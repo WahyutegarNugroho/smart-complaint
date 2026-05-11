@@ -27,17 +27,13 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const logFile = 'signup_debug.log'
-  const fs = require('fs')
-  const log = (msg: string) => fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${msg}\n`)
-
   const supabase = await createClient()
 
   const email = formData.get('email') as string
   const fullName = formData.get('full_name') as string
   const password = formData.get('password') as string
 
-  log(`Signup attempt for: ${email}`)
+  console.log(`Signup attempt for: ${email}`)
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -50,15 +46,15 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    log(`Supabase Auth Error: ${error.message}`)
+    console.error(`Supabase Auth Error: ${error.message}`)
     redirect('/register?error=' + encodeURIComponent(error.message))
   }
 
-  log(`Supabase Auth Success for user: ${data.user?.id}`)
+  console.log(`Supabase Auth Success for user: ${data.user?.id}`)
 
   if (data.user) {
     try {
-      log(`Attempting Prisma upsert for ${email}...`)
+      console.log(`Attempting Prisma upsert for ${email}...`)
       await prisma.profile.upsert({
         where: { username: email },
         update: { userId: data.user.id },
@@ -69,12 +65,12 @@ export async function signup(formData: FormData) {
           role: 'MASYARAKAT'
         }
       })
-      log(`Prisma upsert Success`)
+      console.log(`Prisma upsert Success`)
     } catch (dbError: any) {
       // ⚠️ Don't catch Next.js redirect errors
       if (dbError.digest?.startsWith('NEXT_REDIRECT')) throw dbError;
       
-      log(`Prisma Error: ${dbError.message}`)
+      console.error(`Prisma Error: ${dbError.message}`)
       console.error('Database Error during signup:', dbError)
       
       const errorMessage = dbError.message?.includes('max clients reached') 
@@ -92,11 +88,11 @@ export async function signup(formData: FormData) {
 
   // If session is null, it means email confirmation is required
   if (!data.session) {
-    log('Signup complete - Email confirmation required')
+    console.log('Signup complete - Email confirmation required')
     redirect('/login?message=' + encodeURIComponent('Pendaftaran Berhasil! Silahkan cek email Anda untuk verifikasi akun sebelum login.'))
   }
 
-  log('Signup complete - Redirecting to dashboard')
+  console.log('Signup complete - Redirecting to dashboard')
   revalidatePath('/', 'layout')
   redirect('/dashboard')
 }
