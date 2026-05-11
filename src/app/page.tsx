@@ -25,7 +25,7 @@ export default function LandingPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20">
                 <MessageSquare size={20} className="fill-white/20" />
               </div>
-              <span className="text-xl font-bold bg-gradient-r from-emerald-700 to-teal-600 bg-clip-text text-transparent tracking-tight">
+              <span className="text-xl font-bold bg-gradient-to-r from-emerald-800 to-teal-700 bg-clip-text text-transparent tracking-tight">
                 Smart Complaint
               </span>
             </div>
@@ -75,7 +75,7 @@ export default function LandingPage() {
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-[4rem] font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
-                Ciptakan Lingkungan Harmonis di <span className="bg-gradient-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Pesona Serpong</span>
+                Ciptakan Lingkungan Harmonis di <span className="bg-gradient-to-r from-emerald-800 to-teal-700 bg-clip-text text-transparent">Pesona Serpong</span>
               </h1>
               
               <p className="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed mb-10">
