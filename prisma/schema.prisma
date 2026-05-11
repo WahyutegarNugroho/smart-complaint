@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  MASYARAKAT
+  PETUGAS
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  PROCESSING
+  COMPLETED
+}
+
+model Profile {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  username   String   @unique
+  name       String
+  nik       String?
+  phone     String?
+  address   String?
+  rt        String?
+  rw        String?
+  role      Role     @default(MASYARAKAT)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  complaints    Complaint[]
+  responses     Response[]
+  announcements Announcement[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+model Complaint {
+  id           String   @id @default(cuid())
+  title        String
+  content      String
+  location     String
+  rt           String?
+  rw           String?
+  incidentDate DateTime
+  imageUrl     String?
+  status       Status   @default(PENDING)
+  isUrgent     Boolean  @default(false)
+  authorId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  category     String   @default("umum")
+  author    Profile    @relation(fields: [authorId], references: [id])
+  responses Response[]
+}
+
+model Response {
+  id          String   @id @default(cuid())
+  content     String
+  imageUrl    String?
+  complaintId String
+  officerId   String
+  createdAt   DateTime @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  officer   Profile   @relation(fields: [officerId], references: [id])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author Profile @relation(fields: [authorId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  type      String   @default("INFO") // INFO, WARNING, DELETE
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // e.g., "UPDATE_STATUS", "DELETE_REPORT", "VERIFY_USER"
+  details   String
+  adminId   String
+  createdAt DateTime @default(now())
+
+  admin Profile @relation(fields: [adminId], references: [id])
+}

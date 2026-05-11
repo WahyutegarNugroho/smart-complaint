@@ -1,0 +1,61 @@
+import { redirect } from 'next/navigation'
+import { createClient } from '@/utils/supabase/server'
+import prisma from '@/lib/prisma'
+import Link from 'next/link'
+import { 
+  ChevronLeft, 
+  CheckCircle2,
+  FileBarChart,
+  Download
+} from 'lucide-react'
+import { ExportButtons } from './export-buttons'
+
+export default async function ExportPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id }
+  })
+
+  if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
+
+  return (
+    <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">
+      
+      <main className="max-w-[1400px] mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
+        
+        {/* 👋 HEADER SECTION */}
+        <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3 mb-2">
+               <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
+                  <ChevronLeft size={20} />
+               </Link>
+               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Manajemen Laporan</span>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Ekspor Data & Arsip</h1>
+            <p className="text-slate-400 dark:text-slate-500 font-medium text-sm md:text-base">Unduh data laporan masyarakat untuk keperluan evaluasi berkala.</p>
+          </div>
+        </section>
+
+        <section className="space-y-8">
+           <ExportButtons />
+
+           <div className="bg-slate-50 dark:bg-slate-900/50 p-6 md:p-8 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-start gap-5 transition-colors">
+              <div className="h-12 w-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-blue-500 shrink-0 shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                 <CheckCircle2 size={24} />
+              </div>
+              <div>
+                 <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-2 transition-colors">Panduan Ekspor</p>
+                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed transition-colors">
+                    Untuk hasil yang lebih spesifik, gunakan filter RT/RW di halaman dashboard utama terlebih dahulu. Data yang diekspor akan mengikuti kriteria aktif yang Anda tentukan di sana untuk memastikan akurasi pelaporan.
+                 </p>
+              </div>
+           </div>
+        </section>
+      </main>
+    </div>
+  )
+}
