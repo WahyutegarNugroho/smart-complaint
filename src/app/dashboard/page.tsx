@@ -26,7 +26,7 @@ export default async function DashboardPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
+  let profile = await prisma.profile.findUnique({
     where: { userId: user.id },
     include: { 
       complaints: { orderBy: { createdAt: 'desc' } },
@@ -37,7 +37,53 @@ export default async function DashboardPage({
     }
   })
 
-  if (!profile) redirect('/login')
+  // 🔍 Second check: If userId doesn't match, check by username (email)
+  if (!profile && user.email) {
+    profile = await prisma.profile.findFirst({
+      where: { username: user.email },
+      include: { 
+        complaints: { orderBy: { createdAt: 'desc' } },
+        notifications: {
+          where: { isRead: false },
+          orderBy: { createdAt: 'desc' }
+        }
+      }
+    })
+
+    // If found by username but userId is different, update the userId
+    if (profile) {
+      profile = await prisma.profile.update({
+        where: { id: profile.id },
+        data: { userId: user.id },
+        include: { 
+          complaints: { orderBy: { createdAt: 'desc' } },
+          notifications: {
+            where: { isRead: false },
+            orderBy: { createdAt: 'desc' }
+          }
+        }
+      })
+    }
+  }
+
+  // 🔄 Auto-create profile if still missing
+  if (!profile) {
+    profile = await prisma.profile.create({
+      data: {
+        userId: user.id,
+        username: user.email || `user_${user.id.slice(0, 8)}`,
+        name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+        role: 'MASYARAKAT'
+      },
+      include: { 
+        complaints: { orderBy: { createdAt: 'desc' } },
+        notifications: {
+          where: { isRead: false },
+          orderBy: { createdAt: 'desc' }
+        }
+      }
+    })
+  }
 
   const isAdmin = profile.role === 'ADMIN'
   const isPetugas = profile.role === 'PETUGAS'

@@ -10,9 +10,9 @@ import { useState, use } from 'react'
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string, message?: string }>
 }) {
-  const { error } = use(searchParams)
+  const { error, message } = use(searchParams)
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -59,6 +59,15 @@ export default function LoginPage({
           </div>
 
           <form action={login} className="space-y-6 relative z-10">
+            {message && (
+              <div className="rounded-2xl bg-blue-50 dark:bg-blue-900/20 p-5 text-[10px] font-bold text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/30 uppercase tracking-widest leading-relaxed transition-colors">
+                <div className="flex items-center gap-2 mb-1 text-[11px]">
+                  <div className="h-1.5 w-1.5 bg-blue-600 dark:bg-blue-400 rounded-full"></div> Informasi Sistem
+                </div>
+                {message}
+              </div>
+            )}
+
             {error && (
               <div className="rounded-2xl bg-red-50 dark:bg-red-900/20 p-5 text-[10px] font-bold text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/30 uppercase tracking-widest leading-relaxed transition-colors">
                 <div className="flex items-center gap-2 mb-1 text-[11px]">
