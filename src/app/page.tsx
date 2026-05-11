@@ -71,7 +71,7 @@ export default function LandingPage() {
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/50 px-4 py-1.5 text-sm font-medium text-emerald-700 mb-8 backdrop-blur-sm">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 absolute"></span>
-                Forum Pengaduan Warga v2.0
+                Forum Pengaduan Warga Perumahan Pesona Serpong
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-[4rem] font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">

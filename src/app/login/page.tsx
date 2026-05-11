@@ -1,15 +1,20 @@
+'use client'
+
 import { login } from '@/app/auth/actions'
-import { ShieldCheck, ArrowRight, Lock, Mail, Activity, ArrowLeft } from 'lucide-react'
+import { ShieldCheck, ArrowRight, Lock, Mail, Activity, ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import SubmitButton from '@/components/SubmitButton'
 import ThemeToggle from '@/components/ThemeToggle'
+import { useState, use } from 'react'
 
-export default async function LoginPage({
+export default function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>
 }) {
-  const { error } = await searchParams
+  const { error } = use(searchParams)
+  const [showPassword, setShowPassword] = useState(false)
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] dark:bg-slate-950 relative overflow-hidden px-4 transition-colors duration-300">
       <div className="absolute top-8 right-8 z-50">
@@ -88,11 +93,18 @@ export default async function LoginPage({
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-500 transition-colors" size={20} />
                 <input
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
-                  className="block w-full rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 pl-14 pr-6 py-4.5 text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 transition-all outline-none"
+                  className="block w-full rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 pl-14 pr-12 py-4.5 text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-4 focus:ring-emerald-500/5 transition-all outline-none"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
