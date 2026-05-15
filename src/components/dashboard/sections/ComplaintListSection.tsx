@@ -4,6 +4,7 @@ import { Search, Inbox, Camera, MapPin, ArrowRight, Zap } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import Image from 'next/image'
+import { Status } from '@prisma/client'
 
 interface ComplaintListSectionProps {
   profileId: string
@@ -35,8 +36,8 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
   const currentPage = Number(page) || 1
   const pageSize = 12
 
-  const whereClause: { status?: string; title?: { contains: string; mode: 'insensitive' }; authorId?: string } = {}
-  if (currentStatus) whereClause.status = currentStatus
+  const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string } = {}
+  if (currentStatus) whereClause.status = currentStatus as Status
   if (searchQuery) whereClause.title = { contains: searchQuery, mode: 'insensitive' }
   if (isWarga) whereClause.authorId = profileId
 
