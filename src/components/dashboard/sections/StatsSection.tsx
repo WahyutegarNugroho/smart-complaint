@@ -8,20 +8,17 @@ interface StatsSectionProps {
 }
 
 export default async function StatsSection({ profileId, isWarga }: StatsSectionProps) {
-  const stats = {
-    total: isWarga 
-      ? await prisma.complaint.count({ where: { authorId: profileId } })
-      : await prisma.complaint.count(),
-    pending: isWarga
-      ? await prisma.complaint.count({ where: { authorId: profileId, status: 'PENDING' } })
-      : await prisma.complaint.count({ where: { status: 'PENDING' } }),
-    processing: isWarga
-      ? await prisma.complaint.count({ where: { authorId: profileId, status: 'PROCESSING' } })
-      : await prisma.complaint.count({ where: { status: 'PROCESSING' } }),
-    completed: isWarga 
-      ? await prisma.complaint.count({ where: { authorId: profileId, status: 'COMPLETED' } })
-      : await prisma.complaint.count({ where: { status: 'COMPLETED' } }),
-  }
+  if (!profileId && isWarga) return null;
+  const whereBase = isWarga ? { authorId: profileId } : {};
+
+  const [total, pending, processing, completed] = await Promise.all([
+    prisma.complaint.count({ where: whereBase }),
+    prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
+    prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
+    prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
+  ]);
+
+  const stats = { total, pending, processing, completed };
 
   const items = [
     { label: 'Total Laporan', val: stats.total, icon: Inbox, color: 'slate' },

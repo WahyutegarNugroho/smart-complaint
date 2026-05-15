@@ -39,17 +39,25 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
   const pageSize = 12
 
   const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string; rt?: string; rw?: string } = {}
-  if (currentStatus) whereClause.status = currentStatus as Status
+  
+  // 🛡️ Validate Status Enum to prevent Prisma crash
+  if (currentStatus) {
+    const validStatuses = Object.values(Status)
+    if (validStatuses.includes(currentStatus as Status)) {
+      whereClause.status = currentStatus as Status
+    }
+  }
+
   if (searchQuery) whereClause.title = { contains: searchQuery, mode: 'insensitive' }
   if (rt) whereClause.rt = rt
   if (rw) whereClause.rw = rw
-  if (isWarga) whereClause.authorId = profileId
+  if (isWarga && profileId) whereClause.authorId = profileId
 
   const [complaints, totalComplaints] = await Promise.all([
     prisma.complaint.findMany({
       where: whereClause,
       orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-      include: { author: true }, // Always include author for safety or name display
+      include: { author: true }, 
       take: pageSize,
       skip: (currentPage - 1) * pageSize
     }) as Promise<ComplaintWithAuthor[]>,
