@@ -171,7 +171,7 @@ export default async function DashboardLayout({
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 transition-colors">
           <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 cursor-pointer">
             <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-200 font-bold text-sm shrink-0 transition-colors">
-              {profile.name?.[0] || '?'}
+              {(profile.name || '?').charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-none transition-colors">{profile.name}</p>
@@ -203,7 +203,7 @@ export default async function DashboardLayout({
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <div className="h-8 w-8 bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-900 dark:text-white font-bold text-[10px] border border-slate-100 dark:border-slate-800 transition-colors">
-            {profile.name?.[0] || '?'}
+            {(profile.name || '?').charAt(0).toUpperCase()}
           </div>
         </div>
       </header>
