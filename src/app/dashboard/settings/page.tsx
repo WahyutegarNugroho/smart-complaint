@@ -7,16 +7,16 @@ import { User, Shield, Phone, MapPin, Home, ArrowLeft, ChevronLeft, Save, LogOut
 import { logout } from '@/app/auth/actions'
 import SubmitButton from '@/components/SubmitButton'
 
+import { getCachedProfile } from '@/lib/profile'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function SettingsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const data = await getCachedProfile()
+  if (!data) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-
-  if (!profile) redirect('/dashboard')
+  const { profile } = data
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-32">
