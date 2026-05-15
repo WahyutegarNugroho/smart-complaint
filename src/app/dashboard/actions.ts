@@ -65,56 +65,71 @@ export async function respondToComplaint(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
   const complaintId = formData.get('complaintId') as string
-  const existingComplaint = await prisma.complaint.findUnique({
-    where: { id: complaintId }
-  })
+  if (!complaintId) redirect('/dashboard')
 
-  if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint?.authorId !== profile.id)) {
-    throw new Error('Hanya petugas atau pembuat laporan yang bisa memberikan tanggapan')
-  }
-  const content = formData.get('content') as string
-  const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
-  
-  const imageFile = formData.get('responseImage') as File
-  let responseImageUrl = null
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    
+    const existingComplaint = await prisma.complaint.findUnique({
+      where: { id: complaintId }
+    })
 
-  if (imageFile && imageFile.size > 0) {
-    const fileExt = imageFile.name.split('.').pop()
-    const fileName = `response-${Date.now()}.${fileExt}`
-    const filePath = `${user.id}/${fileName}`
+    if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint?.authorId !== profile.id)) {
+      redirect(`/dashboard/complaint/${complaintId}?error=forbidden`)
+    }
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('complaints')
-      .upload(filePath, imageFile)
+    const content = formData.get('content') as string
+    if (!content) redirect(`/dashboard/complaint/${complaintId}?error=content_required`)
 
-    if (!uploadError) {
-      const { data: urlData } = supabase.storage
+    const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
+    
+    const imageFile = formData.get('responseImage') as File
+    let responseImageUrl = null
+
+    if (imageFile && imageFile instanceof File && imageFile.size > 0) {
+      const fileExt = imageFile.name.split('.').pop()
+      const fileName = `response-${Date.now()}.${fileExt}`
+      const filePath = `${user.id}/${fileName}`
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('complaints')
-        .getPublicUrl(filePath)
-      responseImageUrl = urlData.publicUrl
+        .upload(filePath, imageFile)
+
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage
+          .from('complaints')
+          .getPublicUrl(filePath)
+        responseImageUrl = urlData.publicUrl
+      }
     }
+
+    await prisma.response.create({
+      data: {
+        content: content,
+        imageUrl: responseImageUrl,
+        complaintId: complaintId,
+        officerId: profile.id
+      }
+    })
+
+    // Petugas can update status, Masyarakat uses the current status (hidden input)
+    if (status) {
+      await prisma.complaint.update({
+        where: { id: complaintId },
+        data: { status: status }
+      })
+    }
+
+    revalidatePath(`/dashboard/complaint/${complaintId}`)
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('RespondToComplaint Error:', err)
+    redirect(`/dashboard/complaint/${complaintId}?error=system_error`)
   }
 
-  await prisma.response.create({
-    data: {
-      content: content,
-      imageUrl: responseImageUrl,
-      complaintId: complaintId,
-      officerId: profile.id
-    }
-  })
-
-  await prisma.complaint.update({
-    where: { id: complaintId },
-    data: { status: status }
-  })
-
-  revalidatePath(`/dashboard/complaint/${complaintId}`)
-  revalidatePath('/dashboard')
   redirect(`/dashboard/complaint/${complaintId}?message=Tanggapan berhasil dikirim`)
 }
 

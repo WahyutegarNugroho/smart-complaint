@@ -128,7 +128,7 @@ export default async function ComplaintDetailPage({
             {/* User Info Card */}
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-6 shadow-sm transition-all hover:shadow-xl group">
                <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-300 dark:text-slate-700 font-bold text-2xl transition-all group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-6">
-                  {(complaint.author.name || '?').charAt(0).toUpperCase()}
+                  {(complaint.author?.name || '?').charAt(0).toUpperCase()}
                </div>
                <div>
                   <div className="flex items-center gap-2 mb-1.5">
@@ -163,17 +163,17 @@ export default async function ComplaintDetailPage({
                ) : (
                  <div className="space-y-6">
                     {complaint.responses.map((res) => {
-                      const isOfficer = res.officer.role !== 'MASYARAKAT'
+                      const isOfficer = (res.officer?.role || 'MASYARAKAT') !== 'MASYARAKAT'
                       return (
                         <div key={res.id} className={`flex gap-4 ${isOfficer ? 'flex-row' : 'flex-row-reverse'}`}>
                            <div className="shrink-0 pt-1">
                               <div className={`h-11 w-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all ${isOfficer ? 'bg-slate-900 dark:bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 border border-slate-100 dark:border-slate-700'}`}>
-                                 {(res.officer.name || '?').charAt(0).toUpperCase()}
+                                 {(res.officer?.name || '?').charAt(0).toUpperCase()}
                               </div>
                            </div>
                            <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
                               <div className="flex items-center gap-3 px-1">
-                                 <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer.name || 'Petugas'}</span>
+                                 <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer?.name || 'Petugas'}</span>
                                  <span className="text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{new Date(res.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
                               </div>
                               <div className={`p-5 rounded-[1.5rem] text-[14px] leading-relaxed font-medium transition-all shadow-sm ${isOfficer ? 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300' : 'bg-blue-600 dark:bg-blue-500 text-white'}`}>
