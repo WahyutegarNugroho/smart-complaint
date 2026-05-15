@@ -182,25 +182,32 @@ export async function respondToComplaint(formData: FormData) {
 }
 
 export async function toggleUrgentStatus(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile || profile.role === 'MASYARAKAT') throw new Error('Izin ditolak')
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'PETUGAS')) {
+      throw new Error('Izin ditolak')
+    }
 
-  const id = formData.get('id') as string
-  const isUrgent = formData.get('isUrgent') === 'true'
+    const id = formData.get('id') as string
+    const isUrgent = formData.get('isUrgent') === 'true'
 
-  await prisma.complaint.update({
-    where: { id },
-    data: { isUrgent: !isUrgent }
-  })
+    await prisma.complaint.update({
+      where: { id },
+      data: { isUrgent: !isUrgent }
+    })
 
-  revalidatePath(`/dashboard/complaint/${id}`)
-  revalidatePath('/dashboard')
+    revalidatePath(`/dashboard/complaint/${id}`)
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('ToggleUrgentStatus Error:', err)
+    // Optional: throw to show error on client or redirect with error
+  }
 }
 
 // --- ANNOUNCEMENT ACTIONS ---
@@ -427,27 +434,31 @@ export async function updateComplaint(formData: FormData) {
 }
 
 export async function updateComplaintStatus(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'PETUGAS')) {
-    throw new Error('Izin ditolak: Hanya petugas yang bisa mengubah status')
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'PETUGAS')) {
+      throw new Error('Izin ditolak: Hanya petugas yang bisa mengubah status')
+    }
+
+    const id = formData.get('id') as string
+    const status = formData.get('status') as any
+
+    await prisma.complaint.update({
+      where: { id },
+      data: { status }
+    })
+
+    revalidatePath(`/dashboard/complaint/${id}`)
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('UpdateComplaintStatus Error:', err)
   }
-
-  const id = formData.get('id') as string
-  const status = formData.get('status') as any
-
-  await prisma.complaint.update({
-    where: { id },
-    data: { status }
-  })
-
-  revalidatePath(`/dashboard/complaint/${id}`)
-  revalidatePath('/dashboard')
 }
 
 export async function deleteComplaint(formData: FormData) {
