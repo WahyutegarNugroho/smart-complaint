@@ -1,19 +1,15 @@
 import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
-import { updateComplaintStatus, adminDeleteComplaint, respondToComplaint } from '@/app/dashboard/actions'
+import { updateComplaintStatus, respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
 import Image from 'next/image'
 import { 
   MapPin, 
   Calendar, 
-  User, 
   Clock, 
   CheckCircle2, 
   Activity, 
-  AlertCircle,
-  ArrowLeft,
   ShieldAlert,
-  Trash2,
   Zap,
   CheckCircle,
   MessageSquare,
@@ -104,7 +100,7 @@ export default async function ComplaintDetailPage({
                 </div>
 
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 leading-tight italic transition-colors italic">{complaint.title}</h1>
-                <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors italic pl-6 border-l-2 border-slate-100 dark:border-slate-800 italic">"{complaint.content}"</p>
+                <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors italic pl-6 border-l-2 border-slate-100 dark:border-slate-800 italic">&quot;{complaint.content}&quot;</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-4 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800 transition-colors">

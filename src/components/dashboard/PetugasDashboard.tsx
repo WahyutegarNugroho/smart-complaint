@@ -8,17 +8,9 @@ import {
   ArrowRight, 
   Inbox, 
   CheckCircle2, 
-  ShieldCheck, 
   Clock, 
-  TrendingUp, 
   Activity, 
-  Radar, 
   Hammer, 
-  AlertCircle, 
-  Filter, 
-  MoreVertical, 
-  User, 
-  FileText 
 } from 'lucide-react'
 import EmptyState from '@/components/EmptyState'
 import SuccessToast from '@/components/SuccessToast'
@@ -249,7 +241,7 @@ export default function PetugasDashboard({
                            {item.title}
                         </h4>
                          <p className="text-[12px] md:text-[13px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed line-clamp-2 italic pl-5 border-l-2 border-slate-100 dark:border-slate-800 transition-colors">
-                            "{item.content}"
+                            &quot;{item.content}&quot;
                          </p>
                       </div>
 
