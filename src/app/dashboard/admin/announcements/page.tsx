@@ -21,7 +21,7 @@ export default async function AdminAnnouncementsPage({
   const { message: successMessage } = await searchParams
   const supabase = await createClient()
 
-  let announcements = []
+  let announcements: any[] = []
   try {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) redirect('/login')

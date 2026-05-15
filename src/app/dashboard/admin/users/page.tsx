@@ -20,7 +20,7 @@ export default async function AdminUsersPage({
    const { q, role, rt, rw } = await searchParams
    const supabase = await createClient()
 
-   let allUsers = []
+   let allUsers: any[] = []
    try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) redirect('/login')
