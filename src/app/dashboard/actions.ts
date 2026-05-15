@@ -10,54 +10,79 @@ import prisma from '@/lib/prisma'
 export async function createComplaint(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  
+  let result: { success: boolean; error?: string } = { success: false }
+  
+  try {
+    if (!user) {
+      result = { success: false, error: 'auth_required' }
+    } else {
+      const profile = await prisma.profile.findUnique({
+        where: { userId: user.id }
+      })
+      if (!profile) throw new Error('profile_not_found')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile) throw new Error('Profil tidak ditemukan')
+      const imageFile = formData.get('image') as any
+      let imageUrl = null
 
-  const imageFile = formData.get('image') as File
-  let imageUrl = null
+      // 🖼️ Robust Image Upload
+      if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
+        const fileExt = imageFile.name?.split('.').pop() || 'jpg'
+        const fileName = `complaint-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+        const filePath = `${user.id}/${fileName}`
 
-  if (imageFile && imageFile.size > 0) {
-    const fileExt = imageFile.name.split('.').pop()
-    const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`
-    const filePath = `${user.id}/${fileName}`
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('complaints')
+          .upload(filePath, imageFile, {
+            contentType: imageFile.type,
+            upsert: true
+          })
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('complaints')
-      .upload(filePath, imageFile, {
-        cacheControl: '3600',
-        upsert: false
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('complaints')
+            .getPublicUrl(filePath)
+          imageUrl = urlData.publicUrl
+        }
+      }
+
+      // 🗓️ Safe Date Parsing
+      const rawDate = formData.get('incidentDate') as string
+      const incidentDate = rawDate ? new Date(rawDate) : new Date()
+      const validDate = isNaN(incidentDate.getTime()) ? new Date() : incidentDate
+
+      await prisma.complaint.create({
+        data: {
+          title: formData.get('title') as string,
+          content: formData.get('content') as string,
+          category: formData.get('category') as string || 'umum',
+          isUrgent: formData.get('isUrgent') === 'true',
+          incidentDate: validDate,
+          location: formData.get('location') as string,
+          rt: formData.get('rt') as string,
+          rw: formData.get('rw') as string,
+          imageUrl: imageUrl,
+          authorId: profile.id,
+          status: 'PENDING'
+        }
       })
 
-    if (!uploadError) {
-      const { data: urlData } = supabase.storage
-        .from('complaints')
-        .getPublicUrl(filePath)
-      imageUrl = urlData.publicUrl
+      revalidatePath('/dashboard')
+      result = { success: true }
     }
+  } catch (err) {
+    console.error('CreateComplaint Critical Error:', err)
+    result = { success: false, error: 'system_error' }
   }
 
-  await prisma.complaint.create({
-    data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string,
-      category: formData.get('category') as string || 'umum',
-      isUrgent: formData.get('isUrgent') === 'true',
-      incidentDate: new Date(formData.get('incidentDate') as string),
-      location: formData.get('location') as string,
-      rt: formData.get('rt') as string,
-      rw: formData.get('rw') as string,
-      imageUrl: imageUrl,
-      authorId: profile.id,
-      status: 'PENDING'
-    }
-  })
-
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  // Redirect outside try-catch to satisfy Next.js
+  if (result.success) {
+    redirect('/dashboard?message=Laporan berhasil terbit')
+  } else if (result.error === 'auth_required') {
+    redirect('/login')
+  } else {
+    redirect(`/dashboard?error=${result.error}`)
+  }
 }
 
 export async function respondToComplaint(formData: FormData) {
@@ -315,26 +340,32 @@ export async function updateProfile(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile) throw new Error('Profil tidak ditemukan')
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    if (!profile) throw new Error('profile_not_found')
 
-  await prisma.profile.update({
-    where: { id: profile.id },
-    data: {
-      name: formData.get('name') as string,
-      nik: formData.get('nik') as string,
-      phone: formData.get('phone') as string,
-      address: formData.get('address') as string,
-      rt: formData.get('rt') as string,
-      rw: formData.get('rw') as string,
-    }
-  })
+    await prisma.profile.update({
+      where: { id: profile.id },
+      data: {
+        name: formData.get('name') as string,
+        nik: formData.get('nik') as string,
+        phone: formData.get('phone') as string,
+        address: formData.get('address') as string,
+        rt: formData.get('rt') as string,
+        rw: formData.get('rw') as string,
+      }
+    })
 
-  revalidatePath('/dashboard')
-  revalidatePath('/dashboard/settings')
-  redirect('/dashboard?message=Profil berhasil diperbarui')
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/settings')
+    redirect('/dashboard/settings?message=Profil berhasil diperbarui')
+  } catch (err) {
+    console.error('UpdateProfile Error:', err)
+    if ((err as any).digest?.startsWith('NEXT_REDIRECT')) throw err;
+    redirect('/dashboard/settings?error=system_error')
+  }
 }
 
 export async function updateComplaint(formData: FormData) {
@@ -415,66 +446,97 @@ export async function updateComplaintStatus(formData: FormData) {
 }
 
 export async function deleteComplaint(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
 
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id }
+  })
+  
   const id = formData.get('id') as string
-  await prisma.complaint.delete({ where: { id } })
-  revalidatePath('/dashboard')
-  redirect('/dashboard?message=Laporan berhasil dihapus')
+  const complaint = await prisma.complaint.findUnique({ where: { id } })
+  
+  if (!profile || !complaint) redirect('/dashboard')
+
+  // Only Admin or Author can delete
+  if (profile.role !== 'ADMIN' && complaint.authorId !== profile.id) {
+    redirect('/dashboard?error=forbidden')
+  }
+
+  try {
+    await prisma.complaint.delete({ where: { id } })
+    revalidatePath('/dashboard')
+    redirect('/dashboard?message=Laporan berhasil dihapus')
+  } catch (err) {
+    console.error('DeleteComplaint Error:', err)
+    redirect('/dashboard?error=system_error')
+  }
 }
 
 export async function deleteResponse(responseId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Unauthorized' }
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile) return { error: 'Profile not found' }
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    if (!profile) return { error: 'Profile not found' }
 
-  const response = await prisma.response.findUnique({
-    where: { id: responseId }
-  })
-  if (!response) return { error: 'Response not found' }
+    const response = await prisma.response.findUnique({
+      where: { id: responseId }
+    })
+    if (!response) return { error: 'Response not found' }
 
-  // Author can delete, Admin can delete anything
-  if (response.officerId !== profile.id && profile.role !== 'ADMIN') {
-    return { error: 'Forbidden' }
+    // Author can delete, Admin can delete anything
+    if (response.officerId !== profile.id && profile.role !== 'ADMIN') {
+      return { error: 'Forbidden' }
+    }
+
+    await prisma.response.delete({
+      where: { id: responseId }
+    })
+
+    revalidatePath(`/dashboard/complaint/${response.complaintId}`)
+    return { success: true }
+  } catch (err) {
+    console.error('DeleteResponse Error:', err)
+    return { error: 'system_error' }
   }
-
-  await prisma.response.delete({
-    where: { id: responseId }
-  })
-
-  revalidatePath(`/dashboard/complaint/${response.complaintId}`)
-  return { success: true }
 }
 
 export async function editResponse(responseId: string, content: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Unauthorized' }
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
-  if (!profile) return { error: 'Profile not found' }
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
+    if (!profile) return { error: 'Profile not found' }
 
-  const response = await prisma.response.findUnique({
-    where: { id: responseId }
-  })
-  if (!response) return { error: 'Response not found' }
+    const response = await prisma.response.findUnique({
+      where: { id: responseId }
+    })
+    if (!response) return { error: 'Response not found' }
 
-  // Only author can edit
-  if (response.officerId !== profile.id) {
-    return { error: 'Forbidden' }
+    // Only author can edit
+    if (response.officerId !== profile.id) {
+      return { error: 'Forbidden' }
+    }
+
+    await prisma.response.update({
+      where: { id: responseId },
+      data: { content }
+    })
+
+    revalidatePath(`/dashboard/complaint/${response.complaintId}`)
+    return { success: true }
+  } catch (err) {
+    console.error('EditResponse Error:', err)
+    return { error: 'system_error' }
   }
-
-  await prisma.response.update({
-    where: { id: responseId },
-    data: { content }
-  })
-
-  revalidatePath(`/dashboard/complaint/${response.complaintId}`)
-  return { success: true }
 }
