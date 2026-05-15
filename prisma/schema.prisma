@@ -64,6 +64,8 @@ model Complaint {
   @@index([authorId])
   @@index([status])
   @@index([createdAt])
+  @@index([rt])
+  @@index([rw])
 }
 
 model Response {

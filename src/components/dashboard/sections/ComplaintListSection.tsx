@@ -12,6 +12,8 @@ interface ComplaintListSectionProps {
   searchParams: {
     status?: string
     q?: string
+    rt?: string
+    rw?: string
     page?: string
   }
 }
@@ -27,25 +29,27 @@ interface ComplaintWithAuthor {
   isUrgent: boolean
   createdAt: Date
   author?: {
-    name: string
-  }
+    name: string | null
+  } | null
 }
 
 export default async function ComplaintListSection({ profileId, isWarga, searchParams }: ComplaintListSectionProps) {
-  const { status: currentStatus, q: searchQuery, page } = searchParams
+  const { status: currentStatus, q: searchQuery, rt, rw, page } = searchParams
   const currentPage = Number(page) || 1
   const pageSize = 12
 
-  const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string } = {}
+  const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string; rt?: string; rw?: string } = {}
   if (currentStatus) whereClause.status = currentStatus as Status
   if (searchQuery) whereClause.title = { contains: searchQuery, mode: 'insensitive' }
+  if (rt) whereClause.rt = rt
+  if (rw) whereClause.rw = rw
   if (isWarga) whereClause.authorId = profileId
 
   const [complaints, totalComplaints] = await Promise.all([
     prisma.complaint.findMany({
       where: whereClause,
       orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-      include: { author: !isWarga },
+      include: { author: true }, // Always include author for safety or name display
       take: pageSize,
       skip: (currentPage - 1) * pageSize
     }) as Promise<ComplaintWithAuthor[]>,
@@ -88,18 +92,31 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         </div>
       </div>
 
-      {/* SEARCH BAR */}
-      <div className="relative group">
-        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-600 transition-colors group-focus-within:text-blue-500" size={16} />
-        <form>
-          <input 
-            name="q"
-            type="text" 
-            defaultValue={searchQuery}
-            placeholder="Cari laporan Anda..." 
-            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-14 pr-4 py-4 text-sm font-medium dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all shadow-sm"
-          />
-        </form>
+      {/* SEARCH & FILTER BAR */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="lg:col-span-8 relative group">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-600 transition-colors group-focus-within:text-blue-500" size={16} />
+          <form>
+            <input 
+              name="q"
+              type="text" 
+              defaultValue={searchQuery}
+              placeholder={isWarga ? "Cari laporan Anda..." : "Cari laporan warga..."}
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl pl-14 pr-4 py-4 text-sm font-medium dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all shadow-sm"
+            />
+          </form>
+        </div>
+        {!isWarga && (
+          <div className="lg:col-span-4 flex gap-3">
+             <form className="flex gap-2 w-full">
+               <input name="rt" type="text" defaultValue={rt} placeholder="RT" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-blue-500 transition-all shadow-sm" />
+               <input name="rw" type="text" defaultValue={rw} placeholder="RW" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-blue-500 transition-all shadow-sm" />
+               <button type="submit" className="px-6 bg-slate-900 dark:bg-blue-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 transition-all">
+                  Filter
+               </button>
+             </form>
+          </div>
+        )}
       </div>
 
       {/* REPORT GRID */}
@@ -149,14 +166,26 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                 </div>
 
                 <div className="mt-auto pt-4 md:pt-5 border-t border-slate-50 dark:border-slate-800 flex items-center justify-between transition-colors">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-[12px] uppercase tracking-wider transition-colors">
-                          <MapPin size={12} /> RT {item.rt}/{item.rw}
+                    <div className="flex items-center gap-2 md:gap-3">
+                      {!isWarga && (
+                        <div className="h-8 w-8 md:h-9 md:w-9 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 font-bold text-[10px] uppercase">
+                          {(item.author?.name || 'U').charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        {!isWarga && (
+                          <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
+                        )}
+                        <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-blue-600 dark:text-blue-400 font-bold text-[12px] uppercase tracking-wider transition-colors">
+                          <div className="flex items-center gap-1.5">
+                            <MapPin size={12} /> RT {item.rt}/{item.rw}
+                          </div>
+                          <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700 hidden md:block" />
+                          <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                            {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                          </span>
+                        </div>
                       </div>
-                      <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                      <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
-                          {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
-                      </span>
                     </div>
                     <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-200 dark:text-slate-700 group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-45 transition-all duration-500 shadow-inner">
                       <ArrowRight size={18} />
@@ -183,7 +212,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           {Array.from({ length: totalPages }).map((_, i) => (
             <Link
               key={i}
-              href={`/dashboard?page=${i + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}`}
+              href={`/dashboard?page=${i + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
               className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
                 currentPage === i + 1 
                     ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xl shadow-slate-900/10' 
