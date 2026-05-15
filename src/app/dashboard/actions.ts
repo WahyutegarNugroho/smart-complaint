@@ -151,11 +151,16 @@ export async function respondToComplaint(formData: FormData) {
           }
         })
 
-        if (status) {
-          await prisma.complaint.update({
-            where: { id: complaintId },
-            data: { status: status }
-          })
+        // 🛡️ SECURITY: Only Officers/Admins can change status through response
+        if (status && profile.role !== 'MASYARAKAT') {
+          try {
+            await prisma.complaint.update({
+              where: { id: complaintId },
+              data: { status: status }
+            })
+          } catch (statusErr) {
+            console.error('Non-critical Status Update Error:', statusErr)
+          }
         }
 
         revalidatePath(`/dashboard/complaint/${complaintId}`)
