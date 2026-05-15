@@ -29,16 +29,31 @@ export default function EditComplaintPage({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl)
+      }
       setPreviewUrl(URL.createObjectURL(file))
     }
   }
 
   const removeFile = () => {
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl)
+    }
     setPreviewUrl(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl])
 
   if (!complaint) return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 flex items-center justify-center">

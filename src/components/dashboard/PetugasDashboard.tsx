@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   Plus, 
   Search, 
@@ -233,8 +234,13 @@ export default function PetugasDashboard({
 
                      <div className="space-y-1.5 md:space-y-2">
                         {item.imageUrl && (
-                           <div className="h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-slate-100 dark:border-slate-800">
-                              <img src={item.imageUrl} alt="" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                           <div className="relative h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-slate-100 dark:border-slate-800">
+                              <Image 
+                                 src={item.imageUrl} 
+                                 alt={item.title} 
+                                 fill 
+                                 className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                              />
                            </div>
                         )}
                         <h4 className="text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight italic truncate pl-5">

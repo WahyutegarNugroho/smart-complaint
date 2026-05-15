@@ -31,18 +31,29 @@ export default function CreateComplaintPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result as string)
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview)
       }
-      reader.readAsDataURL(file)
+      setPreview(URL.createObjectURL(file))
     }
   }
 
   const removePreview = () => {
+    if (preview && preview.startsWith('blob:')) {
+      URL.revokeObjectURL(preview)
+    }
     setPreview(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
+
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [preview])
 
   const categories = [
     { id: 'keamanan', label: 'Keamanan', icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-50' },

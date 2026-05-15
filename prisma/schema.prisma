@@ -60,6 +60,10 @@ model Complaint {
   category     String   @default("umum")
   author    Profile    @relation(fields: [authorId], references: [id])
   responses Response[]
+
+  @@index([authorId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Response {
@@ -72,6 +76,9 @@ model Response {
 
   complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
   officer   Profile   @relation(fields: [officerId], references: [id])
+
+  @@index([complaintId])
+  @@index([officerId])
 }
 
 model Announcement {
@@ -94,6 +101,9 @@ model Notification {
   createdAt DateTime @default(now())
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
 }
 
 model AuditLog {

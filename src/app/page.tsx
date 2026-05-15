@@ -10,9 +10,61 @@ import {
   BarChart3,
   MessageSquare,
   Users,
-  Shield
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+
+const LANDING_STEPS = [
+  { title: 'Tulis Keluhan', desc: 'Sampaikan masalah di lingkungan (Misal: Sampah menumpuk).', icon: MessageSquare },
+  { title: 'Foto Bukti', desc: 'Sertakan foto lokasi agar mudah ditemukan petugas.', icon: Camera },
+  { title: 'Verifikasi RT/RW', desc: 'Pengurus akan mengevaluasi laporan Anda.', icon: ShieldCheck },
+  { title: 'Tindak Lanjut', desc: 'Pantau pengerjaan hingga masalah selesai.', icon: CheckCircle },
+];
+
+const LANDING_FEATURES = [
+  { 
+    title: 'Lapor Dari Rumah', 
+    desc: 'Tidak perlu mencari pengurus RT secara fisik. Kirim laporan kapan saja, di mana saja.', 
+    icon: Zap,
+    color: 'text-amber-500',
+    bg: 'bg-amber-50'
+  },
+  { 
+    title: 'Titik Lokasi Akurat', 
+    desc: 'Deteksi otomatis blok dan nomor rumah menggunakan GPS untuk mempermudah perbaikan.', 
+    icon: MapPin,
+    color: 'text-rose-500',
+    bg: 'bg-rose-50'
+  },
+  { 
+    title: 'Timeline Progres', 
+    desc: 'Lihat kapan laporan Anda mulai diproses dan estimasi waktu penyelesaian dari pengurus.', 
+    icon: Clock,
+    color: 'text-blue-500',
+    bg: 'bg-blue-50'
+  },
+  { 
+    title: 'Laporan Kebersihan', 
+    desc: 'Kelola jadwal pengambilan sampah dan laporan area hijau yang kurang terawat.', 
+    icon: BarChart3,
+    color: 'text-indigo-500',
+    bg: 'bg-indigo-50'
+  },
+  { 
+    title: 'Akses Keamanan', 
+    desc: 'Laporkan hal mencurigakan langsung ke tim Security perumahan secara cepat.', 
+    icon: ShieldCheck,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-50'
+  },
+  { 
+    title: 'Data Terpusat', 
+    desc: 'Semua data pengaduan tersimpan rapi untuk bahan evaluasi rapat bulanan warga.', 
+    icon: Users,
+    color: 'text-teal-500',
+    bg: 'bg-teal-50'
+  },
+];
 
 export default function LandingPage() {
   return (
@@ -102,7 +154,14 @@ export default function LandingPage() {
               <div className="mt-10 flex items-center justify-center lg:justify-start gap-4 text-sm font-medium text-slate-500">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
-                    <img key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="User" />
+                    <div key={i} className="relative h-8 w-8 rounded-full ring-2 ring-white overflow-hidden">
+                      <Image 
+                        src={`https://i.pravatar.cc/100?img=${i + 15}`} 
+                        alt="User" 
+                        fill 
+                        className="object-cover"
+                      />
+                    </div>
                   ))}
                 </div>
                 <p>Aktif digunakan oleh <span className="text-slate-800 font-bold">500+</span> Kepala Keluarga</p>
@@ -111,11 +170,13 @@ export default function LandingPage() {
 
             {/* Hero Image / UI Mockup */}
             <div className="relative hidden lg:block z-10">
-              <div className="relative rounded-[3rem] bg-white shadow-2xl ring-1 ring-slate-900/5 p-3 transition-transform duration-700">
-                <img
+              <div className="relative rounded-[3rem] bg-white shadow-2xl ring-1 ring-slate-900/5 p-3 transition-transform duration-700 aspect-[4/5]">
+                <Image
                   src="/hero.png"
                   alt="Gerbang Utama RW Pesona Serpong 08"
-                  className="rounded-[2.5rem] w-full h-[550px] object-cover shadow-inner"
+                  fill
+                  className="rounded-[2.5rem] object-cover shadow-inner p-3"
+                  priority
                 />
                 <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-tr from-emerald-900/20 to-transparent mix-blend-overlay"></div>
               </div>
@@ -163,12 +224,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
             <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -z-10 -translate-y-1/2"></div>
             
-            {[
-              { title: 'Tulis Keluhan', desc: 'Sampaikan masalah di lingkungan (Misal: Sampah menumpuk).', icon: MessageSquare },
-              { title: 'Foto Bukti', desc: 'Sertakan foto lokasi agar mudah ditemukan petugas.', icon: Camera },
-              { title: 'Verifikasi RT/RW', desc: 'Pengurus akan mengevaluasi laporan Anda.', icon: ShieldCheck },
-              { title: 'Tindak Lanjut', desc: 'Pantau pengerjaan hingga masalah selesai.', icon: CheckCircle },
-            ].map((step, index) => (
+            {LANDING_STEPS.map((step, index) => (
               <div key={index} className="relative bg-white rounded-[2rem] p-6 md:p-8 border border-slate-100 shadow-sm text-center">
                 <div className="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-4 border-white">
                   {index + 1}
@@ -191,50 +247,7 @@ export default function LandingPage() {
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Modernisasi Lingkungan Hunian</p>
           
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            {[
-              { 
-                title: 'Lapor Dari Rumah', 
-                desc: 'Tidak perlu mencari pengurus RT secara fisik. Kirim laporan kapan saja, di mana saja.', 
-                icon: Zap,
-                color: 'text-amber-500',
-                bg: 'bg-amber-50'
-              },
-              { 
-                title: 'Titik Lokasi Akurat', 
-                desc: 'Deteksi otomatis blok dan nomor rumah menggunakan GPS untuk mempermudah perbaikan.', 
-                icon: MapPin,
-                color: 'text-rose-500',
-                bg: 'bg-rose-50'
-              },
-              { 
-                title: 'Timeline Progres', 
-                desc: 'Lihat kapan laporan Anda mulai diproses dan estimasi waktu penyelesaian dari pengurus.', 
-                icon: Clock,
-                color: 'text-blue-500',
-                bg: 'bg-blue-50'
-              },
-              { 
-                title: 'Laporan Kebersihan', 
-                desc: 'Kelola jadwal pengambilan sampah dan laporan area hijau yang kurang terawat.', 
-                icon: BarChart3,
-                color: 'text-indigo-500',
-                bg: 'bg-indigo-50'
-              },
-              { 
-                title: 'Akses Keamanan', 
-                desc: 'Laporkan hal mencurigakan langsung ke tim Security perumahan secara cepat.', 
-                icon: ShieldCheck,
-                color: 'text-emerald-500',
-                bg: 'bg-emerald-50'
-              },
-              { 
-                title: 'Data Terpusat', 
-                desc: 'Semua data pengaduan tersimpan rapi untuk bahan evaluasi rapat bulanan warga.', 
-                icon: Users,
-                color: 'text-teal-500',
-                bg: 'bg-teal-50'
-              },
-            ].map((f, i) => (
+            {LANDING_FEATURES.map((f, i) => (
               <div key={i} className="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-300">
                 <div className={`w-14 h-14 rounded-2xl ${f.bg} ${f.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <f.icon size={28} />
@@ -251,10 +264,11 @@ export default function LandingPage() {
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-emerald-900"></div>
         <div className="absolute inset-0 opacity-30 mix-blend-overlay">
-          <img 
+          <Image 
             src="/cta-bg.png" 
             alt="Green landscape" 
-            className="w-full h-full object-cover scale-110 blur-[1px]"
+            fill
+            className="object-cover scale-110 blur-[1px]"
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/80 via-emerald-900/40 to-emerald-900/80"></div>
