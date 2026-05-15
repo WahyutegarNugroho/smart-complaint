@@ -84,7 +84,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
 
         <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl overflow-x-auto hide-scrollbar max-w-full">
           <Link
-            href="/dashboard"
+            href={`/dashboard${searchQuery ? `?q=${searchQuery}` : ''}`}
             className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${!currentStatus ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-500' : 'text-slate-600 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'}`}
           >
             Semua
@@ -96,7 +96,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           ].map((t) => (
             <Link
               key={t.id}
-              href={`/dashboard?status=${t.id}`}
+              href={`/dashboard?status=${t.id}${searchQuery ? `&q=${searchQuery}` : ''}`}
               className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
                 currentStatus === t.id 
                   ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-500' 
@@ -113,7 +113,10 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="lg:col-span-8 relative group">
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-600 transition-colors group-focus-within:text-blue-500" size={16} />
-          <form>
+          <form action="/dashboard" method="GET">
+            {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
+            {rt && <input type="hidden" name="rt" value={rt} />}
+            {rw && <input type="hidden" name="rw" value={rw} />}
             <input 
               name="q"
               type="text" 
@@ -125,7 +128,9 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         </div>
         {!isWarga && (
           <div className="lg:col-span-4 flex gap-3">
-             <form className="flex gap-2 w-full">
+             <form className="flex gap-2 w-full" action="/dashboard" method="GET">
+               {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
+               {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
                <input name="rt" type="text" defaultValue={rt} placeholder="RT" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-blue-500 transition-all shadow-sm" />
                <input name="rw" type="text" defaultValue={rw} placeholder="RW" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-blue-500 transition-all shadow-sm" />
                <button type="submit" className="px-6 bg-slate-900 dark:bg-blue-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 transition-all">
