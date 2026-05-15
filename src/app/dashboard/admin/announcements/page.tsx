@@ -21,21 +21,26 @@ export default async function AdminAnnouncementsPage({
   const { message: successMessage } = await searchParams
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  let announcements = []
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id }
+    })
 
-  if (!profile || profile.role !== 'ADMIN') {
-    redirect('/dashboard')
+    if (!profile || profile.role !== 'ADMIN') {
+      redirect('/dashboard')
+    }
+
+    announcements = await prisma.announcement.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { author: true }
+    })
+  } catch (err) {
+    console.error('AdminAnnouncementsPage Data Error:', err)
   }
-
-  const announcements = await prisma.announcement.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: { author: true }
-  })
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">

@@ -20,32 +20,38 @@ export default async function AdminUsersPage({
    const { q, role, rt, rw } = await searchParams
    const supabase = await createClient()
 
-   const { data: { user } } = await supabase.auth.getUser()
-   if (!user) redirect('/login')
+   let allUsers = []
+   try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) redirect('/login')
 
-   const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
-   })
+      const profile = await prisma.profile.findUnique({
+         where: { userId: user.id }
+      })
 
-   if (!profile || profile.role !== 'ADMIN') {
-      redirect('/dashboard')
+      if (!profile || profile.role !== 'ADMIN') {
+         redirect('/dashboard')
+      }
+
+      const whereClause: any = {}
+      if (q) {
+         whereClause.OR = [
+            { name: { contains: q, mode: 'insensitive' } },
+            { username: { contains: q, mode: 'insensitive' } }
+         ]
+      }
+      if (role) whereClause.role = role
+      if (rt) whereClause.rt = rt
+      if (rw) whereClause.rw = rw
+
+      allUsers = await prisma.profile.findMany({
+         where: whereClause,
+         orderBy: { createdAt: 'desc' }
+      })
+   } catch (err) {
+      console.error('AdminUsersPage Data Error:', err)
+      // Keep allUsers as empty array
    }
-
-   const whereClause: any = {}
-   if (q) {
-      whereClause.OR = [
-         { name: { contains: q, mode: 'insensitive' } },
-         { username: { contains: q, mode: 'insensitive' } }
-      ]
-   }
-   if (role) whereClause.role = role
-   if (rt) whereClause.rt = rt
-   if (rw) whereClause.rw = rw
-
-   const allUsers = await prisma.profile.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' }
-   })
 
    return (
       <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">

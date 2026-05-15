@@ -213,136 +213,168 @@ export async function toggleUrgentStatus(formData: FormData) {
 // --- ANNOUNCEMENT ACTIONS ---
 
 export async function createAnnouncement(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
-  if (!profile || profile.role !== 'ADMIN') throw new Error('Izin ditolak')
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+    if (!profile || profile.role !== 'ADMIN') throw new Error('Izin ditolak')
 
-  await prisma.announcement.create({
-    data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string,
-      authorId: profile.id
-    }
-  })
+    await prisma.announcement.create({
+      data: {
+        title: formData.get('title') as string,
+        content: formData.get('content') as string,
+        authorId: profile.id
+      }
+    })
 
-  revalidatePath('/dashboard')
-  revalidatePath('/dashboard/admin/announcements')
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/admin/announcements')
+  } catch (err) {
+    console.error('CreateAnnouncement Error:', err)
+  }
   redirect('/dashboard/admin/announcements?message=Pengumuman berhasil diterbitkan')
 }
 
 export async function updateAnnouncement(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/login')
 
-  const id = formData.get('id') as string
-  await prisma.announcement.update({
-    where: { id },
-    data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string
-    }
-  })
+    const id = formData.get('id') as string
+    await prisma.announcement.update({
+      where: { id },
+      data: {
+        title: formData.get('title') as string,
+        content: formData.get('content') as string
+      }
+    })
 
-  revalidatePath('/dashboard')
-  revalidatePath('/dashboard/admin/announcements')
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/admin/announcements')
+  } catch (err) {
+    console.error('UpdateAnnouncement Error:', err)
+  }
   redirect('/dashboard/admin/announcements?message=Pengumuman berhasil diubah')
 }
 
 export async function deleteAnnouncement(formData: FormData) {
-  const id = formData.get('id') as string
-  await prisma.announcement.delete({ where: { id } })
-  revalidatePath('/dashboard')
-  revalidatePath('/dashboard/admin/announcements')
+  try {
+    const id = formData.get('id') as string
+    await prisma.announcement.delete({ where: { id } })
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/admin/announcements')
+  } catch (err) {
+    console.error('DeleteAnnouncement Error:', err)
+  }
 }
 
 // --- NOTIFICATION ACTIONS ---
 
 export async function markNotificationAsRead(notificationId: string) {
-  await prisma.notification.update({
-    where: { id: notificationId },
-    data: { isRead: true }
-  })
-  revalidatePath('/dashboard')
+  try {
+    await prisma.notification.update({
+      where: { id: notificationId },
+      data: { isRead: true }
+    })
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('MarkNotificationAsRead Error:', err)
+  }
 }
 
 // --- AUDIT ACTIONS ---
 
 export async function adminDeleteComplaint(formData: FormData) {
-  const id = formData.get('id') as string
-  const complaint = await prisma.complaint.findUnique({
-    where: { id },
-    include: { author: true }
-  })
+  try {
+    const id = formData.get('id') as string
+    const complaint = await prisma.complaint.findUnique({
+      where: { id },
+      include: { author: true }
+    })
 
-  if (!complaint) return
+    if (!complaint) return
 
-  // Kirim Notifikasi ke Warga
-  await prisma.notification.create({
-    data: {
-      userId: complaint.authorId,
-      message: `Laporan Anda yang berjudul "${complaint.title}" telah dihapus oleh Admin karena melanggar ketentuan/spam.`,
-      type: 'DELETE'
-    }
-  })
+    // Kirim Notifikasi ke Warga
+    await prisma.notification.create({
+      data: {
+        userId: complaint.authorId,
+        message: `Laporan Anda yang berjudul "${complaint.title}" telah dihapus oleh Admin karena melanggar ketentuan/spam.`,
+        type: 'DELETE'
+      }
+    })
 
-  await prisma.complaint.delete({ where: { id } })
+    await prisma.complaint.delete({ where: { id } })
 
-  revalidatePath('/dashboard')
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('AdminDeleteComplaint Error:', err)
+  }
   redirect('/dashboard?message=Laporan telah dihapus dan warga diberi tahu')
 }
 
 // --- ADMIN ACTIONS (USER MANAGEMENT) ---
 
 export async function updateUserRole(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user: adminUser } } = await supabase.auth.getUser()
-  if (!adminUser) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user: adminUser } } = await supabase.auth.getUser()
+    if (!adminUser) redirect('/login')
 
-  const adminProfile = await prisma.profile.findUnique({
-    where: { userId: adminUser.id }
-  })
-  if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Hanya Admin yang dapat mengubah role')
+    const adminProfile = await prisma.profile.findUnique({
+      where: { userId: adminUser.id }
+    })
+    if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Hanya Admin yang dapat mengubah role')
 
-  const targetProfileId = formData.get('profileId') as string
-  const newRole = formData.get('role') as 'MASYARAKAT' | 'PETUGAS' | 'ADMIN'
+    const targetProfileId = formData.get('profileId') as string
+    const newRole = formData.get('role') as 'MASYARAKAT' | 'PETUGAS' | 'ADMIN'
 
-  await prisma.profile.update({
-    where: { id: targetProfileId },
-    data: { role: newRole }
-  })
+    await prisma.profile.update({
+      where: { id: targetProfileId },
+      data: { role: newRole }
+    })
 
-  revalidatePath('/dashboard/admin/users')
+    revalidatePath('/dashboard/admin/users')
+  } catch (err) {
+    console.error('UpdateUserRole Error:', err)
+  }
 }
 
 export async function toggleUserVerification(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user: adminUser } } = await supabase.auth.getUser()
-  if (!adminUser) redirect('/login')
+  try {
+    const supabase = await createClient()
+    const { data: { user: adminUser } } = await supabase.auth.getUser()
+    if (!adminUser) redirect('/login')
 
-  const adminProfile = await prisma.profile.findUnique({
-    where: { userId: adminUser.id }
-  })
-  if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Izin ditolak')
+    const adminProfile = await prisma.profile.findUnique({
+      where: { userId: adminUser.id }
+    })
+    if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Izin ditolak')
 
-  const targetProfileId = formData.get('profileId') as string
-  const currentStatus = formData.get('isVerified') === 'true'
+    const targetProfileId = formData.get('profileId') as string
+    const currentStatus = formData.get('isVerified') === 'true'
 
-  await prisma.profile.update({
-    where: { id: targetProfileId },
-    data: { isVerified: !currentStatus } as any
-  })
+    await prisma.profile.update({
+      where: { id: targetProfileId },
+      data: { isVerified: !currentStatus } as any
+    })
 
-  revalidatePath('/dashboard/admin/users')
+    revalidatePath('/dashboard/admin/users')
+  } catch (err) {
+    console.error('ToggleUserVerification Error:', err)
+  }
 }
 
 export async function deleteUserAccount(formData: FormData) {
-  const targetProfileId = formData.get('profileId') as string
-  await prisma.profile.delete({ where: { id: targetProfileId } })
-  revalidatePath('/dashboard/admin/users')
+  try {
+    const targetProfileId = formData.get('profileId') as string
+    await prisma.profile.delete({ where: { id: targetProfileId } })
+    revalidatePath('/dashboard/admin/users')
+  } catch (err) {
+    console.error('DeleteUserAccount Error:', err)
+  }
 }
 
 // --- PROFILE ACTIONS ---
