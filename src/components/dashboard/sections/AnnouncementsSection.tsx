@@ -3,10 +3,15 @@ import { Bell } from 'lucide-react'
 import prisma from '@/lib/prisma'
 
 export default async function AnnouncementsSection() {
-  const announcements = await prisma.announcement.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 3
-  })
+  let announcements = []
+  try {
+    announcements = await prisma.announcement.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 3
+    })
+  } catch (err) {
+    console.error('AnnouncementsSection Error:', err)
+  }
 
   if (announcements.length === 0) return null
 

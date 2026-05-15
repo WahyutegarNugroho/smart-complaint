@@ -35,7 +35,7 @@ interface ComplaintWithAuthor {
 
 export default async function ComplaintListSection({ profileId, isWarga, searchParams }: ComplaintListSectionProps) {
   const { status: currentStatus, q: searchQuery, rt, rw, page } = searchParams
-  const currentPage = Number(page) || 1
+  const currentPage = Math.max(1, Number(page) || 1)
   const pageSize = 12
 
   const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string; rt?: string; rw?: string } = {}
@@ -53,16 +53,25 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
   if (rw) whereClause.rw = rw
   if (isWarga && profileId) whereClause.authorId = profileId
 
-  const [complaints, totalComplaints] = await Promise.all([
-    prisma.complaint.findMany({
-      where: whereClause,
-      orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-      include: { author: true }, 
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize
-    }) as Promise<ComplaintWithAuthor[]>,
-    prisma.complaint.count({ where: whereClause })
-  ])
+  let complaints: ComplaintWithAuthor[] = []
+  let totalComplaints = 0
+
+  try {
+    const [resComplaints, resTotal] = await Promise.all([
+      prisma.complaint.findMany({
+        where: whereClause,
+        orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
+        include: { author: true }, 
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize
+      }),
+      prisma.complaint.count({ where: whereClause })
+    ])
+    complaints = resComplaints as ComplaintWithAuthor[]
+    totalComplaints = resTotal
+  } catch (err) {
+    console.error('ComplaintListSection Error:', err)
+  }
 
   const totalPages = Math.ceil(totalComplaints / pageSize)
 

@@ -11,14 +11,19 @@ export default async function StatsSection({ profileId, isWarga }: StatsSectionP
   if (!profileId && isWarga) return null;
   const whereBase = isWarga ? { authorId: profileId } : {};
 
-  const [total, pending, processing, completed] = await Promise.all([
-    prisma.complaint.count({ where: whereBase }),
-    prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
-    prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
-    prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
-  ]);
+  let stats = { total: 0, pending: 0, processing: 0, completed: 0 };
 
-  const stats = { total, pending, processing, completed };
+  try {
+    const [total, pending, processing, completed] = await Promise.all([
+      prisma.complaint.count({ where: whereBase }),
+      prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
+      prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
+      prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
+    ]);
+    stats = { total, pending, processing, completed };
+  } catch (err) {
+    console.error('StatsSection Error:', err);
+  }
 
   const items = [
     { label: 'Total Laporan', val: stats.total, icon: Inbox, color: 'slate' },
