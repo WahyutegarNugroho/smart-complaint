@@ -18,5 +18,16 @@ export async function GET(
 
   if (!complaint) return NextResponse.json({ error: 'Not Found' }, { status: 404 })
 
+  // 🛡️ SECURITY: Only author or staff can view details
+  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  if (!profile) return NextResponse.json({ error: 'Profile required' }, { status: 403 })
+
+  const isStaff = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
+  const isAuthor = complaint.authorId === profile.id
+
+  if (!isStaff && !isAuthor) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   return NextResponse.json(complaint)
 }

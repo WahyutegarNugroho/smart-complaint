@@ -15,14 +15,15 @@ import {
   MessageSquare,
   Send,
   Camera,
-  ChevronLeft
+  ChevronLeft,
+  Trash2
 } from 'lucide-react'
 import Link from 'next/link'
 import DeleteComplaintButton from './DeleteComplaintButton'
+import CitizenDeleteButton from './CitizenDeleteButton'
 import ResponseFileHandler from './ResponseFileHandler'
 import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
-
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
 
 export const dynamic = 'force-dynamic'
@@ -57,6 +58,7 @@ export default async function ComplaintDetailPage({
 
   const canManage = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
   const isAdmin = profile.role === 'ADMIN'
+  const isAuthor = complaint.authorId === profile.id
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-32">
@@ -221,6 +223,21 @@ export default async function ComplaintDetailPage({
 
           {/* Sidebar Actions */}
           <div className="lg:col-span-5 space-y-8">
+            {isAuthor && complaint.status === 'PENDING' && (
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all">
+                <div className="flex items-center gap-4 mb-8">
+                   <div className="h-12 w-12 bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 border border-red-100 dark:border-red-800">
+                      <Trash2 size={24} />
+                   </div>
+                   <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white italic leading-none mb-1">Batalkan Laporan</h3>
+                      <p className="text-[10px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-widest">Tarik kembali laporan Anda</p>
+                   </div>
+                </div>
+                <CitizenDeleteButton id={complaint.id} />
+              </div>
+            )}
+
             {canManage && (
               <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all">
                 <div className="flex items-center gap-4 mb-8">
