@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { updateComplaintStatus, adminDeleteComplaint, respondToComplaint } from '@/app/dashboard/actions'
+import { getCachedProfile } from '@/lib/profile'
+import Image from 'next/image'
 import { 
   MapPin, 
   Calendar, 
@@ -24,20 +25,19 @@ import Link from 'next/link'
 import DeleteComplaintButton from './DeleteComplaintButton'
 import SubmitButton from '@/components/SubmitButton'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function ComplaintDetailPage({
   params
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
-  })
+  
+  const data = await getCachedProfile()
+  if (!data) redirect('/login')
+  const { profile } = data
 
   const complaint = await prisma.complaint.findUnique({
     where: { id },
@@ -50,7 +50,7 @@ export default async function ComplaintDetailPage({
     }
   })
 
-  if (!complaint || !profile) redirect('/dashboard')
+  if (!complaint) redirect('/dashboard')
 
   const canManage = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
   const isAdmin = profile.role === 'ADMIN'
@@ -80,7 +80,7 @@ export default async function ComplaintDetailPage({
             <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-all group">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-slate-100 dark:border-slate-800 relative">
-                  <img src={complaint.imageUrl} alt={complaint.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <Image src={complaint.imageUrl} alt={complaint.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
                     <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-2xl">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi
@@ -132,12 +132,12 @@ export default async function ComplaintDetailPage({
             {/* User Info Card */}
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-6 shadow-sm transition-all hover:shadow-xl group">
                <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-300 dark:text-slate-700 font-bold text-2xl transition-all group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-6">
-                  {complaint.author.name?.[0] || '?'}
+                  {(complaint.author.name || '?').charAt(0).toUpperCase()}
                </div>
                <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                     <h4 className="text-xl font-bold text-slate-900 dark:text-white italic">{complaint.author.name}</h4>
-                     {(complaint.author as any).isVerified && (
+                     <h4 className="text-xl font-bold text-slate-900 dark:text-white italic">{complaint.author.name || 'Anonim'}</h4>
+                     {complaint.author.isVerified && (
                         <ShieldAlert size={18} className="text-blue-500" fill="currentColor" />
                      )}
                   </div>
@@ -172,19 +172,19 @@ export default async function ComplaintDetailPage({
                         <div key={res.id} className={`flex gap-4 ${isOfficer ? 'flex-row' : 'flex-row-reverse'}`}>
                            <div className="shrink-0 pt-1">
                               <div className={`h-11 w-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all ${isOfficer ? 'bg-slate-900 dark:bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 border border-slate-100 dark:border-slate-700'}`}>
-                                 {res.officer.name?.[0] || '?'}
+                                 {(res.officer.name || '?').charAt(0).toUpperCase()}
                               </div>
                            </div>
                            <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
                               <div className="flex items-center gap-3 px-1">
-                                 <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer.name}</span>
+                                 <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer.name || 'Petugas'}</span>
                                  <span className="text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{new Date(res.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
                               </div>
                               <div className={`p-5 rounded-[1.5rem] text-[14px] leading-relaxed font-medium transition-all shadow-sm ${isOfficer ? 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300' : 'bg-blue-600 dark:bg-blue-500 text-white'}`}>
                                  {res.content}
                                  {res.imageUrl && (
-                                   <div className="mt-4 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5">
-                                      <img src={res.imageUrl} alt="Lampiran" className="w-full max-h-80 object-cover" />
+                                   <div className="mt-4 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 relative h-64">
+                                      <Image src={res.imageUrl} alt="Lampiran" fill className="object-cover" />
                                    </div>
                                  )}
                               </div>

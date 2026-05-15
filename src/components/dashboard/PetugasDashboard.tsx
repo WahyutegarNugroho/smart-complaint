@@ -256,7 +256,7 @@ export default function PetugasDashboard({
                      <div className="mt-auto pt-4 md:pt-5 border-t border-slate-50 dark:border-slate-800 flex items-center justify-between transition-colors">
                         <div className="flex items-center gap-2 md:gap-3">
                            <div className="h-8 w-8 md:h-9 md:w-9 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 font-bold text-[10px] shadow-inner transition-colors">
-                              {item.author?.name[0] || 'U'}
+                              {(item.author?.name || 'U').charAt(0).toUpperCase()}
                            </div>
                            <div className="min-w-0">
                               <p className="text-[10px] md:text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[100px] leading-none mb-1 md:mb-1.5 transition-colors">{item.author?.name || 'Anonim'}</p>
