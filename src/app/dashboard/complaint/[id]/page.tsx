@@ -167,7 +167,10 @@ export default async function ComplaintDetailPage({
                     {complaint.responses.map((res) => (
                       <ResponseItem 
                         key={res.id} 
-                        res={res} 
+                        res={{
+                          ...res,
+                          createdAt: res.createdAt.toISOString()
+                        }} 
                         currentProfileId={profile.id} 
                         isAdmin={profile.role === 'ADMIN'} 
                       />
