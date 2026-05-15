@@ -134,14 +134,14 @@ export default async function ComplaintDetailPage({
                </div>
                <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                     <h4 className="text-xl font-bold text-slate-900 dark:text-white italic">{complaint.author.name || 'Anonim'}</h4>
-                     {complaint.author.isVerified && (
+                     <h4 className="text-xl font-bold text-slate-900 dark:text-white italic">{complaint.author?.name || 'Anonim'}</h4>
+                     {complaint.author?.isVerified && (
                         <ShieldAlert size={18} className="text-blue-500" fill="currentColor" />
                      )}
                   </div>
                   <div className="flex items-center gap-3">
-                     <span className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-500 text-[9px] font-bold rounded-lg uppercase tracking-widest border border-slate-100 dark:border-slate-800">Warga RT {complaint.author.rt}</span>
-                     <span className="text-[11px] font-medium text-slate-500 dark:text-slate-600 italic">{complaint.author.username}</span>
+                     <span className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-500 text-[9px] font-bold rounded-lg uppercase tracking-widest border border-slate-100 dark:border-slate-800">Warga RT {complaint.author?.rt || '-'}</span>
+                     <span className="text-[11px] font-medium text-slate-500 dark:text-slate-600 italic">{complaint.author?.username || 'user'}</span>
                   </div>
                </div>
             </div>
