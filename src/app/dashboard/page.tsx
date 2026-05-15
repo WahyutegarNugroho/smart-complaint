@@ -9,6 +9,7 @@ import PetugasStatsSection from '@/components/dashboard/sections/PetugasStatsSec
 import StatsSection from '@/components/dashboard/sections/StatsSection'
 import AnnouncementsSection from '@/components/dashboard/sections/AnnouncementsSection'
 import ComplaintListSection from '@/components/dashboard/sections/ComplaintListSection'
+import SessionErrorState from '@/components/dashboard/SessionErrorState'
 import SectionSkeleton from '@/components/dashboard/sections/SectionSkeleton'
 import { Suspense } from 'react'
 
@@ -31,9 +32,16 @@ export default async function DashboardPage({
   const { status: rawStatus, message: successMessage } = params
 
   const data = await getCachedProfile()
-  if (!data) redirect('/login')
-  const { profile } = data
+  
+  // Only redirect if explicitly unauthenticated
+  if (data.status === 'UNAUTHENTICATED') return redirect('/login')
+  
+  // Handle database error status gracefully
+  if (data.status === 'ERROR' || !data.profile) {
+    return <SessionErrorState />
+  }
 
+  const { profile } = data
   const isAdmin = profile.role === 'ADMIN'
   const isPetugas = profile.role === 'PETUGAS'
   const isWarga = profile.role === 'MASYARAKAT'

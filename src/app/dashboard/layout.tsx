@@ -22,6 +22,7 @@ import { logout } from '@/app/auth/actions'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import ThemeToggle from '@/components/ThemeToggle'
 import { getCachedProfile } from '@/lib/profile'
+import SessionErrorState from '@/components/dashboard/SessionErrorState'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -32,7 +33,15 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const data = await getCachedProfile()
-  if (!data) redirect('/login')
+  
+  // Only redirect if explicitly unauthenticated
+  if (data.status === 'UNAUTHENTICATED') return redirect('/login')
+  
+  // Handle database error status gracefully
+  if (data.status === 'ERROR' || !data.profile) {
+    return <SessionErrorState />
+  }
+
   const { profile } = data
 
   const isAdmin = profile.role === 'ADMIN'

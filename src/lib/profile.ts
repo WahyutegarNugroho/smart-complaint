@@ -7,7 +7,10 @@ export const getCachedProfile = cache(async () => {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    if (authError || !user) return null
+    // CASE 1: No authenticated user in Supabase (Strict Logout)
+    if (authError || !user) {
+      return { profile: null, user: null, status: 'UNAUTHENTICATED' }
+    }
 
     let profile = await prisma.profile.findUnique({
       where: { userId: user.id }
@@ -39,14 +42,16 @@ export const getCachedProfile = cache(async () => {
       })
     }
 
-    // FINAL VALIDATION: Ensure critical fields exist
+    // FINAL VALIDATION
     if (!profile.id || !profile.role) {
       throw new Error('Incomplete profile data')
     }
 
-    return { profile, user }
+    return { profile, user, status: 'AUTHENTICATED' }
   } catch (err) {
     console.error('getCachedProfile Critical Error:', err)
-    return null
+    // CASE 2: Database/System Error but User is actually logged in to Supabase
+    // Returning 'ERROR' instead of null to prevent login redirect loop
+    return { profile: null, user: null, status: 'ERROR' }
   }
 })

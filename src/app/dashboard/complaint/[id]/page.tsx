@@ -23,6 +23,8 @@ import ResponseFileHandler from './ResponseFileHandler'
 import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
 
+import SessionErrorState from '@/components/dashboard/SessionErrorState'
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
@@ -34,7 +36,10 @@ export default async function ComplaintDetailPage({
   const { id } = await params
   
   const data = await getCachedProfile()
-  if (!data) redirect('/login')
+  
+  if (data.status === 'UNAUTHENTICATED') return redirect('/login')
+  if (data.status === 'ERROR' || !data.profile) return <SessionErrorState />
+  
   const { profile } = data
 
   const complaint = await prisma.complaint.findUnique({
