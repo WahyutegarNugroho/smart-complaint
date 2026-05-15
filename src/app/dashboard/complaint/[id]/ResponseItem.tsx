@@ -133,7 +133,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
           <div className={`p-5 rounded-[1.5rem] text-[14px] leading-relaxed font-medium transition-all shadow-sm ${isOfficer ? 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300' : 'bg-blue-600 dark:bg-blue-500 text-white'}`}>
             {res.content}
             {res.imageUrl && (
-              <div className="mt-4 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 relative h-64">
+              <div className="mt-4 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
                 <Image src={res.imageUrl} alt="Lampiran" fill className="object-cover" />
               </div>
             )}
