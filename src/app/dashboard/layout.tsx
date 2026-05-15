@@ -36,18 +36,24 @@ export default async function DashboardLayout({
   const isPetugas = profile.role === 'PETUGAS'
   const isWarga = profile.role === 'MASYARAKAT'
 
-  // 📊 Fetch Stats for Sidebar (Optimized)
-  const whereBase = isWarga ? { authorId: profile.id } : {}
-  const [pendingCount, processingCount, completedCount] = await Promise.all([
-    prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
-    prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
-    prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
-  ])
-
-  const stats = {
-    pending: pendingCount,
-    processing: processingCount,
-    completed: completedCount
+  // 📊 Fetch Stats for Sidebar (Optimized with error handling)
+  let stats = { pending: 0, processing: 0, completed: 0 }
+  
+  try {
+    const whereBase = isWarga ? { authorId: profile.id } : {}
+    const [pendingCount, processingCount, completedCount] = await Promise.all([
+      prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
+      prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
+      prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
+    ])
+    
+    stats = {
+      pending: pendingCount,
+      processing: processingCount,
+      completed: completedCount
+    }
+  } catch (err) {
+    console.error('Dashboard Stats Fetch Error:', err)
   }
 
   return (
