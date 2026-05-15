@@ -1,9 +1,9 @@
-import React from 'react'
 import { Bell } from 'lucide-react'
 import prisma from '@/lib/prisma'
+import { Announcement } from '@prisma/client'
 
 export default async function AnnouncementsSection() {
-  let announcements = []
+  let announcements: Announcement[] = []
   try {
     announcements = await prisma.announcement.findMany({
       orderBy: { createdAt: 'desc' },

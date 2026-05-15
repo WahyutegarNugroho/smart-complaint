@@ -11,7 +11,12 @@ export default async function StatsSection({ profileId, isWarga }: StatsSectionP
   if (!profileId && isWarga) return null;
   const whereBase = isWarga ? { authorId: profileId } : {};
 
-  let stats = { total: 0, pending: 0, processing: 0, completed: 0 };
+  let stats: { total: number; pending: number; processing: number; completed: number } = { 
+    total: 0, 
+    pending: 0, 
+    processing: 0, 
+    completed: 0 
+  };
 
   try {
     const [total, pending, processing, completed] = await Promise.all([
