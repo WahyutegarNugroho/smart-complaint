@@ -8,8 +8,7 @@ export function ExportButtons() {
   }
 
   const handleExcel = () => {
-    alert('Mengunduh data dalam format CSV/Excel...')
-    // In a real app, this would trigger a download from an API route
+    window.location.href = '/api/admin/export/complaints'
   }
 
   return (
