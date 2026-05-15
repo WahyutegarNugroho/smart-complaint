@@ -68,6 +68,8 @@ export async function respondToComplaint(formData: FormData) {
   const complaintId = formData.get('complaintId') as string
   if (!complaintId) redirect('/dashboard')
 
+  let result: { success: boolean; error?: string } = { success: false }
+
   try {
     const profile = await prisma.profile.findUnique({
       where: { userId: user.id }
@@ -78,59 +80,65 @@ export async function respondToComplaint(formData: FormData) {
     })
 
     if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint?.authorId !== profile.id)) {
-      redirect(`/dashboard/complaint/${complaintId}?error=forbidden`)
-    }
+      result = { success: false, error: 'forbidden' }
+    } else {
+      const content = formData.get('content') as string
+      if (!content) {
+        result = { success: false, error: 'content_required' }
+      } else {
+        const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
+        const imageFile = formData.get('responseImage') as File
+        let responseImageUrl = null
 
-    const content = formData.get('content') as string
-    if (!content) redirect(`/dashboard/complaint/${complaintId}?error=content_required`)
+        if (imageFile && imageFile instanceof File && imageFile.size > 0) {
+          const fileExt = imageFile.name.split('.').pop()
+          const fileName = `response-${Date.now()}.${fileExt}`
+          const filePath = `${user.id}/${fileName}`
 
-    const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
-    
-    const imageFile = formData.get('responseImage') as File
-    let responseImageUrl = null
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('complaints')
+            .upload(filePath, imageFile)
 
-    if (imageFile && imageFile instanceof File && imageFile.size > 0) {
-      const fileExt = imageFile.name.split('.').pop()
-      const fileName = `response-${Date.now()}.${fileExt}`
-      const filePath = `${user.id}/${fileName}`
+          if (!uploadError) {
+            const { data: urlData } = supabase.storage
+              .from('complaints')
+              .getPublicUrl(filePath)
+            responseImageUrl = urlData.publicUrl
+          }
+        }
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('complaints')
-        .upload(filePath, imageFile)
+        await prisma.response.create({
+          data: {
+            content: content,
+            imageUrl: responseImageUrl,
+            complaintId: complaintId,
+            officerId: profile.id
+          }
+        })
 
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage
-          .from('complaints')
-          .getPublicUrl(filePath)
-        responseImageUrl = urlData.publicUrl
+        if (status) {
+          await prisma.complaint.update({
+            where: { id: complaintId },
+            data: { status: status }
+          })
+        }
+
+        revalidatePath(`/dashboard/complaint/${complaintId}`)
+        revalidatePath('/dashboard')
+        result = { success: true }
       }
     }
-
-    await prisma.response.create({
-      data: {
-        content: content,
-        imageUrl: responseImageUrl,
-        complaintId: complaintId,
-        officerId: profile.id
-      }
-    })
-
-    // Petugas can update status, Masyarakat uses the current status (hidden input)
-    if (status) {
-      await prisma.complaint.update({
-        where: { id: complaintId },
-        data: { status: status }
-      })
-    }
-
-    revalidatePath(`/dashboard/complaint/${complaintId}`)
-    revalidatePath('/dashboard')
   } catch (err) {
     console.error('RespondToComplaint Error:', err)
-    redirect(`/dashboard/complaint/${complaintId}?error=system_error`)
+    result = { success: false, error: 'system_error' }
   }
 
-  redirect(`/dashboard/complaint/${complaintId}?message=Tanggapan berhasil dikirim`)
+  // Perform redirect OUTSIDE try-catch
+  if (result.success) {
+    redirect(`/dashboard/complaint/${complaintId}?message=Tanggapan berhasil dikirim`)
+  } else {
+    redirect(`/dashboard/complaint/${complaintId}?error=${result.error || 'unknown'}`)
+  }
 }
 
 export async function toggleUrgentStatus(formData: FormData) {
