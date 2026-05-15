@@ -11,6 +11,7 @@ export default async function AnnouncementsSection() {
     })
   } catch (err) {
     console.error('AnnouncementsSection Error:', err)
+    return null; // Don't crash the whole dashboard if announcements fail
   }
 
   if (announcements.length === 0) return null

@@ -23,7 +23,7 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
         {/* 👋 HEADER SECTION */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white transition-colors">Halo, {profile.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white transition-colors">Halo, {profile?.name || 'Warga'}</h1>
             <p className="text-slate-600 dark:text-slate-500 font-medium text-sm md:text-base">Ada yang bisa kami bantu untuk lingkungan hari ini?</p>
           </div>
           
