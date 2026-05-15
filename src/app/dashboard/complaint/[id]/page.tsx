@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import DeleteComplaintButton from './DeleteComplaintButton'
+import ResponseFileHandler from './ResponseFileHandler'
 import SubmitButton from '@/components/SubmitButton'
 
 export const dynamic = 'force-dynamic'
@@ -192,32 +193,31 @@ export default async function ComplaintDetailPage({
                )}
 
                {/* Response Form */}
-               <div className="mt-10 p-2 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl transition-all focus-within:ring-4 focus-within:ring-blue-500/5">
-                  <form action={respondToComplaint} className="relative">
-                     <input type="hidden" name="complaintId" value={complaint.id} />
-                     <input type="hidden" name="status" value={complaint.status} />
-                     <textarea 
-                       name="content" 
-                       required 
-                       placeholder="Ketik tanggapan Anda di sini..." 
-                       rows={4}
-                       className="w-full bg-transparent border-none rounded-[1.5rem] px-6 py-5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 outline-none resize-none font-medium transition-all"
-                     />
-                     <div className="absolute right-4 bottom-4 flex items-center gap-3">
-                        <label className="h-12 w-12 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer transition-all border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 shadow-inner">
-                           <Camera size={20} />
-                           <input type="file" name="responseImage" className="hidden" />
-                        </label>
-                        <SubmitButton 
-                          className="bg-slate-900 dark:bg-blue-600 text-white h-12 px-8 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl active:scale-95 flex items-center gap-3"
-                          loadingText=""
-                          icon={<Send size={18} />}
-                        >
-                           Kirim
-                        </SubmitButton>
-                     </div>
-                  </form>
-               </div>
+                <div className="mt-10 p-2 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl transition-all focus-within:ring-4 focus-within:ring-blue-500/5">
+                   <form action={respondToComplaint} className="relative" encType="multipart/form-data">
+                      <input type="hidden" name="complaintId" value={complaint.id} />
+                      <input type="hidden" name="status" value={complaint.status} />
+                      <textarea 
+                        name="content" 
+                        required 
+                        placeholder="Ketik tanggapan Anda di sini..." 
+                        rows={4}
+                        className="w-full bg-transparent border-none rounded-[1.5rem] px-6 py-5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 outline-none resize-none font-medium transition-all"
+                      />
+                      
+                      <ResponseFileHandler />
+                      
+                      <div className="absolute right-20 bottom-4 flex items-center gap-3">
+                         <SubmitButton 
+                           className="bg-slate-900 dark:bg-blue-600 text-white h-12 px-8 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl active:scale-95 flex items-center gap-3"
+                           loadingText=""
+                           icon={<Send size={18} />}
+                         >
+                            Kirim
+                         </SubmitButton>
+                      </div>
+                   </form>
+                </div>
             </section>
           </div>
 
