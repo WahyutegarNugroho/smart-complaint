@@ -87,23 +87,33 @@ export async function respondToComplaint(formData: FormData) {
         result = { success: false, error: 'content_required' }
       } else {
         const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
-        const imageFile = formData.get('responseImage') as File
+        const imageFile = formData.get('responseImage') as any // Use any to avoid strict File issues on server
         let responseImageUrl = null
 
-        if (imageFile && imageFile instanceof File && imageFile.size > 0) {
-          const fileExt = imageFile.name.split('.').pop()
-          const fileName = `response-${Date.now()}.${fileExt}`
-          const filePath = `${user.id}/${fileName}`
+        // Robust check for file presence and size
+        if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
+          try {
+            const fileExt = imageFile.name?.split('.').pop() || 'jpg'
+            const fileName = `res-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+            const filePath = `${user.id}/${fileName}`
 
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('complaints')
-            .upload(filePath, imageFile)
-
-          if (!uploadError) {
-            const { data: urlData } = supabase.storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
               .from('complaints')
-              .getPublicUrl(filePath)
-            responseImageUrl = urlData.publicUrl
+              .upload(filePath, imageFile, {
+                contentType: imageFile.type,
+                upsert: true
+              })
+
+            if (!uploadError) {
+              const { data: urlData } = supabase.storage
+                .from('complaints')
+                .getPublicUrl(filePath)
+              responseImageUrl = urlData.publicUrl
+            } else {
+              console.error('Supabase Upload Error:', uploadError)
+            }
+          } catch (uploadExc) {
+            console.error('File Processing Exception:', uploadExc)
           }
         }
 
