@@ -74,34 +74,29 @@ export default async function DashboardPage({
   }
 
   if (isWarga) {
-    try {
-      return (
-        <MasyarakatDashboardLayout profile={profile} successMessage={successMessage}>
-          {!rawStatus && (
-            <Suspense fallback={<SectionSkeleton type="stats" />}>
-              <StatsSection profileId={profile.id} isWarga={true} />
-            </Suspense>
-          )}
-
-          {!rawStatus && (
-            <Suspense fallback={<SectionSkeleton type="announcements" />}>
-              <AnnouncementsSection />
-            </Suspense>
-          )}
-
-          <Suspense fallback={<SectionSkeleton type="list" />}>
-            <ComplaintListSection 
-              profileId={profile.id} 
-              isWarga={true} 
-              searchParams={params} 
-            />
+    return (
+      <MasyarakatDashboardLayout profile={profile} successMessage={successMessage}>
+        {!rawStatus && (
+          <Suspense fallback={<SectionSkeleton type="stats" />}>
+            <StatsSection profileId={profile.id} isWarga={true} />
           </Suspense>
-        </MasyarakatDashboardLayout>
-      )
-    } catch (err) {
-      console.error('Citizen Dashboard Render Error:', err)
-      return redirect('/login?error=session_expired')
-    }
+        )}
+
+        {!rawStatus && (
+          <Suspense fallback={<SectionSkeleton type="announcements" />}>
+            <AnnouncementsSection />
+          </Suspense>
+        )}
+
+        <Suspense fallback={<SectionSkeleton type="list" />}>
+          <ComplaintListSection 
+            profileId={profile.id} 
+            isWarga={true} 
+            searchParams={params} 
+          />
+        </Suspense>
+      </MasyarakatDashboardLayout>
+    )
   }
 
   return redirect('/login')
