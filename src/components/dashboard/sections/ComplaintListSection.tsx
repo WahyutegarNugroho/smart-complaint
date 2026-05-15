@@ -199,7 +199,14 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                           </div>
                           <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700 hidden md:block" />
                           <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
-                            {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                            {(() => {
+                              try {
+                                const date = new Date(item.createdAt)
+                                return isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+                              } catch (e) {
+                                return '-'
+                              }
+                            })()}
                           </span>
                         </div>
                       </div>

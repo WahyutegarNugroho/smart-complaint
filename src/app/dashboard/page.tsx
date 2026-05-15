@@ -9,8 +9,11 @@ import PetugasStatsSection from '@/components/dashboard/sections/PetugasStatsSec
 import StatsSection from '@/components/dashboard/sections/StatsSection'
 import AnnouncementsSection from '@/components/dashboard/sections/AnnouncementsSection'
 import ComplaintListSection from '@/components/dashboard/sections/ComplaintListSection'
-import { Suspense } from 'react'
 import SectionSkeleton from '@/components/dashboard/sections/SectionSkeleton'
+import { Suspense } from 'react'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function DashboardPage({
   searchParams
