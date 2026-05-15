@@ -168,8 +168,15 @@ export default async function ComplaintDetailPage({
                       <ResponseItem 
                         key={res.id} 
                         res={{
-                          ...res,
-                          createdAt: res.createdAt.toISOString()
+                          id: res.id,
+                          content: res.content,
+                          imageUrl: res.imageUrl,
+                          officerId: res.officerId,
+                          createdAt: res.createdAt.toISOString(),
+                          officer: {
+                            name: res.officer?.name,
+                            role: res.officer?.role
+                          }
                         }} 
                         currentProfileId={profile.id} 
                         isAdmin={profile.role === 'ADMIN'} 
