@@ -411,3 +411,60 @@ export async function deleteComplaint(formData: FormData) {
   revalidatePath('/dashboard')
   redirect('/dashboard?message=Laporan berhasil dihapus')
 }
+
+export async function deleteResponse(responseId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id }
+  })
+  if (!profile) return { error: 'Profile not found' }
+
+  const response = await prisma.response.findUnique({
+    where: { id: responseId }
+  })
+  if (!response) return { error: 'Response not found' }
+
+  // Author can delete, Admin can delete anything
+  if (response.officerId !== profile.id && profile.role !== 'ADMIN') {
+    return { error: 'Forbidden' }
+  }
+
+  await prisma.response.delete({
+    where: { id: responseId }
+  })
+
+  revalidatePath(`/dashboard/complaint/${response.complaintId}`)
+  return { success: true }
+}
+
+export async function editResponse(responseId: string, content: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id }
+  })
+  if (!profile) return { error: 'Profile not found' }
+
+  const response = await prisma.response.findUnique({
+    where: { id: responseId }
+  })
+  if (!response) return { error: 'Response not found' }
+
+  // Only author can edit
+  if (response.officerId !== profile.id) {
+    return { error: 'Forbidden' }
+  }
+
+  await prisma.response.update({
+    where: { id: responseId },
+    data: { content }
+  })
+
+  revalidatePath(`/dashboard/complaint/${response.complaintId}`)
+  return { success: true }
+}

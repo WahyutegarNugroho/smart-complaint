@@ -20,6 +20,7 @@ import {
 import Link from 'next/link'
 import DeleteComplaintButton from './DeleteComplaintButton'
 import ResponseFileHandler from './ResponseFileHandler'
+import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
 
 export const dynamic = 'force-dynamic'
@@ -163,32 +164,14 @@ export default async function ComplaintDetailPage({
                  </div>
                ) : (
                  <div className="space-y-6">
-                    {complaint.responses.map((res) => {
-                      const isOfficer = (res.officer?.role || 'MASYARAKAT') !== 'MASYARAKAT'
-                      return (
-                        <div key={res.id} className={`flex gap-4 ${isOfficer ? 'flex-row' : 'flex-row-reverse'}`}>
-                           <div className="shrink-0 pt-1">
-                              <div className={`h-11 w-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all ${isOfficer ? 'bg-slate-900 dark:bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 border border-slate-100 dark:border-slate-700'}`}>
-                                 {(res.officer?.name || '?').charAt(0).toUpperCase()}
-                              </div>
-                           </div>
-                           <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
-                              <div className="flex items-center gap-3 px-1">
-                                 <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer?.name || 'Petugas'}</span>
-                                 <span className="text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{new Date(res.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
-                              </div>
-                              <div className={`p-5 rounded-[1.5rem] text-[14px] leading-relaxed font-medium transition-all shadow-sm ${isOfficer ? 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300' : 'bg-blue-600 dark:bg-blue-500 text-white'}`}>
-                                 {res.content}
-                                 {res.imageUrl && (
-                                   <div className="mt-4 rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 relative h-64">
-                                      <Image src={res.imageUrl} alt="Lampiran" fill className="object-cover" />
-                                   </div>
-                                 )}
-                              </div>
-                           </div>
-                        </div>
-                      )
-                    })}
+                    {complaint.responses.map((res) => (
+                      <ResponseItem 
+                        key={res.id} 
+                        res={res} 
+                        currentProfileId={profile.id} 
+                        isAdmin={profile.role === 'ADMIN'} 
+                      />
+                    ))}
                  </div>
                )}
 
