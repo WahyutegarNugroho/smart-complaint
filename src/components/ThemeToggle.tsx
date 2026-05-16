@@ -45,10 +45,14 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all border border-slate-100 dark:border-slate-700 shadow-sm"
+      className="p-3 rounded-brand bg-brand-canvas text-brand-ink hover:bg-brand-primary hover:text-[#0e0f0c] transition-all border border-brand-hairline shadow-sm flex items-center justify-center group"
       aria-label="Toggle Dark Mode"
     >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? (
+        <Sun size={18} className="group-hover:rotate-45 transition-transform" />
+      ) : (
+        <Moon size={18} className="group-hover:-rotate-12 transition-transform" />
+      )}
     </button>
   )
 }

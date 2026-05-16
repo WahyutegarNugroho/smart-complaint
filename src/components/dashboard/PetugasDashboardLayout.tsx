@@ -13,17 +13,17 @@ interface LayoutProps {
 
 export default function PetugasDashboardLayout({ profile, successMessage, children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">
+    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-500 pb-20 animate-page">
        
        {successMessage && <SuccessToast message={successMessage} />}
 
-       <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
+       <main className="max-w-7xl mx-auto p-6 md:p-12 space-y-12">
          
          {/* 👋 HEADER SECTION */}
-         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-           <div className="space-y-1">
-             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white transition-colors">Halo, {profile.name}</h1>
-             <p className="text-slate-600 dark:text-slate-500 font-medium text-sm md:text-base">Monitoring dan tangani laporan warga Pesona Serpong.</p>
+         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-hairline pb-12">
+           <div className="space-y-2">
+             <h1 className="text-3xl md:text-5xl font-black dark:font-normal tracking-tight text-brand-ink transition-colors leading-none">Halo, {profile.name}</h1>
+             <p className="text-brand-ink/40 font-bold text-[13px] uppercase tracking-widest">Panel Monitoring Petugas Pesona Serpong</p>
            </div>
          </section>
 

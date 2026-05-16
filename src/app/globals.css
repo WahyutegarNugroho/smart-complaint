@@ -3,6 +3,39 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui;
+  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Brand Colors - Mapped to CSS Variables */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-canvas: var(--brand-canvas);
+  --color-brand-canvas-soft: var(--brand-canvas-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-hairline: var(--brand-hairline);
+
+  /* Brand Radius - Dynamic based on theme */
+  --radius-brand: var(--brand-radius);
+}
+
+:root {
+  /* Wise Light Mode Primitives */
+  --brand-primary: #9fe870;
+  --brand-canvas: #ffffff;
+  --brand-canvas-soft: #e8ebe6;
+  --brand-ink: #0e0f0c;
+  --brand-hairline: rgba(14, 15, 12, 0.1);
+  --brand-radius: 24px;
+  
+  --font-inter: "Inter Variable", "Inter", sans-serif;
+}
+
+.dark {
+  /* Voltagent Dark Mode Primitives */
+  --brand-primary: #00d992;
+  --brand-canvas: #101010;
+  --brand-canvas-soft: #1a1a1a;
+  --brand-ink: #f2f2f2;
+  --brand-hairline: #3d3a39;
+  --brand-radius: 8px;
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -10,27 +43,39 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    @apply scroll-smooth;
   }
   
   body {
-    @apply bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased transition-colors duration-300;
+    @apply bg-brand-canvas-soft text-brand-ink antialiased transition-colors duration-500 font-sans;
+    background-color: var(--brand-canvas-soft);
+    color: var(--brand-ink);
   }
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-slate-50 dark:bg-slate-900;
+    @apply bg-brand-canvas-soft;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 dark:bg-slate-700 rounded-full border-2 border-solid border-slate-50 dark:border-slate-900 hover:bg-slate-400 dark:hover:bg-slate-600;
+    @apply bg-brand-hairline rounded-full hover:bg-brand-ink/20 transition-colors;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20;
+    @apply bg-white/70 dark:bg-black/50 backdrop-blur-md border border-white/20 dark:border-white/10;
+  }
+  
+  .card-base {
+    @apply bg-brand-canvas rounded-brand transition-all duration-300;
+    border: 1px solid var(--brand-hairline);
+  }
+
+  .btn-primary {
+    @apply bg-brand-primary text-[#0e0f0c] font-bold py-3 px-8 rounded-brand hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-brand-primary/10;
   }
 }
 
@@ -46,7 +91,7 @@
 @keyframes fade-slide-up {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -55,5 +100,6 @@
 }
 
 .animate-page {
-  animation: fade-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: fade-slide-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
