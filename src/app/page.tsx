@@ -22,11 +22,11 @@ export default function LandingPage() {
       <nav className="fixed top-0 z-50 w-full border-b border-brand-hairline bg-brand-canvas/80 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex h-20 justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-brand bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20">
-                <Zap size={22} fill="currentColor" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-brand bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20">
+                <Zap size={18} className="sm:w-[22px] sm:h-[22px]" fill="currentColor" />
               </div>
-              <span className="text-xl font-bold text-brand-ink tracking-tight uppercase">
+              <span className="text-base sm:text-xl font-bold text-brand-ink tracking-tight uppercase">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
             </div>
@@ -37,17 +37,17 @@ export default function LandingPage() {
               <a href="#statistik" className="hover:text-brand-primary transition-colors">Statistik</a>
             </div>
 
-            <div className="flex items-center space-x-6">
-              <Link href="/login" className="hidden sm:block text-[13px] font-bold uppercase tracking-widest text-brand-ink/60 hover:text-brand-primary transition-colors">
+            <div className="flex items-center space-x-3 sm:space-x-6">
+              <Link href="/login" className="hidden sm:block text-[11px] sm:text-[13px] font-bold uppercase tracking-widest text-brand-ink/60 hover:text-brand-primary transition-colors">
                 Masuk
               </Link>
               <Link
                 href="/register"
-                className="btn-primary py-2.5 px-6 text-[13px] tracking-widest uppercase"
+                className="btn-primary py-2 sm:py-2.5 px-4 sm:px-6 text-[11px] sm:text-[13px] tracking-widest uppercase"
               >
-                Daftar Warga
+                Daftar
               </Link>
-              <div className="hidden sm:block border-l border-brand-hairline h-6 mx-2" />
+              <div className="hidden md:block border-l border-brand-hairline h-6 mx-2" />
               <div className="flex items-center">
                 <ThemeToggle />
               </div>
@@ -68,7 +68,7 @@ export default function LandingPage() {
                 Ecosystem Pengaduan Perumahan
               </div>
               
-              <h1 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight text-brand-ink leading-[0.95] mb-8">
+              <h1 className="text-4xl sm:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight text-brand-ink leading-[1.1] lg:leading-[0.95] mb-6 sm:mb-8">
                 Ciptakan Lingkungan <span className="text-brand-primary">Harmonis</span> di Pesona Serpong.
               </h1>
               
@@ -93,10 +93,10 @@ export default function LandingPage() {
               </div>
 
               {/* Trust badges */}
-              <div className="mt-16 flex items-center justify-center lg:justify-start gap-5">
+              <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-5">
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="relative h-10 w-10 rounded-full ring-4 ring-brand-canvas overflow-hidden border border-brand-hairline">
+                    <div key={i} className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-4 ring-brand-canvas overflow-hidden border border-brand-hairline">
                       <Image 
                         src={`https://i.pravatar.cc/100?img=${i + 20}`} 
                         alt="User" 
@@ -106,7 +106,7 @@ export default function LandingPage() {
                     </div>
                   ))}
                 </div>
-                <p className="text-[13px] font-bold text-brand-ink/50 uppercase tracking-widest">
+                <p className="text-[11px] sm:text-[13px] font-bold text-brand-ink/50 uppercase tracking-widest text-center sm:text-left">
                   Dipercaya <span className="text-brand-ink underline decoration-brand-primary decoration-4">500+</span> Kepala Keluarga
                 </p>
               </div>
@@ -192,13 +192,13 @@ export default function LandingPage() {
         </div>
         
         <div className="relative mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h2 className="text-4xl lg:text-6xl font-extrabold text-brand-canvas mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
-          <p className="text-xl text-brand-canvas/60 mb-14 max-w-2xl mx-auto font-medium">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-brand-canvas mb-8 sm:mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
+          <p className="text-lg sm:text-xl text-brand-canvas/60 mb-10 sm:mb-14 max-w-2xl mx-auto font-medium">
             Suara Anda adalah penggerak perubahan. Laporkan kendala sekarang dan pantau progresnya secara transparan.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-12 py-6 text-xl font-bold text-[#0e0f0c] shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all"
+            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-10 sm:px-12 py-5 sm:py-6 text-lg sm:text-xl font-bold text-[#0e0f0c] shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all w-full sm:w-auto"
           >
             Daftar Sebagai Warga
           </Link>

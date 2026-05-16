@@ -21,11 +21,11 @@ export default function LoginPage({
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md">
-        <div className="text-center mb-16">
-          <Link href="/" className="inline-flex items-center gap-4 group">
-            <div className="flex h-14 w-14 items-center justify-center rounded-brand bg-brand-ink text-brand-primary shadow-2xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
-              <ShieldCheck size={32} />
+      <div className="w-full max-w-md py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-16">
+          <Link href="/" className="inline-flex items-center gap-3 sm:gap-4 group">
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-ink text-brand-primary shadow-2xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
+              <ShieldCheck size={28} className="sm:w-[32px] sm:h-[32px]" />
             </div>
             <div className="flex flex-col items-start text-left">
               <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase italic leading-none transition-colors">
@@ -36,8 +36,8 @@ export default function LoginPage({
           </Link>
         </div>
 
-        <div className="card-base p-10 md:p-12 shadow-2xl shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
-          <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-ink pointer-events-none">
+        <div className="card-base p-7 sm:p-12 shadow-2xl shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
+          <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-ink pointer-events-none hidden sm:block">
             <Activity size={150} />
           </div>
 
