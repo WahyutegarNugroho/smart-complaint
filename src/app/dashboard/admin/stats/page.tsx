@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { 
-  BarChart3, 
   ArrowLeft,
   Activity,
   PieChart as PieIcon,

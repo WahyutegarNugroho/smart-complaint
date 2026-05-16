@@ -42,9 +42,9 @@ export const getCachedProfile = cache(async () => {
             role: 'MASYARAKAT'
           }
         })
-      } catch (createErr: any) {
+      } catch (createErr: unknown) {
         // Handle race condition: if profile was created by another request simultaneously
-        if (createErr.code === 'P2002') {
+        if (createErr && typeof createErr === 'object' && 'code' in createErr && createErr.code === 'P2002') {
           profile = await prisma.profile.findUnique({
             where: { userId: user.id }
           })
@@ -66,7 +66,7 @@ export const getCachedProfile = cache(async () => {
     }
 
     return { profile, user, status: 'AUTHENTICATED' }
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('getCachedProfile Critical Failure:', err)
     return { profile: null, user: null, status: 'ERROR' }
   }

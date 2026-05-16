@@ -1,17 +1,16 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
-import { Camera, X, Image as ImageIcon } from 'lucide-react'
+import { Camera, X } from 'lucide-react'
+import Image from 'next/image'
 
 export default function ResponseFileHandler() {
   const [preview, setPreview] = useState<string | null>(null)
-  const [fileName, setFileName] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setFileName(file.name)
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreview(reader.result as string)
@@ -22,7 +21,6 @@ export default function ResponseFileHandler() {
 
   const clearFile = () => {
     setPreview(null)
-    setFileName(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -33,8 +31,8 @@ export default function ResponseFileHandler() {
       {preview && (
         <div className="px-6 mb-2">
            <div className="relative inline-block group">
-              <div className="h-20 w-20 rounded-2xl overflow-hidden border-2 border-blue-500/30 shadow-lg">
-                <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+              <div className="h-20 w-20 rounded-2xl overflow-hidden border-2 border-blue-500/30 shadow-lg relative">
+                <Image src={preview} alt="Preview" fill className="object-cover" />
               </div>
               <button 
                 type="button"

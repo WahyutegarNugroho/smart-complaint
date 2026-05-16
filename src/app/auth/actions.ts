@@ -13,7 +13,7 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { data: authData, error } = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     redirect('/login?error=' + encodeURIComponent(error.message))
@@ -66,14 +66,15 @@ export async function signup(formData: FormData) {
         }
       })
       console.log(`Prisma upsert Success`)
-    } catch (dbError: any) {
+    } catch (dbError: unknown) {
       // ⚠️ Don't catch Next.js redirect errors
-      if (dbError.digest?.startsWith('NEXT_REDIRECT')) throw dbError;
+      if (dbError instanceof Error && (dbError as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw dbError;
       
-      console.error(`Prisma Error: ${dbError.message}`)
-      console.error('Database Error during signup:', dbError)
+      const error = dbError as Error;
+      console.error(`Prisma Error: ${error.message}`)
+      console.error('Database Error during signup:', error)
       
-      const errorMessage = dbError.message?.includes('max clients reached') 
+      const errorMessage = error.message?.includes('max clients reached') 
         ? 'Database sedang sibuk. Silahkan coba beberapa saat lagi.'
         : 'Gagal membuat profil. Akun terdaftar di Auth tapi gagal di Database.'
       

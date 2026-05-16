@@ -5,12 +5,10 @@ import UserRow from './UserRow'
 import {
    Users,
    ArrowLeft,
-   ShieldCheck,
-   Search,
-   Filter,
-   UserPlus
+   Search
 } from 'lucide-react'
 import Link from 'next/link'
+import { Profile, Prisma, Role } from '@prisma/client'
 
 export default async function AdminUsersPage({
    searchParams
@@ -20,7 +18,7 @@ export default async function AdminUsersPage({
    const { q, role, rt, rw } = await searchParams
    const supabase = await createClient()
 
-   let allUsers: any[] = []
+   let allUsers: Profile[] = []
    try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) redirect('/login')
@@ -33,14 +31,14 @@ export default async function AdminUsersPage({
          redirect('/dashboard')
       }
 
-      const whereClause: any = {}
+      const whereClause: Prisma.ProfileWhereInput = {}
       if (q) {
          whereClause.OR = [
             { name: { contains: q, mode: 'insensitive' } },
             { username: { contains: q, mode: 'insensitive' } }
          ]
       }
-      if (role) whereClause.role = role
+      if (role) whereClause.role = role as Role
       if (rt) whereClause.rt = rt
       if (rw) whereClause.rw = rw
 

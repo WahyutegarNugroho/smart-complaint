@@ -11,14 +11,11 @@ export default function SuccessToast({ message }: SuccessToastProps) {
   const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
-    if (message) {
-      setIsVisible(true)
-      const timer = setTimeout(() => {
-        setIsVisible(false)
-      }, 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [message])
+    const timer = setTimeout(() => {
+      setIsVisible(false)
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [])
 
   if (!isVisible || !message) return null
 

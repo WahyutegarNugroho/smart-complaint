@@ -4,28 +4,25 @@ import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { updateUserRole, toggleUserVerification, deleteUserAccount } from '@/app/dashboard/actions'
 import { 
-  ShieldCheck, 
-  UserCircle,
+  ShieldCheck,
   Trash2,
   CheckCircle2,
   AlertCircle,
   X,
   User,
-  Phone,
-  MapPin,
-  Fingerprint,
-  Calendar,
-  Mail,
-  ChevronRight,
-  MoreVertical
+  ChevronRight
 } from 'lucide-react'
+import { Profile } from '@prisma/client'
 
-export default function UserRow({ user }: { user: any }) {
+export default function UserRow({ user }: { user: Profile }) {
   const [showModal, setShowModal] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    const timer = setTimeout(() => {
+      setMounted(true)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
@@ -42,11 +39,11 @@ export default function UserRow({ user }: { user: any }) {
             <div>
               <div className="flex items-center gap-2 mb-0.5">
                 <p className="text-[15px] font-bold text-slate-900 dark:text-white transition-colors">{user.name}</p>
-                {(user as any).isVerified && (
+                {user.isVerified && (
                   <ShieldCheck size={14} className="text-blue-500 dark:text-blue-400" fill="currentColor" />
                 )}
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium tracking-tight transition-colors">{user.email || user.username}</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium tracking-tight transition-colors">{user.username}</p>
             </div>
           </div>
         </td>
@@ -58,7 +55,13 @@ export default function UserRow({ user }: { user: any }) {
         </td>
         <td className="px-8 py-6">
           <div className="flex flex-col gap-2.5" onClick={(e) => e.stopPropagation()}>
-             <form action={updateUserRole} className="inline-block">
+             <form action={async (formData) => {
+               try {
+                 await updateUserRole(formData)
+               } catch (err) {
+                 if (err instanceof Error && ('digest' in err) && (err as { digest: string }).digest.startsWith('NEXT_REDIRECT')) throw err
+               }
+             }} className="inline-block">
                 <input type="hidden" name="profileId" value={user.id} />
                 <select 
                   name="role" 
@@ -74,16 +77,23 @@ export default function UserRow({ user }: { user: any }) {
              <form action={toggleUserVerification}>
                 <input type="hidden" name="profileId" value={user.id} />
                 <input type="hidden" name="isVerified" value={String(user.isVerified)} />
-                <button className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest transition-all ${(user as any).isVerified ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400'}`}>
-                   {(user as any).isVerified ? <CheckCircle2 size={12} /> : <AlertCircle size={12} />}
-                   {(user as any).isVerified ? 'Terverifikasi' : 'Belum Verifikasi'}
+                <button className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest transition-all ${user.isVerified ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400'}`}>
+                   {user.isVerified ? <CheckCircle2 size={12} /> : <AlertCircle size={12} />}
+                   {user.isVerified ? 'Terverifikasi' : 'Belum Verifikasi'}
                 </button>
              </form>
           </div>
         </td>
         <td className="px-8 py-6 text-right" onClick={(e) => e.stopPropagation()}>
            <div className="flex items-center justify-end gap-3">
-              <form action={deleteUserAccount} onSubmit={(e) => { if(!confirm('Hapus akun pengguna ini secara permanen?')) e.preventDefault() }}>
+              <form action={async (formData) => {
+                if(!confirm('Hapus akun pengguna ini secara permanen?')) return
+                try {
+                  await deleteUserAccount(formData)
+                } catch (dbError) {
+                  if (dbError instanceof Error && ('digest' in dbError) && (dbError as { digest: string }).digest.startsWith('NEXT_REDIRECT')) throw dbError
+                }
+              }}>
                  <input type="hidden" name="profileId" value={user.id} />
                  <button className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/del">
                     <Trash2 size={16} className="group-hover/del:scale-110 transition-transform" />
@@ -180,7 +190,7 @@ export default function UserRow({ user }: { user: any }) {
                    Alamat Domisili
                 </p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed italic pl-4 border-l-2 border-slate-100 dark:border-slate-800 transition-colors">
-                  "{user.address || 'Alamat lengkap belum dilengkapi oleh pengguna dalam profil mereka.'}"
+                  &quot;{user.address || 'Alamat lengkap belum dilengkapi oleh pengguna dalam profil mereka.'}&quot;
                 </p>
               </div>
 

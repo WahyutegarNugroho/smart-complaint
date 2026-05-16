@@ -14,7 +14,6 @@ import {
   CheckCircle,
   MessageSquare,
   Send,
-  Camera,
   ChevronLeft,
   Trash2
 } from 'lucide-react'
@@ -179,7 +178,7 @@ export default async function ComplaintDetailPage({
                           content: res.content,
                           imageUrl: res.imageUrl,
                           officerId: res.officerId,
-                          createdAt: res.createdAt.toISOString(),
+                          createdAt: res.createdAt,
                           officer: {
                             name: res.officer?.name,
                             role: res.officer?.role

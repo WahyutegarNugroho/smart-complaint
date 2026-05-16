@@ -6,12 +6,21 @@ import AnnouncementItem from './AnnouncementItem'
 import { 
   Megaphone, 
   Plus, 
-  ArrowLeft,
   Info,
   ChevronLeft,
   Send
 } from 'lucide-react'
 import Link from 'next/link'
+
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date | string;
+  author: {
+    name: string | null;
+  };
+}
 
 export default async function AdminAnnouncementsPage({
   searchParams
@@ -21,7 +30,7 @@ export default async function AdminAnnouncementsPage({
   const { message: successMessage } = await searchParams
   const supabase = await createClient()
 
-  let announcements: any[] = []
+  let announcements: Announcement[] = []
   try {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) redirect('/login')

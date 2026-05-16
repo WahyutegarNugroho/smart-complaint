@@ -7,15 +7,22 @@ import {
   User,
   Calendar,
   Edit3,
-  X,
   Check,
-  MoreVertical,
-  ChevronRight,
   Megaphone
 } from 'lucide-react'
 
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date | string;
+  author: {
+    name: string | null;
+  };
+}
+
 interface AnnouncementItemProps {
-  item: any;
+  item: Announcement;
 }
 
 export default function AnnouncementItem({ item }: AnnouncementItemProps) {

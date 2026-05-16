@@ -4,16 +4,9 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { 
-  Home, 
-  PlusCircle, 
   Settings2, 
   Megaphone, 
-  Inbox, 
-  BarChart3,
   Users,
-  Search,
-  ClipboardList,
-  Activity,
   BarChart,
   LayoutGrid
 } from 'lucide-react'
@@ -30,7 +23,6 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
   const isActive = (path: string) => pathname === path
 
   const isWarga = role === 'MASYARAKAT'
-  const isAdmin = role === 'ADMIN'
   const isPetugas = role === 'PETUGAS'
 
   if (isWarga) return <MasyarakatMobileNav />

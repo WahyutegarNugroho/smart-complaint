@@ -22,7 +22,7 @@ export async function createComplaint(formData: FormData) {
       })
       if (!profile) throw new Error('profile_not_found')
 
-      const imageFile = formData.get('image') as any
+      const imageFile = formData.get('image') as File | null
       let imageUrl = null
 
       // 🖼️ Robust Image Upload
@@ -31,7 +31,7 @@ export async function createComplaint(formData: FormData) {
         const fileName = `complaint-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
         const filePath = `${user.id}/${fileName}`
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('complaints')
           .upload(filePath, imageFile, {
             contentType: imageFile.type,
@@ -112,7 +112,7 @@ export async function respondToComplaint(formData: FormData) {
         result = { success: false, error: 'content_required' }
       } else {
         const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
-        const imageFile = formData.get('responseImage') as any // Use any to avoid strict File issues on server
+        const imageFile = formData.get('responseImage') as File | null
         let responseImageUrl = null
 
         // Robust check for file presence and size
@@ -122,7 +122,7 @@ export async function respondToComplaint(formData: FormData) {
             const fileName = `res-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
             const filePath = `${user.id}/${fileName}`
 
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
               .from('complaints')
               .upload(filePath, imageFile, {
                 contentType: imageFile.type,
@@ -358,7 +358,7 @@ export async function toggleUserVerification(formData: FormData) {
 
     await prisma.profile.update({
       where: { id: targetProfileId },
-      data: { isVerified: !currentStatus } as any
+      data: { isVerified: !currentStatus }
     })
 
     revalidatePath('/dashboard/admin/users')
@@ -407,7 +407,7 @@ export async function updateProfile(formData: FormData) {
     redirect('/dashboard/settings?message=Profil berhasil diperbarui')
   } catch (err) {
     console.error('UpdateProfile Error:', err)
-    if ((err as any).digest?.startsWith('NEXT_REDIRECT')) throw err;
+    if (err instanceof Error && (err as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw err;
     redirect('/dashboard/settings?error=system_error')
   }
 }
@@ -435,7 +435,7 @@ export async function updateComplaint(formData: FormData) {
     const fileName = `${Date.now()}.${fileExt}`
     const filePath = `${user.id}/${fileName}`
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('complaints')
       .upload(filePath, imageFile)
 
@@ -479,7 +479,7 @@ export async function updateComplaintStatus(formData: FormData) {
     }
 
     const id = formData.get('id') as string
-    const status = formData.get('status') as any
+    const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
 
     await prisma.complaint.update({
       where: { id },

@@ -1,9 +1,7 @@
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import { updateProfile } from '@/app/dashboard/actions'
 import Link from 'next/link'
-import { User, Shield, Phone, MapPin, Home, ArrowLeft, ChevronLeft, Save, LogOut } from 'lucide-react'
+import { User, Shield, Phone, Home, ChevronLeft, Save, LogOut } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
 import SubmitButton from '@/components/SubmitButton'
 

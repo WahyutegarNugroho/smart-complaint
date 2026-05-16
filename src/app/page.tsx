@@ -1,15 +1,12 @@
 import React from 'react';
 import { 
-  Zap, 
-  Camera, 
-  MapPin, 
-  ArrowRight, 
-  ShieldCheck, 
-  Clock, 
-  CheckCircle,
+  Zap,
+  MapPin,
+  Clock,
   BarChart3,
-  MessageSquare,
+  ShieldCheck,
   Users,
+  ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -128,7 +125,7 @@ export default function LandingPage() {
                     <div className="h-2 w-2 rounded-full bg-brand-primary" />
                     <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink/60">Status Real-time</span>
                   </div>
-                  <p className="text-lg font-bold text-brand-ink">"Perbaikan Lampu Jalan Blok C Selesai"</p>
+                  <p className="text-lg font-bold text-brand-ink">&quot;Perbaikan Lampu Jalan Blok C Selesai&quot;</p>
                 </div>
               </div>
             </div>
@@ -257,12 +254,6 @@ export default function LandingPage() {
   );
 }
 
-const LANDING_STEPS = [
-  { title: 'Tulis Keluhan', desc: 'Sampaikan masalah di lingkungan (Misal: Sampah menumpuk).', icon: MessageSquare },
-  { title: 'Foto Bukti', desc: 'Sertakan foto lokasi agar mudah ditemukan petugas.', icon: Camera },
-  { title: 'Verifikasi RT/RW', desc: 'Pengurus akan mengevaluasi laporan Anda.', icon: ShieldCheck },
-  { title: 'Tindak Lanjut', desc: 'Pantau pengerjaan hingga masalah selesai.', icon: CheckCircle },
-];
 
 const LANDING_FEATURES = [
   { 

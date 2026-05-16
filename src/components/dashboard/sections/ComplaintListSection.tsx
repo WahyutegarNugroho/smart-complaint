@@ -152,86 +152,84 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-20">
-          {complaints.map((item) => (
-            <Link key={item.id} href={`/dashboard/complaint/${item.id}`} className="group h-full">
-              <div className={`h-full bg-white dark:bg-slate-900 p-4 md:p-5 rounded-xl border transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1 flex flex-col gap-4 md:gap-5 relative overflow-hidden ${
-                item.isUrgent && item.status !== 'COMPLETED' 
-                  ? 'border-red-100 dark:border-red-900/50 bg-red-50/10 dark:bg-red-900/5' 
-                  : 'border-slate-100 dark:border-slate-800 hover:border-blue-500/30 dark:hover:border-blue-400/30'
-              }`}>
-                
-                <div className="flex justify-between items-center">
-                    <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${
-                      item.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 
-                      item.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800' :
-                      'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
-                    }`}>
-                      {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
-                    </span>
-                    <div className="h-9 w-9 md:h-10 md:w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-600 group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
-                      <Camera size={16} />
-                    </div>
-                </div>
-
-                <div className="space-y-1.5 md:space-y-2">
-                    {item.imageUrl && (
-                      <div className="h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-slate-100 dark:border-slate-800 relative">
-                        <Image src={item.imageUrl} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+          {complaints.map((item) => {
+            const date = new Date(item.createdAt)
+            const dateStr = isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+            
+            return (
+              <Link key={item.id} href={`/dashboard/complaint/${item.id}`} className="group h-full">
+                <div className={`h-full bg-white dark:bg-slate-900 p-4 md:p-5 rounded-xl border transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1 flex flex-col gap-4 md:gap-5 relative overflow-hidden ${
+                  item.isUrgent && item.status !== 'COMPLETED' 
+                    ? 'border-red-100 dark:border-red-900/50 bg-red-50/10 dark:bg-red-900/5' 
+                    : 'border-slate-100 dark:border-slate-800 hover:border-blue-500/30 dark:hover:border-blue-400/30'
+                }`}>
+                  
+                  <div className="flex justify-between items-center">
+                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${
+                        item.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 
+                        item.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800' :
+                        'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
+                      }`}>
+                        {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                      </span>
+                      <div className="h-9 w-9 md:h-10 md:w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-600 group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                        <Camera size={16} />
                       </div>
-                    )}
-                    <h4 className="text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight italic truncate pl-5">
-                      {item.title}
-                    </h4>
-                    <p className={`text-[12px] md:text-[13px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed line-clamp-2 italic pl-5 border-l-2 border-slate-100 dark:border-slate-800 transition-colors`}>
-                      &quot;{item.content}&quot;
-                    </p>
-                </div>
+                  </div>
 
-                <div className="mt-auto pt-4 md:pt-5 border-t border-slate-50 dark:border-slate-800 flex items-center justify-between transition-colors">
-                    <div className="flex items-center gap-2 md:gap-3">
-                      {!isWarga && (
-                        <div className="h-8 w-8 md:h-9 md:w-9 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 font-bold text-[10px] uppercase">
-                          {(item.author?.name || 'U').charAt(0).toUpperCase()}
+                  <div className="space-y-1.5 md:space-y-2">
+                      {item.imageUrl && (
+                        <div className="h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-slate-100 dark:border-slate-800 relative">
+                          <Image src={item.imageUrl} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                         </div>
                       )}
-                      <div className="min-w-0">
+                      <h4 className="text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight italic truncate pl-5">
+                        {item.title}
+                      </h4>
+                      <p className={`text-[12px] md:text-[13px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed line-clamp-2 italic pl-5 border-l-2 border-slate-100 dark:border-slate-800 transition-colors`}>
+                        &quot;{item.content}&quot;
+                      </p>
+                  </div>
+
+                  <div className="mt-auto pt-4 md:pt-5 border-t border-slate-50 dark:border-slate-800 flex items-center justify-between transition-colors">
+                      <div className="flex items-center gap-2 md:gap-3">
                         {!isWarga && (
-                          <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
-                        )}
-                        <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-blue-600 dark:text-blue-400 font-bold text-[12px] uppercase tracking-wider transition-colors">
-                          <div className="flex items-center gap-1.5">
-                            <MapPin size={12} /> RT {item.rt}/{item.rw}
+                          <div className="h-8 w-8 md:h-9 md:w-9 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 font-bold text-[10px] uppercase">
+                            {(item.author?.name || 'U').charAt(0).toUpperCase()}
                           </div>
-                          <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700 hidden md:block" />
-                          <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
-                            {(() => {
-                              try {
-                                const date = new Date(item.createdAt)
-                                return isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
-                              } catch (e) {
-                                return '-'
-                              }
-                            })()}
-                          </span>
+                        )}
+                        <div className="min-w-0">
+                          {!isWarga && (
+                            <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
+                          )}
+                          <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-blue-600 dark:text-blue-400 font-bold text-[12px] uppercase tracking-wider transition-colors">
+                            <div className="flex items-center gap-1.5">
+                              <MapPin size={12} /> RT {item.rt}/{item.rw}
+                            </div>
+                            <div className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700 hidden md:block" />
+                            <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                              {dateStr}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-200 dark:text-slate-700 group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-45 transition-all duration-500 shadow-inner">
-                      <ArrowRight size={18} />
-                    </div>
-                </div>
-
-                {item.isUrgent && item.status !== 'COMPLETED' && (
-                  <div className="absolute top-0 right-10">
-                    <div className="bg-red-500 text-white px-3 md:px-4 py-1.5 rounded-b-xl shadow-lg flex items-center gap-2">
-                        <Zap size={12} fill="currentColor" className="text-red-100" />
-                        <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white">Prioritas</span>
-                    </div>
+                      <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-200 dark:text-slate-700 group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-45 transition-all duration-500 shadow-inner">
+                        <ArrowRight size={18} />
+                      </div>
                   </div>
-                )}
-              </div>
-            </Link>
-          ))}
+
+                  {item.isUrgent && item.status !== 'COMPLETED' && (
+                    <div className="absolute top-0 right-10">
+                      <div className="bg-red-500 text-white px-3 md:px-4 py-1.5 rounded-b-xl shadow-lg flex items-center gap-2">
+                          <Zap size={12} fill="currentColor" className="text-red-100" />
+                          <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white">Prioritas</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            )
+          })}
         </div>
       )}
 

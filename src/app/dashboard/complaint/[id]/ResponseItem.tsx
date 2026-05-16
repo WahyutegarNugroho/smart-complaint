@@ -6,7 +6,17 @@ import { MoreVertical, Edit2, Trash2, Check, X, Loader2 } from 'lucide-react'
 import { deleteResponse, editResponse } from '@/app/dashboard/actions'
 
 interface ResponseItemProps {
-  res: any
+  res: {
+    id: string
+    content: string
+    imageUrl?: string | null
+    officerId: string | null
+    createdAt: Date
+    officer?: {
+      name: string | null
+      role: string
+    } | null
+  }
   currentProfileId: string
   isAdmin: boolean
 }
@@ -23,6 +33,9 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
   const canEdit = isAuthor
   
   const isOfficer = (res.officer?.role || 'MASYARAKAT') !== 'MASYARAKAT'
+
+  const date = new Date(res.createdAt)
+  const timeStr = isNaN(date.getTime()) ? '--:--' : date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 
   const handleDelete = async () => {
     if (!confirm('Hapus tanggapan ini?')) return
@@ -58,14 +71,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
         <div className="flex items-center gap-3 px-1">
           <span className="text-[11px] font-bold text-slate-900 dark:text-white italic">{res.officer?.name || 'Petugas'}</span>
           <span className="text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest">
-            {(() => {
-              try {
-                const date = new Date(res.createdAt)
-                return isNaN(date.getTime()) ? '--:--' : date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-              } catch (e) {
-                return '--:--'
-              }
-            })()}
+            {timeStr}
           </span>
           
           {/* Actions Menu */}

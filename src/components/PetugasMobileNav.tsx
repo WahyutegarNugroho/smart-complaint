@@ -7,7 +7,6 @@ import {
   LayoutDashboard, 
   ClipboardList, 
   CheckCircle2, 
-  Settings2,
   Activity,
   UserCircle
 } from 'lucide-react'

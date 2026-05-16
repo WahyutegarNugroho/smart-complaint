@@ -5,8 +5,6 @@ import Link from 'next/link'
 import { 
   ChevronLeft, 
   CheckCircle2,
-  FileBarChart,
-  Download,
   ShieldCheck
 } from 'lucide-react'
 import { ExportButtons } from './export-buttons'

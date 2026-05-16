@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import SuccessToast from '@/components/SuccessToast'
 
 interface LayoutProps {
@@ -15,7 +14,7 @@ export default function PetugasDashboardLayout({ profile, successMessage, childr
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-500 pb-20 animate-page">
        
-       {successMessage && <SuccessToast message={successMessage} />}
+       {successMessage && <SuccessToast key={successMessage} message={successMessage} />}
 
        <main className="max-w-7xl mx-auto p-4 sm:p-8 md:p-12 space-y-8 sm:space-y-12">
          

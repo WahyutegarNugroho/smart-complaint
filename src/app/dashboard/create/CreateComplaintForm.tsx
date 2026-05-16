@@ -6,7 +6,6 @@ import {
   MapPin, 
   Calendar as CalendarIcon, 
   Send, 
-  ArrowLeft,
   X,
   Info,
   ShieldAlert,
@@ -21,9 +20,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import SubmitButton from '@/components/SubmitButton'
 
-export default function CreateComplaintForm({ profile }: { profile: any }) {
+interface ProfileData {
+  id: string
+  rt?: string | null
+  rw?: string | null
+}
+
+export default function CreateComplaintForm({ profile }: { profile: ProfileData }) {
   const [preview, setPreview] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [category, setCategory] = useState('umum')
   const [isUrgent, setIsUrgent] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -102,7 +106,6 @@ export default function CreateComplaintForm({ profile }: { profile: any }) {
 
         <form 
           action={createComplaint}
-          onSubmit={() => setIsSubmitting(true)}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12"
         >
           {/* Hidden inputs */}

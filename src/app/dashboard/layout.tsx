@@ -1,22 +1,17 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import Link from 'next/link'
 import {
   LayoutDashboard,
   PlusCircle,
   LogOut,
-  UserCircle,
   Users,
   ShieldCheck,
   Megaphone,
-  Home,
   Clock,
   Activity,
   CheckCircle2,
-  ChevronRight,
-  Settings2,
-  FileBarChart
+  ChevronRight
 } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
 import MobileBottomNav from '@/components/MobileBottomNav'
@@ -45,7 +40,6 @@ export default async function DashboardLayout({
   const { profile } = data
 
   const isAdmin = profile.role === 'ADMIN'
-  const isPetugas = profile.role === 'PETUGAS'
   const isWarga = profile.role === 'MASYARAKAT'
 
   // 📊 Fetch Stats for Sidebar (Optimized with error handling)
