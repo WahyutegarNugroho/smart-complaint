@@ -13,58 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-
-const LANDING_STEPS = [
-  { title: 'Tulis Keluhan', desc: 'Sampaikan masalah di lingkungan (Misal: Sampah menumpuk).', icon: MessageSquare },
-  { title: 'Foto Bukti', desc: 'Sertakan foto lokasi agar mudah ditemukan petugas.', icon: Camera },
-  { title: 'Verifikasi RT/RW', desc: 'Pengurus akan mengevaluasi laporan Anda.', icon: ShieldCheck },
-  { title: 'Tindak Lanjut', desc: 'Pantau pengerjaan hingga masalah selesai.', icon: CheckCircle },
-];
-
-const LANDING_FEATURES = [
-  { 
-    title: 'Lapor Dari Rumah', 
-    desc: 'Tidak perlu mencari pengurus RT secara fisik. Kirim laporan kapan saja, di mana saja.', 
-    icon: Zap,
-    color: 'text-amber-500',
-    bg: 'bg-amber-50'
-  },
-  { 
-    title: 'Titik Lokasi Akurat', 
-    desc: 'Deteksi otomatis blok dan nomor rumah menggunakan GPS untuk mempermudah perbaikan.', 
-    icon: MapPin,
-    color: 'text-rose-500',
-    bg: 'bg-rose-50'
-  },
-  { 
-    title: 'Timeline Progres', 
-    desc: 'Lihat kapan laporan Anda mulai diproses dan estimasi waktu penyelesaian dari pengurus.', 
-    icon: Clock,
-    color: 'text-blue-500',
-    bg: 'bg-blue-50'
-  },
-  { 
-    title: 'Laporan Kebersihan', 
-    desc: 'Kelola jadwal pengambilan sampah dan laporan area hijau yang kurang terawat.', 
-    icon: BarChart3,
-    color: 'text-indigo-500',
-    bg: 'bg-indigo-50'
-  },
-  { 
-    title: 'Akses Keamanan', 
-    desc: 'Laporkan hal mencurigakan langsung ke tim Security perumahan secara cepat.', 
-    icon: ShieldCheck,
-    color: 'text-emerald-500',
-    bg: 'bg-emerald-50'
-  },
-  { 
-    title: 'Data Terpusat', 
-    desc: 'Semua data pengaduan tersimpan rapi untuk bahan evaluasi rapat bulanan warga.', 
-    icon: Users,
-    color: 'text-teal-500',
-    bg: 'bg-teal-50'
-  },
-];
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function LandingPage() {
   return (
