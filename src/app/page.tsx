@@ -68,7 +68,7 @@ export default function LandingPage() {
                 Ecosystem Pengaduan Perumahan
               </div>
               
-              <h1 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-black dark:font-normal tracking-tighter dark:tracking-tight text-brand-ink leading-[0.95] mb-8">
+              <h1 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight text-brand-ink leading-[0.95] mb-8">
                 Ciptakan Lingkungan <span className="text-brand-primary">Harmonis</span> di Pesona Serpong.
               </h1>
               
@@ -143,19 +143,19 @@ export default function LandingPage() {
           <div className="rounded-brand bg-brand-ink p-12 shadow-2xl border border-brand-hairline">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               <div className="text-center md:text-left">
-                <p className="text-5xl font-black tracking-tighter text-brand-canvas font-mono">850+</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">850+</p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary">Total Laporan</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-black tracking-tighter text-brand-primary font-mono">95%</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-primary font-mono">95%</p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Tuntas Ditangani</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-black tracking-tighter text-brand-canvas font-mono">12<span className="text-2xl opacity-50">h</span></p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">12<span className="text-2xl opacity-50">h</span></p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Respon Cepat</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-black tracking-tighter text-brand-canvas font-mono">10</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">10</p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Blok Aktif</p>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mb-20 text-center lg:text-left">
             <h2 className="text-[11px] font-bold tracking-[0.3em] text-brand-primary uppercase mb-4">Fitur Utama</h2>
-            <p className="text-4xl lg:text-5xl font-black dark:font-normal text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
+            <p className="text-4xl lg:text-5xl font-extrabold text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -192,13 +192,13 @@ export default function LandingPage() {
         </div>
         
         <div className="relative mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h2 className="text-4xl lg:text-6xl font-black dark:font-normal text-brand-canvas mb-10 tracking-tighter">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
+          <h2 className="text-4xl lg:text-6xl font-extrabold text-brand-canvas mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
           <p className="text-xl text-brand-canvas/60 mb-14 max-w-2xl mx-auto font-medium">
             Suara Anda adalah penggerak perubahan. Laporkan kendala sekarang dan pantau progresnya secara transparan.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-12 py-6 text-xl font-black text-[#0e0f0c] shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all"
+            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-12 py-6 text-xl font-bold text-[#0e0f0c] shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all"
           >
             Daftar Sebagai Warga
           </Link>

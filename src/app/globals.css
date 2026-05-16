@@ -17,25 +17,25 @@
 }
 
 :root {
-  /* Wise Light Mode Primitives */
+  /* Brand Primitives - Unified Model */
   --brand-primary: #9fe870;
   --brand-canvas: #ffffff;
   --brand-canvas-soft: #e8ebe6;
   --brand-ink: #0e0f0c;
   --brand-hairline: rgba(14, 15, 12, 0.1);
-  --brand-radius: 24px;
+  --brand-radius: 12px; /* Unified: Modern & Efficient */
   
   --font-inter: "Inter Variable", "Inter", sans-serif;
 }
 
 .dark {
-  /* Voltagent Dark Mode Primitives */
+  /* Brand Primitives - Unified Model (Dark Palette) */
   --brand-primary: #00d992;
   --brand-canvas: #101010;
   --brand-canvas-soft: #1a1a1a;
   --brand-ink: #f2f2f2;
-  --brand-hairline: #3d3a39;
-  --brand-radius: 8px;
+  --brand-hairline: rgba(255, 255, 255, 0.05);
+  /* --brand-radius stays 12px from :root */
 }
 
 @variant dark (&:where(.dark, .dark *));

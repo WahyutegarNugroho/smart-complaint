@@ -28,7 +28,7 @@ export default function LoginPage({
               <ShieldCheck size={32} />
             </div>
             <div className="flex flex-col items-start text-left">
-              <span className="text-3xl font-black text-brand-ink tracking-tighter uppercase italic leading-none transition-colors">
+              <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase italic leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
               <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.3em] mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
@@ -49,7 +49,7 @@ export default function LoginPage({
           </Link>
 
           <div className="mb-10 relative z-10 text-left">
-            <h1 className="text-4xl font-black dark:font-normal text-brand-ink tracking-tight transition-colors leading-tight">Silahkan Masuk</h1>
+            <h1 className="text-4xl font-extrabold text-brand-ink tracking-tight transition-colors leading-tight">Silahkan Masuk</h1>
             <p className="text-[11px] font-bold text-brand-ink/40 mt-3 uppercase tracking-wider transition-colors">Akses Dashboard Terpusat</p>
           </div>
 
@@ -107,7 +107,7 @@ export default function LoginPage({
             </div>
 
             <SubmitButton
-              className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-black uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
+              className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
               icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
               loadingText="Otentikasi..."
             >
@@ -118,7 +118,7 @@ export default function LoginPage({
           <div className="mt-12 pt-10 border-t border-brand-hairline text-center relative z-10 transition-colors">
             <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-widest">
               Belum terdaftar?
-              <Link href="/register" className="font-black text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
+              <Link href="/register" className="font-extrabold text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
                 REGISTRASI WARGA BARU
               </Link>
             </p>
