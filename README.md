@@ -1,4 +1,4 @@
-# ⚡ SmartComplaint — Pesona Serpong Residential Ecosystem
+# SmartComplaint — Pesona Serpong Residential Ecosystem
 
 [![Next.js Version](https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![React Version](https://img.shields.io/badge/React-19.2.4-blue?style=for-the-badge&logo=react)](https://react.dev)
@@ -11,12 +11,12 @@ A high-end, responsive, and secure residential community complaint management pl
 
 ---
 
-## 📖 Short Description
+## Short Description
 **SmartComplaint** bridges the communication gap between citizens, neighborhood officers, and administrators. It empowers residents to file geo-localized complaints with real-time photo uploads, tracks reports through an interactive visual lifecycle (Pending ➜ Processing ➜ Completed), and hosts administrative announcement broadcasts to foster a transparent, cooperative, and safe neighborhood environment.
 
 ---
 
-## 💡 The Problem it Solves
+## The Problem it Solves
 Traditional residential management often suffers from fragmented and archaic communication channels:
 1. **Scattered & Unstructured Chats**: Complaints sent in WhatsApp groups are quickly buried under standard banter, leading to overlooked issues and forgotten infrastructure work.
 2. **Lack of Transparency**: Residents file complaints but have no visibility into whether their concerns are received, actively worked on, or resolved.
@@ -27,40 +27,40 @@ Traditional residential management often suffers from fragmented and archaic com
 
 ---
 
-## ✨ Main Features
+## Main Features
 
-### 🏡 1. Full-Fidelity Citizen Reports
+### 1. Full-Fidelity Citizen Reports
 * **Categorized Filing**: Submit issues under dedicated domains (e.g., Infrastructure, Security, Waste Management, General).
 * **Geo-Location Details**: Specify exact RT/RW coordinates, block, and house numbers for pinpoint repair routing.
 * **Photo Attachments**: Directly upload images demonstrating issues (e.g., street light outages, garbage piles) backed securely by **Supabase Storage**.
 * **Urgency Toggle**: Flag critical incidents (e.g., security breaches) to draw immediate attention.
 
-### 🔄 2. Dynamic Status Lifecycles & Responses
+### 2. Dynamic Status Lifecycles & Responses
 * **Status Pipeline**: Watch tickets move dynamically across `PENDING`, `PROCESSING`, and `COMPLETED` phases.
 * **Interactive Officer Thread**: Officers can post official updates, attach completion images, and adjust statuses in real-time.
 * **Revision Flow**: Residents retain full control to edit or withdraw their reports as needed.
 
-### 📣 3. Board Announcements & Alerts
+### 3. Board Announcements & Alerts
 * **Official Bulletins**: Admins can publish, update, or pin community announcements directly onto the user dashboard.
 * **Notification Stream**: Users receive immediate in-app notifications if an administrator takes actions on their report or releases new notices.
 
-### 🔑 4. Strict Role-Based Security (RBAC)
+### 4. Strict Role-Based Security (RBAC)
 Three distinct, non-overlapping user segments govern the application:
 * **Masyarakat (Citizen)**: File, edit, and track personal complaints, read announcements, and manage profiles.
 * **Petugas (Officer)**: Review all neighborhood complaints, submit official response updates with images, and transition ticket statuses.
 * **Admin (Administrator)**: Full supervisory control — verify newly registered residents, promote users to officers, audit/delete content, and publish global announcements.
 
-### 📊 5. Statistical Dashboard Widgets
+### 5. Statistical Dashboard Widgets
 * Fully functional analytics widgets displaying critical KPIs: **Total Reports**, **Tuntas Ditangani (95% Resolution Rate)**, **Average Response Time (12h)**, and **Active Blocks**.
 
-### 🎨 6. Premium Wise-Inspired Aesthetic
+### 6. Premium Wise-Inspired Aesthetic
 * **Palette**: Tailored HSL colors, featuring the signature vivid lime-green CTA pill (`#9fe870`), pale sage-tinted background canvas (`#e8ebe6`), and deep olive-warm ink (`#0e0f0c`).
 * **Micro-Animations**: Smooth scale transforms, page transitions, and loading states for a highly premium, fluid interface.
 * **Responsive Touch-Targets**: Fully optimized for mobile screens, tablets, and desktops using WCAG AAA standards.
 
 ---
 
-## 🛠️ Tech Stack & Rationales
+## Tech Stack & Rationales
 
 | Technology | Role | Rationale |
 |:---|:---|:---|
@@ -74,7 +74,7 @@ Three distinct, non-overlapping user segments govern the application:
 
 ---
 
-## 🗃️ Database Schema
+## Database Schema
 
 The system uses a beautifully structured, highly indexed relational schema managed by Prisma:
 
@@ -138,17 +138,17 @@ erDiagram
 
 ---
 
-## 🚀 Installation & Quick Start
+## Installation & Quick Start
 
 Follow these steps to get a local development instance of **SmartComplaint** up and running.
 
-### 📋 Prerequisites
+### Prerequisites
 * **Node.js** (v18+ recommended)
 * **npm** or **yarn**
 * A running **PostgreSQL** database (e.g., via Supabase or local PostgreSQL)
 * A **Supabase** project for Auth and Storage (with a bucket named `complaints` set to public access).
 
-### 🛠️ Step-by-Step Setup
+### Step-by-Step Setup
 
 1. **Clone the Repository**
    ```bash
@@ -188,7 +188,7 @@ Follow these steps to get a local development instance of **SmartComplaint** up 
 
 ---
 
-## 📝 License
+## License
 This project is licensed under the [MIT License](LICENSE) — feel free to customize and redistribute as desired.
 
 © 2026 whtsn dev.
