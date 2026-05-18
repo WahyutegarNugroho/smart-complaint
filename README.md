@@ -191,6 +191,4 @@ Follow these steps to get a local development instance of **SmartComplaint** up 
 ## 📝 License
 This project is licensed under the [MIT License](LICENSE) — feel free to customize and redistribute as desired.
 
----
-
-*Designed and developed with ⚡ for the harmony of **Pesona Serpong** residents.*
+© 2026 whtsn dev.
