@@ -68,6 +68,13 @@ export const getCachedProfile = cache(async () => {
     return { profile, user, status: 'AUTHENTICATED' }
   } catch (err: unknown) {
     console.error('getCachedProfile Critical Failure:', err)
-    return { profile: null, user: null, status: 'ERROR' }
+    const error = err as Error
+    return { 
+      profile: null, 
+      user: null, 
+      status: 'ERROR',
+      error: error?.message || String(err),
+      stack: error?.stack
+    }
   }
 })
