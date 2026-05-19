@@ -88,14 +88,14 @@ export default async function AdminAnnouncementsPage({
                       <Plus size={24} />
                    </div>
                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white italic leading-none mb-1">Buat Baru</h3>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-none mb-1">Buat Baru</h3>
                       <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">Rilis Pengumuman Warga</p>
                    </div>
                 </div>
 
                 <form action={createAnnouncement} className="space-y-6">
                    <div>
-                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1 transition-colors italic">Judul Informasi</label>
+                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1 transition-colors">Judul Informasi</label>
                       <input 
                         name="title" 
                         required 
@@ -104,7 +104,7 @@ export default async function AdminAnnouncementsPage({
                       />
                    </div>
                    <div>
-                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1 transition-colors italic">Isi Pengumuman</label>
+                      <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1 transition-colors">Isi Pengumuman</label>
                       <textarea 
                         name="content" 
                         rows={6} 
@@ -126,14 +126,14 @@ export default async function AdminAnnouncementsPage({
           {/* List Announcements */}
           <div className="lg:col-span-7 space-y-6 md:space-y-8">
              <div className="flex items-center justify-between px-2">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white italic transition-colors">Arsip Pengumuman</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white transition-colors">Arsip Pengumuman</h3>
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">{announcements.length} Total</span>
              </div>
 
              {announcements.length === 0 ? (
                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-20 text-center border border-slate-200 dark:border-slate-800 border-dashed flex flex-col items-center justify-center transition-colors">
                   <Megaphone size={48} className="text-slate-100 dark:text-slate-800 mb-4" />
-                  <p className="text-slate-400 dark:text-slate-600 text-sm font-bold uppercase tracking-widest italic">Belum ada pengumuman aktif</p>
+                  <p className="text-slate-400 dark:text-slate-600 text-sm font-bold uppercase tracking-widest">Belum ada pengumuman aktif</p>
                </div>
              ) : (
                <div className="space-y-6">

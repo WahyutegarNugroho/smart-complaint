@@ -68,7 +68,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
     <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 group transition-all hover:shadow-xl relative overflow-hidden">
       <div className="flex justify-between items-start mb-6">
         <div className="space-y-1">
-           <h4 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight italic pr-8">{item.title}</h4>
+           <h4 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight pr-8">{item.title}</h4>
            <div className="flex items-center gap-4 mt-2">
               <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">
                  <User size={12} className="text-blue-500" />
@@ -99,7 +99,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
       </div>
 
       <div className="relative">
-         <p className="text-[13px] md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-medium transition-colors italic pl-4 border-l-2 border-slate-100 dark:border-slate-800">
+         <p className="text-[13px] md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-medium transition-colors pl-4 border-l-2 border-slate-100 dark:border-slate-800">
            {item.content}
          </p>
       </div>

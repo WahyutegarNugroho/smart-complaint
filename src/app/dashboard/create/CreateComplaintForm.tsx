@@ -180,7 +180,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               
               {/* Category Selector */}
               <div className="space-y-4">
-                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Pilih Kategori Masalah</label>
+                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Pilih Kategori Masalah</label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {categories.map((cat) => {
                     const Icon = cat.icon;
@@ -208,7 +208,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               {/* Title Input */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Judul / Subjek</label>
+                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Judul / Subjek</label>
                   {suggestedCategory && category !== suggestedCategory && (
                     <button 
                       type="button" 
@@ -232,13 +232,13 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
               {/* Description Input */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Detail Kronologi</label>
+                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Detail Kronologi</label>
                 <textarea 
                   name="content"
                   rows={6}
                   required
                   placeholder="Jelaskan detail masalah, perkiraan waktu kejadian, dan dampak yang dirasakan..."
-                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 resize-none leading-relaxed italic"
+                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 resize-none leading-relaxed"
                 />
               </div>
             </div>
@@ -250,7 +250,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               </div>
               <div className="space-y-1.5 pt-1">
                 <p className="text-sm font-bold text-brand-ink">Standar Pelayanan</p>
-                <p className="text-[13px] font-medium text-brand-ink/80 leading-relaxed italic">
+                <p className="text-[13px] font-medium text-brand-ink/80 leading-relaxed">
                   Laporan akan diproses oleh tim operasional dalam waktu maksimal 24 jam kerja. Pastikan data yang Anda lampirkan akurat untuk mempercepat proses investigasi.
                 </p>
               </div>
@@ -262,7 +262,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             
             {/* Photo Attachment */}
             <div className="bg-brand-canvas p-6 md:p-8 rounded-[2rem] border border-brand-hairline shadow-sm space-y-6 transition-colors">
-              <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Lampiran Foto Bukti</label>
+              <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Lampiran Foto Bukti</label>
               
               <div 
                 onClick={() => fileInputRef.current?.click()}
@@ -304,7 +304,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             {/* Location & Metadata */}
             <div className="bg-brand-canvas p-6 md:p-8 rounded-[2rem] border border-brand-hairline shadow-sm space-y-8 transition-colors">
                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Koordinat Lokasi</label>
+                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Koordinat Lokasi</label>
                   <div className="relative group">
                     <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                     <input 
@@ -319,17 +319,17 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-3 text-center">
-                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block italic">RT</label>
+                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RT</label>
                     <input name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                   <div className="space-y-3 text-center">
-                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block italic">RW</label>
+                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RW</label>
                     <input name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                </div>
 
                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1 italic">Waktu Temuan</label>
+                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Waktu Temuan</label>
                   <div className="relative group">
                     <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                     <input 

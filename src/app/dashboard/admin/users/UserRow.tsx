@@ -122,7 +122,7 @@ export default function UserRow({ user }: { user: Profile }) {
                   <User size={28} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-none mb-1 italic">Detail Profil</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-none mb-1">Detail Profil</h3>
                   <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">Informasi Lengkap Penduduk</p>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function UserRow({ user }: { user: Profile }) {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <h4 className="text-2xl font-bold text-slate-900 dark:text-white italic">{user.name}</h4>
+                    <h4 className="text-2xl font-bold text-slate-900 dark:text-white">{user.name}</h4>
                     {user.isVerified && <ShieldCheck size={18} className="text-blue-500" fill="currentColor" />}
                   </div>
                   <div className="flex items-center gap-2">
@@ -158,38 +158,38 @@ export default function UserRow({ user }: { user: Profile }) {
               {/* Info Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 italic transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      NIK
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white italic transition-colors">{user.nik || 'Belum diisi'}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.nik || 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 italic transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      Kontak WhatsApp
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white italic transition-colors">{user.phone || 'Belum diisi'}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.phone || 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 italic transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      Wilayah Blok
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white italic transition-colors">RT {user.rt || '-'} / RW {user.rw || '-'}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">RT {user.rt || '-'} / RW {user.rw || '-'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 italic transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      Tanggal Registrasi
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white italic transition-colors">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">
                     {new Date(user.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-2 pt-6 border-t border-slate-50 dark:border-slate-800">
-                <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 italic transition-colors">
+                <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                    Alamat Domisili
                 </p>
-                <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed italic pl-4 border-l-2 border-slate-100 dark:border-slate-800 transition-colors">
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed pl-4 border-l-2 border-slate-100 dark:border-slate-800 transition-colors">
                   &quot;{user.address || 'Alamat lengkap belum dilengkapi oleh pengguna dalam profil mereka.'}&quot;
                 </p>
               </div>

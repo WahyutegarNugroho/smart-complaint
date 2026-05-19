@@ -18,8 +18,8 @@ export function ExportButtons() {
         <div className="h-14 w-14 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800 mb-8 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
           <FileBarChart size={28} />
         </div>
-        <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors italic">Format Spreadsheet</h2>
-        <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors italic">Ekspor data mentah untuk pengolahan lebih lanjut di Microsoft Excel atau Google Sheets.</p>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Format Spreadsheet</h2>
+        <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors">Ekspor data mentah untuk pengolahan lebih lanjut di Microsoft Excel atau Google Sheets.</p>
         
         <div className="space-y-6">
           <div className="relative">
@@ -47,8 +47,8 @@ export function ExportButtons() {
         <div className="h-14 w-14 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800 mb-8 transition-colors group-hover:bg-blue-600 group-hover:text-white">
           <FileText size={28} />
         </div>
-        <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors italic">Laporan Siap Cetak</h2>
-        <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors italic">Dokumen PDF rapi dengan ringkasan visual untuk bahan presentasi rapat warga.</p>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Laporan Siap Cetak</h2>
+        <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors">Dokumen PDF rapi dengan ringkasan visual untuk bahan presentasi rapat warga.</p>
         
         <div className="space-y-6">
           <div className="relative">

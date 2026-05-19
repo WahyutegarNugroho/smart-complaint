@@ -28,7 +28,7 @@ export default function LoginPage({
               <ShieldCheck size={28} className="sm:w-[32px] sm:h-[32px]" />
             </div>
             <div className="flex flex-col items-start text-left">
-              <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase italic leading-none transition-colors">
+              <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
               <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.3em] mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>

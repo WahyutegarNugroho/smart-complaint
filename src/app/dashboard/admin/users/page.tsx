@@ -114,10 +114,10 @@ export default async function AdminUsersPage({
                      <table className="w-full text-left border-separate border-spacing-0">
                         <thead>
                            <tr className="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800 transition-colors">
-                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] italic">Profil Penduduk</th>
-                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] italic">Domisili</th>
-                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] italic">Status Akses</th>
-                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] italic text-right">Kelola</th>
+                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Profil Penduduk</th>
+                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Domisili</th>
+                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Status Akses</th>
+                              <th className="px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] text-right">Kelola</th>
                            </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -126,7 +126,7 @@ export default async function AdminUsersPage({
                                  <td colSpan={4} className="px-8 py-20 text-center">
                                     <div className="flex flex-col items-center justify-center text-slate-400 opacity-20">
                                        <Users size={64} className="mb-4" />
-                                       <p className="text-sm font-bold uppercase tracking-widest italic">Data Tidak Ditemukan</p>
+                                       <p className="text-sm font-bold uppercase tracking-widest">Data Tidak Ditemukan</p>
                                     </div>
                                  </td>
                               </tr>

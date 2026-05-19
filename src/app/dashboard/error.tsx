@@ -26,7 +26,7 @@ export default function DashboardError({
         
         <div className="space-y-3">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Oops! Terjadi Kesalahan</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic">
+          <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
             &quot;Kami mengalami kendala saat memuat data dashboard Anda.&quot;
           </p>
           {error.digest && (

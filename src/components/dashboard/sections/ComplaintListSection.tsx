@@ -79,7 +79,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
     <section className="space-y-6 md:space-y-8 pt-4 md:pt-8">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-lg md:text-xl font-bold tracking-tight text-brand-ink uppercase italic">Riwayat Laporan</h2>
+          <h2 className="text-lg md:text-xl font-bold tracking-tight text-brand-ink uppercase">Riwayat Laporan</h2>
         </div>
 
         <div className="flex items-center gap-1 bg-brand-canvas-soft border border-brand-hairline p-1 rounded-xl overflow-x-auto hide-scrollbar max-w-full">
@@ -183,10 +183,10 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                           <Image src={item.imageUrl} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                         </div>
                       )}
-                      <h4 className="text-base md:text-lg font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors leading-tight italic truncate pl-5">
+                      <h4 className="text-base md:text-lg font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors leading-tight truncate pl-5">
                         {item.title}
                       </h4>
-                      <p className={`text-[12px] md:text-[13px] text-brand-ink/75 font-medium leading-relaxed line-clamp-2 italic pl-5 border-l-2 border-brand-hairline transition-colors`}>
+                      <p className={`text-[12px] md:text-[13px] text-brand-ink/75 font-medium leading-relaxed line-clamp-2 pl-5 border-l-2 border-brand-hairline transition-colors`}>
                         &quot;{item.content}&quot;
                       </p>
                   </div>

@@ -31,7 +31,7 @@ export default async function AnnouncementsSection() {
               </span>
             </div>
             <h4 className="font-bold text-lg mb-3 leading-tight">{ann.title}</h4>
-            <p className="text-sm line-clamp-2 leading-relaxed opacity-70 italic">
+            <p className="text-sm line-clamp-2 leading-relaxed opacity-70">
               &quot;{ann.content}&quot;
             </p>
           </div>

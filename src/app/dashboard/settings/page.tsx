@@ -56,7 +56,7 @@ export default async function SettingsPage() {
               <LogOut size={18} /> Keluar Dari Sistem
             </button>
           </form>
-          <p className="mt-8 text-[10px] font-medium text-brand-ink/40 italic">Smart Complaint v2.0 • Sesi Aman Terenkripsi</p>
+          <p className="mt-8 text-[10px] font-medium text-brand-ink/40">Smart Complaint v2.0 • Sesi Aman Terenkripsi</p>
         </section>
       </main>
     </div>

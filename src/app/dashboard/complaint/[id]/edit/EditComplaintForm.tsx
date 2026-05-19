@@ -81,7 +81,7 @@ export default function EditComplaintForm({
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-8 transition-colors">
               
               <div className="space-y-3">
-                <label htmlFor="title" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1 italic">Judul / Subjek Laporan</label>
+                <label htmlFor="title" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Judul / Subjek Laporan</label>
                 <div className="relative group">
                    <Edit3 className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                    <input
@@ -97,7 +97,7 @@ export default function EditComplaintForm({
 
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                 <div className="space-y-3">
-                  <label htmlFor="incidentDate" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1 italic">Tanggal Kejadian</label>
+                  <label htmlFor="incidentDate" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Tanggal Kejadian</label>
                   <div className="relative group">
                      <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                      <input
@@ -111,7 +111,7 @@ export default function EditComplaintForm({
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label htmlFor="location" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1 italic">Lokasi Spesifik</label>
+                  <label htmlFor="location" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Lokasi Spesifik</label>
                   <div className="relative group">
                      <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                      <input
@@ -127,14 +127,14 @@ export default function EditComplaintForm({
               </div>
 
               <div className="space-y-3">
-                <label htmlFor="content" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1 italic">Detail Penjelasan</label>
+                <label htmlFor="content" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Detail Penjelasan</label>
                 <textarea
                   id="content"
                   name="content"
                   rows={8}
                   required
                   defaultValue={complaint.content}
-                  className="block w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl px-6 py-4.5 text-[15px] font-medium text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 transition-all outline-none resize-none leading-relaxed italic"
+                  className="block w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl px-6 py-4.5 text-[15px] font-medium text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 transition-all outline-none resize-none leading-relaxed"
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function EditComplaintForm({
           {/* RIGHT: Visuals & Actions */}
           <div className="lg:col-span-5 space-y-8">
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
-              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1 italic">Visual Bukti Kejadian</label>
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Visual Bukti Kejadian</label>
               
               <div className="relative">
                 <input 

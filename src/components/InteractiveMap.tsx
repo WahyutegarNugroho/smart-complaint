@@ -205,10 +205,10 @@ export default function InteractiveMap({ activeComplaints }: InteractiveMapProps
 
           {/* List of Active Complaints */}
           <div className="space-y-3 pt-2">
-            <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest italic">Daftar Aduan Aktif:</p>
+            <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest">Daftar Aduan Aktif:</p>
             
             {currentComplaints.length === 0 ? (
-              <div className="text-center py-6 text-brand-ink/40 italic text-xs border border-dashed border-brand-hairline rounded-2xl">
+              <div className="text-center py-6 text-brand-ink/40 text-xs border border-dashed border-brand-hairline rounded-2xl">
                 Tidak ada laporan kendala saat ini.
               </div>
             ) : (
@@ -234,7 +234,7 @@ export default function InteractiveMap({ activeComplaints }: InteractiveMapProps
 
         <div className="bg-brand-canvas p-4 rounded-2xl border border-brand-hairline flex gap-3 items-start">
           <Info size={16} className="text-brand-primary shrink-0 mt-0.5" />
-          <p className="text-[11px] leading-relaxed text-brand-ink/60 font-medium italic">
+          <p className="text-[11px] leading-relaxed text-brand-ink/60 font-medium">
             Petugas lapangan akan memprioritaskan penanganan berdasarkan tingkat urgensi aduan di masing-masing RT.
           </p>
         </div>

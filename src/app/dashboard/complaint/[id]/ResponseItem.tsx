@@ -69,7 +69,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
 
       <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
         <div className="flex items-center gap-3 px-1">
-          <span className="text-[11px] font-bold text-brand-ink/80 italic">{res.officer?.name || 'Petugas'}</span>
+          <span className="text-[11px] font-bold text-brand-ink/80">{res.officer?.name || 'Petugas'}</span>
           <span className="text-[8px] font-bold text-brand-ink/30 uppercase tracking-widest">
             {timeStr}
           </span>
