@@ -26,7 +26,14 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
   }
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanValue = e.target.value.replace(/\D/g, '')
+    let raw = e.target.value
+    // Auto-convert prefix 08... to +628...
+    if (raw.startsWith('08')) {
+      raw = '+628' + raw.slice(2)
+    } else if (raw.startsWith('628')) {
+      raw = '+' + raw
+    }
+    const cleanValue = raw.replace(/[^\d+]/g, '')
     setPhone(cleanValue)
   }
 
@@ -46,7 +53,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                   type="text"
                   defaultValue={profile.name}
                   required
-                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all outline-none"
+                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
                 />
               </div>
             </div>
@@ -63,7 +70,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                   onChange={handleNikChange}
                   placeholder="Masukkan 16 digit NIK"
                   maxLength={16}
-                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all outline-none"
+                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
                 />
               </div>
             </div>
@@ -80,7 +87,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                 value={phone}
                 onChange={handlePhoneChange}
                 placeholder="Contoh: 08xxxxxxxxxx"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
               />
             </div>
           </div>
@@ -94,7 +101,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                 type="text"
                 defaultValue={profile.rt || ''}
                 placeholder="001"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
               />
             </div>
             <div className="space-y-3 text-center">
@@ -104,7 +111,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                 type="text"
                 defaultValue={profile.rw || ''}
                 placeholder="001"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary transition-all outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
               />
             </div>
           </div>
@@ -119,7 +126,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
                 rows={4}
                 defaultValue={profile.address || ''}
                 placeholder="Sebutkan Blok dan Nomor Rumah Anda..."
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none resize-none leading-relaxed italic transition-colors"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none resize-none leading-relaxed italic"
               />
             </div>
           </div>
