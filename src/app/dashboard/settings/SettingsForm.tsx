@@ -13,7 +13,7 @@ interface SettingsFormProps {
     rw: string | null
     address: string | null
   }
-  action: (formData: FormData) => Promise<unknown>
+  action: (formData: FormData) => Promise<void>
 }
 
 export default function SettingsForm({ profile, action }: SettingsFormProps) {
