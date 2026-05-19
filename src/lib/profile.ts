@@ -1,8 +1,15 @@
 import { cache } from 'react'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { Profile } from '@prisma/client'
+import { User } from '@supabase/supabase-js'
 
-export const getCachedProfile = cache(async () => {
+export type ProfileResponse = 
+  | { profile: null; user: null; status: 'UNAUTHENTICATED' }
+  | { profile: Profile; user: User; status: 'AUTHENTICATED' }
+  | { profile: null; user: null; status: 'ERROR'; error: string; stack?: string }
+
+export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
   try {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()

@@ -37,8 +37,12 @@ export default async function DashboardPage({
   if (data.status === 'UNAUTHENTICATED') return redirect('/login')
   
   // Handle database error status gracefully
-  if (data.status === 'ERROR' || !data.profile) {
-    return <SessionErrorState error={(data as any).error} stack={(data as any).stack} />
+  if (data.status === 'ERROR') {
+    return <SessionErrorState error={data.error} stack={data.stack} />
+  }
+  
+  if (!data.profile) {
+    return <SessionErrorState error="Profile is missing after successful auth" />
   }
 
   const { profile } = data

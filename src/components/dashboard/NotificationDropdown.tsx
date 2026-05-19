@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Bell, Check, Trash2, ShieldAlert, BellOff } from 'lucide-react'
+import { Bell, Check, ShieldAlert, BellOff } from 'lucide-react'
 import { markNotificationAsRead } from '@/app/dashboard/actions'
 
 interface NotificationItem {
@@ -19,12 +19,24 @@ interface NotificationDropdownProps {
 export default function NotificationDropdown({ notifications: initialNotifications }: NotificationDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications)
+  const [now, setNow] = useState<number>(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Sync state if initialNotifications changes (e.g. Server Component updates)
   useEffect(() => {
-    setNotifications(initialNotifications)
+    const timer = setTimeout(() => {
+      setNotifications(initialNotifications)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [initialNotifications])
+
+  // Get current time on client mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNow(Date.now())
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -59,8 +71,9 @@ export default function NotificationDropdown({ notifications: initialNotificatio
   const formatTime = (dateInput: Date | string) => {
     const date = new Date(dateInput)
     if (isNaN(date.getTime())) return 'Baru saja'
+    if (now === 0) return 'Baru saja'
     
-    const diffMs = Date.now() - date.getTime()
+    const diffMs = now - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
     const diffHours = Math.floor(diffMins / 60)
     const diffDays = Math.floor(diffHours / 24)

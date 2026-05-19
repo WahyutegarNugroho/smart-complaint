@@ -35,7 +35,6 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
   const [isUrgent, setIsUrgent] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [title, setTitle] = useState('')
-  const [suggestedCategory, setSuggestedCategory] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const isProfileIncomplete = !profile.rt || !profile.rw || !profile.nik || !profile.phone || !profile.address
@@ -78,15 +77,10 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
     }
   }, [preview])
 
-  // Category Auto Suggestion
-  React.useEffect(() => {
-    const titleLower = title.toLowerCase()
-    
-    if (!titleLower.trim()) {
-      setSuggestedCategory(null)
-      return
-    }
-
+  // Category Auto Suggestion calculated on render
+  const titleLower = title.toLowerCase()
+  let suggestedCategory: string | null = null
+  if (titleLower.trim()) {
     const keamananKeywords = ['maling', 'curiga', 'asing', 'ronda', 'pos', 'pencuri', 'berantem', 'ribut', 'kehilangan', 'copet', 'rampok', 'rusuh', 'hilang', 'aman', 'tetangga']
     const kebersihanKeywords = ['sampah', 'bau', 'kotor', 'daun', 'selokan', 'mampet', 'lumpur', 'banjir', 'genangan', 'limbah', 'bangkai', 'lalat', 'bersih', 'rumput']
     const fasilitasKeywords = ['paving', 'lampu', 'tiang', 'pipa', 'aspal', 'jalan', 'rusak', 'lubang', 'portal', 'pagar', 'taman', 'kabel', 'listrik', 'air']
@@ -96,15 +90,13 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
     const matchesFasilitas = fasilitasKeywords.some(keyword => titleLower.includes(keyword))
 
     if (matchesKeamanan) {
-      setSuggestedCategory('keamanan')
+      suggestedCategory = 'keamanan'
     } else if (matchesKebersihan) {
-      setSuggestedCategory('kebersihan')
+      suggestedCategory = 'kebersihan'
     } else if (matchesFasilitas) {
-      setSuggestedCategory('fasilitas')
-    } else {
-      setSuggestedCategory(null)
+      suggestedCategory = 'fasilitas'
     }
-  }, [title])
+  }
 
   const categories = [
     { id: 'keamanan', label: 'Keamanan', icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-50' },

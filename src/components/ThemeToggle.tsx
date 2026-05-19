@@ -8,7 +8,6 @@ export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     const root = window.document.documentElement;
     const initialColorValue = localStorage.getItem('theme');
     let shouldBeDark = false;
@@ -31,6 +30,7 @@ export default function ThemeToggle() {
     }
     
     setTimeout(() => {
+      setMounted(true);
       setIsDark(shouldBeDark);
     }, 0);
   }, [])

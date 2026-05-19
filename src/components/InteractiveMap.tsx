@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { MapPin, ShieldCheck, AlertTriangle, Info } from 'lucide-react'
+import { ShieldCheck, AlertTriangle, Info } from 'lucide-react'
 
 interface SimpleComplaint {
   id: string
