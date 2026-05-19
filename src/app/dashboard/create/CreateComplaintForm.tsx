@@ -24,17 +24,35 @@ interface ProfileData {
   id: string
   rt?: string | null
   rw?: string | null
+  nik?: string | null
+  phone?: string | null
+  address?: string | null
 }
 
 export default function CreateComplaintForm({ profile }: { profile: ProfileData }) {
   const [preview, setPreview] = useState<string | null>(null)
   const [category, setCategory] = useState('umum')
   const [isUrgent, setIsUrgent] = useState(false)
+  const [fileError, setFileError] = useState<string | null>(null)
+  const [title, setTitle] = useState('')
+  const [suggestedCategory, setSuggestedCategory] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const isProfileIncomplete = !profile.rt || !profile.rw || !profile.nik || !profile.phone || !profile.address
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+    setFileError(null)
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setFileError('Ukuran gambar melebihi 5MB. Silakan pilih gambar lain yang lebih kecil.')
+        if (preview && preview.startsWith('blob:')) {
+          URL.revokeObjectURL(preview)
+        }
+        setPreview(null)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+        return
+      }
       if (preview && preview.startsWith('blob:')) {
         URL.revokeObjectURL(preview)
       }
@@ -43,6 +61,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
   }
 
   const removePreview = () => {
+    setFileError(null)
     if (preview && preview.startsWith('blob:')) {
       URL.revokeObjectURL(preview)
     }
@@ -58,6 +77,34 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
       }
     }
   }, [preview])
+
+  // Category Auto Suggestion
+  React.useEffect(() => {
+    const titleLower = title.toLowerCase()
+    
+    if (!titleLower.trim()) {
+      setSuggestedCategory(null)
+      return
+    }
+
+    const keamananKeywords = ['maling', 'curiga', 'asing', 'ronda', 'pos', 'pencuri', 'berantem', 'ribut', 'kehilangan', 'copet', 'rampok', 'rusuh', 'hilang', 'aman', 'tetangga']
+    const kebersihanKeywords = ['sampah', 'bau', 'kotor', 'daun', 'selokan', 'mampet', 'lumpur', 'banjir', 'genangan', 'limbah', 'bangkai', 'lalat', 'bersih', 'rumput']
+    const fasilitasKeywords = ['paving', 'lampu', 'tiang', 'pipa', 'aspal', 'jalan', 'rusak', 'lubang', 'portal', 'pagar', 'taman', 'kabel', 'listrik', 'air']
+
+    const matchesKeamanan = keamananKeywords.some(keyword => titleLower.includes(keyword))
+    const matchesKebersihan = kebersihanKeywords.some(keyword => titleLower.includes(keyword))
+    const matchesFasilitas = fasilitasKeywords.some(keyword => titleLower.includes(keyword))
+
+    if (matchesKeamanan) {
+      setSuggestedCategory('keamanan')
+    } else if (matchesKebersihan) {
+      setSuggestedCategory('kebersihan')
+    } else if (matchesFasilitas) {
+      setSuggestedCategory('fasilitas')
+    } else {
+      setSuggestedCategory(null)
+    }
+  }, [title])
 
   const categories = [
     { id: 'keamanan', label: 'Keamanan', icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-50' },
@@ -104,6 +151,21 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
           </button>
         </section>
 
+        {/* ⚠️ INCOMPLETE PROFILE BANNER */}
+        {isProfileIncomplete && (
+          <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-[2rem] p-6 sm:p-8 flex items-start gap-4 transition-all duration-300">
+            <div className="h-12 w-12 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center shrink-0 border border-amber-500/20">
+              <ShieldAlert size={24} />
+            </div>
+            <div className="space-y-1">
+              <h4 className="text-sm font-black uppercase tracking-wider text-amber-800 dark:text-amber-300">Profil Anda Belum Lengkap</h4>
+              <p className="text-xs text-amber-700/80 dark:text-amber-400/80 leading-relaxed font-medium">
+                Beberapa data penting Anda (seperti NIK, nomor WhatsApp, atau alamat domisili) belum terisi. Mohon lengkapi profil Anda di menu <Link href="/dashboard/settings" className="font-bold underline hover:text-amber-900 dark:hover:text-amber-200">Pengaturan Profil</Link> untuk mempermudah petugas memverifikasi dan merespon laporan Anda.
+              </p>
+            </div>
+          </div>
+        )}
+
         <form 
           action={createComplaint}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12"
@@ -145,11 +207,24 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
               {/* Title Input */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] ml-1 italic">Judul / Subjek</label>
+                <div className="flex justify-between items-center">
+                  <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] ml-1 italic">Judul / Subjek</label>
+                  {suggestedCategory && category !== suggestedCategory && (
+                    <button 
+                      type="button" 
+                      onClick={() => setCategory(suggestedCategory)}
+                      className="text-[9px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Lightbulb size={10} /> Saran Kategori: {suggestedCategory.toUpperCase()} (Terapkan)
+                    </button>
+                  )}
+                </div>
                 <input 
                   name="title"
                   type="text" 
                   required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Contoh: Perbaikan Lampu Jalan Mati"
                   className="w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl px-6 py-4.5 text-[15px] font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all"
                 />
@@ -216,6 +291,9 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     <div>
                       <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em]">Klik untuk Mengunggah</p>
                       <p className="text-[9px] font-medium text-slate-500 dark:text-slate-500 mt-2 uppercase tracking-widest">Max Size 5MB (JPG/PNG)</p>
+                      {fileError && (
+                        <p className="text-[9px] font-bold text-red-500 uppercase tracking-widest mt-2 max-w-[250px] mx-auto leading-relaxed">{fileError}</p>
+                      )}
                     </div>
                   </div>
                 )}

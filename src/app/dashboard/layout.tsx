@@ -18,6 +18,7 @@ import MobileBottomNav from '@/components/MobileBottomNav'
 import ThemeToggle from '@/components/ThemeToggle'
 import { getCachedProfile } from '@/lib/profile'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
+import NotificationDropdown from '@/components/dashboard/NotificationDropdown'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -41,6 +42,21 @@ export default async function DashboardLayout({
 
   const isAdmin = profile.role === 'ADMIN'
   const isWarga = profile.role === 'MASYARAKAT'
+
+  // Fetch user notifications
+  let notifications: any[] = []
+  try {
+    notifications = await prisma.notification.findMany({
+      where: { userId: profile.id },
+      orderBy: [
+        { isRead: 'asc' },
+        { createdAt: 'desc' }
+      ],
+      take: 10
+    })
+  } catch (notifErr) {
+    console.error('Notifications Fetch Error:', notifErr)
+  }
 
   // 📊 Fetch Stats for Sidebar (Optimized with error handling)
   let stats = { pending: 0, processing: 0, completed: 0 }
@@ -79,7 +95,10 @@ export default async function DashboardLayout({
               <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Platform Pengaduan</span>
             </div>
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <NotificationDropdown notifications={notifications} />
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Navigation Menu */}
@@ -213,6 +232,7 @@ export default async function DashboardLayout({
           <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white uppercase transition-colors">SmartComplaint<span>.</span></span>
         </div>
         <div className="flex items-center gap-2">
+          <NotificationDropdown notifications={notifications} />
           <ThemeToggle />
           <div className="h-8 w-8 bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-900 dark:text-white font-bold text-[10px] border border-slate-100 dark:border-slate-800 transition-colors">
             {(profile.name || '?').charAt(0).toUpperCase()}

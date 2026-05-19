@@ -142,6 +142,12 @@ export async function respondToComplaint(formData: FormData) {
           }
         }
 
+        // Check if status will change
+        let statusChanged = false
+        if (status && status !== existingComplaint?.status && profile.role !== 'MASYARAKAT') {
+          statusChanged = true
+        }
+
         await prisma.response.create({
           data: {
             content: content,
@@ -161,6 +167,22 @@ export async function respondToComplaint(formData: FormData) {
           } catch (statusErr) {
             console.error('Non-critical Status Update Error:', statusErr)
           }
+        }
+
+        // Send notification to the citizen
+        if (existingComplaint && existingComplaint.authorId !== profile.id) {
+          const statusText = status === 'PENDING' ? 'MENUNGGU' : status === 'PROCESSING' ? 'DIPROSES' : 'SELESAI'
+          const message = statusChanged
+            ? `Laporan Anda "${existingComplaint.title}" mendapat tanggapan baru dari ${profile.name} dan statusnya diubah menjadi ${statusText}.`
+            : `Laporan Anda "${existingComplaint.title}" mendapat tanggapan baru dari ${profile.name}.`
+          
+          await prisma.notification.create({
+            data: {
+              userId: existingComplaint.authorId,
+              message,
+              type: 'INFO'
+            }
+          })
         }
 
         revalidatePath(`/dashboard/complaint/${complaintId}`)
@@ -481,9 +503,19 @@ export async function updateComplaintStatus(formData: FormData) {
     const id = formData.get('id') as string
     const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
 
-    await prisma.complaint.update({
+    const updatedComplaint = await prisma.complaint.update({
       where: { id },
       data: { status }
+    })
+
+    // Send notification to the citizen
+    const statusText = status === 'PENDING' ? 'MENUNGGU' : status === 'PROCESSING' ? 'DIPROSES' : 'SELESAI'
+    await prisma.notification.create({
+      data: {
+        userId: updatedComplaint.authorId,
+        message: `Status laporan Anda "${updatedComplaint.title}" kini telah diubah menjadi ${statusText}.`,
+        type: 'INFO'
+      }
     })
 
     revalidatePath(`/dashboard/complaint/${id}`)

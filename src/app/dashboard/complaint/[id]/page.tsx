@@ -24,6 +24,7 @@ import ResponseFileHandler from './ResponseFileHandler'
 import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
+import PrintReceiptButton from './PrintReceiptButton'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -61,26 +62,73 @@ export default async function ComplaintDetailPage({
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-32">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          /* Hide layout components and non-receipt details */
+          aside, header, nav, footer, .no-print, button, form {
+            display: none !important;
+          }
+          
+          /* Full printable area width */
+          main {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+          }
+
+          /* Force main details to fill page */
+          .print-full-width {
+            grid-column: span 12 / span 12 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+
+          /* Body overrides */
+          body {
+            background-color: white !important;
+            color: black !important;
+          }
+          
+          .bg-white, .dark\\:bg-slate-900 {
+            background-color: white !important;
+            color: black !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: none !important;
+          }
+
+          .text-slate-900, .dark\\:text-white, h1, h2, h3, h4, h5, h6 {
+            color: black !important;
+          }
+          .text-slate-700, .dark\\:text-slate-400, p {
+            color: #334155 !important;
+          }
+        }
+      `}} />
       
       <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
         
         {/* 👋 HEADER SECTION */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2 no-print">
                <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
                <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Detail Operasional</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Informasi Laporan #{complaint.id.slice(-6).toUpperCase()}</h1>
-            <p className="text-slate-600 dark:text-slate-500 font-medium text-sm md:text-base">Pantau riwayat penanganan dan koordinasi petugas lapangan.</p>
+            <p className="text-slate-600 dark:text-slate-500 font-medium text-sm md:text-base no-print">Pantau riwayat penanganan dan koordinasi petugas lapangan.</p>
+          </div>
+          
+          <div className="flex items-center gap-4 no-print shrink-0">
+             <PrintReceiptButton />
           </div>
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Main Content */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-7 space-y-8 print-full-width">
             <div className="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-all group">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-slate-100 dark:border-slate-800 relative">
@@ -192,7 +240,7 @@ export default async function ComplaintDetailPage({
                )}
 
                {/* Response Form */}
-                <div className="mt-10 p-2 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl transition-all focus-within:ring-4 focus-within:ring-blue-500/5">
+                <div className="mt-10 p-2 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl transition-all focus-within:ring-4 focus-within:ring-blue-500/5 no-print">
                    <form action={respondToComplaint} className="relative" encType="multipart/form-data">
                       <input type="hidden" name="complaintId" value={complaint.id} />
                       <input type="hidden" name="status" value={complaint.status} />
@@ -221,7 +269,7 @@ export default async function ComplaintDetailPage({
           </div>
 
           {/* Sidebar Actions */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-8 no-print">
             {isAuthor && complaint.status === 'PENDING' && (
               <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all">
                 <div className="flex items-center gap-4 mb-8">
