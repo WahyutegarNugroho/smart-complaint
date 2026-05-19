@@ -350,16 +350,16 @@ export default async function ComplaintDetailPage({
                     return (
                       <div key={i} className="flex gap-6 group/step">
                          <div className="flex flex-col items-center">
-                            <div className={`h-7 w-7 rounded-full flex items-center justify-center transition-all ${isCompleted ? 'bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20' : 'bg-brand-canvas-soft text-brand-ink/20'} ${isActive ? 'ring-4 ring-brand-primary/10 scale-110' : ''}`}>
+                            <div className={`h-7 w-7 rounded-full flex items-center justify-center transition-all duration-500 ${isCompleted ? 'bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20' : 'bg-brand-canvas-soft text-brand-ink/20'} ${isActive ? 'ring-4 ring-brand-primary/30 scale-110 animate-pulse' : ''}`}>
                                <step.icon size={14} />
                             </div>
                             {i < arr.length - 1 && (
-                               <div className={`w-0.5 h-10 transition-all ${isCompleted && complaint.status !== step.status ? 'bg-brand-primary' : 'bg-brand-hairline'}`} />
+                               <div className={`w-0.5 h-10 transition-all duration-500 ${isCompleted && complaint.status !== step.status ? 'bg-brand-primary' : 'bg-brand-hairline'}`} />
                             )}
                          </div>
                          <div className="pt-0.5">
-                            <h5 className={`text-[13px] font-bold uppercase tracking-widest transition-colors ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/30'}`}>{step.label}</h5>
-                            <p className="text-[12px] text-brand-ink/60 mt-1.5 font-medium italic transition-colors">{step.desc}</p>
+                            <h5 className={`text-[13px] font-bold uppercase tracking-widest transition-colors duration-500 ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/30'}`}>{step.label}</h5>
+                            <p className="text-[12px] text-brand-ink/60 mt-1.5 font-medium italic transition-colors duration-500">{step.desc}</p>
                          </div>
                       </div>
                     )
