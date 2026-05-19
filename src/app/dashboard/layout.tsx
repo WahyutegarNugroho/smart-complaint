@@ -79,25 +79,32 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col md:flex-row font-sans selection:bg-emerald-100 dark:selection:bg-emerald-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen bg-brand-canvas-soft flex flex-col md:flex-row font-sans selection:bg-brand-primary/20 text-brand-ink transition-colors duration-500">
 
       {/* 📱 Desktop Sidebar */}
-      <aside className="hidden md:flex w-72 bg-[#FBFBFC] dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex-col sticky top-0 h-screen transition-colors">
+      <aside className="hidden md:flex w-72 bg-brand-canvas border-r border-brand-hairline flex-col sticky top-0 h-screen transition-colors duration-500">
 
         {/* Logo Section */}
-        <div className="p-8 flex items-center justify-between">
+        <div className="px-8 pt-8 pb-4">
           <Link href="/dashboard" className="flex items-center gap-3 group cursor-pointer">
-            <div className={`h-10 w-10 ${isAdmin ? 'bg-emerald-600' : 'bg-slate-900 dark:bg-blue-600'} rounded-xl flex items-center justify-center text-white shadow-xl transition-all duration-300 group-hover:scale-105`}>
+            <div className={`h-10 w-10 ${isAdmin ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'} rounded-xl flex items-center justify-center shadow-xl transition-all duration-300 group-hover:scale-105`}>
               <ShieldCheck size={24} />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white leading-none">SmartComplaint<span>.</span></span>
-              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Platform Pengaduan</span>
+              <span className="font-bold text-xl tracking-tight text-brand-ink leading-none">SmartComplaint<span>.</span></span>
+              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest mt-1">Platform Pengaduan</span>
             </div>
           </Link>
-          <div className="flex items-center gap-2">
-            <NotificationDropdown notifications={notifications} />
-            <ThemeToggle />
+        </div>
+
+        {/* Desktop Quick Toolbar (Notifications & Theme Switcher) */}
+        <div className="px-8 pb-4 flex items-center gap-3">
+          <div className="flex-1 flex items-center gap-2 bg-brand-canvas-soft/80 border border-brand-hairline p-2.5 rounded-2xl shadow-sm justify-between">
+             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest pl-2">Aksi Cepat</span>
+             <div className="flex items-center gap-2">
+                <NotificationDropdown notifications={notifications} />
+                <ThemeToggle />
+             </div>
           </div>
         </div>
 
@@ -105,12 +112,12 @@ export default async function DashboardLayout({
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
 
           <div className="px-4 mb-2 mt-4">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-50">Modul Navigasi</span>
+            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest opacity-50">Modul Navigasi</span>
           </div>
 
           <Link
             href="/dashboard"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-sm"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm"
           >
             <LayoutDashboard size={18} className="opacity-70 group-hover:opacity-100" />
             Beranda Utama
@@ -119,7 +126,7 @@ export default async function DashboardLayout({
           {isWarga && (
             <Link
               href="/dashboard/create"
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-sm transition-all group"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
             >
               <PlusCircle size={18} className="opacity-70 group-hover:opacity-100" />
               Lapor Masalah
@@ -127,19 +134,19 @@ export default async function DashboardLayout({
           )}
 
           <div className="px-4 mb-2 mt-8">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-50">Status Pengaduan</span>
+            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest opacity-50">Status Pengaduan</span>
           </div>
 
           <Link
             href="/dashboard?status=PENDING"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-amber-600 dark:hover:text-amber-400 hover:shadow-sm transition-all group"
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-amber-500 hover:shadow-sm transition-all group"
           >
             <div className="flex items-center gap-3">
               <Clock size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-amber-500" />
               Menunggu
             </div>
             {stats.pending > 0 && (
-              <span className="bg-amber-100/80 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-lg">
+              <span className="bg-amber-500/10 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded-lg border border-amber-500/10">
                 {stats.pending}
               </span>
             )}
@@ -147,14 +154,14 @@ export default async function DashboardLayout({
 
           <Link
             href="/dashboard?status=PROCESSING"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-sm transition-all group"
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-blue-500 hover:shadow-sm transition-all group"
           >
             <div className="flex items-center gap-3">
               <Activity size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-blue-500" />
               Diproses
             </div>
             {stats.processing > 0 && (
-              <span className="bg-blue-100/80 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded-lg">
+              <span className="bg-blue-500/10 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-lg border border-blue-500/10">
                 {stats.processing}
               </span>
             )}
@@ -162,14 +169,14 @@ export default async function DashboardLayout({
 
           <Link
             href="/dashboard?status=COMPLETED"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-sm transition-all group"
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
           >
             <div className="flex items-center gap-3">
-              <CheckCircle2 size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-emerald-500" />
+              <CheckCircle2 size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-brand-primary" />
               Selesai
             </div>
             {stats.completed > 0 && (
-              <span className="bg-emerald-100/80 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-lg">
+              <span className="bg-brand-primary/10 text-brand-primary text-[10px] font-bold px-2 py-0.5 rounded-lg border border-brand-primary/20">
                 {stats.completed}
               </span>
             )}
@@ -178,18 +185,18 @@ export default async function DashboardLayout({
           {isAdmin && (
             <>
               <div className="px-4 mb-2 mt-8">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider opacity-50">Administrasi</span>
+                <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
               </div>
               <Link
                 href="/dashboard/admin/users"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-sm transition-all group"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
               >
                 <Users size={18} className="opacity-70 group-hover:opacity-100" />
                 Data Penduduk
               </Link>
               <Link
                 href="/dashboard/admin/announcements"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-sm transition-all group"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
               >
                 <Megaphone size={18} className="opacity-70 group-hover:opacity-100" />
                 Manajemen Pengumuman
@@ -199,20 +206,20 @@ export default async function DashboardLayout({
         </nav>
 
         {/* User Profile & Logout */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 transition-colors">
-          <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 cursor-pointer">
-            <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-200 font-bold text-sm shrink-0 transition-colors">
+        <div className="p-4 border-t border-brand-hairline bg-brand-canvas-soft/30 transition-colors">
+          <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-brand-canvas hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-brand-hairline cursor-pointer">
+            <div className="h-10 w-10 bg-brand-canvas-soft text-brand-ink font-bold text-sm shrink-0 flex items-center justify-center rounded-xl transition-colors">
               {(profile.name || '?').charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-none transition-colors">{profile.name}</p>
-              <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500 mt-1 transition-colors">Pengaturan Akun</p>
+              <p className="text-xs font-bold text-brand-ink truncate leading-none transition-colors">{profile.name}</p>
+              <p className="text-[10px] font-medium text-brand-ink/40 mt-1 transition-colors">Pengaturan Akun</p>
             </div>
-            <ChevronRight size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-emerald-500 transition-colors" />
+            <ChevronRight size={14} className="text-brand-ink/30 group-hover:text-brand-primary transition-colors" />
           </Link>
 
           <form action={logout}>
-            <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-red-400 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-all group">
+            <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-all group cursor-pointer">
               <LogOut size={16} className="opacity-70 group-hover:opacity-100" />
               Keluar Akun
             </button>
@@ -224,24 +231,24 @@ export default async function DashboardLayout({
       <MobileBottomNav role={profile.role} />
 
       {/* 📱 Mobile Top Bar */}
-      <header className="md:hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors">
+      <header className="md:hidden bg-brand-canvas/90 backdrop-blur-md border-b border-brand-hairline px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-500">
         <div className="flex items-center gap-3">
-          <div className={`h-8 w-8 ${isAdmin ? 'bg-emerald-600' : 'bg-slate-900 dark:bg-blue-600'} rounded-lg flex items-center justify-center text-white shadow-lg`}>
+          <div className={`h-8 w-8 ${isAdmin ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'} rounded-lg flex items-center justify-center shadow-lg`}>
             <ShieldCheck size={18} />
           </div>
-          <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white uppercase transition-colors">SmartComplaint<span>.</span></span>
+          <span className="font-bold text-sm tracking-tight text-brand-ink uppercase transition-colors">SmartComplaint<span>.</span></span>
         </div>
         <div className="flex items-center gap-2">
           <NotificationDropdown notifications={notifications} />
           <ThemeToggle />
-          <div className="h-8 w-8 bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-900 dark:text-white font-bold text-[10px] border border-slate-100 dark:border-slate-800 transition-colors">
+          <div className="h-8 w-8 bg-brand-canvas-soft border border-brand-hairline rounded-lg flex items-center justify-center text-brand-ink font-bold text-[10px] transition-colors">
             {(profile.name || '?').charAt(0).toUpperCase()}
           </div>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 mb-20 md:mb-0 bg-white dark:bg-slate-900 overflow-x-hidden transition-colors">
+      <main className="flex-1 flex flex-col min-w-0 mb-20 md:mb-0 bg-brand-canvas-soft overflow-x-hidden transition-colors duration-500">
         {children}
       </main>
     </div>
