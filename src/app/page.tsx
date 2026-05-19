@@ -11,8 +11,67 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
+import prisma from '@/lib/prisma';
+import InteractiveMap from '@/components/InteractiveMap';
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  // Query dynamic stats
+  const totalReports = await prisma.complaint.count();
+  const completedReports = await prisma.complaint.count({
+    where: { status: 'COMPLETED' }
+  });
+  
+  const successRate = totalReports > 0 ? Math.round((completedReports / totalReports) * 100) : 100;
+  
+  // Calculate average response time
+  const completedComplaints = await prisma.complaint.findMany({
+    where: { status: 'COMPLETED' },
+    select: { createdAt: true, updatedAt: true }
+  });
+  
+  let averageResponseHours = 12;
+  if (completedComplaints.length > 0) {
+    const totalHours = completedComplaints.reduce((acc, c) => {
+      const diffMs = c.updatedAt.getTime() - c.createdAt.getTime();
+      return acc + (diffMs / (1000 * 60 * 60));
+    }, 0);
+    averageResponseHours = Math.max(1, Math.round(totalHours / completedComplaints.length));
+  }
+
+  // Count active blocks (RTs)
+  const activeBlocksResult = await prisma.complaint.groupBy({
+    by: ['rt'],
+    where: { rt: { not: null } }
+  });
+  const activeBlocks = activeBlocksResult.length || 5; // Default to 5 blocks if none
+
+  // Get active complaints for interactive map
+  const activeComplaints = await prisma.complaint.findMany({
+    where: {
+      status: { in: ['PENDING', 'PROCESSING'] },
+      rt: { not: null }
+    },
+    select: {
+      id: true,
+      title: true,
+      rt: true,
+      status: true,
+      isUrgent: true
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  // Simple serialization mapping for client component prop safety
+  const safeActiveComplaints = activeComplaints.map(c => ({
+    id: c.id,
+    title: c.title,
+    rt: c.rt,
+    status: c.status,
+    isUrgent: c.isUrgent
+  }));
+
   return (
     <div className="min-h-screen bg-brand-canvas-soft selection:bg-brand-primary selection:text-brand-ink font-sans overflow-x-hidden animate-page">
       {/* Navigation - Clean & Brand Native */}
@@ -62,7 +121,7 @@ export default function LandingPage() {
             <div className="text-center lg:text-left z-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-brand-hairline bg-brand-canvas px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-ink mb-10 shadow-sm">
                 <span className="flex h-2 w-2 rounded-full bg-brand-primary animate-pulse"></span>
-                Ecosystem Pengaduan Perumahan
+                Ekosistem Pengaduan Perumahan
               </div>
               
               <h1 className="text-4xl sm:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight text-brand-ink leading-[1.1] lg:leading-[0.95] mb-6 sm:mb-8">
@@ -125,7 +184,7 @@ export default function LandingPage() {
                     <div className="h-2 w-2 rounded-full bg-brand-primary" />
                     <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink/60">Status Real-time</span>
                   </div>
-                  <p className="text-lg font-bold text-brand-ink">&quot;Perbaikan Lampu Jalan Blok C Selesai&quot;</p>
+                  <p className="text-lg font-bold text-brand-ink">&quot;Pemantauan Wilayah Terintegrasi Penuh&quot;</p>
                 </div>
               </div>
             </div>
@@ -140,23 +199,30 @@ export default function LandingPage() {
           <div className="rounded-brand bg-brand-ink p-12 shadow-2xl border border-brand-hairline">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               <div className="text-center md:text-left">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">850+</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{totalReports}</p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary">Total Laporan</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-primary font-mono">95%</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-primary font-mono">{successRate}%</p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Tuntas Ditangani</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">12<span className="text-2xl opacity-50">h</span></p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Respon Cepat</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Rata-Rata Penyelesaian</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">10</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Blok Aktif</p>
+                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{activeBlocks}</p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Blok Terlaporkan</p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Interactive Map Section */}
+      <section className="relative z-20 py-12">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <InteractiveMap activeComplaints={safeActiveComplaints} />
         </div>
       </section>
 
@@ -212,7 +278,7 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-brand-ink tracking-tighter uppercase">Smart<span className="text-brand-primary">Complaint</span></span>
               </div>
               <p className="text-base text-brand-ink/50 leading-relaxed max-w-sm font-medium mb-10">
-                Platform resmi warga Pesona Serpong untuk komunikasi dua arah demi lingkungan yang asri and aman.
+                Platform resmi warga Pesona Serpong untuk komunikasi dua arah demi lingkungan yang asri dan aman.
               </p>
               <div className="flex gap-6">
                 <div className="h-12 w-12 rounded-brand bg-brand-canvas-soft flex items-center justify-center text-brand-ink/40 hover:text-brand-primary transition-colors cursor-pointer border border-brand-hairline">
@@ -287,4 +353,3 @@ const LANDING_FEATURES = [
     icon: Users,
   },
 ];
-
