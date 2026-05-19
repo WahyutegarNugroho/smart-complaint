@@ -12,7 +12,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
 import prisma from '@/lib/prisma';
-import InteractiveMap from '@/components/InteractiveMap';
 
 export default async function LandingPage() {
   // Query dynamic stats
@@ -45,32 +44,7 @@ export default async function LandingPage() {
   });
   const activeBlocks = activeBlocksResult.length || 5; // Default to 5 blocks if none
 
-  // Get active complaints for interactive map
-  const activeComplaints = await prisma.complaint.findMany({
-    where: {
-      status: { in: ['PENDING', 'PROCESSING'] },
-      rt: { not: null }
-    },
-    select: {
-      id: true,
-      title: true,
-      rt: true,
-      status: true,
-      isUrgent: true
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
 
-  // Simple serialization mapping for client component prop safety
-  const safeActiveComplaints = activeComplaints.map(c => ({
-    id: c.id,
-    title: c.title,
-    rt: c.rt,
-    status: c.status,
-    isUrgent: c.isUrgent
-  }));
 
   return (
     <div className="min-h-screen bg-brand-canvas-soft selection:bg-brand-primary selection:text-brand-ink font-sans overflow-x-hidden animate-page">
@@ -178,14 +152,6 @@ export default async function LandingPage() {
                   className="rounded-[2.5rem] object-cover transition-transform duration-1000 group-hover:scale-105"
                   priority
                 />
-                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-brand-canvas/80 via-transparent to-transparent"></div>
-                <div className="absolute bottom-10 left-10 right-10 p-8 rounded-brand bg-brand-canvas/90 backdrop-blur-md border border-brand-hairline shadow-2xl">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="h-2 w-2 rounded-full bg-brand-primary" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-ink/60">Status Real-time</span>
-                  </div>
-                  <p className="text-lg font-bold text-brand-ink">&quot;Pemantauan Wilayah Terintegrasi Penuh&quot;</p>
-                </div>
               </div>
             </div>
 
@@ -219,12 +185,7 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Interactive Map Section */}
-      <section className="relative z-20 py-12">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <InteractiveMap activeComplaints={safeActiveComplaints} />
-        </div>
-      </section>
+
 
       {/* Features Section - Hairline Cards on Dark / White Cards on Sage */}
       <section id="fitur" className="py-32 bg-brand-canvas-soft">
