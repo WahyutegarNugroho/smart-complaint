@@ -103,37 +103,11 @@
   animation: fade-slide-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Print Styles - Complaint Detail */
+/* Print Styles — base (applied to all pages) */
 @media print {
-  aside, header, nav, footer, .no-print, button, form {
-    display: none !important;
-  }
-  main {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-  .print-full-width {
-    grid-column: span 12 / span 12 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  body {
-    background-color: white !important;
-    color: black !important;
-  }
-  .bg-white, .dark\:bg-slate-900 {
-    background-color: white !important;
-    color: black !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: none !important;
-  }
-  .text-slate-900, .dark\:text-white, h1, h2, h3, h4, h5, h6 {
-    color: black !important;
-  }
-  .text-slate-700, .dark\:text-slate-400, p {
-    color: #334155 !important;
-  }
+  .no-print { display: none !important; }
+  body { background: white !important; color: #1e293b !important; }
+  main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; width: 100% !important; }
+  .print-full-width { grid-column: span 12 / span 12 !important; width: 100% !important; max-width: 100% !important; }
 }
 

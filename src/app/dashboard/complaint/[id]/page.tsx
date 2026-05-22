@@ -326,6 +326,95 @@ export default async function ComplaintDetailPage({
           </div>
         </div>
       </main>
+
+      {/* 📄 PRINT RECEIPT — muncul saat Cetak Tanda Terima */}
+      <div className="hidden print:block">
+        <style>{`
+          @page { margin: 2cm; }
+          .print-receipt { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; color: #1e293b; }
+          .print-receipt .response-item { border-left: 3px solid #e2e8f0; padding-left: 12px; margin-bottom: 12px; }
+          .print-receipt .meta-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; }
+          .print-receipt .meta-value { font-size: 10pt; font-weight: 600; color: #1e293b; }
+        `}</style>
+
+        <div className="print-receipt p-8 max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-10 pb-8 border-b-2 border-slate-900">
+            <h1 className="text-2xl font-extrabold text-slate-900 mb-2">TANDA TERIMA LAPORAN</h1>
+            <p className="text-[8pt] font-bold uppercase tracking-[0.3em] text-slate-400">SmartComplaint — Pengaduan Masyarakat</p>
+          </div>
+
+          {/* Info Laporan */}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-8">
+            <div>
+              <p className="meta-label">ID Laporan</p>
+              <p className="meta-value">#{complaint.id.slice(-8).toUpperCase()}</p>
+            </div>
+            <div>
+              <p className="meta-label">Status</p>
+              <p className="meta-value">{complaint.status === 'PENDING' ? 'MENUNGGU' : complaint.status === 'PROCESSING' ? 'DIPROSES' : 'SELESAI'}</p>
+            </div>
+            <div>
+              <p className="meta-label">Judul</p>
+              <p className="meta-value">{complaint.title}</p>
+            </div>
+            <div>
+              <p className="meta-label">Kategori</p>
+              <p className="meta-value uppercase">{complaint.category}</p>
+            </div>
+            <div>
+              <p className="meta-label">Tanggal Lapor</p>
+              <p className="meta-value">{new Date(complaint.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            </div>
+            <div>
+              <p className="meta-label">Prioritas</p>
+              <p className="meta-value">{complaint.isUrgent ? 'TINGGI' : 'NORMAL'}</p>
+            </div>
+          </div>
+
+          {/* Pelapor */}
+          <div className="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200">
+            <p className="meta-label mb-2">Data Pelapor</p>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[10pt]">
+              <p><span className="font-bold text-slate-600">Nama:</span> {complaint.author?.name || 'Anonim'}</p>
+              <p><span className="font-bold text-slate-600">Username:</span> {complaint.author?.username || '-'}</p>
+              <p><span className="font-bold text-slate-600">Domisili:</span> RT {complaint.rt}/{complaint.rw}</p>
+              <p><span className="font-bold text-slate-600">Lokasi:</span> {complaint.location}</p>
+            </div>
+          </div>
+
+          {/* Isi Laporan */}
+          <div className="mb-8">
+            <p className="meta-label mb-2">Isi Laporan</p>
+            <p className="text-[10pt] text-slate-700 leading-relaxed p-4 bg-white border border-slate-200 rounded-xl">&quot;{complaint.content}&quot;</p>
+          </div>
+
+          {/* Tanggapan */}
+          {complaint.responses.length > 0 && (
+            <div className="mb-8">
+              <p className="meta-label mb-3">Tanggapan ({complaint.responses.length})</p>
+              {complaint.responses.map(res => (
+                <div key={res.id} className="response-item mb-3">
+                  <p className="text-[9pt] font-bold text-slate-800">{res.officer?.name || 'Petugas'}</p>
+                  <p className="text-[9pt] text-slate-600 mt-0.5">{res.content}</p>
+                  <p className="text-[7pt] text-slate-400 mt-0.5">{new Date(res.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Signature */}
+          <div className="mt-16 pt-8 border-t border-slate-200 text-center">
+            <p className="text-[9pt] text-slate-500 mb-8">Dicetak pada {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+            <div className="inline-block text-center">
+              <div className="w-48 border-t-2 border-slate-900 mx-auto pt-2">
+                <p className="text-[9pt] font-bold text-slate-900">{complaint.author?.name || 'Pengguna'}</p>
+                <p className="text-[7pt] text-slate-400 uppercase tracking-widest">Pelapor</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
