@@ -86,7 +86,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-brand-canvas-soft flex flex-col md:flex-row font-sans selection:bg-brand-primary/20 text-brand-ink transition-colors duration-500">
 
       {/* 📱 Desktop Sidebar */}
-      <aside className="hidden md:flex w-72 bg-brand-canvas border-r border-brand-hairline flex-col sticky top-0 h-screen transition-colors duration-500">
+      <aside className="hidden md:flex w-72 bg-brand-canvas border-r border-brand-hairline flex-col sticky top-0 h-screen transition-colors duration-500 no-print">
 
         {/* Logo Section */}
         <div className="px-8 pt-8 pb-4">
@@ -239,10 +239,10 @@ export default async function DashboardLayout({
       </aside>
 
       {/* 📱 Mobile Bottom Navigation */}
-      <MobileBottomNav role={profile.role} />
+      <div className="no-print"><MobileBottomNav role={profile.role} /></div>
 
       {/* 📱 Mobile Top Bar */}
-      <header className="md:hidden bg-brand-canvas/90 backdrop-blur-md border-b border-brand-hairline px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-500">
+      <header className="md:hidden bg-brand-canvas/90 backdrop-blur-md border-b border-brand-hairline px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-500 no-print">
         <div className="flex items-center gap-3">
           <div className={`h-8 w-8 ${isAdmin ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'} rounded-lg flex items-center justify-center shadow-lg`}>
             <ShieldCheck size={18} />

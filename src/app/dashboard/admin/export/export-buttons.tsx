@@ -4,6 +4,9 @@ import { Download, FileText, FileBarChart } from 'lucide-react'
 
 export function ExportButtons() {
   const handlePrint = () => {
+    const originalTitle = document.title
+    document.title = ''
+    window.onafterprint = () => { document.title = originalTitle; window.onafterprint = null }
     window.print()
   }
 
