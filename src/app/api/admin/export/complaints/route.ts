@@ -1,8 +1,20 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { checkRateLimit } from '@/lib/rate-limit'
 
-export async function GET() {
+function escapeCsvField(value: string): string {
+  const dangerous = /^[=+\-@\t]/
+  const escaped = value.replace(/"/g, '""')
+  return `"${dangerous.test(value) ? '\t' : ''}${escaped}"`
+}
+
+export async function GET(request: Request) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (!checkRateLimit(`api:export:complaints:${ip}`, 5, 60_000)) {
+    return new NextResponse('Too Many Requests', { status: 429 })
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })
@@ -24,18 +36,18 @@ export async function GET() {
     // 📄 Create CSV Content
     const headers = ['ID', 'Judul', 'Kategori', 'Status', 'Prioritas', 'Tanggal Kejadian', 'Warga', 'RT', 'RW', 'Lokasi', 'Isi Laporan', 'Tanggal Dibuat']
     const rows = complaints.map(c => [
-      c.id,
-      `"${c.title.replace(/"/g, '""')}"`,
-      c.category,
-      c.status,
-      c.isUrgent ? 'YA' : 'TIDAK',
-      c.incidentDate.toLocaleDateString('id-ID'),
-      c.author?.name || 'Anonim',
-      c.rt || '-',
-      c.rw || '-',
-      `"${c.location.replace(/"/g, '""')}"`,
-      `"${c.content.replace(/"/g, '""')}"`,
-      c.createdAt.toLocaleDateString('id-ID')
+      escapeCsvField(c.id),
+      escapeCsvField(c.title),
+      escapeCsvField(c.category),
+      escapeCsvField(c.status),
+      escapeCsvField(c.isUrgent ? 'YA' : 'TIDAK'),
+      escapeCsvField(c.incidentDate.toLocaleDateString('id-ID')),
+      escapeCsvField(c.author?.name || 'Anonim'),
+      escapeCsvField(c.rt || '-'),
+      escapeCsvField(c.rw || '-'),
+      escapeCsvField(c.location),
+      escapeCsvField(c.content),
+      escapeCsvField(c.createdAt.toLocaleDateString('id-ID'))
     ])
 
     const csvContent = [

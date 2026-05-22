@@ -20,6 +20,12 @@ enum Status {
   COMPLETED
 }
 
+enum NotificationType {
+  INFO
+  WARNING
+  DELETE
+}
+
 model Profile {
   id         String   @id @default(cuid())
   userId     String   @unique
@@ -58,7 +64,7 @@ model Complaint {
   updatedAt    DateTime @updatedAt
 
   category     String   @default("umum")
-  author    Profile    @relation(fields: [authorId], references: [id])
+  author    Profile    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   responses Response[]
 
   @@index([authorId])
@@ -66,6 +72,9 @@ model Complaint {
   @@index([createdAt])
   @@index([rt])
   @@index([rw])
+  @@index([category])
+  @@index([incidentDate])
+  @@index([status, createdAt])
 }
 
 model Response {
@@ -77,10 +86,11 @@ model Response {
   createdAt   DateTime @default(now())
 
   complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
-  officer   Profile   @relation(fields: [officerId], references: [id])
+  officer   Profile   @relation(fields: [officerId], references: [id], onDelete: Cascade)
 
   @@index([complaintId])
   @@index([officerId])
+  @@index([createdAt])
 }
 
 model Announcement {
@@ -91,14 +101,17 @@ model Announcement {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  author Profile @relation(fields: [authorId], references: [id])
+  author Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([authorId])
 }
 
 model Notification {
   id        String   @id @default(cuid())
   userId    String
   message   String
-  type      String   @default("INFO") // INFO, WARNING, DELETE
+  type      NotificationType @default(INFO)
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
@@ -115,5 +128,5 @@ model AuditLog {
   adminId   String
   createdAt DateTime @default(now())
 
-  admin Profile @relation(fields: [adminId], references: [id])
+  admin Profile @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }

@@ -31,29 +31,29 @@ export default function UserRow({ user }: { user: Profile }) {
         onClick={() => setShowModal(true)}
         className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group border-b border-slate-50 dark:border-slate-800 last:border-0"
       >
-        <td className="px-8 py-6">
+        <td className="px-6 sm:px-8 py-6">
           <div className="flex items-center gap-5">
-            <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center text-slate-400 dark:text-slate-600 shrink-0 font-bold transition-all group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-6">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 bg-slate-100 dark:bg-slate-800 rounded-[1rem] flex items-center justify-center text-slate-400 dark:text-slate-600 shrink-0 font-bold transition-all group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white group-hover:rotate-6">
               {user.name?.[0] || '?'}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <p className="text-[15px] font-bold text-slate-900 dark:text-white transition-colors">{user.name}</p>
+                <p className="text-sm sm:text-[15px] font-bold text-slate-900 dark:text-white transition-colors truncate">{user.name}</p>
                 {user.isVerified && (
-                  <ShieldCheck size={14} className="text-blue-500 dark:text-blue-400" fill="currentColor" />
+                  <ShieldCheck size={14} className="text-blue-500 dark:text-blue-400 shrink-0" fill="currentColor" />
                 )}
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium tracking-tight transition-colors">{user.username}</p>
+              <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-400 font-medium tracking-tight transition-colors truncate">{user.username}</p>
             </div>
           </div>
         </td>
-        <td className="px-8 py-6">
+        <td className="hidden md:table-cell px-6 sm:px-8 py-6">
           <div className="flex flex-col">
              <span className="text-[13px] font-bold text-slate-800 dark:text-slate-200">RT {user.rt || '-'} / RW {user.rw || '-'}</span>
              <span className="text-[10px] text-slate-600 dark:text-slate-400 uppercase font-bold tracking-widest mt-0.5 transition-colors">Blok Wilayah</span>
           </div>
         </td>
-        <td className="px-8 py-6">
+        <td className="hidden sm:table-cell px-6 sm:px-8 py-6">
           <div className="flex flex-col gap-2.5" onClick={(e) => e.stopPropagation()}>
              <form action={async (formData) => {
                try {
@@ -84,7 +84,7 @@ export default function UserRow({ user }: { user: Profile }) {
              </form>
           </div>
         </td>
-        <td className="px-8 py-6 text-right" onClick={(e) => e.stopPropagation()}>
+        <td className="sticky right-0 px-6 sm:px-8 py-6 text-right bg-white dark:bg-slate-900 shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.05)] dark:shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.2)] z-10" onClick={(e) => e.stopPropagation()}>
            <div className="flex items-center justify-end gap-3">
               <form action={async (formData) => {
                 if(!confirm('Hapus akun pengguna ini secara permanen?')) return

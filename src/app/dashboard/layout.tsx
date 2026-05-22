@@ -12,7 +12,8 @@ import {
   Clock,
   Activity,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  History
 } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
 import MobileBottomNav from '@/components/MobileBottomNav'
@@ -63,21 +64,19 @@ export default async function DashboardLayout({
     console.error('Notifications Fetch Error:', notifErr)
   }
 
-  // 📊 Fetch Stats for Sidebar (Optimized with error handling)
-  let stats = { pending: 0, processing: 0, completed: 0 }
+  // 📊 Fetch Stats for Sidebar (Optimized - single GROUP BY query)
+  const stats = { pending: 0, processing: 0, completed: 0 }
   
   try {
     const whereBase = isWarga ? { authorId: profile.id } : {}
-    const [pendingCount, processingCount, completedCount] = await Promise.all([
-      prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
-      prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
-      prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
-    ])
-    
-    stats = {
-      pending: pendingCount,
-      processing: processingCount,
-      completed: completedCount
+    const groupCounts = await prisma.complaint.groupBy({
+      by: ['status'],
+      where: whereBase,
+      _count: { status: true },
+    })
+    for (const g of groupCounts) {
+      const key = g.status.toLowerCase() as 'pending' | 'processing' | 'completed'
+      stats[key] = g._count.status
     }
   } catch (err) {
     console.error('Dashboard Stats Fetch Error:', err)
@@ -205,6 +204,13 @@ export default async function DashboardLayout({
               >
                 <Megaphone size={18} className="opacity-70 group-hover:opacity-100" />
                 Manajemen Pengumuman
+              </Link>
+              <Link
+                href="/dashboard/admin/audit-log"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
+              >
+                <History size={18} className="opacity-70 group-hover:opacity-100" />
+                Aktivitas Admin
               </Link>
             </>
           )}

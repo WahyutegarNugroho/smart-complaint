@@ -62,49 +62,6 @@ export default async function ComplaintDetailPage({
 
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media print {
-          /* Hide layout components and non-receipt details */
-          aside, header, nav, footer, .no-print, button, form {
-            display: none !important;
-          }
-          
-          /* Full printable area width */
-          main {
-            padding: 0 !important;
-            margin: 0 !important;
-            max-width: 100% !important;
-            width: 100% !important;
-          }
-
-          /* Force main details to fill page */
-          .print-full-width {
-            grid-column: span 12 / span 12 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-          }
-
-          /* Body overrides */
-          body {
-            background-color: white !important;
-            color: black !important;
-          }
-          
-          .bg-white, .dark\\:bg-slate-900 {
-            background-color: white !important;
-            color: black !important;
-            border: 1px solid #e2e8f0 !important;
-            box-shadow: none !important;
-          }
-
-          .text-slate-900, .dark\\:text-white, h1, h2, h3, h4, h5, h6 {
-            color: black !important;
-          }
-          .text-slate-700, .dark\\:text-slate-400, p {
-            color: #334155 !important;
-          }
-        }
-      `}} />
       
       <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
         

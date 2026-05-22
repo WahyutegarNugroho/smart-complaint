@@ -38,6 +38,22 @@ export default function NotificationDropdown({ notifications: initialNotificatio
     return () => clearTimeout(timer)
   }, [])
 
+  // Polling: fetch notifications every 30s
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/notifications')
+        if (res.ok) {
+          const data: NotificationItem[] = await res.json()
+          setNotifications(data)
+        }
+      } catch (err) {
+        console.error('Notification polling error:', err)
+      }
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
   // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

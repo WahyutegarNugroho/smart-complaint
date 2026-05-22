@@ -41,10 +41,11 @@ Bagian ini adalah aturan paling kritis saat Anda melakukan perbaikan bug, optima
 
 ---
 
-## 3. Protokol Koreksi Mandiri (Auto-Correction Protocol)
+## 3. Protokol Koreksi Mandiri & Troubleshooting (Auto-Correction Protocol)
 
-* **Analisis Stack Trace:** Jika terjadi error atau kegagalan kompilasi setelah Anda melakukan perubahan, hentikan eksekusi, baca *stack trace* secara mendalam, dan cari akar masalahnya.
-* **Regression Check:** Pastikan perbaikan yang Anda lakukan untuk menyelesaikan masalah "A" tidak menimbulkan masalah baru "B" di file yang sama.
+* **Root Cause Analysis (Analisis Akar Masalah):** Saat menghadapi *error*, kegagalan kompilasi, atau *crash* sistem, Anda wajib membaca *log error* atau *stack trace* secara menyeluruh terlebih dahulu. Identifikasi dan jelaskan akar masalahnya (*root cause*) secara singkat kepada pengguna sebelum menyusun rencana perbaikan (Plan Mode).
+* **Anti-Trial-and-Error:** Dilarang keras melakukan modifikasi spekulatif atau mengubah kode secara membabi buta hanya untuk melihat apakah kesalahan tersebut hilang secara tidak sengaja. Setiap perubahan harus didasari alasan logis yang kuat berdasarkan analisis kode.
+* **Regression Check:** Pastikan perbaikan yang Anda lakukan untuk menyelesaikan masalah "A" tidak menimbulkan masalah baru "B" di file yang sama atau merusak komponen sistem yang saling bergantung (*regression safe*).
 * **Dokumentasikan Perubahan:** Jika Anda menemukan batasan sistem atau *bug* bawaan pada pustaka pihak ketiga, perbarui dokumen panduan (*Blueprint/Directives*) agar kesalahan serupa tidak terulang di masa depan.
 
 ---
