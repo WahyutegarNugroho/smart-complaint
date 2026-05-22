@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SubmitButton from '@/components/SubmitButton'
 import ThemeToggle from '@/components/ThemeToggle'
-import { useState, use, useEffect } from 'react'
+import { useState, use, useEffect, useRef } from 'react'
 
 export default function LoginPage({
   searchParams,
@@ -15,6 +15,7 @@ export default function LoginPage({
 }) {
   const { error, message, remaining, remainingAttempts } = use(searchParams)
   const router = useRouter()
+  const fetchedRef = useRef(false)
   const [showPassword, setShowPassword] = useState(false)
   const isInitiallyLocked = error === 'locked' && !!remaining
   const initialSecs = isInitiallyLocked ? (parseInt(remaining || '60') || 60) : 0
@@ -22,6 +23,21 @@ export default function LoginPage({
   const [countdown, setCountdown] = useState(initialSecs)
   const showRemaining = !locked && remainingAttempts
   const remainingNum = showRemaining ? (parseInt(remainingAttempts) || 0) : 0
+
+  // Cek status lock dari API saat mount (backup jika user navigasi bolak-balik)
+  useEffect(() => {
+    if (fetchedRef.current) return
+    fetchedRef.current = true
+    fetch('/api/login-status')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.locked && !error?.startsWith('locked')) {
+          setLocked(true)
+          setCountdown(data.remainingSeconds || 60)
+        }
+      })
+      .catch(() => {})
+  }, [error])
 
   useEffect(() => {
     if (!locked) return
