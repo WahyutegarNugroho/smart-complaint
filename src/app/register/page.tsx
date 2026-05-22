@@ -62,10 +62,11 @@ export default function RegisterPage({
             )}
             
             <div className="space-y-3">
-              <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Nama Lengkap Sesuai KTP</label>
+              <label htmlFor="reg-name" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Nama Lengkap Sesuai KTP</label>
               <div className="relative group">
                 <User className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
+                  id="reg-name"
                   name="full_name"
                   type="text"
                   required
@@ -76,10 +77,11 @@ export default function RegisterPage({
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Aktif</label>
+              <label htmlFor="reg-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Aktif</label>
               <div className="relative group">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
+                  id="reg-email"
                   name="email"
                   type="email"
                   required
@@ -90,10 +92,11 @@ export default function RegisterPage({
             </div>
 
             <div className="space-y-3">
-              <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Kredensial Password</label>
+              <label htmlFor="reg-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Kredensial Password</label>
               <div className="relative group">
                 <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
+                  id="reg-password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -103,6 +106,7 @@ export default function RegisterPage({
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                   className="absolute right-6 top-1/2 -translate-y-1/2 text-brand-ink/40 hover:text-brand-primary transition-colors"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}

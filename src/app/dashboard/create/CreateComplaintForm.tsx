@@ -157,6 +157,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
           <button 
             type="button"
             onClick={() => setIsUrgent(!isUrgent)}
+            aria-label={isUrgent ? 'Setel sebagai normal' : 'Setel sebagai urgensi'}
             className={`flex items-center gap-4 px-6 py-3 rounded-2xl border transition-all duration-300 cursor-pointer ${
               isUrgent 
                 ? 'bg-red-500/10 border-red-500/20 shadow-xl shadow-red-500/5' 
@@ -259,7 +260,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               {/* Title Input */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Judul / Subjek</label>
+                  <label htmlFor="title" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Judul / Subjek</label>
                   {suggestedCategory && selectedParent !== suggestedCategory && (
                     <button 
                       type="button" 
@@ -279,6 +280,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                   )}
                 </div>
                 <input 
+                  id="title"
                   name="title"
                   type="text" 
                   required
@@ -291,8 +293,9 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
               {/* Description Input */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Detail Kronologi</label>
+                <label htmlFor="content" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Detail Kronologi</label>
                 <textarea 
+                  id="content"
                   name="content"
                   rows={6}
                   required
@@ -366,20 +369,21 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-3 text-center">
-                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RT</label>
-                    <input name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
+                    <label htmlFor="rt" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RT</label>
+                    <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                   <div className="space-y-3 text-center">
-                    <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RW</label>
-                    <input name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
+                    <label htmlFor="rw" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RW</label>
+                    <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                </div>
 
                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Waktu Temuan</label>
+                  <label htmlFor="incidentDate" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Waktu Temuan</label>
                   <div className="relative group">
                     <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                     <input 
+                      id="incidentDate"
                       name="incidentDate"
                       type="date" 
                       required

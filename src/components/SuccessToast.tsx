@@ -31,6 +31,7 @@ export default function SuccessToast({ message }: SuccessToastProps) {
           </div>
           <button 
             onClick={() => setIsVisible(false)}
+            aria-label="Tutup notifikasi"
             className="h-10 w-10 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-center text-slate-300 dark:text-slate-700 hover:text-slate-900 dark:hover:text-white transition-all active:scale-90"
           >
              <X size={18} />

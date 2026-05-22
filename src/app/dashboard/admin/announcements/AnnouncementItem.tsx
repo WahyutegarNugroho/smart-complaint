@@ -85,13 +85,14 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
         <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all translate-x-0 md:translate-x-4 md:group-hover:translate-x-0">
           <button 
             onClick={() => setIsEditing(true)}
+            aria-label="Edit pengumuman"
             className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 transition-all"
           >
             <Edit3 size={16} />
           </button>
           <form action={deleteAnnouncement} onSubmit={(e) => { if(!confirm('Hapus pengumuman ini?')) e.preventDefault() }}>
             <input type="hidden" name="id" value={item.id} />
-            <button className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 transition-all">
+            <button aria-label="Hapus pengumuman" className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 transition-all">
               <Trash2 size={16} />
             </button>
           </form>

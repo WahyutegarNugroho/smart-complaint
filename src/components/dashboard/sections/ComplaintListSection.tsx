@@ -18,6 +18,7 @@ interface ComplaintListSectionProps {
     category?: string
     fromDate?: string
     toDate?: string
+    pageSize?: string
   }
 }
 
@@ -39,9 +40,9 @@ interface ComplaintWithAuthor {
 }
 
 export default async function ComplaintListSection({ profileId, isWarga, searchParams }: ComplaintListSectionProps) {
-  const { status: currentStatus, q: searchQuery, rt, rw, page, category: categoryFilter, fromDate, toDate } = searchParams
+  const { status: currentStatus, q: searchQuery, rt, rw, page, category: categoryFilter, fromDate, toDate, pageSize: rawPageSize } = searchParams
   const currentPage = Math.max(1, Number(page) || 1)
-  const pageSize = 12
+  const pageSize = [12, 24, 48].includes(Number(rawPageSize)) ? Number(rawPageSize) : 12
 
   const whereClause: Prisma.ComplaintWhereInput = {}
   
@@ -302,24 +303,83 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         </div>
       )}
 
-      {/* 📄 Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-16 flex items-center justify-center gap-3">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <Link
-              key={i}
-              href={`/dashboard?page=${i + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
-              className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
-                currentPage === i + 1 
-                    ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xl shadow-slate-900/10' 
-                    : 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-100 dark:border-slate-800 hover:border-slate-200'
-              }`}
-            >
-              {i + 1}
-            </Link>
-          ))}
+      {/* 📄 Pagination with Enhancement */}
+      <div className="mt-16 flex flex-col items-center gap-4">
+        {/* Page Size Selector */}
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Tampilkan</span>
+          <form action="/dashboard" method="GET" className="inline-flex">
+            {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
+            {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
+            {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
+            {fromDate && <input type="hidden" name="fromDate" value={fromDate} />}
+            {toDate && <input type="hidden" name="toDate" value={toDate} />}
+            {rt && <input type="hidden" name="rt" value={rt} />}
+            {rw && <input type="hidden" name="rw" value={rw} />}
+            <select name="pageSize" defaultValue={pageSize} onChange={(e) => e.target.form?.requestSubmit()} className="bg-brand-canvas border border-brand-hairline rounded-xl px-3 py-2 text-xs font-bold text-brand-ink outline-none cursor-pointer">
+              <option value="12">12</option>
+              <option value="24">24</option>
+              <option value="48">48</option>
+            </select>
+          </form>
+          <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">per halaman</span>
         </div>
-      )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            {/* Previous */}
+            {currentPage > 1 && (
+              <Link
+                href={`/dashboard?page=${currentPage - 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-500 border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all gap-1.5"
+              >
+                ← Sebelumnya
+              </Link>
+            )}
+
+            {/* Page numbers with truncation */}
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const pageNum = i + 1
+              const isFirst = pageNum === 1
+              const isLast = pageNum === totalPages
+              const isNear = Math.abs(pageNum - currentPage) <= 1
+              const showEllipsisBefore = pageNum === currentPage - 2 && currentPage > 3
+              const showEllipsisAfter = pageNum === currentPage + 2 && currentPage < totalPages - 2
+
+              if (!isFirst && !isLast && !isNear) {
+                if (showEllipsisBefore || showEllipsisAfter) {
+                  return <span key={i} className="text-brand-ink/30 font-bold text-xs px-1">...</span>
+                }
+                return null
+              }
+
+              return (
+                <Link
+                  key={i}
+                  href={`/dashboard?page=${pageNum}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                  className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
+                    currentPage === pageNum
+                        ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xl shadow-slate-900/10'
+                        : 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                  }`}
+                >
+                  {pageNum}
+                </Link>
+              )
+            })}
+
+            {/* Next */}
+            {currentPage < totalPages && (
+              <Link
+                href={`/dashboard?page=${currentPage + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-500 border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all gap-1.5"
+              >
+                Selanjutnya →
+              </Link>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   )
 }

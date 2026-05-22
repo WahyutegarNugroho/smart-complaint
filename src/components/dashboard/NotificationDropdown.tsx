@@ -54,16 +54,21 @@ export default function NotificationDropdown({ notifications: initialNotificatio
     return () => clearInterval(interval)
   }, [])
 
-  // Close dropdown on click outside
+  // Close dropdown on click outside or Escape
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
     }
   }, [])
 
@@ -105,8 +110,11 @@ export default function NotificationDropdown({ notifications: initialNotificatio
       {/* 🔔 BELL BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => { if (e.key === 'Escape') setIsOpen(false) }}
         className="relative h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/70 hover:text-brand-primary hover:border-brand-primary hover:shadow-sm transition-all cursor-pointer"
         aria-label="Notifikasi"
+        aria-expanded={isOpen}
+        aria-haspopup="true"
       >
         <Bell size={20} />
         {unreadCount > 0 && (

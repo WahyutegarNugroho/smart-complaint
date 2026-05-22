@@ -61,10 +61,11 @@ export default function ForgotPasswordPage({
             )}
 
             <div className="space-y-3 text-left">
-              <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Terdaftar</label>
+              <label htmlFor="forgot-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Terdaftar</label>
               <div className="relative group">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
+                  id="forgot-email"
                   name="email"
                   type="email"
                   required

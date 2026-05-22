@@ -181,10 +181,11 @@ export default function LoginPage({
               )}
 
               <div className="space-y-3 text-left">
-                <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Warga / Petugas</label>
+                <label htmlFor="login-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Warga / Petugas</label>
                 <div className="relative group">
                   <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                   <input
+                    id="login-email"
                     name="email"
                     type="email"
                     required
@@ -196,12 +197,13 @@ export default function LoginPage({
 
               <div className="space-y-3 text-left">
                 <div className="flex justify-between items-center px-1">
-                  <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Kredensial Password</label>
+                  <label htmlFor="login-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Kredensial Password</label>
                   <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-widest hover:underline decoration-2">Lupa?</Link>
                 </div>
                 <div className="relative group">
                   <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                   <input
+                    id="login-password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -211,6 +213,7 @@ export default function LoginPage({
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                     className="absolute right-6 top-1/2 -translate-y-1/2 text-brand-ink/40 hover:text-brand-primary transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}

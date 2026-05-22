@@ -85,8 +85,13 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-brand-canvas-soft flex flex-col md:flex-row font-sans selection:bg-brand-primary/20 text-brand-ink transition-colors duration-500">
 
+      {/* Skip to content link */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-6 focus:py-4 focus:bg-brand-ink focus:text-brand-canvas focus:rounded-xl focus:text-sm focus:font-bold focus:shadow-2xl focus:outline-none">
+        Langsung ke konten utama
+      </a>
+
       {/* 📱 Desktop Sidebar */}
-      <aside className="hidden md:flex w-72 bg-brand-canvas border-r border-brand-hairline flex-col sticky top-0 h-screen transition-colors duration-500 no-print">
+      <aside className="hidden md:flex w-72 bg-brand-canvas border-r border-brand-hairline flex-col sticky top-0 h-screen transition-colors duration-500 no-print" role="navigation" aria-label="Navigasi sidebar">
 
         {/* Logo Section */}
         <div className="px-8 pt-8 pb-4">
@@ -259,7 +264,7 @@ export default async function DashboardLayout({
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 mb-20 md:mb-0 bg-brand-canvas-soft overflow-x-hidden transition-colors duration-500">
+      <main id="main-content" className="flex-1 flex flex-col min-w-0 mb-20 md:mb-0 bg-brand-canvas-soft overflow-x-hidden transition-colors duration-500">
         {children}
       </main>
     </div>

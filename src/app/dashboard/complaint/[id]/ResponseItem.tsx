@@ -77,12 +77,13 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
           {/* Actions Menu */}
           {(canEdit || canDelete) && !isEditing && (
             <div className="relative">
-               <button 
-                 onClick={() => setShowMenu(!showMenu)}
-                 className="p-1 rounded-lg hover:bg-brand-canvas-soft text-brand-ink/40 transition-all opacity-0 group-hover/item:opacity-100 cursor-pointer"
-               >
-                 <MoreVertical size={14} />
-               </button>
+                <button 
+                  onClick={() => setShowMenu(!showMenu)}
+                  aria-label="Opsi tanggapan"
+                  className="p-1 rounded-lg hover:bg-brand-canvas-soft text-brand-ink/40 transition-all opacity-0 group-hover/item:opacity-100 cursor-pointer"
+                >
+                  <MoreVertical size={14} />
+                </button>
                
                {showMenu && (
                  <>
@@ -120,17 +121,19 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
               rows={3}
             />
             <div className="flex justify-end gap-2">
-               <button 
-                 onClick={() => setIsEditing(false)}
-                 className="p-2 rounded-xl bg-brand-canvas border border-brand-hairline text-brand-ink/60 hover:bg-brand-canvas-soft transition-all cursor-pointer"
-               >
-                 <X size={16} />
-               </button>
-               <button 
-                 onClick={handleEdit}
-                 disabled={isSaving}
-                 className="p-2 rounded-xl bg-brand-primary text-[#0e0f0c] hover:opacity-90 transition-all flex items-center gap-2 cursor-pointer"
-               >
+                <button 
+                  onClick={() => setIsEditing(false)}
+                  aria-label="Batal edit"
+                  className="p-2 rounded-xl bg-brand-canvas border border-brand-hairline text-brand-ink/60 hover:bg-brand-canvas-soft transition-all cursor-pointer"
+                >
+                  <X size={16} />
+                </button>
+                <button 
+                  onClick={handleEdit}
+                  disabled={isSaving}
+                  aria-label="Simpan edit"
+                  className="p-2 rounded-xl bg-brand-primary text-[#0e0f0c] hover:opacity-90 transition-all flex items-center gap-2 cursor-pointer"
+                >
                  {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                </button>
             </div>

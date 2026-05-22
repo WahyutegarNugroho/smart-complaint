@@ -175,6 +175,7 @@ export default function EditComplaintForm({
                     <button
                       type="button"
                       onClick={removeFile}
+                      aria-label="Hapus lampiran"
                       className="absolute top-6 right-6 h-10 w-10 bg-red-500 text-white rounded-xl shadow-lg hover:bg-red-600 transition-all flex items-center justify-center z-10 active:scale-90"
                     >
                       <X size={20} />

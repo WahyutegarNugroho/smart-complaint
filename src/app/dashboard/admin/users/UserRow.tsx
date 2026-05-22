@@ -25,6 +25,16 @@ export default function UserRow({ user }: { user: Profile }) {
     return () => clearTimeout(timer)
   }, [])
 
+  // Focus trap + Escape handler for modal
+  useEffect(() => {
+    if (!showModal) return
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') setShowModal(false)
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [showModal])
+
   return (
     <>
       <tr 
@@ -95,9 +105,9 @@ export default function UserRow({ user }: { user: Profile }) {
                 }
               }}>
                  <input type="hidden" name="profileId" value={user.id} />
-                 <button className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/del">
-                    <Trash2 size={16} className="group-hover/del:scale-110 transition-transform" />
-                 </button>
+                  <button aria-label="Hapus pengguna" className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/del">
+                     <Trash2 size={16} className="group-hover/del:scale-110 transition-transform" />
+                  </button>
               </form>
               <div className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 group-hover:bg-slate-900 dark:group-hover:bg-blue-600 group-hover:text-white transition-all">
                  <ChevronRight size={18} />
@@ -128,6 +138,7 @@ export default function UserRow({ user }: { user: Profile }) {
               </div>
               <button 
                 onClick={() => setShowModal(false)}
+                aria-label="Tutup detail pengguna"
                 className="h-10 w-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm border border-slate-100 dark:border-slate-800"
               >
                 <X size={20} />
