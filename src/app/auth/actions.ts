@@ -13,9 +13,9 @@ export async function login(formData: FormData) {
   const headerList = await headers()
   const ip = headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
-  const { locked, remainingSeconds } = await checkLoginAttempt(ip)
-  if (locked) {
-    redirect('/login?error=locked&remaining=' + remainingSeconds)
+  const check = await checkLoginAttempt(ip)
+  if (check.locked) {
+    redirect('/login?error=locked&remaining=' + check.remainingSeconds)
   }
 
   const data = {
@@ -26,8 +26,11 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    await recordFailedAttempt(ip)
-    redirect('/login?error=' + encodeURIComponent(error.message))
+    const result = await recordFailedAttempt(ip)
+    if (result.locked) {
+      redirect('/login?error=locked&remaining=' + result.remainingSeconds)
+    }
+    redirect('/login?error=' + encodeURIComponent(error.message) + '&remainingAttempts=' + result.remainingAttempts)
   }
 
   await resetLoginAttempts(ip)

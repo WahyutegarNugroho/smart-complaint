@@ -11,15 +11,17 @@ import { useState, use, useEffect } from 'react'
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string, message?: string, remaining?: string }>
+  searchParams: Promise<{ error?: string, message?: string, remaining?: string, remainingAttempts?: string }>
 }) {
-  const { error, message, remaining } = use(searchParams)
+  const { error, message, remaining, remainingAttempts } = use(searchParams)
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const isInitiallyLocked = error === 'locked' && !!remaining
   const initialSecs = isInitiallyLocked ? (parseInt(remaining || '60') || 60) : 0
   const [locked, setLocked] = useState(isInitiallyLocked)
   const [countdown, setCountdown] = useState(initialSecs)
+  const showRemaining = !locked && remainingAttempts
+  const remainingNum = showRemaining ? (parseInt(remainingAttempts) || 0) : 0
 
   useEffect(() => {
     if (!locked) return
@@ -117,6 +119,23 @@ export default function LoginPage({
                 <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
                   <div className="h-2 w-2 bg-brand-primary rounded-full mt-1.5 flex-shrink-0"></div>
                   <div>{message}</div>
+                </div>
+              )}
+
+              {showRemaining && (
+                <div className={`rounded-brand p-6 text-[11px] font-bold uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4 border ${
+                  remainingNum > 3 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' :
+                  remainingNum > 1 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' :
+                  'bg-red-500/10 text-red-600 border-red-500/20'
+                }`}>
+                  <div className={`h-2 w-2 rounded-full mt-1.5 flex-shrink-0 ${
+                    remainingNum > 3 ? 'bg-emerald-500' :
+                    remainingNum > 1 ? 'bg-amber-500' : 'bg-red-500'
+                  }`}></div>
+                  <div>
+                    <span className="block">SISA PERCOBAAN ANDA: {remainingNum}</span>
+                    <span className="block text-[9px] mt-1 opacity-70">Setelah habis, login akan diblokir 1 menit</span>
+                  </div>
                 </div>
               )}
 
