@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
-import { checkRateLimit } from '@/lib/rate-limit'
 
 function escapeCsvField(value: string): string {
   const dangerous = /^[=+\-@\t]/
@@ -9,12 +8,7 @@ function escapeCsvField(value: string): string {
   return `"${dangerous.test(value) ? '\t' : ''}${escaped}"`
 }
 
-export async function GET(request: Request) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  if (!checkRateLimit(`api:export:complaints:${ip}`, 5, 60_000)) {
-    return new NextResponse('Too Many Requests', { status: 429 })
-  }
-
+export async function GET() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })

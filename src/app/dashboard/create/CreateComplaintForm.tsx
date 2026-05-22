@@ -3,7 +3,6 @@
 import React, { useState, useRef } from 'react'
 import { 
   Camera, 
-  MapPin, 
   Calendar as CalendarIcon, 
   Send, 
   X,
@@ -19,6 +18,7 @@ import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
 import Image from 'next/image'
 import SubmitButton from '@/components/SubmitButton'
+import { LocationPicker } from '@/components/map'
 
 interface ProfileData {
   id: string
@@ -295,19 +295,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
             {/* Location & Metadata */}
             <div className="bg-brand-canvas p-6 md:p-8 rounded-[2rem] border border-brand-hairline shadow-sm space-y-8 transition-colors">
-               <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Koordinat Lokasi</label>
-                  <div className="relative group">
-                    <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
-                    <input 
-                      name="location"
-                      type="text" 
-                      required
-                      placeholder="Contoh: Dekat Pos Security Utama"
-                      className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-4 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300"
-                    />
-                  </div>
-               </div>
+               <LocationPicker />
 
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-3 text-center">

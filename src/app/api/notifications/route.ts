@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
-import { checkRateLimit } from '@/lib/rate-limit'
 
-export async function GET(request: Request) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  if (!checkRateLimit(`api:notifications:${ip}`, 10, 30_000)) {
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  }
-
+export async function GET() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

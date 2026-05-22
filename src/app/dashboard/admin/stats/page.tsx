@@ -7,9 +7,11 @@ import {
   PieChart as PieIcon,
   Map,
   TrendingUp,
-  Inbox
+  Inbox,
+  MapPin
 } from 'lucide-react'
 import Link from 'next/link'
+import { ComplaintMapView } from '@/components/map'
 
 export default async function AdminStatsPage() {
   const supabase = await createClient()
@@ -34,6 +36,33 @@ export default async function AdminStatsPage() {
 
   const total = await prisma.complaint.count()
   const maxRTCount = Math.max(...rtCounts.map(r => r._count._all), 1)
+
+  // Data for Map
+  const mappedComplaints = await prisma.complaint.findMany({
+    where: {
+      latitude: { not: null },
+      longitude: { not: null }
+    },
+    select: {
+      id: true,
+      title: true,
+      latitude: true,
+      longitude: true,
+      status: true,
+      rt: true,
+      rw: true,
+      isUrgent: true,
+      createdAt: true
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 500
+  })
+
+  const mapComplaints = mappedComplaints.map(c => ({
+    ...c,
+    latitude: c.latitude!,
+    longitude: c.longitude!
+  }))
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">
@@ -176,6 +205,25 @@ export default async function AdminStatsPage() {
                  <p className="text-xl font-bold text-slate-900 dark:text-white">{rtCounts.length} <span className="text-sm text-slate-400 font-medium tracking-normal uppercase ml-1">RT Terdata</span></p>
               </div>
            </div>
+        </section>
+
+        {/* 🗺️ COMPLAINT MAP */}
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 bg-rose-50 dark:bg-rose-900/20 rounded-2xl flex items-center justify-center text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-800">
+                <MapPin size={20} />
+              </div>
+              <div>
+                <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Visualisasi</h3>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">Peta Sebaran Laporan</p>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              {mapComplaints.length} titik
+            </span>
+          </div>
+          <ComplaintMapView complaints={mapComplaints} />
         </section>
 
       </main>

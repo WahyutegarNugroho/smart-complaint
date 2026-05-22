@@ -1,19 +1,47 @@
 'use client'
 
 import { login } from '@/app/auth/actions'
-import { ShieldCheck, ArrowRight, Lock, Mail, Activity, ArrowLeft, Eye, EyeOff } from 'lucide-react'
+import { ShieldCheck, ArrowRight, Lock, Mail, Activity, ArrowLeft, Eye, EyeOff, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import SubmitButton from '@/components/SubmitButton'
 import ThemeToggle from '@/components/ThemeToggle'
-import { useState, use } from 'react'
+import { useState, use, useEffect } from 'react'
 
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string, message?: string }>
+  searchParams: Promise<{ error?: string, message?: string, remaining?: string }>
 }) {
-  const { error, message } = use(searchParams)
+  const { error, message, remaining } = use(searchParams)
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const isInitiallyLocked = error === 'locked' && !!remaining
+  const initialSecs = isInitiallyLocked ? (parseInt(remaining || '60') || 60) : 0
+  const [locked, setLocked] = useState(isInitiallyLocked)
+  const [countdown, setCountdown] = useState(initialSecs)
+
+  useEffect(() => {
+    if (!locked) return
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          setLocked(false)
+          router.replace('/login')
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [locked, router])
+
+  const formatCountdown = (s: number) => {
+    const m = Math.floor(s / 60)
+    const sec = s % 60
+    return `${m}:${sec.toString().padStart(2, '0')}`
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-canvas-soft relative overflow-hidden px-6 transition-colors duration-500 animate-page">
@@ -48,72 +76,104 @@ export default function LoginPage({
             <ArrowLeft size={16} /> Kembali ke Beranda
           </Link>
 
-          <div className="mb-10 relative z-10 text-left">
-            <h1 className="text-4xl font-extrabold text-brand-ink tracking-tight transition-colors leading-tight">Silahkan Masuk</h1>
-            <p className="text-[11px] font-bold text-brand-ink/40 mt-3 uppercase tracking-wider transition-colors">Akses Dashboard Terpusat</p>
-          </div>
-
-          <form action={login} className="space-y-8 relative z-10">
-            {message && (
-              <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
-                <div className="h-2 w-2 bg-brand-primary rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>{message}</div>
+          {locked ? (
+            <div className="relative z-10 space-y-8">
+              <div className="rounded-brand bg-red-500/10 p-8 text-center space-y-6 border border-red-500/20">
+                <div className="flex justify-center">
+                  <div className="h-20 w-20 bg-red-500/20 rounded-3xl flex items-center justify-center mx-auto border border-red-500/20">
+                    <Clock size={40} className="text-red-500" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h2 className="text-lg font-black text-red-600 uppercase tracking-widest">
+                    Terlalu Banyak Percobaan
+                  </h2>
+                  <p className="text-[12px] font-bold text-red-500/70 uppercase tracking-wider leading-relaxed">
+                    Akun Anda diblokir sementara karena 5 kali gagal login berturut-turut
+                  </p>
+                </div>
+                <div className="flex justify-center">
+                  <div className="bg-red-500/10 rounded-2xl px-10 py-5 border border-red-500/10">
+                    <span className="text-5xl font-black text-red-600 tabular-nums tracking-tight">
+                      {formatCountdown(countdown)}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-[10px] font-bold text-red-500/50 uppercase tracking-widest">
+                  Tunggu hingga waktu habis untuk mencoba lagi
+                </p>
               </div>
-            )}
 
-            {error && (
-              <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
-                <div className="h-2 w-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>{error}</div>
-              </div>
-            )}
-
-            <div className="space-y-3 text-left">
-              <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Warga / Petugas</label>
-              <div className="relative group">
-                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-8 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
-                  placeholder="name@pesonaserpong.com"
-                />
-              </div>
+              <SubmitButton
+                disabled={true}
+                className="w-full h-16 rounded-brand bg-red-300 text-white text-[13px] font-bold uppercase tracking-widest cursor-not-allowed mt-10"
+              >
+                Masuk
+              </SubmitButton>
             </div>
+          ) : (
+            <form action={login} className="space-y-8 relative z-10">
+              {message && (
+                <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
+                  <div className="h-2 w-2 bg-brand-primary rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div>{message}</div>
+                </div>
+              )}
 
-            <div className="space-y-3 text-left">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Kredensial Password</label>
-                <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-widest hover:underline decoration-2">Lupa?</Link>
-              </div>
-              <div className="relative group">
-                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
-                <input
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-14 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-brand-ink/40 hover:text-brand-primary transition-colors"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
+              {error && error !== 'locked' && (
+                <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
+                  <div className="h-2 w-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                  <div>{error}</div>
+                </div>
+              )}
 
-            <SubmitButton
-              className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
-              icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
-              loadingText="Otentikasi..."
-            >
-              Masuk
-            </SubmitButton>
-          </form>
+              <div className="space-y-3 text-left">
+                <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Warga / Petugas</label>
+                <div className="relative group">
+                  <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-8 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
+                    placeholder="name@pesonaserpong.com"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3 text-left">
+                <div className="flex justify-between items-center px-1">
+                  <label className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Kredensial Password</label>
+                  <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-widest hover:underline decoration-2">Lupa?</Link>
+                </div>
+                <div className="relative group">
+                  <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
+                  <input
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-14 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-6 top-1/2 -translate-y-1/2 text-brand-ink/40 hover:text-brand-primary transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              <SubmitButton
+                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
+                icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
+                loadingText="Otentikasi..."
+              >
+                Masuk
+              </SubmitButton>
+            </form>
+          )}
 
           <div className="mt-12 pt-10 border-t border-brand-hairline text-center relative z-10 transition-colors">
             <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-widest">

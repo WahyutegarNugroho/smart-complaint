@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { validateString, validateRTRW, validateEnum } from '@/lib/validate'
+import { resetEscalation } from '@/lib/escalation'
 
 export async function createComplaint(formData: FormData) {
   try {
@@ -24,6 +25,10 @@ export async function createComplaint(formData: FormData) {
     const category = formData.get('category') as string || 'umum'
     const rt = formData.get('rt') as string
     const rw = formData.get('rw') as string
+    const rawLat = formData.get('latitude') as string
+    const rawLng = formData.get('longitude') as string
+    const latitude = rawLat ? parseFloat(rawLat) : null
+    const longitude = rawLng ? parseFloat(rawLng) : null
 
     const validCategory = validateEnum(category, ['keamanan', 'kebersihan', 'fasilitas', 'umum'] as const)
     const errTitle = validateString(title, 'Judul', 200)
@@ -79,6 +84,8 @@ export async function createComplaint(formData: FormData) {
         isUrgent: formData.get('isUrgent') === 'true',
         incidentDate: validDate,
         location,
+        latitude,
+        longitude,
         rt,
         rw,
         imageUrl,
@@ -184,6 +191,9 @@ export async function respondToComplaint(formData: FormData) {
           where: { id: complaintId },
           data: { status: validStatus }
         })
+        if (validStatus === 'COMPLETED' || validStatus === 'PROCESSING') {
+          await resetEscalation(complaintId)
+        }
       } catch (statusErr) {
         console.error('Non-critical Status Update Error:', statusErr)
       }
@@ -273,6 +283,10 @@ export async function updateComplaint(formData: FormData) {
     const location = formData.get('location') as string
     const rt = formData.get('rt') as string
     const rw = formData.get('rw') as string
+    const rawLat = formData.get('latitude') as string
+    const rawLng = formData.get('longitude') as string
+    const latitude = rawLat ? parseFloat(rawLat) : existing.latitude
+    const longitude = rawLng ? parseFloat(rawLng) : existing.longitude
 
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Detail kronologi', 2000)
@@ -320,6 +334,8 @@ export async function updateComplaint(formData: FormData) {
         content,
         incidentDate: new Date(formData.get('incidentDate') as string),
         location,
+        latitude,
+        longitude,
         rt,
         rw,
         imageUrl,
@@ -358,6 +374,10 @@ export async function updateComplaintStatus(formData: FormData) {
       where: { id },
       data: { status }
     })
+
+    if (status === 'COMPLETED' || status === 'PROCESSING') {
+      await resetEscalation(id)
+    }
 
     // Send notification to the citizen
     const statusText = status === 'PENDING' ? 'MENUNGGU' : status === 'PROCESSING' ? 'DIPROSES' : 'SELESAI'

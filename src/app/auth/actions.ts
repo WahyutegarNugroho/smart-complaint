@@ -6,27 +6,31 @@ import { headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
-import { checkRateLimit } from '@/lib/rate-limit'
+import { checkLoginAttempt, recordFailedAttempt, resetLoginAttempts } from '@/lib/login-rate-limit'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
   const headerList = await headers()
   const ip = headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
+  const { locked, remainingSeconds } = await checkLoginAttempt(ip)
+  if (locked) {
+    redirect('/login?error=locked&remaining=' + remainingSeconds)
+  }
+
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
 
-  if (!checkRateLimit(`login:${ip}`, 5, 60_000)) {
-    redirect('/login?error=' + encodeURIComponent('Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.'))
-  }
-
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
+    await recordFailedAttempt(ip)
     redirect('/login?error=' + encodeURIComponent(error.message))
   }
+
+  await resetLoginAttempts(ip)
 
   // 🔄 Force session refresh to ensure cookies are set
   await supabase.auth.getUser()
@@ -37,16 +41,10 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient()
-  const headerList = await headers()
-  const ip = headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
   const email = formData.get('email') as string
   const fullName = formData.get('full_name') as string
   const password = formData.get('password') as string
-
-  if (!checkRateLimit(`signup:${ip}`, 3, 60_000)) {
-    redirect('/register?error=' + encodeURIComponent('Terlalu banyak percobaan daftar. Silakan coba lagi dalam 1 menit.'))
-  }
 
   // 📝 Input Validation
   const errName = validateString(fullName, 'Nama lengkap', 100)

@@ -4,7 +4,6 @@ import { updateComplaintStatus, respondToComplaint } from '@/app/dashboard/actio
 import { getCachedProfile } from '@/lib/profile'
 import Image from 'next/image'
 import { 
-  MapPin, 
   Calendar, 
   Clock, 
   CheckCircle2, 
@@ -25,6 +24,8 @@ import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
 import PrintReceiptButton from './PrintReceiptButton'
+import { LocationView } from '@/components/map'
+import { getEscalationInfo } from '@/lib/escalation'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -59,6 +60,7 @@ export default async function ComplaintDetailPage({
   const canManage = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
   const isAdmin = profile.role === 'ADMIN'
   const isAuthor = complaint.authorId === profile.id
+  const escalationLogs = await getEscalationInfo(complaint.id)
 
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">
@@ -116,15 +118,11 @@ export default async function ComplaintDetailPage({
                 <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors pl-6 border-l-2 border-slate-100 dark:border-slate-800">&quot;{complaint.content}&quot;</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
-                    <div className="h-10 w-10 bg-brand-canvas rounded-xl flex items-center justify-center text-brand-ink shadow-sm border border-brand-hairline">
-                       <MapPin size={18} />
-                    </div>
-                    <div>
-                      <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest">Lokasi Spesifik</p>
-                      <p className="text-[13px] font-bold text-brand-ink">{complaint.location}</p>
-                    </div>
-                  </div>
+                  <LocationView
+                    latitude={complaint.latitude}
+                    longitude={complaint.longitude}
+                    address={complaint.location}
+                  />
                   <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
                     <div className="h-10 w-10 bg-brand-canvas rounded-xl flex items-center justify-center text-brand-ink shadow-sm border border-brand-hairline">
                        <Calendar size={18} />
@@ -283,6 +281,54 @@ export default async function ComplaintDetailPage({
                       <p className="text-[9px] font-bold text-red-500 uppercase tracking-[0.2em] mb-5 ml-1">Tindakan Destruktif</p>
                       <DeleteComplaintButton id={complaint.id} />
                    </div>
+                )}
+              </div>
+            )}
+
+            {/* ⚠️ Escalation Status */}
+            {complaint.escalationLevel !== 'NONE' && (
+              <div className={`bg-brand-canvas p-8 rounded-[2rem] border shadow-sm transition-all ${
+                complaint.escalationLevel === 'LEVEL_3' ? 'border-red-500/30' : 
+                complaint.escalationLevel === 'LEVEL_2' ? 'border-amber-500/30' : 'border-orange-500/30'
+              }`}>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center border ${
+                    complaint.escalationLevel === 'LEVEL_3' ? 'bg-red-500/10 text-red-600 border-red-500/20' : 
+                    complaint.escalationLevel === 'LEVEL_2' ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 
+                    'bg-orange-500/10 text-orange-600 border-orange-500/20'
+                  }`}>
+                    <Zap size={24} fill="currentColor" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Eskalasi Level {
+                      complaint.escalationLevel === 'LEVEL_3' ? '3' :
+                      complaint.escalationLevel === 'LEVEL_2' ? '2' : '1'
+                    }</h3>
+                    <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
+                      {complaint.escalationLevel === 'LEVEL_3' ? 'Melebihi SLA penanganan' :
+                       complaint.escalationLevel === 'LEVEL_2' ? 'Melebihi SLA tanggapan awal' :
+                       'Perlu perhatian'}
+                    </p>
+                  </div>
+                </div>
+
+                {escalationLogs.length > 0 && (
+                  <div className="space-y-4 pl-2">
+                    {escalationLogs.map((log) => (
+                      <div key={log.id} className="flex gap-4">
+                        <div className="w-2 h-2 rounded-full bg-amber-500 mt-2 shrink-0" />
+                        <div>
+                          <p className="text-[12px] font-bold text-brand-ink">{log.reason}</p>
+                          <p className="text-[10px] font-medium text-brand-ink/40">
+                            {new Date(log.createdAt).toLocaleDateString('id-ID', {
+                              day: 'numeric', month: 'short', year: 'numeric',
+                              hour: '2-digit', minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             )}

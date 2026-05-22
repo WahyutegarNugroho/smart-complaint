@@ -26,6 +26,13 @@ enum NotificationType {
   DELETE
 }
 
+enum EscalationLevel {
+  NONE
+  LEVEL_1
+  LEVEL_2
+  LEVEL_3
+}
+
 model Profile {
   id         String   @id @default(cuid())
   userId     String   @unique
@@ -41,31 +48,39 @@ model Profile {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  complaints    Complaint[]
-  responses     Response[]
-  announcements Announcement[]
-  notifications Notification[]
-  auditLogs     AuditLog[]
+  complaints         Complaint[]       @relation("ComplaintAuthor")
+  assignedComplaints Complaint[]       @relation("ComplaintAssignee")
+  responses          Response[]
+  announcements      Announcement[]
+  notifications      Notification[]
+  auditLogs          AuditLog[]
 }
 
 model Complaint {
-  id           String   @id @default(cuid())
-  title        String
-  content      String
-  location     String
-  rt           String?
-  rw           String?
-  incidentDate DateTime
-  imageUrl     String?
-  status       Status   @default(PENDING)
-  isUrgent     Boolean  @default(false)
-  authorId     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String           @id @default(cuid())
+  title           String
+  content         String
+  location        String
+  latitude        Float?
+  longitude       Float?
+  rt              String?
+  rw              String?
+  incidentDate    DateTime
+  imageUrl        String?
+  status          Status           @default(PENDING)
+  isUrgent        Boolean          @default(false)
+  authorId        String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  category        String           @default("umum")
+  escalationLevel EscalationLevel  @default(NONE)
+  escalatedAt     DateTime?
+  assignedToId    String?
 
-  category     String   @default("umum")
-  author    Profile    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  responses Response[]
+  author       Profile    @relation("ComplaintAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  assignedTo   Profile?   @relation("ComplaintAssignee", fields: [assignedToId], references: [id])
+  responses    Response[]
+  escalationLogs EscalationLog[]
 
   @@index([authorId])
   @@index([status])
@@ -75,6 +90,8 @@ model Complaint {
   @@index([category])
   @@index([incidentDate])
   @@index([status, createdAt])
+  @@index([latitude, longitude])
+  @@index([escalationLevel])
 }
 
 model Response {
@@ -119,6 +136,30 @@ model Notification {
 
   @@index([userId])
   @@index([isRead])
+}
+
+model EscalationLog {
+  id           String           @id @default(cuid())
+  complaintId  String
+  fromLevel    EscalationLevel
+  toLevel      EscalationLevel
+  reason       String
+  createdAt    DateTime         @default(now())
+
+  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  @@index([complaintId])
+  @@index([createdAt])
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  count     Int      @default(1)
+  resetAt   DateTime
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
 }
 
 model AuditLog {
