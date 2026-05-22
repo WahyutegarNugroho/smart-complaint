@@ -13,6 +13,9 @@ import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function LandingPage() {
   // Query dynamic stats
   const totalReports = await prisma.complaint.count();
