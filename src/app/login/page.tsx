@@ -15,36 +15,49 @@ export default function LoginPage({
 }) {
   const { error, message, remaining, remainingAttempts } = use(searchParams)
   const router = useRouter()
-  const fetchedRef = useRef(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const initRef = useRef(false)
   const [showPassword, setShowPassword] = useState(false)
-  const isInitiallyLocked = error === 'locked' && !!remaining
-  const initialSecs = isInitiallyLocked ? (parseInt(remaining || '60') || 60) : 0
-  const [locked, setLocked] = useState(isInitiallyLocked)
-  const [countdown, setCountdown] = useState(initialSecs)
+  const [locked, setLocked] = useState(false)
+  const [countdown, setCountdown] = useState(0)
   const showRemaining = !locked && remainingAttempts
   const remainingNum = showRemaining ? (parseInt(remainingAttempts) || 0) : 0
 
-  // Cek status lock dari API saat mount (backup jika user navigasi bolak-balik)
+  // Inisialisasi status lock: prioritaskan API, fallback ke URL params
   useEffect(() => {
-    if (fetchedRef.current) return
-    fetchedRef.current = true
+    if (initRef.current) return
+    initRef.current = true
     fetch('/api/login-status')
       .then((res) => res.json())
       .then((data) => {
-        if (data.locked && !error?.startsWith('locked')) {
+        if (data.locked) {
           setLocked(true)
-          setCountdown(data.remainingSeconds || 60)
+          setCountdown(data.remainingSeconds)
         }
       })
-      .catch(() => {})
-  }, [error])
+      .catch(() => {
+        if (error === 'locked' && remaining) {
+          setLocked(true)
+          setCountdown(parseInt(remaining) || 60)
+        }
+      })
+  }, [error, remaining])
 
+  // Countdown timer — selalu 1 interval, selalu pakai latest countdown
   useEffect(() => {
-    if (!locked) return
-    const timer = setInterval(() => {
+    if (!locked) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+      return
+    }
+    if (intervalRef.current) return
+    intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(timer)
+          if (intervalRef.current) clearInterval(intervalRef.current)
+          intervalRef.current = null
           setLocked(false)
           router.replace('/login')
           return 0
@@ -52,7 +65,12 @@ export default function LoginPage({
         return prev - 1
       })
     }, 1000)
-    return () => clearInterval(timer)
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
   }, [locked, router])
 
   const formatCountdown = (s: number) => {
