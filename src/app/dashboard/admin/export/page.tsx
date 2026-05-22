@@ -119,20 +119,6 @@ export default async function ExportPage() {
           table { page-break-inside: auto; width: 100%; border-collapse: collapse; }
           tr { page-break-inside: avoid; }
           thead { display: table-header-group; }
-          .print-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 8pt;
-            color: #94a3b8;
-            border-top: 1px solid #e2e8f0;
-            padding: 8pt 0;
-          }
-          .print-footer .page:after {
-            content: counter(page);
-          }
           .page-break { page-break-before: always; }
           .no-break { page-break-inside: avoid; }
           .summary-row td {
@@ -279,7 +265,7 @@ export default async function ExportPage() {
 
         {/* ===== SIGNATURE ===== */}
         {complaints.length > 0 && (
-        <div className="page-break px-16 py-12 flex flex-col justify-end min-h-[80vh]">
+        <div className="page-break px-16 py-12 flex flex-col justify-end min-h-[40vh]">
           <div className="border-t-2 border-slate-900 pt-8 text-center max-w-md mx-auto">
             <p className="text-[9pt] text-slate-500 mb-2">Mengetahui,</p>
             <p className="text-[10pt] font-bold text-slate-900 mb-16">{profile.name}</p>
@@ -288,10 +274,6 @@ export default async function ExportPage() {
         </div>
         )}
 
-        {/* ===== PAGE FOOTER ===== */}
-        <div className="print-footer">
-          SmartComplaint — Laporan Pengaduan Masyarakat
-        </div>
       </div>
     </div>
   )
