@@ -265,7 +265,7 @@ export default async function ExportPage() {
 
         {/* ===== SIGNATURE ===== */}
         {complaints.length > 0 && (
-        <div className="page-break px-16 py-12 flex flex-col justify-end min-h-[40vh]">
+        <div className="page-break px-16 py-12 flex flex-col justify-end min-h-[20vh]">
           <div className="border-t-2 border-slate-900 pt-8 text-center max-w-md mx-auto">
             <p className="text-[9pt] text-slate-500 mb-2">Mengetahui,</p>
             <p className="text-[10pt] font-bold text-slate-900 mb-16">{profile.name}</p>
