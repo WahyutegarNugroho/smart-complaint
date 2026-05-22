@@ -265,10 +265,10 @@ export default async function ExportPage() {
 
         {/* ===== SIGNATURE ===== */}
         {complaints.length > 0 && (
-        <div className="page-break px-16 py-12 flex flex-col justify-end min-h-[20vh]">
-          <div className="border-t-2 border-slate-900 pt-8 text-center max-w-md mx-auto">
+        <div className="px-16 py-4 flex justify-end">
+          <div className="border-t-2 border-slate-900 pt-6 text-right max-w-xs">
             <p className="text-[9pt] text-slate-500 mb-2">Mengetahui,</p>
-            <p className="text-[10pt] font-bold text-slate-900 mb-16">{profile.name}</p>
+            <p className="text-[10pt] font-bold text-slate-900 mb-6">{profile.name}</p>
             <p className="text-[8pt] text-slate-400">SmartComplaint — Platform Pengaduan Warga</p>
           </div>
         </div>
