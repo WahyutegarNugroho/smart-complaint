@@ -8,7 +8,8 @@ import {
   Megaphone, 
   Users,
   BarChart,
-  LayoutGrid
+  LayoutGrid,
+  Map
 } from 'lucide-react'
 import MasyarakatMobileNav from './MasyarakatMobileNav'
 import PetugasMobileNav from './PetugasMobileNav'
@@ -32,9 +33,9 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
   const getNavItems = () => {
     return [
       { href: '/dashboard', label: 'Stats', icon: BarChart, active: isActive('/dashboard') },
-      { href: '/dashboard/admin/users', label: 'Warga', icon: Users, active: isActive('/dashboard/admin/users') },
+      { href: '/dashboard/map', label: 'Peta', icon: Map, active: isActive('/dashboard/map') },
       { href: '/dashboard', label: 'Admin', icon: LayoutGrid, isCenter: true },
-      { href: '/dashboard/admin/announcements', label: 'Info', icon: Megaphone, active: isActive('/dashboard/admin/announcements') },
+      { href: '/dashboard/admin/users', label: 'Warga', icon: Users, active: isActive('/dashboard/admin/users') },
       { href: '/dashboard/settings', label: 'Profil', icon: Settings2, active: isActive('/dashboard/settings') },
     ]
   }

@@ -8,7 +8,8 @@ import {
   ClipboardList, 
   CheckCircle2, 
   Activity,
-  UserCircle
+  UserCircle,
+  Map
 } from 'lucide-react'
 
 export default function PetugasMobileNav() {
@@ -17,9 +18,9 @@ export default function PetugasMobileNav() {
 
   const navItems = [
     { href: '/dashboard', label: 'Monitor', icon: LayoutDashboard, active: isActive('/dashboard') && !pathname.includes('status') },
-    { href: '/dashboard?status=PROCESSING', label: 'Proses', icon: Activity, active: pathname.includes('status=PROCESSING') },
+    { href: '/dashboard/map', label: 'Peta', icon: Map, active: isActive('/dashboard/map') },
     { href: '/dashboard?status=PENDING', label: 'Tugas', icon: ClipboardList, isCenter: true },
-    { href: '/dashboard?status=COMPLETED', label: 'Selesai', icon: CheckCircle2, active: pathname.includes('status=COMPLETED') },
+    { href: '/dashboard?status=PROCESSING', label: 'Proses', icon: Activity, active: pathname.includes('status=PROCESSING') },
     { href: '/dashboard/settings', label: 'Profil', icon: UserCircle, active: isActive('/dashboard/settings') },
   ]
 

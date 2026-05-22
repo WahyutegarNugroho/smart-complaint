@@ -37,3 +37,18 @@ export const ComplaintMapView = dynamic(
     ),
   }
 )
+
+export const MapPageClient = dynamic(
+  () => import('./MapPageClient'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full bg-brand-canvas-soft flex items-center justify-center">
+        <div className="text-center animate-pulse">
+          <div className="w-10 h-10 rounded-full bg-brand-hairline mx-auto mb-3" />
+          <p className="text-[10px] font-bold uppercase tracking-widest text-brand-ink/40">Memuat peta...</p>
+        </div>
+      </div>
+    ),
+  }
+)

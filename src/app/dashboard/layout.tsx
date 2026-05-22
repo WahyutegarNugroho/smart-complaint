@@ -13,7 +13,8 @@ import {
   Activity,
   CheckCircle2,
   ChevronRight,
-  History
+  History,
+  Map
 } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
 import MobileBottomNav from '@/components/MobileBottomNav'
@@ -130,6 +131,14 @@ export default async function DashboardLayout({
           >
             <LayoutDashboard size={18} className="opacity-70 group-hover:opacity-100" />
             Beranda Utama
+          </Link>
+
+          <Link
+            href="/dashboard/map"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm"
+          >
+            <Map size={18} className="opacity-70 group-hover:opacity-100" />
+            Peta Laporan
           </Link>
 
           {isWarga && (

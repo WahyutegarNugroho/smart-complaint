@@ -8,7 +8,8 @@ import {
   Plus, 
   Settings2, 
   Inbox,
-  LayoutGrid
+  LayoutGrid,
+  Map
 } from 'lucide-react'
 
 export default function MasyarakatMobileNav() {
@@ -17,9 +18,9 @@ export default function MasyarakatMobileNav() {
 
   const navItems = [
     { href: '/dashboard', label: 'Beranda', icon: Home, active: isActive('/dashboard') && !pathname.includes('status') },
-    { href: '/dashboard?status=PENDING', label: 'Aduan', icon: Inbox, active: pathname.includes('status=PENDING') },
+    { href: '/dashboard/map', label: 'Peta', icon: Map, active: isActive('/dashboard/map') },
     { href: '/dashboard/create', label: 'Lapor', icon: Plus, isCenter: true },
-    { href: '/dashboard#announcements', label: 'Info', icon: LayoutGrid, active: false },
+    { href: '/dashboard?status=PENDING', label: 'Aduan', icon: Inbox, active: pathname.includes('status=PENDING') },
     { href: '/dashboard/settings', label: 'Profil', icon: Settings2, active: isActive('/dashboard/settings') },
   ]
 
