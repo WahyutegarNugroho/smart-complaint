@@ -18,12 +18,19 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
       return { profile: null, user: null, status: 'UNAUTHENTICATED' }
     }
 
-    const profile = await prisma.profile.findUnique({
+    let profile = await prisma.profile.findUnique({
       where: { userId: user.id }
     })
 
     if (!profile) {
-      throw new Error('Profile tidak ditemukan. Silakan hubungi admin atau daftar ulang.')
+      profile = await prisma.profile.create({
+        data: {
+          userId: user.id,
+          username: user.email || `user_${user.id.slice(0, 8)}`,
+          name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+          role: 'MASYARAKAT'
+        }
+      })
     }
 
     return { profile, user, status: 'AUTHENTICATED' }

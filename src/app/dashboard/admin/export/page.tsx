@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { 
   ChevronLeft, 
   CheckCircle2,
-  ShieldCheck
+  ShieldCheck,
+  AlertTriangle
 } from 'lucide-react'
 import { ExportButtons } from './export-buttons'
 import PrintStyles from './PrintStyles'
@@ -24,11 +25,19 @@ export default async function ExportPage() {
 
   if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
 
-  // 📊 Fetch all complaints for print preview
-  const complaints = await prisma.complaint.findMany({
-    include: { author: true },
-    orderBy: { createdAt: 'desc' }
-  })
+  // 📊 Fetch complaints for print preview (with safety limit)
+  let complaints: Awaited<ReturnType<typeof prisma.complaint.findMany>> = []
+  let exportError = false
+  try {
+    complaints = await prisma.complaint.findMany({
+      include: { author: true },
+      orderBy: { createdAt: 'desc' },
+      take: 500
+    })
+  } catch (err) {
+    console.error('Export Fetch Error:', err)
+    exportError = true
+  }
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">
@@ -92,6 +101,20 @@ export default async function ExportPage() {
           </div>
         </div>
 
+        {exportError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
+            <AlertTriangle size={20} />
+            <p className="text-sm font-bold">Gagal memuat data laporan. Silakan coba refresh halaman.</p>
+          </div>
+        )}
+
+        {!exportError && complaints.length === 0 && (
+          <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-xl text-center text-slate-500 text-sm font-bold">
+            Belum ada laporan masyarakat.
+          </div>
+        )}
+
+        {complaints.length > 0 && (
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-slate-100">
@@ -118,6 +141,7 @@ export default async function ExportPage() {
             ))}
           </tbody>
         </table>
+        )}
 
         <div className="mt-20 flex justify-end">
            <div className="text-center w-64 border-t border-slate-900 pt-4">
