@@ -94,7 +94,7 @@ export default function UserRow({ user }: { user: Profile }) {
              </form>
           </div>
         </td>
-        <td className="sticky right-0 px-6 sm:px-8 py-6 text-right bg-white dark:bg-slate-900 shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.05)] dark:shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.2)] z-10" onClick={(e) => e.stopPropagation()}>
+        <td className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-right bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 z-10 transition-colors" onClick={(e) => e.stopPropagation()}>
            <div className="flex items-center justify-end gap-3">
               <form action={async (formData) => {
                 if(!confirm('Hapus akun pengguna ini secara permanen?')) return

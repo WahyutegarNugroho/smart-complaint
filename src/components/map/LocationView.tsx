@@ -40,7 +40,7 @@ export default function LocationView({ latitude, longitude, address }: LocationV
       <div className="h-48 w-full">
         <MapContainer
           center={[latitude, longitude]}
-          zoom={15}
+          zoom={17}
           className="h-full w-full"
           zoomControl={false}
           scrollWheelZoom={false}

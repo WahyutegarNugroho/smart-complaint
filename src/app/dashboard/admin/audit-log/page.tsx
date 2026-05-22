@@ -3,9 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { ArrowLeft, History } from 'lucide-react'
 import Link from 'next/link'
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+import AuditLogActionFilter from '@/components/AuditLogActionFilter'
 
 const ACTION_LABELS: Record<string, string> = {
   DELETE_REPORT: 'Hapus Laporan',
@@ -14,6 +12,9 @@ const ACTION_LABELS: Record<string, string> = {
   VERIFY_USER: 'Verifikasi Akun',
   UPDATE_STATUS: 'Ubah Status',
 }
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function AuditLogPage({
   searchParams
@@ -71,24 +72,7 @@ export default async function AuditLogPage({
 
         <section className="space-y-6">
           <div className="bg-brand-canvas p-4 rounded-2xl border border-brand-hairline shadow-sm">
-            <form className="flex items-center gap-4">
-              <select
-                name="action"
-                defaultValue={filterAction}
-                onChange={(e) => e.target.form?.requestSubmit()}
-                className="bg-brand-canvas-soft border border-brand-hairline rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none cursor-pointer transition-all"
-              >
-                <option value="">Semua Tindakan</option>
-                {Object.entries(ACTION_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
-                ))}
-              </select>
-              {filterAction && (
-                <Link href="/dashboard/admin/audit-log" className="text-[10px] font-bold text-red-500 uppercase tracking-widest hover:underline">
-                  Reset
-                </Link>
-              )}
-            </form>
+            <AuditLogActionFilter filterAction={filterAction} baseUrl="/dashboard/admin/audit-log" />
           </div>
 
           <div className="bg-brand-canvas rounded-[2rem] border border-brand-hairline shadow-sm overflow-hidden">

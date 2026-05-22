@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import Image from 'next/image'
 import { Prisma, Status } from '@prisma/client'
+import PageSizeSelector from './PageSizeSelector'
 
 interface ComplaintListSectionProps {
   profileId: string
@@ -308,20 +309,16 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         {/* Page Size Selector */}
         <div className="flex items-center gap-2">
           <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Tampilkan</span>
-          <form action="/dashboard" method="GET" className="inline-flex">
-            {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
-            {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
-            {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
-            {fromDate && <input type="hidden" name="fromDate" value={fromDate} />}
-            {toDate && <input type="hidden" name="toDate" value={toDate} />}
-            {rt && <input type="hidden" name="rt" value={rt} />}
-            {rw && <input type="hidden" name="rw" value={rw} />}
-            <select name="pageSize" defaultValue={pageSize} onChange={(e) => e.target.form?.requestSubmit()} className="bg-brand-canvas border border-brand-hairline rounded-xl px-3 py-2 text-xs font-bold text-brand-ink outline-none cursor-pointer">
-              <option value="12">12</option>
-              <option value="24">24</option>
-              <option value="48">48</option>
-            </select>
-          </form>
+          <PageSizeSelector
+            currentStatus={currentStatus}
+            searchQuery={searchQuery}
+            categoryFilter={categoryFilter}
+            fromDate={fromDate}
+            toDate={toDate}
+            rt={rt}
+            rw={rw}
+            pageSize={pageSize}
+          />
           <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">per halaman</span>
         </div>
 

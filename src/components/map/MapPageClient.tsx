@@ -151,7 +151,7 @@ function MarkerClusterLayer({
     if (filtered.length > 0) {
       const bounds = mcg.getBounds()
       if (bounds.isValid()) {
-        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 18 })
       }
     }
 
@@ -199,7 +199,7 @@ export default function MapPageClient({ complaints, categories }: MapPageClientP
 
   const center: [number, number] = complaints.length > 0
     ? [complaints[0].latitude, complaints[0].longitude]
-    : [-6.2088, 106.8456]
+    : [-6.330579, 106.660773]
 
   const handleMarkerClick = useCallback((c: ComplaintMarker) => {
     setSelectedComplaint(c)
@@ -229,7 +229,7 @@ export default function MapPageClient({ complaints, categories }: MapPageClientP
     <>
       <MapContainer
         center={center}
-        zoom={13}
+        zoom={18}
         className="h-full w-full"
         scrollWheelZoom={true}
         zoomControl={true}
@@ -242,7 +242,7 @@ export default function MapPageClient({ complaints, categories }: MapPageClientP
       </MapContainer>
 
       {/* Floating Filter Bar */}
-      <div className="absolute top-3 left-3 right-3 md:left-4 md:right-auto md:w-80 z-[1000]">
+      <div className="absolute top-3 left-3 right-14 md:left-4 md:right-auto md:w-80 z-[1000]">
         <div className="bg-brand-canvas/90 backdrop-blur-xl border border-brand-hairline rounded-2xl shadow-xl overflow-hidden">
           {/* Search input */}
           <div className="flex items-center gap-2 px-4 py-2.5">

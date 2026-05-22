@@ -117,7 +117,7 @@ export default async function AdminUsersPage({
                                <th className="px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Profil Penduduk</th>
                                <th className="hidden md:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Domisili</th>
                                <th className="hidden sm:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Status Akses</th>
-                               <th className="sticky right-0 px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] text-right bg-white dark:bg-slate-900 shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.05)] dark:shadow-[-8px_0_16px_-8px_rgba(0,0,0,0.2)] z-10">Kelola</th>
+                                <th className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] text-right z-10">Kelola</th>
                            </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 dark:divide-slate-800">

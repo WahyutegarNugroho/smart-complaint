@@ -5,8 +5,8 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-lea
 import { MapPin, Search, Crosshair, Loader2 } from 'lucide-react'
 import L from 'leaflet'
 
-const DEFAULT_CENTER: [number, number] = [-6.2088, 106.8456]
-const DEFAULT_ZOOM = 13
+const DEFAULT_CENTER: [number, number] = [-6.330579, 106.660773]
+const DEFAULT_ZOOM = 17
 
 const markerIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',

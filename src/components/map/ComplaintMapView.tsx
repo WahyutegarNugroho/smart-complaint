@@ -45,7 +45,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
     <div className="h-[500px] rounded-2xl overflow-hidden border border-brand-hairline shadow-sm">
       <MapContainer
         center={center}
-        zoom={13}
+        zoom={15}
         className="h-full w-full"
         scrollWheelZoom={true}
       >
