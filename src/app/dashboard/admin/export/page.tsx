@@ -24,11 +24,10 @@ export default async function ExportPage() {
 
   if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
 
-  // 📊 Fetch latest complaints for print preview
+  // 📊 Fetch all complaints for print preview
   const complaints = await prisma.complaint.findMany({
     include: { author: true },
-    orderBy: { createdAt: 'desc' },
-    take: 50 // Limit for print stability
+    orderBy: { createdAt: 'desc' }
   })
 
   return (
@@ -69,6 +68,14 @@ export default async function ExportPage() {
 
       {/* 📄 PRINT-ONLY CONTENT */}
       <div className="hidden print:block p-10 bg-white text-slate-900">
+        <style>{`
+          @media print {
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            thead { display: table-header-group; }
+          }
+        `}</style>
+
         <div className="flex items-center justify-between mb-10 border-b-2 border-slate-900 pb-8">
           <div className="flex items-center gap-4">
              <div className="h-14 w-14 bg-slate-900 rounded-2xl flex items-center justify-center text-white">
@@ -76,7 +83,7 @@ export default async function ExportPage() {
              </div>
              <div>
                 <h1 className="text-3xl font-bold tracking-tight">SmartComplaint<span>.</span></h1>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Laporan Pengaduan Masyarakat - Pesona Serpong</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Laporan Pengaduan Masyarakat</p>
              </div>
           </div>
           <div className="text-right">
@@ -92,6 +99,7 @@ export default async function ExportPage() {
               <th className="text-left font-bold p-3">JUDUL LAPORAN</th>
               <th className="text-left font-bold p-3">KATEGORI</th>
               <th className="text-left font-bold p-3">DOMISILI</th>
+              <th className="text-left font-bold p-3">ISI LAPORAN</th>
               <th className="text-left font-bold p-3">STATUS</th>
               <th className="text-left font-bold p-3">TANGGAL</th>
             </tr>
@@ -99,12 +107,13 @@ export default async function ExportPage() {
           <tbody>
             {complaints.map((c, i) => (
               <tr key={c.id} className="border-b">
-                <td className="p-3">{i + 1}</td>
-                <td className="p-3 font-bold">{c.title}</td>
-                <td className="p-3 uppercase">{c.category}</td>
-                <td className="p-3">RT {c.rt}/{c.rw}</td>
-                <td className="p-3 font-bold uppercase">{c.status}</td>
-                <td className="p-3">{c.createdAt.toLocaleDateString('id-ID')}</td>
+                <td className="p-3 align-top">{i + 1}</td>
+                <td className="p-3 font-bold align-top">{c.title}</td>
+                <td className="p-3 uppercase align-top">{c.category}</td>
+                <td className="p-3 align-top">RT {c.rt}/{c.rw}</td>
+                <td className="p-3 text-slate-600 align-top max-w-[200px]">{c.content}</td>
+                <td className="p-3 font-bold uppercase align-top">{c.status}</td>
+                <td className="p-3 align-top whitespace-nowrap">{new Date(c.createdAt).toLocaleDateString('id-ID')}</td>
               </tr>
             ))}
           </tbody>
@@ -112,7 +121,7 @@ export default async function ExportPage() {
 
         <div className="mt-20 flex justify-end">
            <div className="text-center w-64 border-t border-slate-900 pt-4">
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-16">Admin Pesona Serpong</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-16">Admin</p>
               <p className="text-sm font-bold underline">{profile.name}</p>
            </div>
         </div>

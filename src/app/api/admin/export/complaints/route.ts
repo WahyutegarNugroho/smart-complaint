@@ -34,23 +34,22 @@ export async function GET(request: Request) {
     })
 
     // 📄 Create CSV Content
-    const headers = ['ID', 'Judul', 'Kategori', 'Status', 'Prioritas', 'Tanggal Kejadian', 'Warga', 'RT', 'RW', 'Lokasi', 'Isi Laporan', 'Tanggal Dibuat']
+    const headers = ['ID', 'Tanggal Dibuat', 'Pelapor', 'Judul', 'Kategori', 'Isi Laporan', 'Lokasi', 'RT', 'RW', 'Status', 'Prioritas']
     const rows = complaints.map(c => [
       escapeCsvField(c.id),
+      escapeCsvField(new Date(c.createdAt).toLocaleDateString('id-ID')),
+      escapeCsvField(c.author?.name || 'Anonim'),
       escapeCsvField(c.title),
       escapeCsvField(c.category),
-      escapeCsvField(c.status),
-      escapeCsvField(c.isUrgent ? 'YA' : 'TIDAK'),
-      escapeCsvField(c.incidentDate.toLocaleDateString('id-ID')),
-      escapeCsvField(c.author?.name || 'Anonim'),
+      escapeCsvField((c.content || '').replace(/\n/g, ' ')),
+      escapeCsvField(c.location),
       escapeCsvField(c.rt || '-'),
       escapeCsvField(c.rw || '-'),
-      escapeCsvField(c.location),
-      escapeCsvField(c.content),
-      escapeCsvField(c.createdAt.toLocaleDateString('id-ID'))
+      escapeCsvField(c.status),
+      escapeCsvField(c.isUrgent ? 'YA' : 'TIDAK')
     ])
 
-    const csvContent = [
+    const csvContent = '\ufeff' + [
       headers.join(','),
       ...rows.map(row => row.join(','))
     ].join('\n')
