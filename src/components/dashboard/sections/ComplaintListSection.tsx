@@ -1,10 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
-import { Search, Inbox, Camera, MapPin, ArrowRight, Zap } from 'lucide-react'
+import { Search, Inbox, Camera, MapPin, ArrowRight, Zap, Filter } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import Image from 'next/image'
-import { Status } from '@prisma/client'
+import { Prisma, Status } from '@prisma/client'
 
 interface ComplaintListSectionProps {
   profileId: string
@@ -15,6 +15,9 @@ interface ComplaintListSectionProps {
     rt?: string
     rw?: string
     page?: string
+    category?: string
+    fromDate?: string
+    toDate?: string
   }
 }
 
@@ -24,6 +27,8 @@ interface ComplaintWithAuthor {
   content: string
   imageUrl?: string | null
   status: string
+  category: string
+  categoryRel?: { name: string } | null
   rt: string | null
   rw: string | null
   isUrgent: boolean
@@ -34,13 +39,12 @@ interface ComplaintWithAuthor {
 }
 
 export default async function ComplaintListSection({ profileId, isWarga, searchParams }: ComplaintListSectionProps) {
-  const { status: currentStatus, q: searchQuery, rt, rw, page } = searchParams
+  const { status: currentStatus, q: searchQuery, rt, rw, page, category: categoryFilter, fromDate, toDate } = searchParams
   const currentPage = Math.max(1, Number(page) || 1)
   const pageSize = 12
 
-  const whereClause: { status?: Status; title?: { contains: string; mode: 'insensitive' }; authorId?: string; rt?: string; rw?: string } = {}
+  const whereClause: Prisma.ComplaintWhereInput = {}
   
-  // 🛡️ Validate Status Enum to prevent Prisma crash
   if (currentStatus) {
     const validStatuses = Object.values(Status)
     if (validStatuses.includes(currentStatus as Status)) {
@@ -52,6 +56,18 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
   if (rt) whereClause.rt = rt
   if (rw) whereClause.rw = rw
   if (isWarga && profileId) whereClause.authorId = profileId
+  if (categoryFilter) whereClause.category = categoryFilter
+  if (fromDate || toDate) {
+    const createdAt: Record<string, Date> = {}
+    if (fromDate) createdAt.gte = new Date(fromDate)
+    if (toDate) createdAt.lte = new Date(toDate + 'T23:59:59.999Z')
+    whereClause.createdAt = createdAt
+  }
+
+  const categoryOptions = await prisma.category.findMany({
+    where: { parentId: null },
+    orderBy: { name: 'asc' },
+  })
 
   let complaints: ComplaintWithAuthor[] = []
   let totalComplaints = 0
@@ -61,7 +77,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       prisma.complaint.findMany({
         where: whereClause,
         orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-        include: { author: true }, 
+        include: { author: true, categoryRel: { select: { name: true } } }, 
         take: pageSize,
         skip: (currentPage - 1) * pageSize
       }),
@@ -83,29 +99,41 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         </div>
 
         <div className="flex items-center gap-1 bg-brand-canvas-soft border border-brand-hairline p-1 rounded-xl overflow-x-auto hide-scrollbar max-w-full">
-          <Link
-            href={`/dashboard${searchQuery ? `?q=${searchQuery}` : ''}`}
-            className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${!currentStatus ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}
-          >
-            Semua
-          </Link>
-          {[
-            { id: 'PENDING', label: 'Menunggu' },
-            { id: 'PROCESSING', label: 'Diproses' },
-            { id: 'COMPLETED', label: 'Selesai' }
-          ].map((t) => (
-            <Link
-              key={t.id}
-              href={`/dashboard?status=${t.id}${searchQuery ? `&q=${searchQuery}` : ''}`}
-              className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
-                currentStatus === t.id 
-                  ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' 
-                  : 'text-brand-ink/60 hover:text-brand-primary'
-              }`}
-            >
-              {t.label}
-            </Link>
-          ))}
+          {(() => {
+            const baseParams = new URLSearchParams()
+            if (searchQuery) baseParams.set('q', searchQuery)
+            if (categoryFilter) baseParams.set('category', categoryFilter)
+            if (rt) baseParams.set('rt', rt)
+            if (rw) baseParams.set('rw', rw)
+            if (fromDate) baseParams.set('fromDate', fromDate)
+            if (toDate) baseParams.set('toDate', toDate)
+            const qs = baseParams.toString()
+            const prefix = qs ? `?${qs}` : ''
+            return (
+              <>
+                <Link href={`/dashboard${prefix}`} className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${!currentStatus ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}>
+                  Semua
+                </Link>
+                {[
+                  { id: 'PENDING', label: 'Menunggu' },
+                  { id: 'PROCESSING', label: 'Diproses' },
+                  { id: 'COMPLETED', label: 'Selesai' }
+                ].map((t) => {
+                  const p = new URLSearchParams(baseParams)
+                  p.set('status', t.id)
+                  return (
+                    <Link
+                      key={t.id}
+                      href={`/dashboard?${p.toString()}`}
+                      className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${currentStatus === t.id ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}
+                    >
+                      {t.label}
+                    </Link>
+                  )
+                })}
+              </>
+            )
+          })()}
         </div>
       </div>
 
@@ -115,8 +143,11 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/40 transition-colors group-focus-within:text-brand-primary" size={16} />
           <form action="/dashboard" method="GET">
             {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
+            {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
             {rt && <input type="hidden" name="rt" value={rt} />}
             {rw && <input type="hidden" name="rw" value={rw} />}
+            {fromDate && <input type="hidden" name="fromDate" value={fromDate} />}
+            {toDate && <input type="hidden" name="toDate" value={toDate} />}
             <input 
               name="q"
               type="text" 
@@ -140,6 +171,39 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           </div>
         )}
       </div>
+
+      {/* EXTRA FILTERS: Category + Date Range */}
+      <form action="/dashboard" method="GET" className="flex flex-wrap items-end gap-3">
+        {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
+        {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
+        {rt && <input type="hidden" name="rt" value={rt} />}
+        {rw && <input type="hidden" name="rw" value={rw} />}
+        <div className="flex-1 min-w-[140px]">
+          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Kategori</label>
+          <select name="category" defaultValue={categoryFilter || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
+            <option value="">Semua Kategori</option>
+            {categoryOptions.map((cat) => (
+              <option key={cat.id} value={cat.slug}>{cat.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex-1 min-w-[120px]">
+          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
+          <input name="fromDate" type="date" defaultValue={fromDate || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
+        </div>
+        <div className="flex-1 min-w-[120px]">
+          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
+          <input name="toDate" type="date" defaultValue={toDate || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
+        </div>
+        <button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
+          <Filter size={14} /> Terapkan
+        </button>
+        {(categoryFilter || fromDate || toDate) && (
+          <a href={`/dashboard${currentStatus ? `?status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`} className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-ink/50 hover:text-brand-ink transition-all">
+            Reset
+          </a>
+        )}
+      </form>
 
       {/* REPORT GRID */}
       {complaints.length === 0 ? (
@@ -165,13 +229,18 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                 }`}>
                   
                   <div className="flex justify-between items-center">
-                      <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${
-                        item.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 
-                        item.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-amber-800' :
-                        'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
-                      }`}>
-                        {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${
+                          item.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 
+                          item.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-amber-800' :
+                          'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
+                        }`}>
+                          {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                        </span>
+                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
+                          {item.categoryRel?.name || item.category}
+                        </span>
+                      </div>
                       <div className="h-9 w-9 md:h-10 md:w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/40 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-brand-ink transition-all shadow-sm">
                         <Camera size={16} />
                       </div>
@@ -239,7 +308,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           {Array.from({ length: totalPages }).map((_, i) => (
             <Link
               key={i}
-              href={`/dashboard?page=${i + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
+              href={`/dashboard?page=${i + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
               className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
                 currentPage === i + 1 
                     ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xl shadow-slate-900/10' 

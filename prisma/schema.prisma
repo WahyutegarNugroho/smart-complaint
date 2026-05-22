@@ -56,6 +56,24 @@ model Profile {
   auditLogs          AuditLog[]
 }
 
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  icon        String?
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  complaints Complaint[]
+
+  @@index([parentId])
+  @@index([slug])
+}
+
 model Complaint {
   id              String           @id @default(cuid())
   title           String
@@ -73,12 +91,14 @@ model Complaint {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   category        String           @default("umum")
+  categoryId      String?
   escalationLevel EscalationLevel  @default(NONE)
   escalatedAt     DateTime?
   assignedToId    String?
 
-  author       Profile    @relation("ComplaintAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  assignedTo   Profile?   @relation("ComplaintAssignee", fields: [assignedToId], references: [id])
+  author       Profile      @relation("ComplaintAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  assignedTo   Profile?     @relation("ComplaintAssignee", fields: [assignedToId], references: [id])
+  categoryRel   Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   responses    Response[]
   escalationLogs EscalationLog[]
 
@@ -88,6 +108,7 @@ model Complaint {
   @@index([rt])
   @@index([rw])
   @@index([category])
+  @@index([categoryId])
   @@index([incidentDate])
   @@index([status, createdAt])
   @@index([latitude, longitude])

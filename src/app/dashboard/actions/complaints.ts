@@ -23,6 +23,7 @@ export async function createComplaint(formData: FormData) {
     const content = formData.get('content') as string
     const location = formData.get('location') as string
     const category = formData.get('category') as string || 'umum'
+    const rawCategoryId = formData.get('categoryId') as string
     const rt = formData.get('rt') as string
     const rw = formData.get('rw') as string
     const rawLat = formData.get('latitude') as string
@@ -31,6 +32,11 @@ export async function createComplaint(formData: FormData) {
     const longitude = rawLng ? parseFloat(rawLng) : null
 
     const validCategory = validateEnum(category, ['keamanan', 'kebersihan', 'fasilitas', 'umum'] as const)
+    let validCategoryId: string | null = null
+    if (rawCategoryId) {
+      const catExists = await prisma.category.findUnique({ where: { id: rawCategoryId } })
+      if (catExists) validCategoryId = catExists.id
+    }
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Detail kronologi', 2000)
     const errLocation = validateString(location, 'Lokasi', 200)
@@ -81,6 +87,7 @@ export async function createComplaint(formData: FormData) {
         title,
         content,
         category: validCategory,
+        categoryId: validCategoryId,
         isUrgent: formData.get('isUrgent') === 'true',
         incidentDate: validDate,
         location,

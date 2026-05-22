@@ -46,13 +46,14 @@ export default async function ComplaintDetailPage({
 
   const complaint = await prisma.complaint.findUnique({
     where: { id },
-    include: { 
-      author: true,
-      responses: {
-        include: { officer: true },
-        orderBy: { createdAt: 'asc' }
-      }
+  include: { 
+    author: true,
+    categoryRel: true,
+    responses: {
+      include: { officer: true },
+      orderBy: { createdAt: 'asc' }
     }
+  }
   })
 
   if (!complaint) redirect('/dashboard')
@@ -109,10 +110,13 @@ export default async function ComplaintDetailPage({
                   }`}>
                     {complaint.status === 'PENDING' ? 'Menunggu' : complaint.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
                   </span>
-                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
-                    Blok Wilayah RT {complaint.rt} / RW {complaint.rw}
-                  </span>
-                </div>
+    <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
+      Blok Wilayah RT {complaint.rt} / RW {complaint.rw}
+    </span>
+    <span className="text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+      {complaint.categoryRel?.name || complaint.category}
+    </span>
+  </div>
 
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 leading-tight transition-colors">{complaint.title}</h1>
                 <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors pl-6 border-l-2 border-slate-100 dark:border-slate-800">&quot;{complaint.content}&quot;</p>

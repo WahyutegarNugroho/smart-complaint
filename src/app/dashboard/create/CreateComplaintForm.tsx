@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { 
   Camera, 
   Calendar as CalendarIcon, 
@@ -12,13 +12,29 @@ import {
   Lightbulb,
   AlertTriangle,
   Hammer,
-  ChevronLeft
+  ChevronLeft,
+  ChevronDown
 } from 'lucide-react'
 import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
 import Image from 'next/image'
 import SubmitButton from '@/components/SubmitButton'
 import { LocationPicker } from '@/components/map'
+
+interface CategoryChild {
+  id: string
+  name: string
+  slug: string
+}
+
+interface CategoryParent {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  icon: string | null
+  children: CategoryChild[]
+}
 
 interface ProfileData {
   id: string
@@ -29,13 +45,34 @@ interface ProfileData {
   address?: string | null
 }
 
+const ICON_MAP: Record<string, React.ElementType> = {
+  ShieldAlert, Trash2, Hammer, Lightbulb,
+}
+
 export default function CreateComplaintForm({ profile }: { profile: ProfileData }) {
   const [preview, setPreview] = useState<string | null>(null)
-  const [category, setCategory] = useState('umum')
+  const [categories, setCategories] = useState<CategoryParent[]>([])
+  const [selectedParent, setSelectedParent] = useState('umum')
+  const [selectedChildId, setSelectedChildId] = useState('')
   const [isUrgent, setIsUrgent] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data)
+        if (data.length > 0) {
+          const umum = data.find((c: CategoryParent) => c.slug === 'umum')
+          if (umum?.children?.length === 1) {
+            setSelectedChildId(umum.children[0].id)
+          }
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const isProfileIncomplete = !profile.rt || !profile.rw || !profile.nik || !profile.phone || !profile.address
 
@@ -98,13 +135,6 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
     }
   }
 
-  const categories = [
-    { id: 'keamanan', label: 'Keamanan', icon: ShieldAlert, color: 'text-red-500', bg: 'bg-red-50' },
-    { id: 'kebersihan', label: 'Kebersihan', icon: Trash2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { id: 'fasilitas', label: 'Fasilitas', icon: Hammer, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { id: 'umum', label: 'Lainnya', icon: Lightbulb, color: 'text-amber-500', bg: 'bg-amber-50' },
-  ]
-
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">
       
@@ -163,7 +193,8 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12"
         >
           {/* Hidden inputs */}
-          <input type="hidden" name="category" value={category} />
+          <input type="hidden" name="category" value={selectedParent} />
+          <input type="hidden" name="categoryId" value={selectedChildId} />
           <input type="hidden" name="isUrgent" value={isUrgent.toString()} />
           
           {/* LEFT: Main Information */}
@@ -175,39 +206,75 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                 <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Pilih Kategori Masalah</label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {categories.map((cat) => {
-                    const Icon = cat.icon;
+                    const Icon = ICON_MAP[cat.icon || 'Lightbulb'] || Lightbulb
                     return (
                       <button
                         key={cat.id}
                         type="button"
-                        onClick={() => setCategory(cat.id)}
+                        onClick={() => {
+                          setSelectedParent(cat.slug)
+                          setSelectedChildId('')
+                          if (cat.children?.length === 1) {
+                            setSelectedChildId(cat.children[0].id)
+                          }
+                        }}
                         className={`flex flex-col items-center justify-center gap-4 p-5 rounded-2xl border transition-all cursor-pointer ${
-                          category === cat.id 
-                            ? `bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] border-transparent shadow-xl` 
+                          selectedParent === cat.slug 
+                            ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] border-transparent shadow-xl' 
                             : 'bg-brand-canvas-soft border-brand-hairline text-brand-ink/65 hover:bg-brand-canvas'
                         }`}
                       >
-                        <div className={`transition-transform duration-500 ${category === cat.id ? 'scale-110' : ''}`}>
+                        <div className={`transition-transform duration-500 ${selectedParent === cat.slug ? 'scale-110' : ''}`}>
                            <Icon size={24} />
                         </div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest">{cat.label}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest">{cat.name}</span>
                       </button>
                     )
                   })}
                 </div>
+
+                {/* Subcategory Dropdown */}
+                {(() => {
+                  const parent = categories.find((c) => c.slug === selectedParent)
+                  const children = parent?.children || []
+                  if (children.length <= 1) return null
+                  return (
+                    <div className="relative">
+                      <select
+                        value={selectedChildId}
+                        onChange={(e) => setSelectedChildId(e.target.value)}
+                        className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-sm font-bold text-brand-ink appearance-none outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all cursor-pointer"
+                      >
+                        <option value="">Pilih sub-kategori...</option>
+                        {children.map((child) => (
+                          <option key={child.id} value={child.id}>{child.name}</option>
+                        ))}
+                      </select>
+                      <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" />
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* Title Input */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Judul / Subjek</label>
-                  {suggestedCategory && category !== suggestedCategory && (
+                  {suggestedCategory && selectedParent !== suggestedCategory && (
                     <button 
                       type="button" 
-                      onClick={() => setCategory(suggestedCategory)}
+                      onClick={() => {
+                        setSelectedParent(suggestedCategory)
+                        const parent = categories.find((c) => c.slug === suggestedCategory)
+                        if (parent?.children?.length === 1) {
+                          setSelectedChildId(parent.children[0].id)
+                        } else {
+                          setSelectedChildId('')
+                        }
+                      }}
                       className="text-[9px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
-                      <Lightbulb size={10} /> Saran Kategori: {suggestedCategory.toUpperCase()} (Terapkan)
+                      <Lightbulb size={10} /> Saran Kategori: {(suggestedCategory).toUpperCase()} (Terapkan)
                     </button>
                   )}
                 </div>

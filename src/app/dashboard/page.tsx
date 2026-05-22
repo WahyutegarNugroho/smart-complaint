@@ -25,7 +25,10 @@ export default async function DashboardPage({
     q?: string, 
     rt?: string, 
     rw?: string,
-    page?: string 
+    page?: string,
+    category?: string,
+    fromDate?: string,
+    toDate?: string
   }>
 }) {
   const params = await searchParams
