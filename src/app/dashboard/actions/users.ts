@@ -1,17 +1,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
+import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
 
 export async function updateUserRole(formData: FormData) {
   try {
-    const supabase = await createClient()
-    const { data: { user: adminUser } } = await supabase.auth.getUser()
-    if (!adminUser) redirect('/login')
-
+    const { user: adminUser } = await getAuthenticatedUser()
     const adminProfile = await prisma.profile.findUnique({
       where: { userId: adminUser.id }
     })
@@ -39,10 +35,7 @@ export async function updateUserRole(formData: FormData) {
 
 export async function toggleUserVerification(formData: FormData) {
   try {
-    const supabase = await createClient()
-    const { data: { user: adminUser } } = await supabase.auth.getUser()
-    if (!adminUser) redirect('/login')
-
+    const { user: adminUser } = await getAuthenticatedUser()
     const adminProfile = await prisma.profile.findUnique({
       where: { userId: adminUser.id }
     })
@@ -68,10 +61,9 @@ export async function toggleUserVerification(formData: FormData) {
 
 export async function deleteUserAccount(formData: FormData) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-
+    const auth = await getAuthenticatedUserOptional()
+    if (!auth) return
+    const { user } = auth
     const adminProfile = await prisma.profile.findUnique({
       where: { userId: user.id }
     })

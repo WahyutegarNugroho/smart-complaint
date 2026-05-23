@@ -17,6 +17,7 @@ import {
   Trash2
 } from 'lucide-react'
 import Link from 'next/link'
+import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
 import DeleteComplaintButton from './DeleteComplaintButton'
 import CitizenDeleteButton from './CitizenDeleteButton'
 import ResponseFileHandler from './ResponseFileHandler'
@@ -103,12 +104,8 @@ export default async function ComplaintDetailPage({
               
               <div className="p-8 md:p-10">
                 <div className="flex flex-wrap items-center gap-3 mb-8">
-                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest border transition-colors ${
-                    complaint.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' :
-                    complaint.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800' :
-                    'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
-                  }`}>
-                    {complaint.status === 'PENDING' ? 'Menunggu' : complaint.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest border transition-colors ${STATUS_BADGE_CLASSES[complaint.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                    {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                   </span>
     <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
       Blok Wilayah RT {complaint.rt} / RW {complaint.rw}
@@ -403,7 +400,7 @@ export default async function ComplaintDetailPage({
             </div>
             <div>
               <p className="meta-label">Status</p>
-              <p className="meta-value">{complaint.status === 'PENDING' ? 'MENUNGGU' : complaint.status === 'PROCESSING' ? 'DIPROSES' : 'SELESAI'}</p>
+              <p className="meta-value">{(STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu').toUpperCase()}</p>
             </div>
             <div>
               <p className="meta-label">Judul</p>

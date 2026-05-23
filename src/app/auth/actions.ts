@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
 import { checkLoginAttempt, recordFailedAttempt, resetLoginAttempts } from '@/lib/login-rate-limit'
+import { isRedirectError } from '@/lib/redirect-guard'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -96,7 +97,7 @@ export async function signup(formData: FormData) {
       console.log(`Prisma upsert Success`)
     } catch (dbError: unknown) {
       // ⚠️ Don't catch Next.js redirect errors
-      if (dbError instanceof Error && (dbError as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw dbError;
+      if (isRedirectError(dbError)) throw dbError;
       
       const error = dbError as Error;
       console.error(`Prisma Error: ${error.message}`)

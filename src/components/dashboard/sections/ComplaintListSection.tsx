@@ -6,6 +6,7 @@ import EmptyState from '@/components/EmptyState'
 import Image from 'next/image'
 import { Prisma, Status } from '@prisma/client'
 import PageSizeSelector from './PageSizeSelector'
+import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
 
 interface ComplaintListSectionProps {
   profileId: string
@@ -66,15 +67,16 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
     whereClause.createdAt = createdAt
   }
 
-  const categoryOptions = await prisma.category.findMany({
-    where: { parentId: null },
-    orderBy: { name: 'asc' },
-  })
-
   let complaints: ComplaintWithAuthor[] = []
   let totalComplaints = 0
+  let categoryOptions: { id: string; name: string; slug: string }[] = []
 
   try {
+    categoryOptions = await prisma.category.findMany({
+      where: { parentId: null },
+      orderBy: { name: 'asc' },
+    })
+
     const [resComplaints, resTotal] = await Promise.all([
       prisma.complaint.findMany({
         where: whereClause,
@@ -232,12 +234,8 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   
                   <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${
-                          item.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 
-                          item.status === 'PROCESSING' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-amber-800' :
-                          'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'
-                        }`}>
-                          {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                        <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-colors ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                          {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                         </span>
                         <span className="text-[9px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
                           {item.categoryRel?.name || item.category}

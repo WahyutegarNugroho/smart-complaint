@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { ComplaintMapView } from '@/components/map'
+import { STATUS_LABELS } from '@/lib/constants'
 
 export default async function AdminStatsPage() {
   const supabase = await createClient()
@@ -118,7 +119,7 @@ export default async function AdminStatsPage() {
                          <div className="flex justify-between items-end">
                             <div className="flex flex-col">
                                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
-                                  {item.status === 'PENDING' ? 'Menunggu' : item.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                                  {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                                </span>
                                <span className="text-sm font-bold text-slate-900 dark:text-white">{item._count._all} Laporan</span>
                             </div>

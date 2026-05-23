@@ -3,10 +3,9 @@ import { getCachedProfile } from '@/lib/profile'
 import AdminDashboardLayout from '@/components/dashboard/AdminDashboardLayout'
 import PetugasDashboardLayout from '@/components/dashboard/PetugasDashboardLayout'
 import MasyarakatDashboardLayout from '@/components/dashboard/MasyarakatDashboardLayout'
-import AdminStatsSection from '@/components/dashboard/sections/AdminStatsSection'
 import AdminAnalyticsSection from '@/components/dashboard/sections/AdminAnalyticsSection'
-import PetugasStatsSection from '@/components/dashboard/sections/PetugasStatsSection'
 import StatsSection from '@/components/dashboard/sections/StatsSection'
+import RoleStatsSection from '@/components/dashboard/sections/RoleStatsSection'
 import AnnouncementsSection from '@/components/dashboard/sections/AnnouncementsSection'
 import ComplaintListSection from '@/components/dashboard/sections/ComplaintListSection'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
@@ -59,7 +58,7 @@ export default async function DashboardPage({
         {!rawStatus && (
           <>
             <Suspense fallback={<SectionSkeleton type="stats" />}>
-              <AdminStatsSection />
+              <RoleStatsSection role="admin" />
             </Suspense>
             <Suspense fallback={<SectionSkeleton type="stats" />}>
               <AdminAnalyticsSection />
@@ -78,7 +77,7 @@ export default async function DashboardPage({
       <PetugasDashboardLayout profile={profile} successMessage={successMessage}>
         {!rawStatus && (
           <Suspense fallback={<SectionSkeleton type="stats" />}>
-            <PetugasStatsSection />
+            <RoleStatsSection role="petugas" />
           </Suspense>
         )}
         <Suspense fallback={<SectionSkeleton type="list" />}>

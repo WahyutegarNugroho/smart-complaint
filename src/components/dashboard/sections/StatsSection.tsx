@@ -28,7 +28,7 @@ export default async function StatsSection({ profileId, isWarga }: StatsSectionP
     stats = { total, pending, processing, completed };
   } catch (err) {
     console.error('StatsSection Error:', err);
-    return null; // Don't crash the whole dashboard if stats fail
+    return null;
   }
 
   const items = [

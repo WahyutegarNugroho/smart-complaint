@@ -8,20 +8,9 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { Search, Filter, X, Layers } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { STATUS_LABELS, STATUS_HEX } from '@/lib/constants'
 
 const ComplaintDetailPanel = dynamic(() => import('./ComplaintDetailPanel'), { ssr: false })
-
-const statusColors: Record<string, string> = {
-  PENDING: '#f59e0b',
-  PROCESSING: '#3b82f6',
-  COMPLETED: '#10b981',
-}
-
-const statusLabels: Record<string, string> = {
-  PENDING: 'Menunggu',
-  PROCESSING: 'Diproses',
-  COMPLETED: 'Selesai',
-}
 
 export interface ComplaintMarker {
   id: string
@@ -102,8 +91,8 @@ function MarkerClusterLayer({
       iconCreateFunction: (cluster) => {
         const count = cluster.getChildCount()
         let bg = '#6b7280'
-        if (filters.status && statusColors[filters.status]) {
-          bg = statusColors[filters.status]
+          if (filters.status && STATUS_HEX[filters.status as keyof typeof STATUS_HEX]) {
+            bg = STATUS_HEX[filters.status as keyof typeof STATUS_HEX]
         }
         return L.divIcon({
           html: `<div style="
@@ -122,7 +111,7 @@ function MarkerClusterLayer({
     })
 
     filtered.forEach((c) => {
-      const color = statusColors[c.status] || '#6b7280'
+      const color = STATUS_HEX[c.status as keyof typeof STATUS_HEX] || '#6b7280'
       const icon = L.divIcon({
         className: 'custom-marker-icon',
         html: `<div style="
@@ -337,7 +326,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
                           : 'bg-brand-canvas-soft text-brand-ink/50 border-brand-hairline hover:border-brand-ink/20'
                       }`}
                     >
-                      {s ? statusLabels[s] || s : 'Semua'}
+                      {s ? STATUS_LABELS[s as keyof typeof STATUS_LABELS] || s : 'Semua'}
                     </button>
                   ))}
                 </div>
@@ -370,14 +359,14 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
         <div className="bg-brand-canvas/90 backdrop-blur-xl border border-brand-hairline rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-4">
           <Layers size={14} className="text-brand-ink/30 shrink-0" />
-          {Object.entries(statusColors).map(([status, color]) => (
+          {(Object.entries(STATUS_HEX) as [string, string][]).map(([status, color]) => (
             <div key={status} className="flex items-center gap-1.5">
               <span
                 className="w-3 h-3 rounded-full inline-block"
                 style={{ backgroundColor: color }}
               />
               <span className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-widest">
-                {statusLabels[status]}
+                {STATUS_LABELS[status as keyof typeof STATUS_LABELS]}
               </span>
             </div>
           ))}

@@ -2,14 +2,13 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { validateString, validateNIK, validatePhone, validateRTRW } from '@/lib/validate'
+import { isRedirectError } from '@/lib/redirect-guard'
+import { getAuthenticatedUser } from '@/lib/auth'
 
 export async function updateProfile(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { user } = await getAuthenticatedUser()
 
   try {
     const profile = await prisma.profile.findUnique({
@@ -50,7 +49,7 @@ export async function updateProfile(formData: FormData) {
     redirect('/dashboard/settings?message=Profil berhasil diperbarui')
   } catch (err) {
     console.error('UpdateProfile Error:', err)
-    if (err instanceof Error && (err as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) throw err;
+    if (isRedirectError(err)) throw err;
     redirect('/dashboard/settings?error=system_error')
   }
 }

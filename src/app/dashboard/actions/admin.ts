@@ -2,17 +2,16 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
+import { getAuthenticatedUserOptional } from '@/lib/auth'
 
 export async function adminDeleteComplaint(formData: FormData) {
   let success = false
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-
+    const auth = await getAuthenticatedUserOptional()
+    if (!auth) return
+    const { user } = auth
     const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
     if (!profile || profile.role !== 'ADMIN') return
 

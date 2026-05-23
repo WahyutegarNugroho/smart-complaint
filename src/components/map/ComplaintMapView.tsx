@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { MapPin } from 'lucide-react'
 import Link from 'next/link'
+import { STATUS_LABELS, STATUS_HEX } from '@/lib/constants'
 
 interface ComplaintMarker {
   id: string
@@ -19,12 +20,6 @@ interface ComplaintMarker {
 
 interface ComplaintMapViewProps {
   complaints: ComplaintMarker[]
-}
-
-const statusColors: Record<string, string> = {
-  PENDING: '#f59e0b',
-  PROCESSING: '#3b82f6',
-  COMPLETED: '#10b981',
 }
 
 export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) {
@@ -54,7 +49,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {complaints.map((c) => {
-          const color = statusColors[c.status] || '#6b7280'
+          const color = STATUS_HEX[c.status as keyof typeof STATUS_HEX] || '#6b7280'
           const icon = L.divIcon({
             className: 'custom-marker',
             html: `<div style="
@@ -85,7 +80,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
                       c.status === 'PROCESSING' ? 'bg-blue-100 text-blue-700' :
                       'bg-emerald-100 text-emerald-700'
                     }`}>
-                      {c.status === 'PENDING' ? 'Menunggu' : c.status === 'PROCESSING' ? 'Diproses' : 'Selesai'}
+                      {STATUS_LABELS[c.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                     </span>
                     <span className="text-slate-400">RT {c.rt}/{c.rw}</span>
                   </div>

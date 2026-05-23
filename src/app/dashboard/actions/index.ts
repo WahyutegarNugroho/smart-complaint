@@ -1,4 +1,6 @@
-export * from './complaints'
+export * from './complaints.crud'
+export * from './complaints.status'
+export * from './responses'
 export * from './announcements'
 export * from './users'
 export * from './notifications'

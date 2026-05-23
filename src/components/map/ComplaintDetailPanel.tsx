@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { X, Calendar, MapPin, User, AlertTriangle, ArrowUpRight, LockKeyhole } from 'lucide-react'
 import type { ComplaintMarker } from './MapPageClient'
+import { STATUS_LABELS } from '@/lib/constants'
 
 interface ComplaintDetailPanelProps {
   complaint: ComplaintMarker | null
@@ -13,9 +14,9 @@ interface ComplaintDetailPanelProps {
 }
 
 const statusConfig = {
-  PENDING: { label: 'Menunggu', bg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' },
-  PROCESSING: { label: 'Diproses', bg: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' },
-  COMPLETED: { label: 'Selesai', bg: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' },
+  PENDING: { bg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' },
+  PROCESSING: { bg: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' },
+  COMPLETED: { bg: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' },
 }
 
 const escalationLabels: Record<string, string> = {
@@ -99,7 +100,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
 
               <div className="flex items-start gap-2">
                 <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
-                  {status.label}
+                  {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
@@ -181,7 +182,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
             <>
               <div className="flex items-start gap-2">
                 <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
-                  {status.label}
+                  {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
