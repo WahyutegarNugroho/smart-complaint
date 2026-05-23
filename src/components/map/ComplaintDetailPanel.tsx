@@ -2,12 +2,14 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { X, Calendar, MapPin, User, AlertTriangle, ArrowUpRight } from 'lucide-react'
+import { X, Calendar, MapPin, User, AlertTriangle, ArrowUpRight, LockKeyhole } from 'lucide-react'
 import type { ComplaintMarker } from './MapPageClient'
 
 interface ComplaintDetailPanelProps {
   complaint: ComplaintMarker | null
   onClose: () => void
+  userRole: string
+  currentUserId: string
 }
 
 const statusConfig = {
@@ -23,7 +25,7 @@ const escalationLabels: Record<string, string> = {
   LEVEL_3: 'Diproses >72 jam',
 }
 
-export default function ComplaintDetailPanel({ complaint, onClose }: ComplaintDetailPanelProps) {
+export default function ComplaintDetailPanel({ complaint, onClose, userRole, currentUserId }: ComplaintDetailPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -56,6 +58,8 @@ export default function ComplaintDetailPanel({ complaint, onClose }: ComplaintDe
     day: 'numeric', month: 'long', year: 'numeric'
   })
   const escalationLabel = escalationLabels[complaint.escalationLevel] || ''
+  const isOwnComplaint = complaint.authorId === currentUserId
+  const canViewFull = userRole !== 'MASYARAKAT' || isOwnComplaint
 
   return (
     <>
@@ -81,82 +85,136 @@ export default function ComplaintDetailPanel({ complaint, onClose }: ComplaintDe
         </div>
 
         <div className="p-5 space-y-5">
-          {complaint.imageUrl && (
-            <div className="rounded-2xl overflow-hidden border border-brand-hairline">
-              <img
-                src={complaint.imageUrl}
-                alt={complaint.title}
-                className="w-full h-48 object-cover"
-              />
-            </div>
-          )}
+          {canViewFull ? (
+            <>
+              {complaint.imageUrl && (
+                <div className="rounded-2xl overflow-hidden border border-brand-hairline">
+                  <img
+                    src={complaint.imageUrl}
+                    alt={complaint.title}
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+              )}
 
-          <div className="flex items-start gap-2">
-            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
-              {status.label}
-            </span>
-            {complaint.isUrgent && (
-              <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
-                <AlertTriangle size={10} />
-                Prioritas
-              </span>
-            )}
-            {escalationLabel && (
-              <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
-                {escalationLabel}
-              </span>
-            )}
-          </div>
-
-          <h3 className="text-lg font-bold text-brand-ink leading-snug">{complaint.title}</h3>
-
-          <p className="text-sm text-brand-ink/70 leading-relaxed line-clamp-4">
-            {complaint.content}
-          </p>
-
-          <div className="space-y-3 text-sm">
-            {complaint.categoryName && (
-              <div className="flex items-center gap-3 text-brand-ink/60">
-                <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
-                  <span className="text-[10px] font-bold">{complaint.categoryName.charAt(0)}</span>
+              <div className="flex items-start gap-2">
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
+                  {status.label}
                 </span>
-                <span className="font-medium">{complaint.categoryName}</span>
-              </div>
-            )}
-
-            <div className="flex items-center gap-3 text-brand-ink/60">
-              <User size={14} className="shrink-0 opacity-50" />
-              <span className="font-medium">{complaint.author?.name || 'Anonim'}</span>
-            </div>
-
-            <div className="flex items-center gap-3 text-brand-ink/60">
-              <MapPin size={14} className="shrink-0 opacity-50" />
-              <span className="font-medium">
-                {complaint.location}
-                {complaint.rt && complaint.rw && (
-                  <span className="text-brand-ink/40"> (RT {complaint.rt}/{complaint.rw})</span>
+                {complaint.isUrgent && (
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                    <AlertTriangle size={10} />
+                    Prioritas
+                  </span>
                 )}
-              </span>
-            </div>
+                {escalationLabel && (
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
+                    {escalationLabel}
+                  </span>
+                )}
+              </div>
 
-            <div className="flex items-center gap-3 text-brand-ink/60">
-              <Calendar size={14} className="shrink-0 opacity-50" />
-              <span className="font-medium">Kejadian: {incidentDate}</span>
-            </div>
+              <h3 className="text-lg font-bold text-brand-ink leading-snug">{complaint.title}</h3>
 
-            <div className="flex items-center gap-3 text-brand-ink/60">
-              <Calendar size={14} className="shrink-0 opacity-50" />
-              <span className="font-medium">Dilaporkan: {date}</span>
-            </div>
-          </div>
+              <p className="text-sm text-brand-ink/70 leading-relaxed line-clamp-4">
+                {complaint.content}
+              </p>
 
-          <Link
-            href={`/dashboard/complaint/${complaint.id}`}
-            className="w-full flex items-center justify-center gap-2 bg-brand-ink text-brand-canvas dark:bg-brand-primary dark:text-[#0e0f0c] font-bold py-3 px-6 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
-          >
-            Lihat Detail Lengkap
-            <ArrowUpRight size={16} />
-          </Link>
+              <div className="space-y-3 text-sm">
+                {complaint.categoryName && (
+                  <div className="flex items-center gap-3 text-brand-ink/60">
+                    <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
+                      <span className="text-[10px] font-bold">{complaint.categoryName.charAt(0)}</span>
+                    </span>
+                    <span className="font-medium">{complaint.categoryName}</span>
+                  </div>
+                )}
+
+                {userRole !== 'MASYARAKAT' ? (
+                  <div className="flex items-center gap-3 text-brand-ink/60">
+                    <User size={14} className="shrink-0 opacity-50" />
+                    <span className="font-medium">{complaint.author?.name || 'Anonim'}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 text-brand-ink/60">
+                    <User size={14} className="shrink-0 opacity-50" />
+                    <span className="font-medium">Warga</span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 text-brand-ink/60">
+                  <MapPin size={14} className="shrink-0 opacity-50" />
+                  {userRole !== 'MASYARAKAT' ? (
+                    <span className="font-medium">
+                      {complaint.location}
+                      {complaint.rt && complaint.rw && (
+                        <span className="text-brand-ink/40"> (RT {complaint.rt}/{complaint.rw})</span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="font-medium">
+                      {complaint.rt && complaint.rw ? `RT ${complaint.rt}/${complaint.rw}` : 'Lokasi tidak tersedia'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3 text-brand-ink/60">
+                  <Calendar size={14} className="shrink-0 opacity-50" />
+                  <span className="font-medium">Kejadian: {incidentDate}</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-brand-ink/60">
+                  <Calendar size={14} className="shrink-0 opacity-50" />
+                  <span className="font-medium">Dilaporkan: {date}</span>
+                </div>
+              </div>
+
+              <Link
+                href={`/dashboard/complaint/${complaint.id}`}
+                className="w-full flex items-center justify-center gap-2 bg-brand-ink text-brand-canvas dark:bg-brand-primary dark:text-[#0e0f0c] font-bold py-3 px-6 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
+              >
+                Lihat Detail Lengkap
+                <ArrowUpRight size={16} />
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="flex items-start gap-2">
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
+                  {status.label}
+                </span>
+                {complaint.isUrgent && (
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                    <AlertTriangle size={10} />
+                    Prioritas
+                  </span>
+                )}
+              </div>
+
+              {complaint.categoryName && (
+                <div className="flex items-center gap-3 text-sm text-brand-ink/60">
+                  <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
+                    <span className="text-[10px] font-bold">{complaint.categoryName.charAt(0)}</span>
+                  </span>
+                  <span className="font-medium">{complaint.categoryName}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-3 text-sm text-brand-ink/60">
+                <MapPin size={14} className="shrink-0 opacity-50" />
+                <span className="font-medium">
+                  {complaint.rt && complaint.rw ? `RT ${complaint.rt}/${complaint.rw}` : 'Lokasi tidak tersedia'}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-800/30 rounded-xl text-amber-700 dark:text-amber-400">
+                <LockKeyhole size={14} className="shrink-0" />
+                <p className="text-[11px] font-bold leading-snug">
+                  Detail lengkap laporan hanya dapat dilihat oleh pelapor
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

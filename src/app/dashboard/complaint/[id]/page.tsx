@@ -92,7 +92,7 @@ export default async function ComplaintDetailPage({
             <div className="bg-brand-canvas rounded-[2rem] shadow-sm border border-brand-hairline overflow-hidden transition-all group">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
-                  <Image src={complaint.imageUrl} alt={complaint.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <Image src={complaint.imageUrl} alt={complaint.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
                     <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-2xl">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi
@@ -121,15 +121,16 @@ export default async function ComplaintDetailPage({
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 leading-tight transition-colors">{complaint.title}</h1>
                 <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors pl-6 border-l-2 border-slate-100 dark:border-slate-800">&quot;{complaint.content}&quot;</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4">
                   <LocationView
                     latitude={complaint.latitude}
                     longitude={complaint.longitude}
                     address={complaint.location}
+                    complaintId={complaint.id}
                   />
-                  <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
-                    <div className="h-10 w-10 bg-brand-canvas rounded-xl flex items-center justify-center text-brand-ink shadow-sm border border-brand-hairline">
-                       <Calendar size={18} />
+                  <div className="flex items-center gap-3 p-4 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
+                    <div className="h-8 w-8 bg-brand-canvas rounded-xl flex items-center justify-center text-brand-ink shadow-sm border border-brand-hairline">
+                       <Calendar size={14} />
                     </div>
                     <div>
                       <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest">Tanggal Lapor</p>
@@ -200,7 +201,7 @@ export default async function ComplaintDetailPage({
 
                {/* Response Form */}
                 <div className="mt-10 p-2 bg-brand-canvas rounded-[2rem] border border-brand-hairline shadow-xl transition-all focus-within:ring-4 focus-within:ring-brand-primary/5 no-print">
-                   <form action={respondToComplaint} className="relative" encType="multipart/form-data">
+                   <form action={respondToComplaint} className="relative">
                       <input type="hidden" name="complaintId" value={complaint.id} />
                       <input type="hidden" name="status" value={complaint.status} />
                       <textarea 

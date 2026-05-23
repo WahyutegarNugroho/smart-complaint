@@ -2,7 +2,8 @@
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
-import { MapPin } from 'lucide-react'
+import { MapPin, ExternalLink } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const markerIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -18,9 +19,14 @@ interface LocationViewProps {
   latitude: number | null
   longitude: number | null
   address: string
+  complaintId: string
 }
 
-export default function LocationView({ latitude, longitude, address }: LocationViewProps) {
+export default function LocationView({ latitude, longitude, address, complaintId }: LocationViewProps) {
+  const router = useRouter()
+
+  const goToMap = () => router.push('/dashboard/map?complaintId=' + complaintId)
+
   if (latitude === null || longitude === null) {
     return (
       <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
@@ -36,8 +42,14 @@ export default function LocationView({ latitude, longitude, address }: LocationV
   }
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-brand-hairline shadow-sm">
-      <div className="h-48 w-full">
+    <div
+      className="rounded-2xl overflow-hidden border border-brand-hairline shadow-sm cursor-pointer group transition-all hover:shadow-lg"
+      onClick={goToMap}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') goToMap() }}
+    >
+      <div className="h-48 w-full relative">
         <MapContainer
           center={[latitude, longitude]}
           zoom={17}
@@ -54,6 +66,12 @@ export default function LocationView({ latitude, longitude, address }: LocationV
             <Popup>{address}</Popup>
           </Marker>
         </MapContainer>
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-brand-canvas/90 text-brand-ink rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-[11px] font-bold shadow-lg">
+            <ExternalLink size={12} />
+            Lihat di peta sebaran
+          </div>
+        </div>
       </div>
       <div className="p-3 bg-brand-canvas border-t border-brand-hairline flex items-center gap-2">
         <MapPin size={14} className="text-brand-primary shrink-0" />

@@ -54,6 +54,9 @@ interface CategoryItem {
 interface MapPageClientProps {
   complaints: ComplaintMarker[]
   categories: CategoryItem[]
+  highlightedComplaintId?: string
+  userRole: string
+  currentUserId: string
 }
 
 interface Filters {
@@ -168,10 +171,12 @@ function MapContent({
   complaints,
   filters,
   onMarkerClick,
+  highlightedComplaintId,
 }: {
   complaints: ComplaintMarker[]
   filters: Filters
   onMarkerClick: (c: ComplaintMarker) => void
+  highlightedComplaintId?: string
 }) {
   return (
     <>
@@ -184,11 +189,39 @@ function MapContent({
         filters={filters}
         onMarkerClick={onMarkerClick}
       />
+      <AutoSelectMapLayer
+        complaints={complaints}
+        highlightedComplaintId={highlightedComplaintId}
+        onMarkerClick={onMarkerClick}
+      />
     </>
   )
 }
 
-export default function MapPageClient({ complaints, categories }: MapPageClientProps) {
+function AutoSelectMapLayer({
+  complaints,
+  highlightedComplaintId,
+  onMarkerClick,
+}: {
+  complaints: ComplaintMarker[]
+  highlightedComplaintId?: string
+  onMarkerClick: (c: ComplaintMarker) => void
+}) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!highlightedComplaintId) return
+    const complaint = complaints.find((c) => c.id === highlightedComplaintId)
+    if (!complaint) return
+
+    onMarkerClick(complaint)
+    map.flyTo([complaint.latitude, complaint.longitude], 18, { duration: 1 })
+  }, [highlightedComplaintId, complaints, onMarkerClick, map])
+
+  return null
+}
+
+export default function MapPageClient({ complaints, categories, highlightedComplaintId, userRole, currentUserId }: MapPageClientProps) {
   const [filters, setFilters] = useState<Filters>({
     status: '',
     categoryId: '',
@@ -238,6 +271,7 @@ export default function MapPageClient({ complaints, categories }: MapPageClientP
           complaints={complaints}
           filters={filters}
           onMarkerClick={handleMarkerClick}
+          highlightedComplaintId={highlightedComplaintId}
         />
       </MapContainer>
 
@@ -360,6 +394,8 @@ export default function MapPageClient({ complaints, categories }: MapPageClientP
       <ComplaintDetailPanel
         complaint={selectedComplaint}
         onClose={() => setSelectedComplaint(null)}
+        userRole={userRole}
+        currentUserId={currentUserId}
       />
     </>
   )

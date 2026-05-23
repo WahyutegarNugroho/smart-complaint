@@ -134,6 +134,7 @@ export default async function LandingPage() {
                         src={`https://i.pravatar.cc/100?img=${i + 20}`} 
                         alt="User" 
                         fill 
+                        unoptimized
                         className="object-cover"
                       />
                     </div>
@@ -152,6 +153,7 @@ export default async function LandingPage() {
                   src="/hero.png"
                   alt="Pesona Serpong"
                   fill
+                  unoptimized
                   className="rounded-[2.5rem] object-cover transition-transform duration-1000 group-hover:scale-105"
                   priority
                 />

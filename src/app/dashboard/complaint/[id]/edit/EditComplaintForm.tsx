@@ -168,7 +168,7 @@ export default function EditComplaintForm({
                   </label>
                 ) : (
                   <div className="relative rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-xl group h-80">
-                    <Image src={previewUrl} alt="Preview" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <Image src={previewUrl} alt="Preview" fill unoptimized className="object-cover transition-transform duration-700 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                        <label htmlFor="image-upload" className="cursor-pointer bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform">Ganti Foto Bukti</label>
                     </div>
