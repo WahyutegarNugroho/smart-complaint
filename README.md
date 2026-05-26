@@ -87,7 +87,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 
 ---
 
-## Tech Stack & Alasan
+## Tech Stack
 
 | Teknologi | Peran | Alasan |
 |:---|:---|:---|
