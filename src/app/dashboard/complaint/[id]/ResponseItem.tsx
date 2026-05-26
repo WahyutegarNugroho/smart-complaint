@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { MoreVertical, Edit2, Trash2, Check, X, Loader2 } from 'lucide-react'
 import { deleteResponse, editResponse } from '@/app/dashboard/actions'
+import ConfirmModal from '@/components/ConfirmModal'
 
 interface ResponseItemProps {
   res: {
@@ -27,6 +28,8 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
   const [isDeleting, setIsDeleting] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   const isAuthor = res.officerId === currentProfileId
   const canDelete = isAuthor || isAdmin
@@ -38,11 +41,11 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
   const timeStr = isNaN(date.getTime()) ? '--:--' : date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 
   const handleDelete = async () => {
-    if (!confirm('Hapus tanggapan ini?')) return
+    setShowDeleteModal(false)
     setIsDeleting(true)
     const result = await deleteResponse(res.id)
     if (result.error) {
-      alert(result.error)
+      setErrorMsg(result.error || null)
       setIsDeleting(false)
     }
   }
@@ -54,7 +57,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
     if (result.success) {
       setIsEditing(false)
     } else {
-      alert(result.error)
+      setErrorMsg(result.error || null)
     }
     setIsSaving(false)
   }
@@ -97,9 +100,9 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                          <Edit2 size={12} /> Edit
                        </button>
                      )}
-                     {canDelete && (
-                       <button 
-                         onClick={() => { handleDelete(); setShowMenu(false); }}
+                      {canDelete && (
+                        <button 
+                          onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
                          className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
                        >
                          {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Hapus
@@ -112,11 +115,19 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
           )}
         </div>
 
-        {isEditing ? (
+          {errorMsg && (
+            <div className="w-full p-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 font-medium">
+              {errorMsg}
+              <button onClick={() => setErrorMsg(null)} className="ml-2 text-red-400 hover:text-red-600">&times;</button>
+            </div>
+          )}
+
+          {isEditing ? (
           <div className="w-full space-y-2">
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              aria-label="Edit tanggapan"
               className="w-full p-4 rounded-2xl bg-brand-canvas-soft border-2 border-brand-primary/30 text-sm text-brand-ink focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 resize-none"
               rows={3}
             />
@@ -149,6 +160,16 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        open={showDeleteModal}
+        title="Hapus Tanggapan"
+        message="Apakah Anda yakin ingin menghapus tanggapan ini? Tindakan ini tidak dapat dibatalkan."
+        confirmLabel="Ya, Hapus"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+      />
     </div>
   )
 }

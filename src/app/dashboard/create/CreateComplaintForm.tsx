@@ -244,6 +244,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                       <select
                         value={selectedChildId}
                         onChange={(e) => setSelectedChildId(e.target.value)}
+                        aria-label="Sub kategori"
                         className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-sm font-bold text-brand-ink appearance-none outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all cursor-pointer"
                       >
                         <option value="">Pilih sub-kategori...</option>

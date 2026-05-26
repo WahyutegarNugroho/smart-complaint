@@ -12,13 +12,13 @@ export async function adminDeleteComplaint(formData: FormData) {
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return
     const { user } = auth
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
     if (!profile || profile.role !== 'ADMIN') return
 
     const id = formData.get('id') as string
     const complaint = await prisma.complaint.findUnique({
       where: { id },
-      include: { author: true }
+      select: { title: true, authorId: true, author: { select: { name: true } } }
     })
 
     if (!complaint) return

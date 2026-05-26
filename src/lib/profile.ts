@@ -7,7 +7,7 @@ import { User } from '@supabase/supabase-js'
 export type ProfileResponse = 
   | { profile: null; user: null; status: 'UNAUTHENTICATED' }
   | { profile: Profile; user: User; status: 'AUTHENTICATED' }
-  | { profile: null; user: null; status: 'ERROR'; error: string; stack?: string }
+  | { profile: null; user: null; status: 'ERROR'; error: string }
 
 export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
   try {
@@ -41,8 +41,7 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
       profile: null, 
       user: null, 
       status: 'ERROR',
-      error: error?.message || String(err),
-      stack: error?.stack
+      error: error?.message || String(err)
     }
   }
 })

@@ -15,7 +15,7 @@ export default async function MapPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
   if (!profile) redirect('/dashboard')
 
   const complaints = await prisma.complaint.findMany({

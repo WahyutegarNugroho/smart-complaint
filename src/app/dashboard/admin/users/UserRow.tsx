@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { updateUserRole, toggleUserVerification, deleteUserAccount } from '@/app/dashboard/actions'
-import { 
+import {
   ShieldCheck,
   Trash2,
   CheckCircle2,
@@ -12,10 +12,12 @@ import {
   User,
   ChevronRight
 } from 'lucide-react'
+import ConfirmModal from '@/components/ConfirmModal'
 import { Profile } from '@prisma/client'
 
 export default function UserRow({ user }: { user: Profile }) {
   const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -77,6 +79,7 @@ export default function UserRow({ user }: { user: Profile }) {
                   name="role" 
                   defaultValue={user.role}
                   onChange={(e) => e.target.form?.requestSubmit()}
+                  aria-label="Ubah role pengguna"
                   className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-lg px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none cursor-pointer transition-all"
                 >
                   <option value="MASYARAKAT">Warga</option>
@@ -96,16 +99,9 @@ export default function UserRow({ user }: { user: Profile }) {
         </td>
         <td className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-right bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 z-10 transition-colors" onClick={(e) => e.stopPropagation()}>
            <div className="flex items-center justify-end gap-3">
-              <form action={async (formData) => {
-                if(!confirm('Hapus akun pengguna ini secara permanen?')) return
-                try {
-                  await deleteUserAccount(formData)
-                } catch (dbError) {
-                  if (dbError instanceof Error && ('digest' in dbError) && (dbError as { digest: string }).digest.startsWith('NEXT_REDIRECT')) throw dbError
-                }
-              }}>
+              <form action={deleteUserAccount}>
                  <input type="hidden" name="profileId" value={user.id} />
-                  <button aria-label="Hapus pengguna" className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/del">
+                  <button type="button" onClick={() => setShowDeleteModal(true)} aria-label="Hapus pengguna" className="h-10 w-10 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl flex items-center justify-center text-slate-200 dark:text-slate-700 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-500 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/30 group/del">
                      <Trash2 size={16} className="group-hover/del:scale-110 transition-transform" />
                   </button>
               </form>
@@ -117,6 +113,18 @@ export default function UserRow({ user }: { user: Profile }) {
       </tr>
 
       {/* 🔍 DETAIL MODAL */}
+      <ConfirmModal
+        open={showDeleteModal}
+        title="Hapus Akun"
+        message="Hapus akun pengguna ini secara permanen? Semua data terkait akan dihapus."
+        confirmLabel="Ya, Hapus"
+        variant="danger"
+        onConfirm={() => {
+          setShowDeleteModal(false)
+        }}
+        onCancel={() => setShowDeleteModal(false)}
+      />
+
       {showModal && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
           <div 
@@ -172,13 +180,13 @@ export default function UserRow({ user }: { user: Profile }) {
                   <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      NIK
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.nik || 'Belum diisi'}</p>
+                   <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.nik ? `****${user.nik.slice(-4)}` : 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
                   <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
                      Kontak WhatsApp
                   </p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.phone || 'Belum diisi'}</p>
+                   <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.phone ? `****${user.phone.slice(-4)}` : 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
                   <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">

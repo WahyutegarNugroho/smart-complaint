@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
-import { updateComplaintStatus, respondToComplaint } from '@/app/dashboard/actions'
+import { respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
 import Image from 'next/image'
 import { 
@@ -18,15 +18,17 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
-import DeleteComplaintButton from './DeleteComplaintButton'
 import CitizenDeleteButton from './CitizenDeleteButton'
 import ResponseFileHandler from './ResponseFileHandler'
 import ResponseItem from './ResponseItem'
 import SubmitButton from '@/components/SubmitButton'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
 import PrintReceiptButton from './PrintReceiptButton'
+import EscalationStatus from './EscalationStatus'
+import StaffActionsPanel from './StaffActionsPanel'
 import { LocationView } from '@/components/map'
 import { getEscalationInfo } from '@/lib/escalation'
+import { isStaff, isAdmin as checkIsAdmin } from '@/lib/authorization'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -59,8 +61,8 @@ export default async function ComplaintDetailPage({
 
   if (!complaint) redirect('/dashboard')
 
-  const canManage = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
-  const isAdmin = profile.role === 'ADMIN'
+  const canManage = isStaff(profile)
+  const isAdmin = checkIsAdmin(profile)
   const isAuthor = complaint.authorId === profile.id
   const escalationLogs = await getEscalationInfo(complaint.id)
 
@@ -206,6 +208,7 @@ export default async function ComplaintDetailPage({
                         required 
                         placeholder="Ketik tanggapan Anda di sini..." 
                         rows={4}
+                        aria-label="Tulis tanggapan"
                         className="w-full bg-transparent border-none rounded-[1.5rem] px-6 py-5 text-sm text-brand-ink placeholder:text-brand-ink/30 outline-none resize-none font-medium transition-all"
                       />
                       
@@ -243,97 +246,17 @@ export default async function ComplaintDetailPage({
             )}
 
             {canManage && (
-              <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-sm transition-all">
-                <div className="flex items-center gap-4 mb-8">
-                   <div className="h-12 w-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                      <ShieldAlert size={24} />
-                   </div>
-                   <div>
-                      <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Moderasi</h3>
-                      <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Kontrol Status Laporan</p>
-                   </div>
-                </div>
-                
-                <form action={updateComplaintStatus} className="space-y-6">
-                  <input type="hidden" name="id" value={complaint.id} />
-                  <div>
-                    <label className="block text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em] mb-3 ml-1">Ubah Progress</label>
-                    <div className="relative group">
-                       <select 
-                         name="status" 
-                         defaultValue={complaint.status}
-                         className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-[11px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none appearance-none cursor-pointer transition-all"
-                       >
-                         <option value="PENDING" className="dark:bg-brand-canvas">🕒 MENUNGGU KONFIRMASI</option>
-                         <option value="PROCESSING" className="dark:bg-brand-canvas">⚙️ SEDANG DIPROSES</option>
-                         <option value="COMPLETED" className="dark:bg-brand-canvas">✅ DINYATAKAN SELESAI</option>
-                       </select>
-                    </div>
-                  </div>
-                  <SubmitButton 
-                    className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4.5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-xl active:scale-[0.98] cursor-pointer"
-                    loadingText="Menyimpan..."
-                  >
-                    Simpan Perubahan
-                  </SubmitButton>
-                </form>
-
-                {isAdmin && (
-                   <div className="mt-10 pt-10 border-t border-brand-hairline">
-                      <p className="text-[9px] font-bold text-red-500 uppercase tracking-[0.2em] mb-5 ml-1">Tindakan Destruktif</p>
-                      <DeleteComplaintButton id={complaint.id} />
-                   </div>
-                )}
-              </div>
+              <StaffActionsPanel
+                complaintId={complaint.id}
+                currentStatus={complaint.status}
+                isAdmin={isAdmin}
+              />
             )}
 
-            {/* ⚠️ Escalation Status */}
-            {complaint.escalationLevel !== 'NONE' && (
-              <div className={`bg-brand-canvas p-8 rounded-[2rem] border shadow-sm transition-all ${
-                complaint.escalationLevel === 'LEVEL_3' ? 'border-red-500/30' : 
-                complaint.escalationLevel === 'LEVEL_2' ? 'border-amber-500/30' : 'border-orange-500/30'
-              }`}>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center border ${
-                    complaint.escalationLevel === 'LEVEL_3' ? 'bg-red-500/10 text-red-600 border-red-500/20' : 
-                    complaint.escalationLevel === 'LEVEL_2' ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 
-                    'bg-orange-500/10 text-orange-600 border-orange-500/20'
-                  }`}>
-                    <Zap size={24} fill="currentColor" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Eskalasi Level {
-                      complaint.escalationLevel === 'LEVEL_3' ? '3' :
-                      complaint.escalationLevel === 'LEVEL_2' ? '2' : '1'
-                    }</h3>
-                    <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
-                      {complaint.escalationLevel === 'LEVEL_3' ? 'Melebihi SLA penanganan' :
-                       complaint.escalationLevel === 'LEVEL_2' ? 'Melebihi SLA tanggapan awal' :
-                       'Perlu perhatian'}
-                    </p>
-                  </div>
-                </div>
-
-                {escalationLogs.length > 0 && (
-                  <div className="space-y-4 pl-2">
-                    {escalationLogs.map((log) => (
-                      <div key={log.id} className="flex gap-4">
-                        <div className="w-2 h-2 rounded-full bg-amber-500 mt-2 shrink-0" />
-                        <div>
-                          <p className="text-[12px] font-bold text-brand-ink">{log.reason}</p>
-                          <p className="text-[10px] font-medium text-brand-ink/40">
-                            {new Date(log.createdAt).toLocaleDateString('id-ID', {
-                              day: 'numeric', month: 'short', year: 'numeric',
-                              hour: '2-digit', minute: '2-digit'
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+            <EscalationStatus
+              escalationLevel={complaint.escalationLevel}
+              escalationLogs={escalationLogs}
+            />
 
             {/* Timeline / Progress */}
             <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-sm relative overflow-hidden transition-all group">

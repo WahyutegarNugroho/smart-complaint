@@ -20,6 +20,16 @@ jobs:
 
       - run: npm ci
 
+      - name: Dependency audit
+        run: npm audit --audit-level=high || true
+
+      - name: Scan for secrets in git history
+        run: |
+          if git log --all --oneline --diff-filter=A -- '.env' 2>/dev/null | grep -q .; then
+            echo "::error::SECURITY: .env file detected in git history! Run 'git filter-branch' to remove it."
+            exit 1
+          fi
+
       - run: npx prisma generate
 
       - run: npx tsc --noEmit

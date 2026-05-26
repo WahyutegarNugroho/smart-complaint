@@ -31,7 +31,8 @@ export default async function ExportPage() {
   if (!user) redirect('/login')
 
   const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
+    where: { userId: user.id },
+    select: { role: true, name: true }
   })
 
   if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')

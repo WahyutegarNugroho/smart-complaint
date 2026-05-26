@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { isStaff } from '@/lib/authorization'
 
 export async function GET(
   request: Request,
@@ -19,13 +20,12 @@ export async function GET(
   if (!complaint) return NextResponse.json({ error: 'Not Found' }, { status: 404 })
 
   // 🛡️ SECURITY: Only author or staff can view details
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
   if (!profile) return NextResponse.json({ error: 'Profile required' }, { status: 403 })
 
-  const isStaff = profile.role === 'ADMIN' || profile.role === 'PETUGAS'
   const isAuthor = complaint.authorId === profile.id
 
-  if (!isStaff && !isAuthor) {
+  if (!isStaff(profile) && !isAuthor) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

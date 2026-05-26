@@ -12,7 +12,8 @@ export async function updateProfile(formData: FormData) {
 
   try {
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { id: true }
     })
     if (!profile) throw new Error('profile_not_found')
 

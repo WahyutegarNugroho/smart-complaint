@@ -7,7 +7,7 @@ export async function createAuditLog(action: string, details: string) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true } })
     if (!profile) return
 
     await prisma.auditLog.create({

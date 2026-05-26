@@ -17,6 +17,11 @@ export async function processEscalations() {
   const now = new Date()
   let escalatedCount = 0
 
+  const adminIds = await prisma.profile.findMany({
+    where: { role: 'ADMIN' },
+    select: { id: true },
+  })
+
   for (const rule of SLA_RULES) {
     const cutoff = new Date(now.getTime() - rule.hours * 60 * 60 * 1000)
 
@@ -55,20 +60,14 @@ export async function processEscalations() {
           }),
         ])
 
-        if (rule.level === 'LEVEL_2') {
-          const admins = await prisma.profile.findMany({
-            where: { role: 'ADMIN' },
-            select: { id: true },
+        if (rule.level === 'LEVEL_2' && adminIds.length > 0) {
+          await prisma.notification.createMany({
+            data: adminIds.map(admin => ({
+              userId: admin.id,
+              message: `Laporan "${complaint.title}" (RT ${complaint.rt}/${complaint.rw}) sudah 48 jam, perlu perhatian segera.`,
+              type: 'WARNING' as const,
+            })),
           })
-          for (const admin of admins) {
-            await prisma.notification.create({
-              data: {
-                userId: admin.id,
-                message: `Laporan "${complaint.title}" (RT ${complaint.rt}/${complaint.rw}) sudah 48 jam, perlu perhatian segera.`,
-                type: 'WARNING',
-              },
-            })
-          }
         }
 
         escalatedCount++

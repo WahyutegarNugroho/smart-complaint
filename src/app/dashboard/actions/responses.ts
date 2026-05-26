@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { validateString, validateEnum } from '@/lib/validate'
 import { resetEscalation } from '@/lib/escalation'
-import { uploadImage } from '@/lib/upload'
+import { uploadImage, UPLOAD_ERROR_MAP } from '@/lib/upload'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { STATUS_LABELS } from '@/lib/constants'
 import { getAuthenticatedProfile, getAuthenticatedUserOptional } from '@/lib/auth'
@@ -19,7 +19,8 @@ export async function respondToComplaint(formData: FormData) {
     const { user, profile } = await getAuthenticatedProfile()
 
     const existingComplaint = await prisma.complaint.findUnique({
-      where: { id: complaintId }
+      where: { id: complaintId },
+      select: { status: true, authorId: true, title: true }
     })
 
     if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint?.authorId !== profile.id)) {
@@ -38,10 +39,11 @@ export async function respondToComplaint(formData: FormData) {
     let responseImageUrl = null
 
     if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
-      try {
-        responseImageUrl = await uploadImage(imageFile, user.id, 'res')
-      } catch (uploadExc) {
-        console.error('File Processing Exception:', uploadExc)
+      const result = await uploadImage(imageFile, user.id, 'res')
+      if (result.success) {
+        responseImageUrl = result.url
+      } else {
+        redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(UPLOAD_ERROR_MAP[result.error])}`)
       }
     }
 
@@ -104,7 +106,8 @@ export async function deleteResponse(responseId: string) {
     if (!auth) return { error: 'Unauthorized' }
     const { user } = auth
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { id: true, role: true }
     })
     if (!profile) return { error: 'Profile not found' }
 
@@ -135,7 +138,8 @@ export async function editResponse(responseId: string, content: string) {
     if (!auth) return { error: 'Unauthorized' }
     const { user } = auth
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { id: true }
     })
     if (!profile) return { error: 'Profile not found' }
 

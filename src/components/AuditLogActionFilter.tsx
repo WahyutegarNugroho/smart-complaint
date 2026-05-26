@@ -19,6 +19,7 @@ export default function AuditLogActionFilter({ filterAction, baseUrl }: AuditLog
       <select
         name="action"
         defaultValue={filterAction || ''}
+        aria-label="Filter tindakan"
         onChange={(e) => e.target.form?.requestSubmit()}
         className="bg-brand-canvas-soft border border-brand-hairline rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none cursor-pointer transition-all"
       >

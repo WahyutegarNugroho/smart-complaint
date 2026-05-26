@@ -7,188 +7,160 @@
 [![Supabase Backend](https://img.shields.io/badge/Supabase-Enabled-3ecf8e?style=for-the-badge&logo=supabase)](https://supabase.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](#license)
 
-A high-end, responsive, and secure residential community complaint management platform designed for the **Pesona Serpong** housing complex. Inspired by the sleek, typography-heavy **Wise (TransferWise) design philosophy**, it features a warm, sage-canvas light mode, premium dark mode, secure Role-Based Access Control (RBAC), robust Server Action-driven workflows, and real-time community announcements.
+---
+
+## Nama Project
+
+**SmartComplaint** — Platform Pengaduan Warga Perumahan Pesona Serpong
 
 ---
 
-## Short Description
-**SmartComplaint** bridges the communication gap between citizens, neighborhood officers, and administrators. It empowers residents to file geo-localized complaints with real-time photo uploads, tracks reports through an interactive visual lifecycle (Pending ➜ Processing ➜ Completed), and hosts administrative announcement broadcasts to foster a transparent, cooperative, and safe neighborhood environment.
+## Deskripsi Singkat
+
+SmartComplaint menjembatani kesenjangan komunikasi antara warga, petugas lingkungan (RT/RW), dan administrator perumahan. Warga dapat mengirim laporan berbasis lokasi dengan foto, melacak status secara real-time (Pending → Diproses → Selesai), dan menerima pengumuman resmi dari pengurus — semua dalam satu platform yang modern, responsif, dan aman.
 
 ---
 
-## The Problem it Solves
-Traditional residential management often suffers from fragmented and archaic communication channels:
-1. **Scattered & Unstructured Chats**: Complaints sent in WhatsApp groups are quickly buried under standard banter, leading to overlooked issues and forgotten infrastructure work.
-2. **Lack of Transparency**: Residents file complaints but have no visibility into whether their concerns are received, actively worked on, or resolved.
-3. **No Centralized History**: Neighborhood associations (RT/RW) lack comprehensive logs or audit trails of historical issues to guide budgeting and town hall decisions.
-4. **Coordination Overhead**: Manually sorting reports by category (e.g., Security, Cleanliness, Infrastructure) and prioritization (Urgent vs. Standard) is tedious and error-prone.
+## Problem yang Diselesaikan
 
-**SmartComplaint solves this by providing a unified, real-time command center** where every report is categorized, assigned an urgency flag, tracked with visual timeline updates, and accompanied by transparent, official response threads.
+1. **Komunikasi Tersebar** — Laporan di grup WhatsApp cepat tertimbun obrolan lain, menyebabkan banyak keluhan terlewat dan tidak tertangani.
+2. **Tidak Ada Transparansi** — Warga melapor tapi tidak bisa melihat apakah laporannya diterima, diproses, atau sudah selesai.
+3. **Tidak Ada Riwayat Terpusat** — Pengurus RT/RW tidak memiliki catatan historis keluhan untuk evaluasi dan pengambilan keputusan.
+4. **Koordinasi Manual** — Memilah laporan berdasarkan kategori (Keamanan, Kebersihan, Fasilitas) dan prioritas (Urgent/Normal) secara manual rentan salah dan memakan waktu.
 
----
-
-## Main Features
-
-### 1. Full-Fidelity Citizen Reports
-* **Categorized Filing**: Submit issues under dedicated domains (e.g., Infrastructure, Security, Waste Management, General).
-* **Geo-Location Details**: Specify exact RT/RW coordinates, block, and house numbers for pinpoint repair routing.
-* **Photo Attachments**: Directly upload images demonstrating issues (e.g., street light outages, garbage piles) backed securely by **Supabase Storage**.
-* **Urgency Toggle**: Flag critical incidents (e.g., security breaches) to draw immediate attention.
-
-### 2. Dynamic Status Lifecycles & Responses
-* **Status Pipeline**: Watch tickets move dynamically across `PENDING`, `PROCESSING`, and `COMPLETED` phases.
-* **Interactive Officer Thread**: Officers can post official updates, attach completion images, and adjust statuses in real-time.
-* **Revision Flow**: Residents retain full control to edit or withdraw their reports as needed.
-
-### 3. Board Announcements & Alerts
-* **Official Bulletins**: Admins can publish, update, or pin community announcements directly onto the user dashboard.
-* **Notification Stream**: Users receive immediate in-app notifications if an administrator takes actions on their report or releases new notices.
-
-### 4. Strict Role-Based Security (RBAC)
-Three distinct, non-overlapping user segments govern the application:
-* **Masyarakat (Citizen)**: File, edit, and track personal complaints, read announcements, and manage profiles.
-* **Petugas (Officer)**: Review all neighborhood complaints, submit official response updates with images, and transition ticket statuses.
-* **Admin (Administrator)**: Full supervisory control — verify newly registered residents, promote users to officers, audit/delete content, and publish global announcements.
-
-### 5. Statistical Dashboard Widgets
-* Fully functional analytics widgets displaying critical KPIs: **Total Reports**, **Tuntas Ditangani (95% Resolution Rate)**, **Average Response Time (12h)**, and **Active Blocks**.
-
-### 6. Premium Wise-Inspired Aesthetic
-* **Palette**: Tailored HSL colors, featuring the signature vivid lime-green CTA pill (`#9fe870`), pale sage-tinted background canvas (`#e8ebe6`), and deep olive-warm ink (`#0e0f0c`).
-* **Micro-Animations**: Smooth scale transforms, page transitions, and loading states for a highly premium, fluid interface.
-* **Responsive Touch-Targets**: Fully optimized for mobile screens, tablets, and desktops using WCAG AAA standards.
+SmartComplaint menyediakan **command center terpadu** di mana setiap laporan terkategori, terprioritaskan, terlacak statusnya, dan disertai thread tanggapan resmi dari petugas.
 
 ---
 
-## Tech Stack & Rationales
+## Fitur Utama
 
-| Technology | Role | Rationale |
+### 1. Laporan Warga dengan Geolokasi & Foto
+- Input detail RT/RW, alamat, dan titik koordinat.
+- Upload foto kejadian didukung Supabase Storage.
+- Toggle urgensi untuk laporan darurat.
+
+### 2. Siklus Hidup Status & Tanggapan
+- Status: `PENDING` → `PROCESSING` → `COMPLETED`.
+- Petugas bisa menambahkan tanggapan, mengupload foto penyelesaian, dan mengubah status.
+- Warga bisa mengedit atau menarik laporan yang masih berstatus PENDING.
+
+### 3. Eskalasi SLA Otomatis
+- Sistem otomatis menaikkan level eskalasi (24h/48h/72h) jika laporan tidak ditangani sesuai SLA.
+- Admin mendapat notifikasi jika laporan sudah 48 jam tanpa tanggapan.
+
+### 4. Pengumuman Resmi
+- Admin dapat menerbitkan, mengedit, dan menghapus pengumuman.
+- Pengumuman muncul di dashboard seluruh warga.
+
+### 5. Keamanan Role-Based (RBAC)
+- **Warga (Masyarakat)**: Buat, edit, lacak laporan pribadi.
+- **Petugas**: Review semua laporan, beri tanggapan, ubah status.
+- **Admin**: Verifikasi akun, kelola role pengguna, audit, hapus konten.
+
+### 6. Dashboard Statistik & Peta
+- Grafik status, distribusi per RT, dan peta sebaran laporan interaktif.
+- KPI: Total laporan, tingkat penyelesaian, response time.
+
+### 7. Ekspor Data
+- Unduh laporan dalam format PDF (ringkasan eksekutif), CSV, dan XLSX.
+- Limit paginasi (max 5000 record) untuk keamanan.
+
+### 8. Cetak Tanda Terima
+- Setiap laporan bisa dicetak sebagai bukti tanda terima resmi.
+
+---
+
+## Kelebihan & Kekurangan
+
+### Kelebihan
+- **Performa Tinggi**: Server Actions + Prisma select minimal → query database efisien, N+1 hampir tidak ada.
+- **Keamanan**: RBAC ketat, validasi server-side, header keamanan (CSP, HSTS), proteksi IP spoofing, tidak ada stack trace bocor ke client.
+- **UI/UX Premium**: Desain terinspirasi Wise (TransferWise), dark mode, mikro-animasi, responsif di semua perangkat.
+- **Code Quality**: TypeScript strict, lint ketat, zero ESLint errors, reusable components (ConfirmModal, MobileBottomNav).
+- **CI/CD**: GitHub Actions dengan secret scanning + npm audit.
+
+### Kekurangan
+- **Belum Ada Real-time**: Notifikasi dan update status masih refresh-based (belum WebSocket/SSE).
+- **Mobile App**: Belum ada versi native Android/iOS (hanya PWA-compatible web).
+- **Multi-Bahasa**: Hanya mendukung Bahasa Indonesia untuk saat ini.
+- **Ketergantungan Eksternal**: Membutuhkan Supabase (Auth + Storage) dan koneksi internet aktif.
+
+---
+
+## Tech Stack & Alasan
+
+| Teknologi | Peran | Alasan |
 |:---|:---|:---|
-| **Next.js 16 (App Router)** | Framework | Provides optimized Server-Side Rendering (SSR), stable Server Actions, layout persistence, and lightning-fast page loading times. |
-| **React 19** | Frontend Engine | Utilizes standard high-performance concurrent rendering features and native form-handling states. |
-| **Tailwind CSS v4** | UI Styling | Standard-setting utility library, enabling rapid execution of the customized Wise design tokens and responsive layout structure. |
-| **Supabase Client & Auth** | Security / Storage | Provides industry-grade authentication, secure session handling, JWT parsing, and scalable, encrypted binary storage buckets. |
-| **Prisma ORM** | Data Mapping | Direct type-safe Prisma Client, abstracting raw SQL queries and facilitating robust, clean database schema migrations. |
-| **PostgreSQL** | Database | High-performance relational database hosted on Supabase, guaranteeing transactions, consistency, and efficient index lookups. |
-| **Lucide React** | Iconography | Crisp, lightweight, and modern vector icon pack supporting high visual accessibility. |
+| **Next.js 16 (App Router)** | Framework | SSR optimal, Server Actions bawaan, routing intuitif, build size kecil. |
+| **React 19** | Frontend Engine | Concurrent rendering, form native state, ekosistem luas. |
+| **Tailwind CSS v4** | Styling | Utility-first, kustomisasi desain cepat, bundle kecil. |
+| **Supabase (Auth + Storage)** | Keamanan & Media | Auth JWT built-in, storage terenkripsi, integrasi mudah dengan Next.js. |
+| **Prisma ORM** | Database | Type-safe query, migrasi mudah, dukungan PostgreSQL penuh. |
+| **PostgreSQL** | Database | Reliabel, transaksional, performa index lookup tinggi. |
+| **Lucide React** | Ikon | Ringan, modern, aksesibel. |
+| **PDFKit** | Generate PDF | Library PDF server-side yang stabil dan ringan. |
+| **xlsx** | Generate XLSX | Membuat file Excel tanpa dependency berat. |
 
 ---
 
-## Database Schema
+## Cara Install / Run
 
-The system uses a beautifully structured, highly indexed relational schema managed by Prisma:
+### Prasyarat
+- Node.js v18+
+- npm atau yarn
+- Database PostgreSQL (via Supabase atau lokal)
+- Project Supabase (Auth + Storage bucket `complaints`)
 
-```mermaid
-erDiagram
-    Profile ||--o{ Complaint : "author"
-    Profile ||--o{ Response : "officer"
-    Profile ||--o{ Announcement : "author"
-    Profile ||--o{ Notification : "user"
-    Profile ||--o{ AuditLog : "admin"
-    Complaint ||--o{ Response : "has"
+### Langkah-Langkah
 
-    Profile {
-        String id PK
-        String userId UK
-        String username UK
-        String name
-        String nik
-        String phone
-        String address
-        String rt
-        String rw
-        Role role
-        Boolean isVerified
-        DateTime createdAt
-    }
+```bash
+# 1. Clone repositori
+git clone https://github.com/WahyutegarNugroho/smart-complaint.git
+cd smart-complaint
 
-    Complaint {
-        String id PK
-        String title
-        String content
-        String location
-        String rt
-        String rw
-        DateTime incidentDate
-        String imageUrl
-        Status status
-        Boolean isUrgent
-        String category
-        String authorId FK
-        DateTime createdAt
-    }
+# 2. Install dependencies
+npm install
 
-    Response {
-        String id PK
-        String content
-        String imageUrl
-        String complaintId FK
-        String officerId FK
-        DateTime createdAt
-    }
+# 3. Buat file .env
+# Salin dari .env.example dan isi konfigurasi:
+#   DATABASE_URL, DIRECT_URL (PostgreSQL)
+#   NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY (Supabase)
+#   CRON_SECRET (untuk endpoint cron eskalasi)
+cp .env.example .env
 
-    Announcement {
-        String id PK
-        String title
-        String content
-        String authorId FK
-        DateTime createdAt
-    }
+# 4. Inisialisasi database
+npx prisma db push
+npx prisma generate
+
+# 5. Jalankan development server
+npm run dev
+# Buka http://localhost:3000
+
+# Build untuk production
+npm run build
+npm start
+```
+
+### Environment Variables (.env)
+
+```env
+# Database
+DATABASE_URL="postgresql://user:pass@host:5432/db?pgbouncer=true"
+DIRECT_URL="postgresql://user:pass@host:5432/db"
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+
+# Cron (untuk endpoint /api/cron/escalate)
+CRON_SECRET="your-cron-secret"
+
+# App URL (untuk redirect setelah reset password)
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
 ---
 
-## Installation & Quick Start
+## Lisensi
 
-Follow these steps to get a local development instance of **SmartComplaint** up and running.
-
-### Prerequisites
-* **Node.js** (v18+ recommended)
-* **npm** or **yarn**
-* A running **PostgreSQL** database (e.g., via Supabase or local PostgreSQL)
-* A **Supabase** project for Auth and Storage (with a bucket named `complaints` set to public access).
-
-### Step-by-Step Setup
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/WahyutegarNugroho/smart-complaint.git
-   cd smart-complaint
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables**
-   Create a `.env` file in the root directory and configure the following variables:
-   ```env
-   # PostgreSQL Connection URLs (Supabase Pooling / Direct)
-   DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<db_name>?pgbouncer=true"
-   DIRECT_URL="postgresql://<username>:<password>@<host>:<port>/<db_name>"
-
-   # Supabase Keys
-   NEXT_PUBLIC_SUPABASE_URL="https://your-supabase-project.supabase.co"
-   NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
-   ```
-
-4. **Initialize the Database**
-   Push the schema to your database and generate the client:
-   ```bash
-   npx prisma db push
-   npx prisma generate
-   ```
-
-5. **Run the Development Server**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) with your browser to experience the platform!
-
----
-
-## License
-This project is licensed under the [MIT License](LICENSE) — feel free to customize and redistribute as desired.
-
-© 2026 whtsn dev.
+**MIT License** — © 2026 whtsn dev.

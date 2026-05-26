@@ -157,6 +157,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
               type="text" 
               defaultValue={searchQuery}
               placeholder={isWarga ? "Cari laporan Anda..." : "Cari laporan warga..."}
+              aria-label="Cari laporan"
               className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl pl-14 pr-4 py-4 text-sm font-medium text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all shadow-sm"
             />
           </form>
@@ -166,8 +167,8 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
              <form className="flex gap-2 w-full" action="/dashboard" method="GET">
                {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
                {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
-               <input name="rt" type="text" defaultValue={rt} placeholder="RT" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
-               <input name="rw" type="text" defaultValue={rw} placeholder="RW" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
+               <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
+                <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
                <button type="submit" className="px-6 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 transition-all cursor-pointer">
                   Filter
                </button>
@@ -184,7 +185,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         {rw && <input type="hidden" name="rw" value={rw} />}
         <div className="flex-1 min-w-[140px]">
           <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Kategori</label>
-          <select name="category" defaultValue={categoryFilter || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
+          <select name="category" defaultValue={categoryFilter || ''} aria-label="Filter kategori" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
             <option value="">Semua Kategori</option>
             {categoryOptions.map((cat) => (
               <option key={cat.id} value={cat.slug}>{cat.name}</option>
@@ -193,11 +194,11 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         </div>
         <div className="flex-1 min-w-[120px]">
           <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
-          <input name="fromDate" type="date" defaultValue={fromDate || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
+          <input name="fromDate" type="date" defaultValue={fromDate || ''} aria-label="Dari tanggal" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
         </div>
         <div className="flex-1 min-w-[120px]">
           <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
-          <input name="toDate" type="date" defaultValue={toDate || ''} className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
+          <input name="toDate" type="date" defaultValue={toDate || ''} aria-label="Sampai tanggal" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
         </div>
         <button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
           <Filter size={14} /> Terapkan

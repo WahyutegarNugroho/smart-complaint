@@ -19,7 +19,7 @@ export default async function AdminStatsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
   if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
 
   // Data for Status Chart

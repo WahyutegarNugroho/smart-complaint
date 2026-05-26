@@ -9,11 +9,12 @@ export async function markNotificationAsRead(notificationId: string) {
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return
     const { user } = auth
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true } })
     if (!profile) return
 
     const notification = await prisma.notification.findUnique({
-      where: { id: notificationId }
+      where: { id: notificationId },
+      select: { id: true, userId: true }
     })
     if (!notification || notification.userId !== profile.id) return
 

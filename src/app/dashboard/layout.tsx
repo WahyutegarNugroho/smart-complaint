@@ -38,7 +38,7 @@ export default async function DashboardLayout({
   
   // Handle database error status gracefully
   if (data.status === 'ERROR') {
-    return <SessionErrorState error={data.error} stack={data.stack} />
+    return <SessionErrorState error={data.error} />
   }
 
   if (!data.profile) {

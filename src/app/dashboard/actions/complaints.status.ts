@@ -8,15 +8,17 @@ import { resetEscalation } from '@/lib/escalation'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { STATUS_LABELS } from '@/lib/constants'
 import { getAuthenticatedUser } from '@/lib/auth'
+import { isStaff } from '@/lib/authorization'
 
 export async function toggleUrgentStatus(formData: FormData) {
   let complaintId = ''
   try {
     const { user } = await getAuthenticatedUser()
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { id: true, role: true }
     })
-    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'PETUGAS')) {
+    if (!isStaff(profile)) {
       throw new Error('Izin ditolak')
     }
 
@@ -42,9 +44,10 @@ export async function updateComplaintStatus(formData: FormData) {
   try {
     const { user } = await getAuthenticatedUser()
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { id: true, role: true }
     })
-    if (!profile || (profile.role !== 'ADMIN' && profile.role !== 'PETUGAS')) {
+    if (!isStaff(profile)) {
       throw new Error('Izin ditolak: Hanya petugas yang bisa mengubah status')
     }
 
@@ -55,7 +58,8 @@ export async function updateComplaintStatus(formData: FormData) {
 
     const updatedComplaint = await prisma.complaint.update({
       where: { id },
-      data: { status }
+      data: { status },
+      select: { authorId: true, title: true }
     })
 
     if (status === 'COMPLETED' || status === 'PROCESSING') {

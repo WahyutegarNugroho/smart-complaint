@@ -2,14 +2,15 @@
 
 import { useState } from 'react'
 import { deleteAnnouncement, updateAnnouncement } from '@/app/dashboard/actions'
-import { 
-  Trash2, 
+import {
+  Trash2,
   User,
   Calendar,
   Edit3,
   Check,
   Megaphone
 } from 'lucide-react'
+import ConfirmModal from '@/components/ConfirmModal'
 
 interface Announcement {
   id: string;
@@ -27,6 +28,7 @@ interface AnnouncementItemProps {
 
 export default function AnnouncementItem({ item }: AnnouncementItemProps) {
   const [isEditing, setIsEditing] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   if (isEditing) {
     return (
@@ -90,12 +92,21 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
           >
             <Edit3 size={16} />
           </button>
-          <form action={deleteAnnouncement} onSubmit={(e) => { if(!confirm('Hapus pengumuman ini?')) e.preventDefault() }}>
+          <form action={deleteAnnouncement}>
             <input type="hidden" name="id" value={item.id} />
-            <button aria-label="Hapus pengumuman" className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 transition-all">
+            <button type="button" onClick={() => setShowDeleteModal(true)} aria-label="Hapus pengumuman" className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 transition-all">
               <Trash2 size={16} />
             </button>
           </form>
+          <ConfirmModal
+            open={showDeleteModal}
+            title="Hapus Pengumuman"
+            message="Hapus pengumuman ini?"
+            confirmLabel="Ya, Hapus"
+            variant="danger"
+            onConfirm={() => { setShowDeleteModal(false); }}
+            onCancel={() => setShowDeleteModal(false)}
+          />
         </div>
       </div>
 

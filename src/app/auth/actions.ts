@@ -12,7 +12,7 @@ import { isRedirectError } from '@/lib/redirect-guard'
 export async function login(formData: FormData) {
   const supabase = await createClient()
   const headerList = await headers()
-  const ip = headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  const ip = headerList.get('x-real-ip') || headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
   const check = await checkLoginAttempt(ip)
   if (check.locked) {
@@ -135,7 +135,11 @@ export async function resetPassword(formData: FormData) {
     redirect('/forgot-password?error=' + encodeURIComponent('Email tidak valid'))
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+  if (!siteUrl) {
+    throw new Error('NEXT_PUBLIC_SITE_URL environment variable is not set')
+  }
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${siteUrl}/reset-password`,
   })

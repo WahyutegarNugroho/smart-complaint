@@ -8,13 +8,14 @@ function escapeCsvField(value: string): string {
   return `"${dangerous.test(value) ? '\t' : ''}${escaped}"`
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })
 
   const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
+    where: { userId: user.id },
+    select: { role: true }
   })
 
   if (!profile || profile.role !== 'ADMIN') {
@@ -22,7 +23,12 @@ export async function GET() {
   }
 
   try {
+    const { searchParams } = new URL(request.url)
+    const limitParam = searchParams.get('limit')
+    const limit = Math.min(Math.max(1, parseInt(limitParam || '500')), 5000)
+
     const complaints = await prisma.complaint.findMany({
+      take: limit,
       include: { author: true },
       orderBy: { createdAt: 'desc' }
     })

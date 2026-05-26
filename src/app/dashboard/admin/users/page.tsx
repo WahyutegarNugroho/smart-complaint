@@ -5,26 +5,33 @@ import UserRow from './UserRow'
 import {
    Users,
    ArrowLeft,
-   Search
+   Search,
+   ChevronLeft,
+   ChevronRight
 } from 'lucide-react'
 import Link from 'next/link'
 import { Profile, Prisma, Role } from '@prisma/client'
 
+const PAGE_SIZE = 20
+
 export default async function AdminUsersPage({
    searchParams
 }: {
-   searchParams: Promise<{ q?: string, role?: string, rt?: string, rw?: string }>
+   searchParams: Promise<{ q?: string, role?: string, rt?: string, rw?: string, page?: string }>
 }) {
-   const { q, role, rt, rw } = await searchParams
+   const { q, role, rt, rw, page: pageStr } = await searchParams
+   const page = Math.max(1, parseInt(pageStr || '1'))
    const supabase = await createClient()
 
    let allUsers: Profile[] = []
+   let totalUsers = 0
    try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) redirect('/login')
 
       const profile = await prisma.profile.findUnique({
-         where: { userId: user.id }
+         where: { userId: user.id },
+         select: { role: true }
       })
 
       if (!profile || profile.role !== 'ADMIN') {
@@ -42,9 +49,13 @@ export default async function AdminUsersPage({
       if (rt) whereClause.rt = rt
       if (rw) whereClause.rw = rw
 
+      totalUsers = await prisma.profile.count({ where: whereClause })
+
       allUsers = await prisma.profile.findMany({
          where: whereClause,
-         orderBy: { createdAt: 'desc' }
+         orderBy: { createdAt: 'desc' },
+         skip: (page - 1) * PAGE_SIZE,
+         take: PAGE_SIZE
       })
    } catch (err) {
       console.error('AdminUsersPage Data Error:', err)
@@ -76,25 +87,26 @@ export default async function AdminUsersPage({
                   <form className="flex flex-col lg:flex-row items-center gap-4 md:gap-6">
                      <div className="flex-1 flex items-center gap-4 w-full px-4">
                         <Search size={18} className="text-slate-300 dark:text-slate-600 group-focus-within:text-blue-500 transition-colors" />
-                        <input
-                           name="q"
-                           type="text"
-                           defaultValue={q}
-                           placeholder="Cari nama atau username warga..."
-                           className="flex-1 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 outline-none h-12"
-                        />
+                         <input
+                            name="q"
+                            type="text"
+                            defaultValue={q}
+                            placeholder="Cari nama atau username warga..."
+                            aria-label="Cari warga"
+                            className="flex-1 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 outline-none h-12"
+                         />
                      </div>
 
                      <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 pt-4 lg:pt-0 lg:pl-6 px-2">
                         <div className="flex gap-2 w-full sm:w-auto">
-                           <select name="role" defaultValue={role} className="flex-1 sm:w-32 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 h-12 text-[10px] font-black uppercase text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-blue-500/20 outline-none cursor-pointer appearance-none text-center">
+                           <select name="role" defaultValue={role} aria-label="Filter role" className="flex-1 sm:w-32 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 h-12 text-[10px] font-black uppercase text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-blue-500/20 outline-none cursor-pointer appearance-none text-center">
                               <option value="">Role</option>
                               <option value="MASYARAKAT">Warga</option>
                               <option value="PETUGAS">Petugas</option>
                               <option value="ADMIN">Admin</option>
                            </select>
-                           <input name="rt" type="text" defaultValue={rt} placeholder="RT" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
-                           <input name="rw" type="text" defaultValue={rw} placeholder="RW" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
+                           <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
+                            <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
                         </div>
                         <button type="submit" className="flex-1 sm:flex-none h-12 bg-slate-900 dark:bg-blue-600 text-white px-8 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95">
                            Terapkan
@@ -137,11 +149,40 @@ export default async function AdminUsersPage({
                            )}
                         </tbody>
                      </table>
-                  </div>
-               </div>
-            </section>
+                   </div>
+                </div>
 
-         </main>
-      </div>
-   )
+                {totalUsers > PAGE_SIZE && (
+                <div className="flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                  <p className="text-xs text-slate-500">
+                    {totalUsers > 0 ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalUsers)} dari ${totalUsers}` : 'Tidak ada data'}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {page > 1 && (
+                      <Link
+                        href={`/dashboard/admin/users?page=${page - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
+                        className="h-9 w-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        aria-label="Halaman sebelumnya"
+                      >
+                        <ChevronLeft size={16} />
+                      </Link>
+                    )}
+                    <span className="text-xs font-bold text-slate-600 dark:text-slate-400 px-3">{page}</span>
+                    {page * PAGE_SIZE < totalUsers && (
+                      <Link
+                        href={`/dashboard/admin/users?page=${page + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
+                        className="h-9 w-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        aria-label="Halaman selanjutnya"
+                      >
+                        <ChevronRight size={16} />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+                )}
+             </section>
+
+          </main>
+       </div>
+    )
 }

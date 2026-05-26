@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { validateString, validateRTRW, validateEnum } from '@/lib/validate'
-import { uploadImage } from '@/lib/upload'
+import { uploadImage, UPLOAD_ERROR_MAP } from '@/lib/upload'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { getAuthenticatedUser, getAuthenticatedProfile } from '@/lib/auth'
 
@@ -27,7 +27,7 @@ export async function createComplaint(formData: FormData) {
     const validCategory = validateEnum(category, ['keamanan', 'kebersihan', 'fasilitas', 'umum'] as const)
     let validCategoryId: string | null = null
     if (rawCategoryId) {
-      const catExists = await prisma.category.findUnique({ where: { id: rawCategoryId } })
+      const catExists = await prisma.category.findUnique({ where: { id: rawCategoryId }, select: { id: true } })
       if (catExists) validCategoryId = catExists.id
     }
     const errTitle = validateString(title, 'Judul', 200)
@@ -37,14 +37,20 @@ export async function createComplaint(formData: FormData) {
     const errRW = validateRTRW(rw, 'RW')
 
     if (errTitle || errContent || errLocation || !validCategory || errRT || errRW) {
-      redirect(`/dashboard?error=${errTitle || errContent || errLocation || 'Kategori tidak valid' || errRT || errRW}`)
+      const errorMsg = errTitle || errContent || errLocation || (errRT || errRW) || (!validCategory ? 'Kategori tidak valid' : '')
+      redirect(`/dashboard?error=${encodeURIComponent(errorMsg)}`)
     }
 
     const imageFile = formData.get('image') as File | null
     let imageUrl = null
 
     if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
-      imageUrl = await uploadImage(imageFile, user.id, 'complaint')
+      const result = await uploadImage(imageFile, user.id, 'complaint')
+      if (result.success) {
+        imageUrl = result.url
+      } else {
+        redirect(`/dashboard?error=${encodeURIComponent(UPLOAD_ERROR_MAP[result.error])}`)
+      }
     }
 
     const rawDate = formData.get('incidentDate') as string
@@ -86,7 +92,7 @@ export async function updateComplaint(formData: FormData) {
     const complaintId = formData.get('id') as string
     const existing = await prisma.complaint.findUnique({
       where: { id: complaintId },
-      include: { author: true }
+      select: { status: true, latitude: true, longitude: true, imageUrl: true, author: { select: { userId: true } } }
     })
 
     if (!existing || existing.author.userId !== user.id) {
@@ -121,8 +127,12 @@ export async function updateComplaint(formData: FormData) {
     let imageUrl = existing.imageUrl
 
     if (imageFile && imageFile.size > 0) {
-      const uploadedUrl = await uploadImage(imageFile, user.id, 'complaint')
-      if (uploadedUrl) imageUrl = uploadedUrl
+      const result = await uploadImage(imageFile, user.id, 'complaint')
+      if (result.success) {
+        imageUrl = result.url
+      } else {
+        redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(UPLOAD_ERROR_MAP[result.error])}`)
+      }
     }
 
     await prisma.complaint.update({
@@ -153,11 +163,12 @@ export async function updateComplaint(formData: FormData) {
 export async function deleteComplaint(formData: FormData) {
   const { user } = await getAuthenticatedUser()
   const profile = await prisma.profile.findUnique({
-    where: { userId: user.id }
+    where: { userId: user.id },
+    select: { id: true, role: true }
   })
 
   const id = formData.get('id') as string
-  const complaint = await prisma.complaint.findUnique({ where: { id } })
+  const complaint = await prisma.complaint.findUnique({ where: { id }, select: { id: true, authorId: true } })
 
   if (!profile || !complaint) redirect('/dashboard')
 

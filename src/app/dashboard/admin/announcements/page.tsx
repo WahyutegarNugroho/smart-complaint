@@ -8,6 +8,7 @@ import {
   Plus, 
   Info,
   ChevronLeft,
+  ChevronRight,
   Send
 } from 'lucide-react'
 import Link from 'next/link'
@@ -22,30 +23,39 @@ interface Announcement {
   };
 }
 
+const PAGE_SIZE = 10
+
 export default async function AdminAnnouncementsPage({
   searchParams
 }: {
-  searchParams: Promise<{ message?: string }>
+  searchParams: Promise<{ message?: string, page?: string }>
 }) {
-  const { message: successMessage } = await searchParams
+  const { message: successMessage, page: pageStr } = await searchParams
+  const page = Math.max(1, parseInt(pageStr || '1'))
   const supabase = await createClient()
 
   let announcements: Announcement[] = []
+  let totalAnnouncements = 0
   try {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) redirect('/login')
 
     const profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { role: true }
     })
 
     if (!profile || profile.role !== 'ADMIN') {
       redirect('/dashboard')
     }
 
+    totalAnnouncements = await prisma.announcement.count()
+
     announcements = await prisma.announcement.findMany({
       orderBy: { createdAt: 'desc' },
-      include: { author: true }
+      include: { author: true },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE
     })
   } catch (err) {
     console.error('AdminAnnouncementsPage Data Error:', err)
@@ -125,23 +135,52 @@ export default async function AdminAnnouncementsPage({
 
           {/* List Announcements */}
           <div className="lg:col-span-7 space-y-6 md:space-y-8">
-             <div className="flex items-center justify-between px-2">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white transition-colors">Arsip Pengumuman</h3>
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">{announcements.length} Total</span>
-             </div>
+              <div className="flex items-center justify-between px-2">
+                 <h3 className="text-lg font-bold text-slate-900 dark:text-white transition-colors">Arsip Pengumuman</h3>
+                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">{totalAnnouncements} Total</span>
+              </div>
 
-             {announcements.length === 0 ? (
-               <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-20 text-center border border-slate-200 dark:border-slate-800 border-dashed flex flex-col items-center justify-center transition-colors">
-                  <Megaphone size={48} className="text-slate-100 dark:text-slate-800 mb-4" />
-                  <p className="text-slate-400 dark:text-slate-600 text-sm font-bold uppercase tracking-widest">Belum ada pengumuman aktif</p>
-               </div>
-             ) : (
-               <div className="space-y-6">
-                 {announcements.map((item) => (
-                   <AnnouncementItem key={item.id} item={item} />
-                 ))}
-               </div>
-             )}
+              {announcements.length === 0 ? (
+                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-20 text-center border border-slate-200 dark:border-slate-800 border-dashed flex flex-col items-center justify-center transition-colors">
+                   <Megaphone size={48} className="text-slate-100 dark:text-slate-800 mb-4" />
+                   <p className="text-slate-400 dark:text-slate-600 text-sm font-bold uppercase tracking-widest">Belum ada pengumuman aktif</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {announcements.map((item) => (
+                    <AnnouncementItem key={item.id} item={item} />
+                  ))}
+                </div>
+              )}
+
+              {totalAnnouncements > PAGE_SIZE && (
+              <div className="flex items-center justify-between px-2 pt-4">
+                <p className="text-xs text-slate-500">
+                  {totalAnnouncements > 0 ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalAnnouncements)} dari ${totalAnnouncements}` : ''}
+                </p>
+                <div className="flex items-center gap-2">
+                  {page > 1 && (
+                    <Link
+                      href={`/dashboard/admin/announcements?page=${page - 1}${successMessage ? `&message=${encodeURIComponent(successMessage)}` : ''}`}
+                      className="h-9 w-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      aria-label="Halaman sebelumnya"
+                    >
+                      <ChevronLeft size={16} />
+                    </Link>
+                  )}
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-400 px-3">{page}</span>
+                  {page * PAGE_SIZE < totalAnnouncements && (
+                    <Link
+                      href={`/dashboard/admin/announcements?page=${page + 1}${successMessage ? `&message=${encodeURIComponent(successMessage)}` : ''}`}
+                      className="h-9 w-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      aria-label="Halaman selanjutnya"
+                    >
+                      <ChevronRight size={16} />
+                    </Link>
+                  )}
+                </div>
+              </div>
+              )}
           </div>
         </div>
       </main>

@@ -4,20 +4,23 @@ import { revalidatePath } from 'next/cache'
 import prisma from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
 import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
+import { requireAdmin } from '@/lib/authorization'
 
 export async function updateUserRole(formData: FormData) {
   try {
     const { user: adminUser } = await getAuthenticatedUser()
     const adminProfile = await prisma.profile.findUnique({
-      where: { userId: adminUser.id }
+      where: { userId: adminUser.id },
+      select: { id: true, role: true }
     })
-    if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Hanya Admin yang dapat mengubah role')
+    requireAdmin(adminProfile)
 
     const targetProfileId = formData.get('profileId') as string
     const newRole = formData.get('role') as 'MASYARAKAT' | 'PETUGAS' | 'ADMIN'
 
     const targetUser = await prisma.profile.findUnique({
-      where: { id: targetProfileId }
+      where: { id: targetProfileId },
+      select: { username: true, role: true }
     })
     if (!targetUser) return
 
@@ -37,9 +40,10 @@ export async function toggleUserVerification(formData: FormData) {
   try {
     const { user: adminUser } = await getAuthenticatedUser()
     const adminProfile = await prisma.profile.findUnique({
-      where: { userId: adminUser.id }
+      where: { userId: adminUser.id },
+      select: { id: true, role: true }
     })
-    if (!adminProfile || adminProfile.role !== 'ADMIN') throw new Error('Izin ditolak')
+    requireAdmin(adminProfile)
 
     const targetProfileId = formData.get('profileId') as string
     const currentStatus = formData.get('isVerified') === 'true'
@@ -50,7 +54,7 @@ export async function toggleUserVerification(formData: FormData) {
     })
 
     revalidatePath('/dashboard/admin/users')
-    const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId } })
+    const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId }, select: { username: true } })
     if (targetUser) {
       await createAuditLog('VERIFY_USER', `${currentStatus ? 'Mencabut' : 'Memverifikasi'} akun ${targetUser.username}`)
     }
@@ -65,12 +69,13 @@ export async function deleteUserAccount(formData: FormData) {
     if (!auth) return
     const { user } = auth
     const adminProfile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { role: true }
     })
     if (!adminProfile || adminProfile.role !== 'ADMIN') return
 
     const targetProfileId = formData.get('profileId') as string
-    const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId } })
+    const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId }, select: { username: true, name: true } })
     if (!targetUser) return
 
     await prisma.profile.delete({ where: { id: targetProfileId } })

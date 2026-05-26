@@ -4,19 +4,27 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_SIZE = 5 * 1024 * 1024
 const BUCKET = 'complaints'
 
+export const UPLOAD_ERROR_MAP: Record<string, string> = {
+  file_too_large: 'Ukuran gambar maksimal 5MB',
+  invalid_type: 'Tipe file tidak didukung (hanya JPG, PNG, WebP, GIF)',
+  upload_failed: 'Gagal mengupload gambar',
+}
+
+export type UploadResult =
+  | { success: true; url: string }
+  | { success: false; error: 'file_too_large' | 'invalid_type' | 'upload_failed' }
+
 export async function uploadImage(
   file: File,
   userId: string,
   prefix: string = 'complaint'
-): Promise<string | null> {
+): Promise<UploadResult> {
   if (file.size > MAX_SIZE) {
-    console.error(`Image too large: ${file.size}`)
-    return null
+    return { success: false, error: 'file_too_large' }
   }
 
   if (!ALLOWED_TYPES.includes(file.type)) {
-    console.error(`Invalid file type: ${file.type}`)
-    return null
+    return { success: false, error: 'invalid_type' }
   }
 
   const supabase = await createClient()
@@ -30,12 +38,12 @@ export async function uploadImage(
 
   if (uploadError) {
     console.error('Supabase Upload Error:', uploadError)
-    return null
+    return { success: false, error: 'upload_failed' }
   }
 
   const { data: urlData } = supabase.storage
     .from(BUCKET)
     .getPublicUrl(filePath)
 
-  return urlData.publicUrl
+  return { success: true, url: urlData.publicUrl }
 }

@@ -6,12 +6,13 @@ import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
+import { requireAdmin } from '@/lib/authorization'
 
 export async function createAnnouncement(formData: FormData) {
   try {
     const { user } = await getAuthenticatedUser()
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
-    if (!profile || profile.role !== 'ADMIN') throw new Error('Izin ditolak')
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
+    requireAdmin(profile)
 
     const title = formData.get('title') as string
     const content = formData.get('content') as string
@@ -38,8 +39,8 @@ export async function createAnnouncement(formData: FormData) {
 export async function updateAnnouncement(formData: FormData) {
   try {
     const { user } = await getAuthenticatedUser()
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
-    if (!profile || profile.role !== 'ADMIN') throw new Error('Izin ditolak')
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
+    requireAdmin(profile)
 
     const id = formData.get('id') as string
     const title = formData.get('title') as string
@@ -70,7 +71,7 @@ export async function deleteAnnouncement(formData: FormData) {
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return
     const { user } = auth
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
     if (!profile || profile.role !== 'ADMIN') return
 
     const id = formData.get('id') as string
