@@ -29,21 +29,37 @@ export default function StrukturPage() {
               <Users size={32} />
             </div>
             <h2 className="text-xl font-bold text-brand-ink">Ketua RW</h2>
-            <p className="text-sm text-brand-ink/50 font-medium">Bapak Bambang Susilo</p>
+            <p className="text-sm text-brand-ink/50 font-medium">....</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
-              { role: 'Sekretaris', name: 'Ibu Dewi Sartika' },
-              { role: 'Bendahara', name: 'Bapak Ahmad Fauzi' },
-              { role: 'Keamanan', name: 'Bapak Hendra Gunawan' },
-              { role: 'Kebersihan', name: 'Bapak Rudi Hartono' },
+              { role: 'Sekretaris', name: '....' },
+              { role: 'Bendahara', name: '....' },
+              { role: 'Keamanan', name: '....' },
+              { role: 'Kebersihan', name: '....' },
             ].map((item, i) => (
               <div key={i} className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline">
                 <h3 className="text-sm font-bold text-brand-primary uppercase tracking-wider">{item.role}</h3>
                 <p className="text-base font-bold text-brand-ink mt-1">{item.name}</p>
               </div>
             ))}
+          </div>
+
+          <div className="border-t border-brand-hairline pt-8">
+            <h3 className="text-lg font-bold text-brand-ink mb-6 text-center">Ketua RT</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { rt: 'RT 01', name: '....' },
+                { rt: 'RT 02', name: '....' },
+                { rt: 'RT 03', name: '....' },
+              ].map((item, i) => (
+                <div key={i} className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline text-center">
+                  <h4 className="text-sm font-bold text-brand-primary uppercase tracking-wider">{item.rt}</h4>
+                  <p className="text-base font-bold text-brand-ink mt-1">{item.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline flex items-start gap-3">

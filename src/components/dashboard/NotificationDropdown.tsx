@@ -133,7 +133,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 md:absolute md:inset-auto md:left-0 md:top-full md:mt-3 md:w-96 md:z-50 text-brand-ink">
+          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 md:fixed md:inset-auto md:right-8 md:top-24 md:w-96 md:z-50 text-brand-ink">
             <div className="p-5 border-b border-brand-hairline flex items-center justify-between gap-3">
               <h4 className="text-xs font-black uppercase tracking-normal text-brand-ink">Notifikasi Anda</h4>
               <div className="flex items-center gap-2 shrink-0">
