@@ -73,7 +73,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
       <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
         <div className="flex items-center gap-3 px-1">
           <span className="text-[11px] font-bold text-brand-ink/80">{res.officer?.name || 'Petugas'}</span>
-          <span className="text-[8px] font-bold text-brand-ink/30 uppercase tracking-widest">
+          <span className="text-[8px] font-bold text-brand-ink/30 uppercase tracking-normal">
             {timeStr}
           </span>
           
@@ -95,7 +95,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                      {canEdit && (
                        <button 
                          onClick={() => { setIsEditing(true); setShowMenu(false); }}
-                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary transition-all cursor-pointer"
+                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-normal text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary transition-all cursor-pointer"
                        >
                          <Edit2 size={12} /> Edit
                        </button>
@@ -103,7 +103,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                       {canDelete && (
                         <button 
                           onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
-                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
+                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-bold uppercase tracking-normal text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
                        >
                          {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Hapus
                        </button>

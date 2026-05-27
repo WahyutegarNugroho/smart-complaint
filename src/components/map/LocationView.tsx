@@ -5,14 +5,30 @@ import L from 'leaflet'
 import { MapPin, ExternalLink } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-const markerIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const markerIcon = L.divIcon({
+  className: 'custom-marker-location-view',
+  html: `<div style="
+    width: 24px; height: 36px;
+    position: relative;
+  ">
+    <div style="
+      width: 24px; height: 24px;
+      background: #9fe870;
+      border: 3px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    "></div>
+    <div style="
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #9fe870;
+      margin: -2px auto 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    "></div>
+  </div>`,
+  iconSize: [24, 36],
+  iconAnchor: [12, 36],
 })
 
 interface LocationViewProps {
@@ -34,7 +50,7 @@ export default function LocationView({ latitude, longitude, address, complaintId
           <MapPin size={18} />
         </div>
         <div>
-          <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest">Lokasi Spesifik</p>
+          <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-normal">Lokasi Spesifik</p>
           <p className="text-[13px] font-bold text-brand-ink">{address}</p>
         </div>
       </div>

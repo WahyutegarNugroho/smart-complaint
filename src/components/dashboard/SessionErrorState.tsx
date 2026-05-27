@@ -30,7 +30,7 @@ export default function SessionErrorState({ error }: SessionErrorStateProps) {
 
          {error && (
            <div className="text-left bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 p-4 rounded-xl space-y-2">
-             <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">Detail Error (Debug):</p>
+             <p className="text-[10px] font-bold text-red-500 uppercase tracking-normal">Detail Error (Debug):</p>
              <p className="text-xs font-mono text-red-600 dark:text-red-400 break-all">{error}</p>
            </div>
          )}

@@ -33,7 +33,7 @@ export default function EscalationStatus({
             escalationLevel === 'LEVEL_3' ? '3' :
             escalationLevel === 'LEVEL_2' ? '2' : '1'
           }</h3>
-          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
+          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">
             {escalationLevel === 'LEVEL_3' ? 'Melebihi SLA penanganan' :
              escalationLevel === 'LEVEL_2' ? 'Melebihi SLA tanggapan awal' :
              'Perlu perhatian'}

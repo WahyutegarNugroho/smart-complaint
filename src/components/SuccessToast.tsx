@@ -26,7 +26,7 @@ export default function SuccessToast({ message }: SuccessToastProps) {
              <CheckCircle2 size={24} />
           </div>
           <div className="flex-1 min-w-0 pt-1">
-             <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.2em] mb-1">Sistem Berhasil</p>
+             <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-normal mb-1">Sistem Berhasil</p>
              <p className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight">{message}</p>
           </div>
           <button 

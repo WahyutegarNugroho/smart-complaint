@@ -29,7 +29,7 @@ export default function SubmitButton({
       {pending ? (
         <div className="flex items-center justify-center gap-2 w-full">
           <Loader2 className="animate-spin" size={18} />
-          <span className="uppercase tracking-widest">{loadingText}</span>
+          <span className="uppercase tracking-normal">{loadingText}</span>
         </div>
       ) : (
         <div className="flex items-center justify-center gap-2 w-full">

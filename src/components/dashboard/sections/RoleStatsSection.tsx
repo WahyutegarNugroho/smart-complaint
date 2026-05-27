@@ -63,7 +63,7 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
               </div>
             </div>
             <p className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{item.val}</p>
-            <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
+            <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-normal text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
         </div>
         )
       })}

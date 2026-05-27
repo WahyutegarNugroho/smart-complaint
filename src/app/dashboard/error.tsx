@@ -39,13 +39,13 @@ export default function DashboardError({
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
           <button
             onClick={reset}
-            className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-slate-900/10 hover:opacity-90 transition-all flex items-center justify-center gap-3 active:scale-95"
+            className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-normal shadow-xl shadow-slate-900/10 hover:opacity-90 transition-all flex items-center justify-center gap-3 active:scale-95"
           >
             <RotateCcw size={18} /> Coba Lagi
           </button>
           <Link
             href="/"
-            className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-3 active:scale-95"
+            className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 py-4 rounded-2xl font-bold text-xs uppercase tracking-normal hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-3 active:scale-95"
           >
             <Home size={18} /> Beranda
           </Link>

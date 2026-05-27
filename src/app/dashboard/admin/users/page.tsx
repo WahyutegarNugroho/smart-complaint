@@ -74,7 +74,7 @@ export default async function AdminUsersPage({
                      <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
                         <ArrowLeft size={20} />
                      </Link>
-                     <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Manajemen Data Pengguna</span>
+                     <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-normal">Manajemen Data Pengguna</span>
                   </div>
                   <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Data Penduduk</h1>
                   <p className="text-slate-700 dark:text-slate-400 font-medium text-sm md:text-base transition-colors">Kelola basis data warga, petugas dan verifikasi akun secara terpusat.</p>
@@ -108,11 +108,11 @@ export default async function AdminUsersPage({
                            <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
                             <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-16 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-colors" />
                         </div>
-                        <button type="submit" className="flex-1 sm:flex-none h-12 bg-slate-900 dark:bg-blue-600 text-white px-8 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95">
+                        <button type="submit" className="flex-1 sm:flex-none h-12 bg-slate-900 dark:bg-blue-600 text-white px-8 rounded-xl text-[10px] font-bold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg active:scale-95">
                            Terapkan
                         </button>
                         {(q || role || rt || rw) && (
-                           <Link href="/dashboard/admin/users" className="h-12 flex items-center px-4 text-[10px] font-bold uppercase text-red-500 tracking-widest hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-all">
+                           <Link href="/dashboard/admin/users" className="h-12 flex items-center px-4 text-[10px] font-bold uppercase text-red-500 tracking-normal hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-all">
                               Reset
                            </Link>
                         )}
@@ -126,10 +126,10 @@ export default async function AdminUsersPage({
                      <table className="w-full text-left border-separate border-spacing-0">
                         <thead>
                            <tr className="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800 transition-colors">
-                               <th className="px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Profil Penduduk</th>
-                               <th className="hidden md:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Domisili</th>
-                               <th className="hidden sm:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Status Akses</th>
-                                <th className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] text-right z-10">Kelola</th>
+                               <th className="px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal">Profil Penduduk</th>
+                               <th className="hidden md:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal">Domisili</th>
+                               <th className="hidden sm:table-cell px-6 sm:px-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal">Status Akses</th>
+                                <th className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal text-right z-10">Kelola</th>
                            </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -138,7 +138,7 @@ export default async function AdminUsersPage({
                                  <td colSpan={4} className="px-8 py-20 text-center">
                                     <div className="flex flex-col items-center justify-center text-slate-400 opacity-20">
                                        <Users size={64} className="mb-4" />
-                                       <p className="text-sm font-bold uppercase tracking-widest">Data Tidak Ditemukan</p>
+                                       <p className="text-sm font-bold uppercase tracking-normal">Data Tidak Ditemukan</p>
                                     </div>
                                  </td>
                               </tr>

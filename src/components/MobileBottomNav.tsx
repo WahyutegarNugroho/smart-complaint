@@ -86,7 +86,7 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
               className={`relative flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all duration-300 ${active ? 'text-brand-primary' : 'text-brand-ink/40 active:scale-95'}`}
             >
               <Icon size={22} className={`${active ? 'scale-110 drop-shadow-[0_0_8px_rgba(0,217,146,0.4)]' : 'opacity-70'}`} />
-              <span className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'opacity-100' : 'opacity-50'}`}>{item.label}</span>
+              <span className={`text-[9px] font-bold uppercase tracking-normal ${active ? 'opacity-100' : 'opacity-50'}`}>{item.label}</span>
               {active && (
                 <div className="absolute -bottom-1 w-1 h-1 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(0,217,146,0.8)]" />
               )}

@@ -102,7 +102,7 @@ export default async function DashboardLayout({
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-xl tracking-tight text-brand-ink leading-none">SmartComplaint<span>.</span></span>
-              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest mt-1">Platform Pengaduan</span>
+              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mt-1">Platform Pengaduan</span>
             </div>
           </Link>
         </div>
@@ -110,7 +110,7 @@ export default async function DashboardLayout({
         {/* Desktop Quick Toolbar (Notifications & Theme Switcher) */}
         <div className="px-8 pb-4 flex items-center gap-3">
           <div className="flex-1 flex items-center gap-2 bg-brand-canvas-soft/80 border border-brand-hairline p-2.5 rounded-2xl shadow-sm justify-between">
-             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest pl-2">Aksi Cepat</span>
+             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal pl-2">Aksi Cepat</span>
              <div className="flex items-center gap-2">
                 <NotificationDropdown notifications={notifications} />
                 <ThemeToggle />
@@ -122,7 +122,7 @@ export default async function DashboardLayout({
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
 
           <div className="px-4 mb-2 mt-4">
-            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest opacity-50">Modul Navigasi</span>
+            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
           </div>
 
           <Link
@@ -152,7 +152,7 @@ export default async function DashboardLayout({
           )}
 
           <div className="px-4 mb-2 mt-8">
-            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest opacity-50">Status Pengaduan</span>
+            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
           </div>
 
           <Link

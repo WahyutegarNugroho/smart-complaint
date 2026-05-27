@@ -15,7 +15,7 @@ export default function DeleteComplaintButton({ id }: { id: string }) {
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all"
+          className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-normal hover:bg-red-600 hover:text-white transition-all"
         >
           <Trash2 size={14} />
           Hapus Laporan

@@ -78,7 +78,7 @@ export default async function ComplaintDetailPage({
                <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em]">Detail Operasional</span>
+               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-normal">Detail Operasional</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">Informasi Laporan #{complaint.id.slice(-6).toUpperCase()}</h1>
             <p className="text-brand-ink/60 font-medium text-sm md:text-base no-print">Pantau riwayat penanganan dan koordinasi petugas lapangan.</p>
@@ -97,7 +97,7 @@ export default async function ComplaintDetailPage({
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
                   <Image src={complaint.imageUrl} alt={complaint.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
-                    <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-2xl">
+                    <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-normal flex items-center gap-2 shadow-2xl">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi
                     </div>
                   )}
@@ -106,13 +106,13 @@ export default async function ComplaintDetailPage({
               
               <div className="p-8 md:p-10">
                 <div className="flex flex-wrap items-center gap-3 mb-8">
-                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest border transition-colors ${STATUS_BADGE_CLASSES[complaint.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[complaint.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
                     {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                   </span>
-    <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
+    <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-normal bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
       Blok Wilayah RT {complaint.rt} / RW {complaint.rw}
     </span>
-    <span className="text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+    <span className="text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-normal bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
       {complaint.categoryRel?.name || complaint.category}
     </span>
   </div>
@@ -132,7 +132,7 @@ export default async function ComplaintDetailPage({
                        <Calendar size={14} />
                     </div>
                     <div>
-                      <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-widest">Tanggal Lapor</p>
+                      <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-normal">Tanggal Lapor</p>
                       <p className="text-[13px] font-bold text-brand-ink">{new Date(complaint.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                   </div>
@@ -153,7 +153,7 @@ export default async function ComplaintDetailPage({
                      )}
                   </div>
                   <div className="flex items-center gap-3">
-                     <span className="px-2.5 py-1 bg-brand-canvas-soft text-brand-ink/60 text-[9px] font-bold rounded-lg uppercase tracking-widest border border-brand-hairline">Warga RT {complaint.author?.rt || '-'}</span>
+                     <span className="px-2.5 py-1 bg-brand-canvas-soft text-brand-ink/60 text-[9px] font-bold rounded-lg uppercase tracking-normal border border-brand-hairline">Warga RT {complaint.author?.rt || '-'}</span>
                      <span className="text-[11px] font-medium text-brand-ink/40">{complaint.author?.username || 'user'}</span>
                   </div>
                </div>
@@ -165,7 +165,7 @@ export default async function ComplaintDetailPage({
                   <h3 className="text-lg font-bold text-brand-ink flex items-center gap-3">
                      <MessageSquare size={22} className="text-brand-primary" /> Linimasa Diskusi
                   </h3>
-                  <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">{complaint.responses.length} Pesan</span>
+                  <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">{complaint.responses.length} Pesan</span>
                </div>
 
                {complaint.responses.length === 0 ? (
@@ -173,7 +173,7 @@ export default async function ComplaintDetailPage({
                     <div className="h-20 w-20 bg-brand-canvas-soft rounded-3xl flex items-center justify-center text-brand-ink/20 mx-auto mb-6 transition-all group-hover:scale-110">
                        <MessageSquare size={40} />
                     </div>
-                    <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-widest">Belum ada tanggapan</p>
+                    <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-normal">Belum ada tanggapan</p>
                  </div>
                ) : (
                  <div className="space-y-6">
@@ -216,7 +216,7 @@ export default async function ComplaintDetailPage({
                       
                       <div className="absolute right-20 bottom-4 flex items-center gap-3">
                          <SubmitButton 
-                           className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] h-12 px-8 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl active:scale-95 flex items-center gap-3 cursor-pointer"
+                           className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] h-12 px-8 rounded-xl font-bold text-[10px] uppercase tracking-normal hover:opacity-90 transition-all shadow-xl active:scale-95 flex items-center gap-3 cursor-pointer"
                            loadingText=""
                            icon={<Send size={18} />}
                          >
@@ -238,7 +238,7 @@ export default async function ComplaintDetailPage({
                    </div>
                    <div>
                       <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Batalkan Laporan</h3>
-                      <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Tarik kembali laporan Anda</p>
+                      <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Tarik kembali laporan Anda</p>
                    </div>
                 </div>
                 <CitizenDeleteButton id={complaint.id} />
@@ -286,7 +286,7 @@ export default async function ComplaintDetailPage({
                             )}
                          </div>
                          <div className="pt-0.5">
-                            <h5 className={`text-[13px] font-bold uppercase tracking-widest transition-colors duration-500 ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/30'}`}>{step.label}</h5>
+                            <h5 className={`text-[13px] font-bold uppercase tracking-normal transition-colors duration-500 ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/30'}`}>{step.label}</h5>
                             <p className="text-[12px] text-brand-ink/60 mt-1.5 font-medium transition-colors duration-500">{step.desc}</p>
                          </div>
                       </div>
@@ -312,7 +312,7 @@ export default async function ComplaintDetailPage({
           {/* Header */}
           <div className="text-center mb-10 pb-8 border-b-2 border-slate-900">
             <h1 className="text-2xl font-extrabold text-slate-900 mb-2">TANDA TERIMA LAPORAN</h1>
-            <p className="text-[8pt] font-bold uppercase tracking-[0.3em] text-slate-400">SmartComplaint — Pengaduan Masyarakat</p>
+            <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">SmartComplaint — Pengaduan Masyarakat</p>
           </div>
 
           {/* Info Laporan */}
@@ -380,7 +380,7 @@ export default async function ComplaintDetailPage({
             <div className="inline-block text-center">
               <div className="w-48 border-t-2 border-slate-900 mx-auto pt-2">
                 <p className="text-[9pt] font-bold text-slate-900">{complaint.author?.name || 'Pengguna'}</p>
-                <p className="text-[7pt] text-slate-400 uppercase tracking-widest">Pelapor</p>
+                <p className="text-[7pt] text-slate-400 uppercase tracking-normal">Pelapor</p>
               </div>
             </div>
           </div>

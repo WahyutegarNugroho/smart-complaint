@@ -37,7 +37,7 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
             </div>
             <Link 
               href="/dashboard/settings" 
-              className="px-6 py-3 rounded-2xl bg-amber-500 text-slate-900 font-bold text-[10px] uppercase tracking-widest hover:bg-amber-600 transition-all text-center w-full md:w-auto shrink-0 shadow-lg shadow-amber-500/10 active:scale-[0.98]"
+              className="px-6 py-3 rounded-2xl bg-amber-500 text-slate-900 font-bold text-[10px] uppercase tracking-normal hover:bg-amber-600 transition-all text-center w-full md:w-auto shrink-0 shadow-lg shadow-amber-500/10 active:scale-[0.98]"
             >
               Lengkapi Profil
             </Link>
@@ -48,13 +48,13 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-hairline pb-8 sm:pb-12">
           <div className="space-y-2">
             <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight text-brand-ink transition-colors leading-none">Halo, {profile?.name || 'Warga'}</h1>
-            <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-widest leading-relaxed">Platform Pengaduan Warga Pesona Serpong</p>
+            <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-normal leading-relaxed">Platform Pengaduan Warga Pesona Serpong</p>
           </div>
           
           <div className="flex items-center gap-4">
              <Link
                 href="/dashboard/create"
-                className="btn-primary py-3 sm:py-4 px-6 sm:px-8 text-[10px] sm:text-[11px] tracking-widest uppercase shadow-2xl shadow-brand-primary/20 w-full sm:w-auto text-center"
+                className="btn-primary py-3 sm:py-4 px-6 sm:px-8 text-[10px] sm:text-[11px] tracking-normal uppercase shadow-2xl shadow-brand-primary/20 w-full sm:w-auto text-center inline-flex items-center justify-center gap-2"
              >
                 <Plus size={18} /> Buat Laporan
              </Link>

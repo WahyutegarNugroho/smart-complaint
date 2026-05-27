@@ -33,7 +33,7 @@ export function ExportButtons() {
         <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors">Data mentah dalam format CSV — kompatibel dengan Excel/Spreadsheet apapun.</p>
         <button 
           onClick={handleCsv} 
-          className="w-full bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-xl shadow-slate-900/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-normal hover:opacity-90 transition-all shadow-xl shadow-slate-900/10 active:scale-95 flex items-center justify-center gap-3"
         >
           <Download size={18} /> Unduh CSV
         </button>
@@ -48,7 +48,7 @@ export function ExportButtons() {
         <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors">Format Excel dengan 2 sheet (data + ringkasan), lebih rapi dan terstruktur.</p>
         <button 
           onClick={handleExcel} 
-          className="w-full bg-emerald-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-xl shadow-emerald-600/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full bg-emerald-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-normal hover:opacity-90 transition-all shadow-xl shadow-emerald-600/10 active:scale-95 flex items-center justify-center gap-3"
         >
           <Download size={18} /> Unduh Excel
         </button>
@@ -63,7 +63,7 @@ export function ExportButtons() {
         <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-10 leading-relaxed transition-colors">Dokumen PDF terformat dengan cover, ringkasan, dan tabel detail — generated server-side.</p>
         <button 
           onClick={handlePdf} 
-          className="w-full bg-blue-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-xl shadow-blue-600/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full bg-blue-600 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-normal hover:opacity-90 transition-all shadow-xl shadow-blue-600/10 active:scale-95 flex items-center justify-center gap-3"
         >
           <FileBarChart size={18} /> Unduh PDF
         </button>

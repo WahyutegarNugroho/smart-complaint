@@ -36,7 +36,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
         <form action={updateAnnouncement} onSubmit={() => setIsEditing(false)} className="space-y-6">
           <input type="hidden" name="id" value={item.id} />
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest ml-1 transition-colors">Judul</label>
+            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Judul</label>
             <input 
               name="title" 
               defaultValue={item.title} 
@@ -45,7 +45,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest ml-1 transition-colors">Konten</label>
+            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Konten</label>
             <textarea 
               name="content" 
               defaultValue={item.content} 
@@ -54,10 +54,10 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             />
           </div>
           <div className="flex items-center gap-3">
-            <button type="submit" className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95">
+            <button type="submit" className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95">
               <Check size={16} /> Simpan Perubahan
             </button>
-            <button type="button" onClick={() => setIsEditing(false)} className="px-8 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95">
+            <button type="button" onClick={() => setIsEditing(false)} className="px-8 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 py-4 rounded-xl text-[10px] font-bold uppercase tracking-normal hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95">
               Batal
             </button>
           </div>
@@ -72,12 +72,12 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
         <div className="space-y-1">
            <h4 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight pr-8">{item.title}</h4>
            <div className="flex items-center gap-4 mt-2">
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">
                  <User size={12} className="text-blue-500" />
                  {item.author.name}
               </div>
               <div className="h-1 w-1 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">
                  <Calendar size={12} className="text-blue-500" />
                  {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
               </div>

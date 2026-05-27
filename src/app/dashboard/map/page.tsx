@@ -86,7 +86,7 @@ export default async function MapPage({
           </Link>
           <div>
             <h1 className="text-sm font-bold text-brand-ink">Peta Sebaran Laporan</h1>
-            <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
+            <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">
               {parsed.length} titik lokasi
             </p>
           </div>

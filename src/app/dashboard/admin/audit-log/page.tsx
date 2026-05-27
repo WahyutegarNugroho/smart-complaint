@@ -64,7 +64,7 @@ export default async function AuditLogPage({
               <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
                 <ArrowLeft size={20} />
               </Link>
-              <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em]">Administrasi</span>
+              <span className="text-[10px] font-bold text-brand-primary uppercase tracking-normal">Administrasi</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">Aktivitas Admin</h1>
             <p className="text-brand-ink/60 font-medium text-sm md:text-base">Riwayat tindakan administratif di platform.</p>
@@ -82,24 +82,24 @@ export default async function AuditLogPage({
                 <div className="h-16 w-16 bg-brand-canvas-soft rounded-3xl flex items-center justify-center text-brand-ink/20 mx-auto mb-4">
                   <History size={32} />
                 </div>
-                <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-widest">Belum ada aktivitas</p>
+                <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-normal">Belum ada aktivitas</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-separate border-spacing-0">
                   <thead>
                     <tr className="bg-brand-canvas-soft/50 border-b border-brand-hairline">
-                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">Tindakan</th>
-                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">Detail</th>
-                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">Oleh</th>
-                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">Waktu</th>
+                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Tindakan</th>
+                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Detail</th>
+                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Oleh</th>
+                      <th className="px-6 py-5 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Waktu</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-brand-hairline">
                     {logs.map((log) => (
                       <tr key={log.id} className="hover:bg-brand-canvas-soft/30 transition-colors">
                         <td className="px-6 py-5">
-                          <span className="text-[10px] font-bold bg-brand-canvas-soft px-3 py-1.5 rounded-lg uppercase tracking-widest border border-brand-hairline">
+                          <span className="text-[10px] font-bold bg-brand-canvas-soft px-3 py-1.5 rounded-lg uppercase tracking-normal border border-brand-hairline">
                             {ACTION_LABELS[log.action] || log.action}
                           </span>
                         </td>

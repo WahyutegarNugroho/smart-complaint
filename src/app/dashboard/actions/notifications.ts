@@ -27,3 +27,21 @@ export async function markNotificationAsRead(notificationId: string) {
     console.error('MarkNotificationAsRead Error:', err)
   }
 }
+
+export async function markAllNotificationsAsRead() {
+  try {
+    const auth = await getAuthenticatedUserOptional()
+    if (!auth) return
+    const { user } = auth
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true } })
+    if (!profile) return
+
+    await prisma.notification.updateMany({
+      where: { userId: profile.id, isRead: false },
+      data: { isRead: true }
+    })
+    revalidatePath('/dashboard')
+  } catch (err) {
+    console.error('MarkAllNotificationsAsRead Error:', err)
+  }
+}

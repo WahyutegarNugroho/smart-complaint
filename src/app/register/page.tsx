@@ -31,7 +31,7 @@ export default function RegisterPage({
               <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
-              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.3em] mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
+              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
             </div>
           </Link>
         </div>
@@ -43,7 +43,7 @@ export default function RegisterPage({
 
           <Link 
             href="/login" 
-            className="inline-flex items-center gap-3 text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest hover:text-brand-primary transition-colors mb-12 relative z-10"
+            className="inline-flex items-center gap-3 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal hover:text-brand-primary transition-colors mb-12 relative z-10"
           >
             <ArrowLeft size={16} /> Kembali ke Login
           </Link>
@@ -55,14 +55,14 @@ export default function RegisterPage({
 
           <form action={signup} className="space-y-8 relative z-10 text-left">
             {error && (
-              <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
+              <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
                 <div className="h-2 w-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                 <div>{error}</div>
               </div>
             )}
             
             <div className="space-y-3">
-              <label htmlFor="reg-name" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Nama Lengkap Sesuai KTP</label>
+              <label htmlFor="reg-name" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal ml-1">Nama Lengkap Sesuai KTP</label>
               <div className="relative group">
                 <User className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
@@ -77,7 +77,7 @@ export default function RegisterPage({
             </div>
 
             <div className="space-y-3">
-              <label htmlFor="reg-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Aktif</label>
+              <label htmlFor="reg-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal ml-1">Email Aktif</label>
               <div className="relative group">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
@@ -92,7 +92,7 @@ export default function RegisterPage({
             </div>
 
             <div className="space-y-3">
-              <label htmlFor="reg-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Kredensial Password</label>
+              <label htmlFor="reg-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal ml-1">Kredensial Password</label>
               <div className="relative group">
                 <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
@@ -124,7 +124,7 @@ export default function RegisterPage({
             </div>
 
             <SubmitButton
-              className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-6"
+              className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-normal shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-6"
               icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
               loadingText="Registrasi..."
             >
@@ -133,7 +133,7 @@ export default function RegisterPage({
           </form>
 
           <div className="mt-12 pt-10 border-t border-brand-hairline text-center relative z-10 transition-colors">
-            <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-widest">
+            <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-normal">
               Sudah memiliki akses?
               <Link href="/login" className="font-extrabold text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
                 MASUK KE DASHBOARD

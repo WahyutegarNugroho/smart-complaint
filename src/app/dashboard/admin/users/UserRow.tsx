@@ -62,7 +62,7 @@ export default function UserRow({ user }: { user: Profile }) {
         <td className="hidden md:table-cell px-6 sm:px-8 py-6">
           <div className="flex flex-col">
              <span className="text-[13px] font-bold text-slate-800 dark:text-slate-200">RT {user.rt || '-'} / RW {user.rw || '-'}</span>
-             <span className="text-[10px] text-slate-600 dark:text-slate-400 uppercase font-bold tracking-widest mt-0.5 transition-colors">Blok Wilayah</span>
+             <span className="text-[10px] text-slate-600 dark:text-slate-400 uppercase font-bold tracking-normal mt-0.5 transition-colors">Blok Wilayah</span>
           </div>
         </td>
         <td className="hidden sm:table-cell px-6 sm:px-8 py-6">
@@ -80,7 +80,7 @@ export default function UserRow({ user }: { user: Profile }) {
                   defaultValue={user.role}
                   onChange={(e) => e.target.form?.requestSubmit()}
                   aria-label="Ubah role pengguna"
-                  className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-lg px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none cursor-pointer transition-all"
+                  className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-lg px-3 py-1.5 text-[9px] font-bold uppercase tracking-normal text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none cursor-pointer transition-all"
                 >
                   <option value="MASYARAKAT">Warga</option>
                   <option value="PETUGAS">Petugas</option>
@@ -90,7 +90,7 @@ export default function UserRow({ user }: { user: Profile }) {
              <form action={toggleUserVerification}>
                 <input type="hidden" name="profileId" value={user.id} />
                 <input type="hidden" name="isVerified" value={String(user.isVerified)} />
-                <button className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest transition-all ${user.isVerified ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400'}`}>
+                <button className={`flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-normal transition-all ${user.isVerified ? 'text-blue-600 dark:text-blue-400' : 'text-slate-300 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400'}`}>
                    {user.isVerified ? <CheckCircle2 size={12} /> : <AlertCircle size={12} />}
                    {user.isVerified ? 'Terverifikasi' : 'Belum Verifikasi'}
                 </button>
@@ -141,7 +141,7 @@ export default function UserRow({ user }: { user: Profile }) {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-none mb-1">Detail Profil</h3>
-                  <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">Informasi Lengkap Penduduk</p>
+                  <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">Informasi Lengkap Penduduk</p>
                 </div>
               </div>
               <button 
@@ -167,9 +167,9 @@ export default function UserRow({ user }: { user: Profile }) {
                     {user.isVerified && <ShieldCheck size={18} className="text-blue-500" fill="currentColor" />}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-slate-900 dark:bg-blue-600 text-white text-[9px] font-bold rounded-lg uppercase tracking-[0.2em]">{user.role}</span>
+                    <span className="px-3 py-1 bg-slate-900 dark:bg-blue-600 text-white text-[9px] font-bold rounded-lg uppercase tracking-normal">{user.role}</span>
                     <span className="text-slate-200 dark:text-slate-700">•</span>
-                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest transition-colors">{user.username}</span>
+                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">{user.username}</span>
                   </div>
                 </div>
               </div>
@@ -177,25 +177,25 @@ export default function UserRow({ user }: { user: Profile }) {
               {/* Info Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal flex items-center gap-2 transition-colors">
                      NIK
                   </p>
                    <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.nik ? `****${user.nik.slice(-4)}` : 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal flex items-center gap-2 transition-colors">
                      Kontak WhatsApp
                   </p>
                    <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">{user.phone ? `****${user.phone.slice(-4)}` : 'Belum diisi'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal flex items-center gap-2 transition-colors">
                      Wilayah Blok
                   </p>
                   <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">RT {user.rt || '-'} / RW {user.rw || '-'}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
+                  <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal flex items-center gap-2 transition-colors">
                      Tanggal Registrasi
                   </p>
                   <p className="text-sm font-bold text-slate-900 dark:text-white transition-colors">
@@ -205,7 +205,7 @@ export default function UserRow({ user }: { user: Profile }) {
               </div>
 
               <div className="space-y-2 pt-6 border-t border-slate-50 dark:border-slate-800">
-                <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 transition-colors">
+                <p className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal flex items-center gap-2 transition-colors">
                    Alamat Domisili
                 </p>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed pl-4 border-l-2 border-slate-100 dark:border-slate-800 transition-colors">
@@ -219,7 +219,7 @@ export default function UserRow({ user }: { user: Profile }) {
             <div className="p-8 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex justify-end transition-colors">
               <button 
                 onClick={() => setShowModal(false)}
-                className="px-10 py-4 bg-slate-900 dark:bg-blue-600 text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95"
+                className="px-10 py-4 bg-slate-900 dark:bg-blue-600 text-white text-[10px] font-bold uppercase tracking-normal rounded-2xl hover:opacity-90 transition-all shadow-xl active:scale-95"
               >
                 Tutup Jendela
               </button>

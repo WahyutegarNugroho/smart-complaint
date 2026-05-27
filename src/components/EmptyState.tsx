@@ -38,7 +38,7 @@ export default function EmptyState({
        {actionHref && actionLabel && (
           <Link 
             href={actionHref} 
-            className="relative z-10 px-10 py-4 bg-slate-900 dark:bg-emerald-600 text-white rounded-[1.5rem] text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 dark:hover:bg-emerald-500 transition-all active:scale-95 shadow-2xl shadow-slate-900/20 dark:shadow-emerald-600/40"
+            className="relative z-10 px-10 py-4 bg-slate-900 dark:bg-emerald-600 text-white rounded-[1.5rem] text-[10px] font-bold uppercase tracking-normal hover:bg-emerald-600 dark:hover:bg-emerald-500 transition-all active:scale-95 shadow-2xl shadow-slate-900/20 dark:shadow-emerald-600/40"
           >
             {actionLabel}
           </Link>

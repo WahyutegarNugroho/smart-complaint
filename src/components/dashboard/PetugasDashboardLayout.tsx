@@ -22,7 +22,7 @@ export default function PetugasDashboardLayout({ profile, successMessage, childr
          <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-hairline pb-8 sm:pb-12">
            <div className="space-y-2">
              <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight text-brand-ink transition-colors leading-none">Halo, {profile.name}</h1>
-             <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-widest leading-relaxed">Panel Monitoring Petugas Pesona Serpong</p>
+             <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-normal leading-relaxed">Panel Monitoring Petugas Pesona Serpong</p>
            </div>
          </section>
 

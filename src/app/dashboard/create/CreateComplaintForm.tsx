@@ -147,7 +147,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em]">Layanan Warga</span>
+               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-normal">Layanan Warga</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">Buat Laporan Baru</h1>
             <p className="text-brand-ink/70 font-medium text-sm md:text-base">Sampaikan keluhan atau masukan Anda secara rinci dan objektif.</p>
@@ -168,7 +168,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               <AlertTriangle size={20} />
             </div>
             <div className="text-left">
-              <p className={`text-[9px] font-bold uppercase tracking-widest ${isUrgent ? 'text-red-600 dark:text-red-400' : 'text-brand-ink/50'}`}>Tingkat Urgensi</p>
+              <p className={`text-[9px] font-bold uppercase tracking-normal ${isUrgent ? 'text-red-600 dark:text-red-400' : 'text-brand-ink/50'}`}>Tingkat Urgensi</p>
               <p className="text-sm font-bold">{isUrgent ? 'Darurat / Penting' : 'Normal / Rutin'}</p>
             </div>
           </button>
@@ -204,7 +204,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               
               {/* Category Selector */}
               <div className="space-y-4">
-                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Pilih Kategori Masalah</label>
+                <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">Pilih Kategori Masalah</label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {categories.map((cat) => {
                     const Icon = ICON_MAP[cat.icon || 'Lightbulb'] || Lightbulb
@@ -228,7 +228,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                         <div className={`transition-transform duration-500 ${selectedParent === cat.slug ? 'scale-110' : ''}`}>
                            <Icon size={24} />
                         </div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest">{cat.name}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-normal">{cat.name}</span>
                       </button>
                     )
                   })}
@@ -261,7 +261,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               {/* Title Input */}
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="title" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Judul / Subjek</label>
+                  <label htmlFor="title" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">Judul / Subjek</label>
                   {suggestedCategory && selectedParent !== suggestedCategory && (
                     <button 
                       type="button" 
@@ -294,7 +294,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
               {/* Description Input */}
               <div className="space-y-3">
-                <label htmlFor="content" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Detail Kronologi</label>
+                <label htmlFor="content" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">Detail Kronologi</label>
                 <textarea 
                   id="content"
                   name="content"
@@ -325,7 +325,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             
             {/* Photo Attachment */}
             <div className="bg-brand-canvas p-6 md:p-8 rounded-[2rem] border border-brand-hairline shadow-sm space-y-6 transition-colors">
-              <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Lampiran Foto Bukti</label>
+              <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">Lampiran Foto Bukti</label>
               
               <div 
                 onClick={() => fileInputRef.current?.click()}
@@ -340,7 +340,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                       <button 
                         type="button"
                         onClick={(e) => { e.stopPropagation(); removePreview(); }}
-                        className="bg-brand-canvas p-4 rounded-2xl text-red-500 shadow-2xl flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-transform"
+                        className="bg-brand-canvas p-4 rounded-2xl text-red-500 shadow-2xl flex items-center gap-3 text-[10px] font-bold uppercase tracking-normal hover:scale-105 transition-transform"
                       >
                         <X size={18} /> Ganti Gambar
                       </button>
@@ -352,10 +352,10 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                       <Camera size={32} />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em]">Klik untuk Mengunggah</p>
-                      <p className="text-[9px] font-medium text-brand-ink/40 mt-2 uppercase tracking-widest">Max Size 5MB (JPG/PNG)</p>
+                      <p className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal">Klik untuk Mengunggah</p>
+                      <p className="text-[9px] font-medium text-brand-ink/40 mt-2 uppercase tracking-normal">Max Size 5MB (JPG/PNG)</p>
                       {fileError && (
-                        <p className="text-[9px] font-bold text-red-500 uppercase tracking-widest mt-2 max-w-[250px] mx-auto leading-relaxed">{fileError}</p>
+                        <p className="text-[9px] font-bold text-red-500 uppercase tracking-normal mt-2 max-w-[250px] mx-auto leading-relaxed">{fileError}</p>
                       )}
                     </div>
                   </div>
@@ -370,17 +370,17 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-3 text-center">
-                    <label htmlFor="rt" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RT</label>
+                    <label htmlFor="rt" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal block">RT</label>
                     <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                   <div className="space-y-3 text-center">
-                    <label htmlFor="rw" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] block">RW</label>
+                    <label htmlFor="rw" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal block">RW</label>
                     <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
                   </div>
                </div>
 
                <div className="space-y-3">
-                  <label htmlFor="incidentDate" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-[0.2em] ml-1">Waktu Temuan</label>
+                  <label htmlFor="incidentDate" className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">Waktu Temuan</label>
                   <div className="relative group">
                     <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                     <input 
@@ -396,7 +396,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
             {/* Submit Button */}
             <SubmitButton 
-              className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-6 rounded-[2rem] font-bold text-[11px] uppercase tracking-[0.3em] shadow-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-4 cursor-pointer"
+              className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-6 rounded-[2rem] font-bold text-[11px] uppercase tracking-normal shadow-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-4 cursor-pointer"
               loadingText="Mengirim Data..."
               icon={<Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
             >

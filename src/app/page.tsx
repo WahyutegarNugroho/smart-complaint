@@ -64,19 +64,19 @@ export default async function LandingPage() {
               </span>
             </div>
             
-            <div className="hidden md:flex items-center space-x-10 text-[13px] font-bold uppercase tracking-widest text-brand-ink/60">
+            <div className="hidden md:flex items-center space-x-10 text-[13px] font-bold uppercase tracking-normal text-brand-ink/60">
               <a href="#fitur" className="hover:text-brand-primary transition-colors">Fitur</a>
-              <a href="#cara-kerja" className="hover:text-brand-primary transition-colors">Alur</a>
+              <Link href="/alur" className="hover:text-brand-primary transition-colors">Alur</Link>
               <a href="#statistik" className="hover:text-brand-primary transition-colors">Statistik</a>
             </div>
 
             <div className="flex items-center space-x-3 sm:space-x-6">
-              <Link href="/login" className="hidden sm:block text-[11px] sm:text-[13px] font-bold uppercase tracking-widest text-brand-ink/60 hover:text-brand-primary transition-colors">
+              <Link href="/login" className="text-[11px] sm:text-[13px] font-bold uppercase tracking-normal text-brand-ink/60 hover:text-brand-primary transition-colors">
                 Masuk
               </Link>
               <Link
                 href="/register"
-                className="btn-primary py-2 sm:py-2.5 px-4 sm:px-6 text-[11px] sm:text-[13px] tracking-widest uppercase"
+                className="btn-primary py-2 sm:py-2.5 px-4 sm:px-6 text-[11px] sm:text-[13px] tracking-normal uppercase"
               >
                 Daftar
               </Link>
@@ -96,7 +96,7 @@ export default async function LandingPage() {
             
             {/* Hero Content */}
             <div className="text-center lg:text-left z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand-hairline bg-brand-canvas px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-ink mb-10 shadow-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand-hairline bg-brand-canvas px-4 py-2 text-[10px] font-bold uppercase tracking-normal text-brand-ink mb-10 shadow-sm">
                 <span className="flex h-2 w-2 rounded-full bg-brand-primary animate-pulse"></span>
                 Ekosistem Pengaduan Perumahan
               </div>
@@ -116,31 +116,28 @@ export default async function LandingPage() {
                 >
                   Buat Laporan Sekarang
                 </Link>
-                <a
-                  href="#cara-kerja"
+                <Link
+                  href="/alur"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-brand bg-brand-canvas px-10 py-5 text-base font-bold text-brand-ink shadow-sm border border-brand-hairline hover:bg-brand-canvas-soft transition-all"
                 >
                   Pelajari Alur
                   <ArrowRight size={18} />
-                </a>
+                </Link>
               </div>
 
               {/* Trust badges */}
               <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-5">
                 <div className="flex -space-x-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-4 ring-brand-canvas overflow-hidden border border-brand-hairline">
-                      <Image 
-                        src={`https://i.pravatar.cc/100?img=${i + 20}`} 
-                        alt="User" 
-                        fill 
-                        unoptimized
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {['A', 'B', 'C', 'D'].map((letter, i) => {
+                    const colors = ['bg-brand-primary', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500']
+                    return (
+                      <div key={i} className={`relative h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-4 ring-brand-canvas border border-brand-hairline ${colors[i]} flex items-center justify-center text-[#0e0f0c] text-xs sm:text-sm font-extrabold`}>
+                        {letter}
+                      </div>
+                    )
+                  })}
                 </div>
-                <p className="text-[11px] sm:text-[13px] font-bold text-brand-ink/50 uppercase tracking-widest text-center sm:text-left">
+                <p className="text-[11px] sm:text-[13px] font-bold text-brand-ink/50 uppercase tracking-normal text-center sm:text-left">
                   Dipercaya <span className="text-brand-ink underline decoration-brand-primary decoration-4">500+</span> Kepala Keluarga
                 </p>
               </div>
@@ -171,19 +168,19 @@ export default async function LandingPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               <div className="text-center md:text-left">
                 <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{totalReports}</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary">Total Laporan</p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-primary">Total Laporan</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
                 <p className="text-5xl font-extrabold tracking-tight text-brand-primary font-mono">{successRate}%</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Tuntas Ditangani</p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Tuntas Ditangani</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
                 <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Rata-Rata Penyelesaian</p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Rata-Rata Penyelesaian</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
                 <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{activeBlocks}</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-canvas/50">Blok Terlaporkan</p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Blok Terlaporkan</p>
               </div>
             </div>
           </div>
@@ -196,7 +193,7 @@ export default async function LandingPage() {
       <section id="fitur" className="py-32 bg-brand-canvas-soft">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mb-20 text-center lg:text-left">
-            <h2 className="text-[11px] font-bold tracking-[0.3em] text-brand-primary uppercase mb-4">Fitur Utama</h2>
+            <h2 className="text-[11px] font-bold tracking-normal text-brand-primary uppercase mb-4">Fitur Utama</h2>
             <p className="text-4xl lg:text-5xl font-extrabold text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
           </div>
           
@@ -257,26 +254,26 @@ export default async function LandingPage() {
             </div>
             
             <div>
-              <h4 className="text-[11px] font-bold text-brand-ink uppercase tracking-[0.2em] mb-8">Informasi</h4>
-              <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-widest">
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Struktur</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Keamanan</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Agenda</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Darurat</a></li>
+              <h4 className="text-[11px] font-bold text-brand-ink uppercase tracking-normal mb-8">Informasi</h4>
+              <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-normal">
+                <li><Link href="/informasi/struktur" className="hover:text-brand-primary transition-colors">Struktur</Link></li>
+                <li><Link href="/informasi/keamanan" className="hover:text-brand-primary transition-colors">Keamanan</Link></li>
+                <li><Link href="/informasi/agenda" className="hover:text-brand-primary transition-colors">Agenda</Link></li>
+                <li><Link href="/informasi/darurat" className="hover:text-brand-primary transition-colors">Darurat</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-[11px] font-bold text-brand-ink uppercase tracking-[0.2em] mb-8">Bantuan</h4>
-              <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-widest">
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Panduan</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Privasi</a></li>
-                <li><a href="#" className="hover:text-brand-primary transition-colors">Kontak</a></li>
+              <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-normal">
+                <li><Link href="/bantuan/panduan" className="hover:text-brand-primary transition-colors">Panduan</Link></li>
+                <li><Link href="/bantuan/privasi" className="hover:text-brand-primary transition-colors">Privasi</Link></li>
+                <li><Link href="/bantuan/kontak" className="hover:text-brand-primary transition-colors">Kontak</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="pt-12 border-t border-brand-hairline flex flex-col md:flex-row justify-between items-center text-[11px] font-bold text-brand-ink/30 uppercase tracking-[0.2em]">
+          <div className="pt-12 border-t border-brand-hairline flex flex-col md:flex-row justify-between items-center text-[11px] font-bold text-brand-ink/30 uppercase tracking-normal">
             <p>© {new Date().getFullYear()} Smart Complaint Pesona Serpong.</p>
             <p className="mt-4 md:mt-0">Dirancang untuk kenyamanan bersama.</p>
           </div>

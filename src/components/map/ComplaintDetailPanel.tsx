@@ -99,17 +99,17 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
               )}
 
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
                     <AlertTriangle size={10} />
                     Prioritas
                   </span>
                 )}
                 {escalationLabel && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
                     {escalationLabel}
                   </span>
                 )}
@@ -181,11 +181,11 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
           ) : (
             <>
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-widest bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
                     <AlertTriangle size={10} />
                     Prioritas
                   </span>

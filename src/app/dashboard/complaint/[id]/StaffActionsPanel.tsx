@@ -20,14 +20,14 @@ export default function StaffActionsPanel({
         </div>
         <div>
           <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Moderasi</h3>
-          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Kontrol Status Laporan</p>
+          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Kontrol Status Laporan</p>
         </div>
       </div>
 
       <form action={updateComplaintStatus} className="space-y-6">
         <input type="hidden" name="id" value={complaintId} />
         <div>
-          <label className="block text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em] mb-3 ml-1">Ubah Progress</label>
+          <label className="block text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mb-3 ml-1">Ubah Progress</label>
           <div className="relative group">
             <select
               name="status"
@@ -42,7 +42,7 @@ export default function StaffActionsPanel({
           </div>
         </div>
         <SubmitButton
-          className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4.5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-xl active:scale-[0.98] cursor-pointer"
+          className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4.5 rounded-2xl font-bold text-[10px] uppercase tracking-normal hover:opacity-90 transition-all shadow-xl active:scale-[0.98] cursor-pointer"
           loadingText="Menyimpan..."
         >
           Simpan Perubahan
@@ -51,7 +51,7 @@ export default function StaffActionsPanel({
 
       {isAdmin && (
         <div className="mt-10 pt-10 border-t border-brand-hairline">
-          <p className="text-[9px] font-bold text-red-500 uppercase tracking-[0.2em] mb-5 ml-1">Tindakan Destruktif</p>
+          <p className="text-[9px] font-bold text-red-500 uppercase tracking-normal mb-5 ml-1">Tindakan Destruktif</p>
           <DeleteComplaintButton id={complaintId} />
         </div>
       )}

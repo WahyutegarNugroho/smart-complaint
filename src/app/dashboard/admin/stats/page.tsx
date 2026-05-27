@@ -77,7 +77,7 @@ export default async function AdminStatsPage() {
                <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
                   <ArrowLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Pusat Data</span>
+               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-normal">Pusat Data</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Analitik & Statistik</h1>
             <p className="text-slate-400 dark:text-slate-500 font-medium text-sm md:text-base">Wawasan mendalam mengenai performa operasional perumahan.</p>
@@ -90,7 +90,7 @@ export default async function AdminStatsPage() {
           <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
              <div className="flex items-center justify-between mb-8 md:mb-10">
                 <div>
-                   <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Distribusi Status</h3>
+                   <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Distribusi Status</h3>
                    <p className="text-xl font-bold text-slate-900 dark:text-white">Arus Penyelesaian</p>
                 </div>
                 <div className="h-10 w-10 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
@@ -118,7 +118,7 @@ export default async function AdminStatsPage() {
                        <div key={item.status} className="space-y-3">
                          <div className="flex justify-between items-end">
                             <div className="flex flex-col">
-                               <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">
+                               <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">
                                   {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                                </span>
                                <span className="text-sm font-bold text-slate-900 dark:text-white">{item._count._all} Laporan</span>
@@ -142,7 +142,7 @@ export default async function AdminStatsPage() {
           <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
              <div className="flex items-center justify-between mb-8 md:mb-10">
                 <div>
-                   <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Peta Wilayah</h3>
+                   <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Peta Wilayah</h3>
                    <p className="text-xl font-bold text-slate-900 dark:text-white">Laporan per RT</p>
                 </div>
                 <div className="h-10 w-10 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800">
@@ -166,7 +166,7 @@ export default async function AdminStatsPage() {
                                {item._count._all} Laporan
                             </div>
                          </div>
-                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">RT {item.rt || '?'}</span>
+                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">RT {item.rt || '?'}</span>
                        </div>
                      )
                    })
@@ -182,7 +182,7 @@ export default async function AdminStatsPage() {
                  <Activity size={22} />
               </div>
               <div>
-                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Rata-rata Laporan</p>
+                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Rata-rata Laporan</p>
                  <p className="text-xl font-bold text-slate-900 dark:text-white">{(total / Math.max(rtCounts.length, 1)).toFixed(1)} <span className="text-sm text-slate-400 font-medium tracking-normal uppercase ml-1">Per RT</span></p>
               </div>
            </div>
@@ -192,7 +192,7 @@ export default async function AdminStatsPage() {
                  <TrendingUp size={22} />
               </div>
               <div>
-                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Total Entri</p>
+                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Total Entri</p>
                  <p className="text-xl font-bold text-slate-900 dark:text-white">{total} <span className="text-sm text-slate-400 font-medium tracking-normal uppercase ml-1">Laporan Warga</span></p>
               </div>
            </div>
@@ -202,7 +202,7 @@ export default async function AdminStatsPage() {
                  <Inbox size={22} />
               </div>
               <div>
-                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Cakupan Wilayah</p>
+                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Cakupan Wilayah</p>
                  <p className="text-xl font-bold text-slate-900 dark:text-white">{rtCounts.length} <span className="text-sm text-slate-400 font-medium tracking-normal uppercase ml-1">RT Terdata</span></p>
               </div>
            </div>
@@ -216,11 +216,11 @@ export default async function AdminStatsPage() {
                 <MapPin size={20} />
               </div>
               <div>
-                <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Visualisasi</h3>
+                <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Visualisasi</h3>
                 <p className="text-xl font-bold text-slate-900 dark:text-white">Peta Sebaran Laporan</p>
               </div>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-normal">
               {mapComplaints.length} titik
             </span>
           </div>

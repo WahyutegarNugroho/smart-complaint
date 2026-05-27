@@ -28,7 +28,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
       <div className="h-64 rounded-2xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40">
         <div className="text-center">
           <MapPin size={32} className="mx-auto mb-2 opacity-30" />
-          <p className="text-sm font-bold uppercase tracking-widest">Belum ada data lokasi</p>
+          <p className="text-sm font-bold uppercase tracking-normal">Belum ada data lokasi</p>
         </div>
       </div>
     )
@@ -74,7 +74,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
                   >
                     {c.title}
                   </Link>
-                  <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-normal">
                     <span className={`px-2 py-0.5 rounded ${
                       c.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
                       c.status === 'PROCESSING' ? 'bg-blue-100 text-blue-700' :
@@ -92,7 +92,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
       </MapContainer>
 
       {/* Legend */}
-      <div className="p-3 bg-brand-canvas border-t border-brand-hairline flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest">
+      <div className="p-3 bg-brand-canvas border-t border-brand-hairline flex items-center gap-4 text-[10px] font-bold uppercase tracking-normal">
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" /> Menunggu
         </div>

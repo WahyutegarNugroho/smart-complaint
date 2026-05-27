@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Bell, Check, ShieldAlert, BellOff } from 'lucide-react'
-import { markNotificationAsRead } from '@/app/dashboard/actions'
+import { Bell, Check, ShieldAlert, BellOff, CheckCheck } from 'lucide-react'
+import { markNotificationAsRead, markAllNotificationsAsRead } from '@/app/dashboard/actions'
 
 interface NotificationItem {
   id: string
@@ -133,14 +133,34 @@ export default function NotificationDropdown({ notifications: initialNotificatio
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 md:absolute md:inset-auto md:right-0 md:top-full md:mt-3 md:w-96 md:z-50 text-brand-ink">
-            <div className="p-5 border-b border-brand-hairline flex items-center justify-between">
-              <h4 className="text-xs font-black uppercase tracking-widest text-brand-ink">Notifikasi Anda</h4>
-              {unreadCount > 0 && (
-                <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[9px] font-bold px-2.5 py-0.5 rounded-lg uppercase tracking-wider">
-                  {unreadCount} Baru
-                </span>
-              )}
+          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 md:absolute md:inset-auto md:left-0 md:top-full md:mt-3 md:w-96 md:z-50 text-brand-ink">
+            <div className="p-5 border-b border-brand-hairline flex items-center justify-between gap-3">
+              <h4 className="text-xs font-black uppercase tracking-normal text-brand-ink">Notifikasi Anda</h4>
+              <div className="flex items-center gap-2 shrink-0">
+                {unreadCount > 0 && (
+                  <>
+                    <button
+                      onClick={async () => {
+                        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+                        try {
+                          await markAllNotificationsAsRead()
+                        } catch (err) {
+                          console.error('Mark all as read error:', err)
+                          setNotifications(initialNotifications)
+                        }
+                      }}
+                      className="text-[9px] font-bold text-brand-primary hover:text-brand-ink uppercase tracking-normal flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Tandai semua telah dibaca"
+                    >
+                      <CheckCheck size={13} /> Sudah Dibaca
+                    </button>
+                    <span className="w-px h-4 bg-brand-hairline" />
+                    <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[9px] font-bold px-2.5 py-0.5 rounded-lg uppercase tracking-normal">
+                      {unreadCount} Baru
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
             <div className="max-h-80 overflow-y-auto divide-y divide-brand-hairline">

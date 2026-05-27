@@ -95,7 +95,7 @@ export default function LoginPage({
               <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
-              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.3em] mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
+              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
             </div>
           </Link>
         </div>
@@ -107,7 +107,7 @@ export default function LoginPage({
 
           <Link
             href="/"
-            className="inline-flex items-center gap-3 text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest hover:text-brand-primary transition-colors mb-12 relative z-10"
+            className="inline-flex items-center gap-3 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal hover:text-brand-primary transition-colors mb-12 relative z-10"
           >
             <ArrowLeft size={16} /> Kembali ke Beranda
           </Link>
@@ -121,7 +121,7 @@ export default function LoginPage({
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-lg font-black text-red-600 uppercase tracking-widest">
+                  <h2 className="text-lg font-black text-red-600 uppercase tracking-normal">
                     Terlalu Banyak Percobaan
                   </h2>
                   <p className="text-[12px] font-bold text-red-500/70 uppercase tracking-wider leading-relaxed">
@@ -135,14 +135,14 @@ export default function LoginPage({
                     </span>
                   </div>
                 </div>
-                <p className="text-[10px] font-bold text-red-500/50 uppercase tracking-widest">
+                <p className="text-[10px] font-bold text-red-500/50 uppercase tracking-normal">
                   Tunggu hingga waktu habis untuk mencoba lagi
                 </p>
               </div>
 
               <SubmitButton
                 disabled={true}
-                className="w-full h-16 rounded-brand bg-red-300 text-white text-[13px] font-bold uppercase tracking-widest cursor-not-allowed mt-10"
+                className="w-full h-16 rounded-brand bg-red-300 text-white text-[13px] font-bold uppercase tracking-normal cursor-not-allowed mt-10"
               >
                 Masuk
               </SubmitButton>
@@ -150,14 +150,14 @@ export default function LoginPage({
           ) : (
             <form action={login} className="space-y-8 relative z-10">
               {message && (
-                <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
+                <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
                   <div className="h-2 w-2 bg-brand-primary rounded-full mt-1.5 flex-shrink-0"></div>
                   <div>{message}</div>
                 </div>
               )}
 
               {showRemaining && (
-                <div className={`rounded-brand p-6 text-[11px] font-bold uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4 border ${
+                <div className={`rounded-brand p-6 text-[11px] font-bold uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4 border ${
                   remainingNum > 3 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' :
                   remainingNum > 1 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' :
                   'bg-red-500/10 text-red-600 border-red-500/20'
@@ -174,14 +174,14 @@ export default function LoginPage({
               )}
 
               {error && error !== 'locked' && (
-                <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-widest leading-relaxed transition-colors flex items-start gap-4">
+                <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
                   <div className="h-2 w-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                   <div>{error}</div>
                 </div>
               )}
 
               <div className="space-y-3 text-left">
-                <label htmlFor="login-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest ml-1">Email Warga / Petugas</label>
+                <label htmlFor="login-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal ml-1">Email Warga / Petugas</label>
                 <div className="relative group">
                   <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                   <input
@@ -197,8 +197,8 @@ export default function LoginPage({
 
               <div className="space-y-3 text-left">
                 <div className="flex justify-between items-center px-1">
-                  <label htmlFor="login-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-widest">Kredensial Password</label>
-                  <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-widest hover:underline decoration-2">Lupa?</Link>
+                  <label htmlFor="login-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal">Kredensial Password</label>
+                  <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-normal hover:underline decoration-2">Lupa?</Link>
                 </div>
                 <div className="relative group">
                   <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
@@ -222,7 +222,7 @@ export default function LoginPage({
               </div>
 
               <SubmitButton
-                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-widest shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
+                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-normal shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
                 icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
                 loadingText="Otentikasi..."
               >
@@ -232,7 +232,7 @@ export default function LoginPage({
           )}
 
           <div className="mt-12 pt-10 border-t border-brand-hairline text-center relative z-10 transition-colors">
-            <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-widest">
+            <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-normal">
               Belum terdaftar?
               <Link href="/register" className="font-extrabold text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
                 REGISTRASI WARGA BARU

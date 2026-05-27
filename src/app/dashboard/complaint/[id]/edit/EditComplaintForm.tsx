@@ -66,7 +66,7 @@ export default function EditComplaintForm({
                <Link href={`/dashboard/complaint/${id}`} className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Koreksi Laporan</span>
+               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-normal">Koreksi Laporan</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Edit Informasi Pengaduan</h1>
             <p className="text-slate-400 dark:text-slate-500 font-medium text-sm md:text-base">Lakukan perubahan pada data laporan sebelum masuk tahap verifikasi petugas.</p>
@@ -81,7 +81,7 @@ export default function EditComplaintForm({
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-8 transition-colors">
               
               <div className="space-y-3">
-                <label htmlFor="title" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Judul / Subjek Laporan</label>
+                <label htmlFor="title" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal ml-1">Judul / Subjek Laporan</label>
                 <div className="relative group">
                    <Edit3 className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                    <input
@@ -97,7 +97,7 @@ export default function EditComplaintForm({
 
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                 <div className="space-y-3">
-                  <label htmlFor="incidentDate" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Tanggal Kejadian</label>
+                  <label htmlFor="incidentDate" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal ml-1">Tanggal Kejadian</label>
                   <div className="relative group">
                      <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                      <input
@@ -111,7 +111,7 @@ export default function EditComplaintForm({
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label htmlFor="location" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Lokasi Spesifik</label>
+                  <label htmlFor="location" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal ml-1">Lokasi Spesifik</label>
                   <div className="relative group">
                      <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 group-focus-within:text-blue-500 transition-colors" size={20} />
                      <input
@@ -127,7 +127,7 @@ export default function EditComplaintForm({
               </div>
 
               <div className="space-y-3">
-                <label htmlFor="content" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Detail Penjelasan</label>
+                <label htmlFor="content" className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal ml-1">Detail Penjelasan</label>
                 <textarea
                   id="content"
                   name="content"
@@ -143,7 +143,7 @@ export default function EditComplaintForm({
           {/* RIGHT: Visuals & Actions */}
           <div className="lg:col-span-5 space-y-8">
             <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
-              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] ml-1">Visual Bukti Kejadian</label>
+              <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal ml-1">Visual Bukti Kejadian</label>
               
               <div className="relative">
                 <input 
@@ -164,13 +164,13 @@ export default function EditComplaintForm({
                     <div className="h-16 w-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-300 dark:text-slate-700 mb-6 shadow-inner group-hover:scale-110 transition-transform">
                        <UploadCloud size={32} />
                     </div>
-                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">Unggah Foto Baru</p>
+                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal">Unggah Foto Baru</p>
                   </label>
                 ) : (
                   <div className="relative rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-xl group h-80">
                     <Image src={previewUrl} alt="Preview" fill unoptimized className="object-cover transition-transform duration-700 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                       <label htmlFor="image-upload" className="cursor-pointer bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform">Ganti Foto Bukti</label>
+                       <label htmlFor="image-upload" className="cursor-pointer bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold text-[10px] uppercase tracking-normal shadow-2xl hover:scale-105 transition-transform">Ganti Foto Bukti</label>
                     </div>
                     <button
                       type="button"
@@ -188,13 +188,13 @@ export default function EditComplaintForm({
             <div className="flex flex-col gap-4">
                <button
                  type="submit"
-                 className="w-full bg-slate-900 dark:bg-blue-600 py-6 rounded-[2rem] text-[11px] font-bold text-white uppercase tracking-[0.3em] shadow-2xl shadow-slate-900/20 dark:shadow-blue-600/20 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                 className="w-full bg-slate-900 dark:bg-blue-600 py-6 rounded-[2rem] text-[11px] font-bold text-white uppercase tracking-normal shadow-2xl shadow-slate-900/20 dark:shadow-blue-600/20 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
                >
                  <Save size={20} /> Simpan Pembaruan
                </button>
                <Link 
                  href={`/dashboard/complaint/${id}`}
-                 className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 py-6 rounded-[2rem] text-[11px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white text-center transition-all shadow-sm"
+                 className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 py-6 rounded-[2rem] text-[11px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-normal hover:text-slate-900 dark:hover:text-white text-center transition-all shadow-sm"
                >
                  Batalkan Perubahan
                </Link>

@@ -78,7 +78,7 @@ export default async function ExportPage() {
                <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">Manajemen Laporan</span>
+               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-normal">Manajemen Laporan</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white transition-colors">Ekspor Data & Arsip</h1>
             <p className="text-slate-400 dark:text-slate-500 font-medium text-sm md:text-base transition-colors">Unduh data laporan masyarakat untuk keperluan evaluasi berkala.</p>
@@ -93,7 +93,7 @@ export default async function ExportPage() {
                  <CheckCircle2 size={24} />
               </div>
               <div>
-                 <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-2 transition-colors">Panduan Ekspor</p>
+                 <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-normal mb-2 transition-colors">Panduan Ekspor</p>
                  <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed transition-colors">
                     Format CSV sangat cocok untuk diolah kembali di Excel, sementara Cetak PDF akan menghasilkan dokumen ringkasan yang siap dipresentasikan pada rapat warga atau pengurus RT/RW.
                  </p>
@@ -136,7 +136,7 @@ export default async function ExportPage() {
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
             Laporan Pengaduan Masyarakat
           </h1>
-          <p className="text-[11pt] font-bold uppercase tracking-[0.3em] text-slate-400 mb-12">
+          <p className="text-[11pt] font-bold uppercase tracking-normal text-slate-400 mb-12">
             SmartComplaint
           </p>
           <div className="w-32 h-1 bg-slate-900 mb-12" />
@@ -171,7 +171,7 @@ export default async function ExportPage() {
               <div key={kpi.label} className="border border-slate-200 rounded-xl p-6 text-center">
                 <div className={'w-3 h-3 rounded-full mx-auto mb-3 ' + kpi.color} />
                 <p className="text-3xl font-bold text-slate-900 mb-1">{kpi.value}</p>
-                <p className="text-[8pt] font-bold uppercase tracking-widest text-slate-400">{kpi.label}</p>
+                <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">{kpi.label}</p>
               </div>
             ))}
           </div>
@@ -188,7 +188,7 @@ export default async function ExportPage() {
 
           {/* Status Distribution */}
           <div className="no-break">
-            <h3 className="text-[10pt] font-bold text-slate-900 uppercase tracking-widest mb-5">Distribusi Status</h3>
+            <h3 className="text-[10pt] font-bold text-slate-900 uppercase tracking-normal mb-5">Distribusi Status</h3>
             <div className="space-y-4">
               {statuses.map(s => (
                 <div key={s.label}>

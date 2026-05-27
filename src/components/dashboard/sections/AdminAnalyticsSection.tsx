@@ -43,7 +43,7 @@ export default async function AdminAnalyticsSection() {
       <div className="lg:col-span-8 bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col min-h-[350px]">
         <div className="flex items-center justify-between mb-10 md:mb-12">
             <div>
-              <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Analisis Kerja</h3>
+              <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-normal mb-1">Analisis Kerja</h3>
               <p className="text-xl font-bold text-slate-900 dark:text-white transition-colors">Tren Mingguan</p>
             </div>
         </div>
@@ -54,7 +54,7 @@ export default async function AdminAnalyticsSection() {
                 <div className="w-full bg-slate-50 dark:bg-slate-800 rounded-xl relative transition-all duration-500 group-hover:bg-blue-500/10 flex items-end p-0.5" style={{ height: `${(item.count / maxChart) * 100}%`, minHeight: '8px' }}>
                     <div className="w-full bg-slate-900 dark:bg-blue-600 rounded-lg h-full opacity-10 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{item.day}</span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">{item.day}</span>
               </div>
             ))}
         </div>
@@ -68,9 +68,9 @@ export default async function AdminAnalyticsSection() {
             </div>
             
             <div className="relative z-10 space-y-8">
-                <h3 className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Penanganan</h3>
+                <h3 className="text-[9px] font-bold text-white/50 uppercase tracking-normal">Penanganan</h3>
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-white/60 uppercase tracking-widest">Rate Selesai</p>
+                  <p className="text-sm font-bold text-white/60 uppercase tracking-normal">Rate Selesai</p>
                   <p className="text-4xl md:text-5xl font-bold tracking-tight">{completionRate}%</p>
                 </div>
                 <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -79,7 +79,7 @@ export default async function AdminAnalyticsSection() {
             </div>
 
             <Link href="/dashboard/admin/users" className="relative z-10 mt-8 flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl transition-all group backdrop-blur-md border border-white/10 cursor-pointer">
-                <span className="text-[9px] font-bold uppercase tracking-widest">Verifikasi {unverifiedUsers} Warga</span>
+                <span className="text-[9px] font-bold uppercase tracking-normal">Verifikasi {unverifiedUsers} Warga</span>
                 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
