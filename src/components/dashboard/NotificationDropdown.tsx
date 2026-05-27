@@ -21,7 +21,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
   const [isOpen, setIsOpen] = useState(false)
   const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications)
   const [now, setNow] = useState<number>(0)
-  const [desktopPos, setDesktopPos] = useState<{ top: number; right: number } | null>(null)
+  const [desktopPos, setDesktopPos] = useState<{ top: number; left: number } | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLButtonElement>(null)
 
@@ -115,7 +115,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
       const rect = bellRef.current.getBoundingClientRect()
       setDesktopPos({
         top: rect.bottom + 12,
-        right: window.innerWidth - rect.right,
+        left: rect.left,
       })
     } else {
       setDesktopPos(null)
@@ -241,7 +241,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
           {desktopPos && createPortal(
             <div
               className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 text-brand-ink"
-              style={{ top: desktopPos.top, right: desktopPos.right, width: '384px' }}
+              style={{ top: desktopPos.top, left: desktopPos.left, width: '384px' }}
             >
               {dropdownContent}
             </div>,
