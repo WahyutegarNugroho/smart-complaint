@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
 import PDFDocument from 'pdfkit'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: Request) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -99,7 +101,8 @@ export async function GET(request: Request) {
       statuses.forEach(s => {
         const pct = total > 0 ? Math.round((s.count / total) * 100) : 0
         doc.fontSize(9).font('Helvetica').fillColor('#333').text(`${s.label}: ${s.count} laporan (${pct}%)`)
-        doc.rect(50, doc.y + 2, 400 * (pct / 100), 6).fill(s.color)
+        doc.rect(50, doc.y + 2, Math.max(1, 400 * (pct / 100)), 6)
+        doc.fill(s.color)
         doc.moveDown(1.2)
       })
 
@@ -118,7 +121,8 @@ export async function GET(request: Request) {
       doc.fontSize(7).font('Helvetica-Bold').fillColor('#fff')
       let xPos = 50
       columns.forEach((col, i) => {
-        doc.rect(xPos, tableTop, colW[i], 18).fill('#1e293b')
+        doc.rect(xPos, tableTop, colW[i], 18)
+        doc.fill('#1e293b')
         doc.fillColor('#fff').text(col, xPos + 3, tableTop + 5, { width: colW[i] - 6, align: 'left' })
         xPos += colW[i]
       })
@@ -131,7 +135,8 @@ export async function GET(request: Request) {
           xPos = 50
           doc.fontSize(7).font('Helvetica-Bold').fillColor('#fff')
           columns.forEach((col, ci) => {
-            doc.rect(xPos, y, colW[ci], 18).fill('#1e293b')
+            doc.rect(xPos, y, colW[ci], 18)
+            doc.fill('#1e293b')
             doc.fillColor('#fff').text(col, xPos + 3, y + 5, { width: colW[ci] - 6, align: 'left' })
             xPos += colW[ci]
           })
@@ -139,7 +144,8 @@ export async function GET(request: Request) {
         }
 
         const bgColor = i % 2 === 0 ? '#ffffff' : '#f8fafc'
-        doc.rect(50, y, 460, 16).fill(bgColor)
+        doc.rect(50, y, 460, 16)
+        doc.fill(bgColor)
         xPos = 50
 
         const rowData = [
@@ -180,7 +186,9 @@ export async function GET(request: Request) {
       }
     })
   } catch (err) {
-    console.error('PDF Export Error:', err)
-    return new NextResponse('Internal Server Error', { status: 500 })
+    console.error('=== PDF Export Error ===')
+    console.error(err instanceof Error ? err.message : err)
+    if (err instanceof Error && err.stack) console.error(err.stack)
+    return new NextResponse(`Internal Server Error: ${err instanceof Error ? err.message : 'Unknown error'}`, { status: 500 })
   }
 }

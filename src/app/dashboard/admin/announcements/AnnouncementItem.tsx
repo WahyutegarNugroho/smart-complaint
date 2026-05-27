@@ -12,10 +12,20 @@ import {
 } from 'lucide-react'
 import ConfirmModal from '@/components/ConfirmModal'
 
+const CATEGORY_STYLES: Record<string, { label: string; cls: string }> = {
+  umum: { label: 'Umum', cls: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800' },
+  kegiatan: { label: 'Kegiatan', cls: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800' },
+  darurat: { label: 'Darurat', cls: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' },
+  kebersihan: { label: 'Kebersihan', cls: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800' },
+  kesehatan: { label: 'Kesehatan', cls: 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-800' },
+  keagamaan: { label: 'Keagamaan', cls: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' },
+}
+
 interface Announcement {
   id: string;
   title: string;
   content: string;
+  category: string;
   createdAt: Date | string;
   author: {
     name: string | null;
@@ -53,6 +63,21 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
               className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl px-5 py-3.5 text-xs font-medium text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none resize-none transition-all" 
             />
           </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Kategori</label>
+            <select 
+              name="category" 
+              defaultValue={item.category || 'umum'}
+              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl px-5 py-3.5 text-sm font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all appearance-none"
+            >
+              <option value="umum">Umum</option>
+              <option value="kegiatan">Kegiatan</option>
+              <option value="darurat">Darurat</option>
+              <option value="kebersihan">Kebersihan</option>
+              <option value="kesehatan">Kesehatan</option>
+              <option value="keagamaan">Keagamaan</option>
+            </select>
+          </div>
           <div className="flex items-center gap-3">
             <button type="submit" className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95">
               <Check size={16} /> Simpan Perubahan
@@ -71,6 +96,11 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
       <div className="flex justify-between items-start mb-6">
         <div className="space-y-1">
            <h4 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight pr-8">{item.title}</h4>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <span className={"text-[9px] font-bold uppercase tracking-normal px-2 py-0.5 rounded-lg border " + (CATEGORY_STYLES[item.category]?.cls || CATEGORY_STYLES.umum.cls)}>
+                {CATEGORY_STYLES[item.category]?.label || 'Umum'}
+              </span>
+            </div>
            <div className="flex items-center gap-4 mt-2">
               <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">
                  <User size={12} className="text-blue-500" />

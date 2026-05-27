@@ -132,18 +132,20 @@ model Response {
 }
 
 model Announcement {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id        String   @id @default(cuid())
+    title     String
+    content   String
+    category  String   @default("umum")
+    authorId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  author Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    author Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  @@index([createdAt])
-  @@index([authorId])
-}
+    @@index([createdAt])
+    @@index([category])
+    @@index([authorId])
+  }
 
 model Notification {
   id        String   @id @default(cuid())

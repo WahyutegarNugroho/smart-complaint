@@ -1,43 +1,42 @@
 import React from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, Clock, MapPin } from 'lucide-react'
+import prisma from '@/lib/prisma'
+import { ArrowLeft, Calendar } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata = {
   title: 'Agenda Kegiatan | Smart Complaint',
 }
 
-const AGENDAS = [
-  {
-    title: 'Rapat Bulanan Warga',
-    date: 'Setiap Sabtu Pertama',
-    time: '19.00 - 21.00 WIB',
-    location: 'Balai Warga RW 09',
-    category: 'Rutin',
-  },
-  {
-    title: 'Kerja Bakti Lingkungan',
-    date: 'Setiap Minggu Kedua',
-    time: '06.00 - 09.00 WIB',
-    location: 'Area Lingkungan Pesona Serpong',
-    category: 'Kebersihan',
-  },
-  {
-    title: 'Posyandu Balita',
-    date: 'Setiap Rabu',
-    time: '08.00 - 12.00 WIB',
-    location: 'Posyandu RW 09',
-    category: 'Kesehatan',
-  },
-  {
-    title: 'Pengajian Akbar',
-    date: 'Jumat Terakhir Bulan',
-    time: '16.00 - 18.00 WIB',
-    location: 'Masjid Pesona Serpong',
-    category: 'Keagamaan',
-  },
-]
+const CATEGORY_MAP: Record<string, { label: string; cls: string }> = {
+  umum: { label: 'Umum', cls: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800' },
+  kegiatan: { label: 'Kegiatan', cls: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800' },
+  darurat: { label: 'Darurat', cls: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' },
+  kebersihan: { label: 'Kebersihan', cls: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800' },
+  kesehatan: { label: 'Kesehatan', cls: 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-800' },
+  keagamaan: { label: 'Keagamaan', cls: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' },
+}
 
-export default function AgendaPage() {
+export default async function AgendaPage() {
+  let announcements: Array<{
+    id: string
+    title: string
+    content: string
+    category: string
+    createdAt: Date
+  }> = []
+
+  try {
+    announcements = await prisma.announcement.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    })
+  } catch (err) {
+    console.error('AgendaPage Error:', err)
+  }
+
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 animate-page">
       <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-10">
@@ -55,26 +54,40 @@ export default function AgendaPage() {
         </div>
 
         <div className="space-y-4">
-          {AGENDAS.map((item, i) => (
-            <div key={i} className="bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:border-brand-primary/30 transition-all">
-              <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
-                  <Calendar size={20} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="text-[9px] font-bold text-brand-primary uppercase tracking-wider bg-brand-primary/10 px-2 py-0.5 rounded-lg">{item.category}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-brand-ink mb-2">{item.title}</h3>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-brand-ink/60 font-medium">
-                    <span className="flex items-center gap-1.5"><Calendar size={14} className="text-brand-ink/40" /> {item.date}</span>
-                    <span className="flex items-center gap-1.5"><Clock size={14} className="text-brand-ink/40" /> {item.time}</span>
-                    <span className="flex items-center gap-1.5"><MapPin size={14} className="text-brand-ink/40" /> {item.location}</span>
-                  </div>
-                </div>
-              </div>
+          {announcements.length === 0 ? (
+            <div className="bg-brand-canvas border border-brand-hairline rounded-2xl p-16 text-center">
+              <Calendar size={48} className="text-brand-ink/10 mx-auto mb-4" />
+              <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-normal">Belum ada agenda</p>
             </div>
-          ))}
+          ) : (
+            announcements.map((item) => {
+              const cat = CATEGORY_MAP[item.category] || CATEGORY_MAP.umum
+              return (
+                <div key={item.id} className="bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:border-brand-primary/30 transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
+                      <Calendar size={20} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <span className={"text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-lg border " + cat.cls}>{cat.label}</span>
+                      </div>
+                      <h3 className="text-lg font-bold text-brand-ink mb-2">{item.title}</h3>
+                      {item.content && (
+                        <p className="text-sm text-brand-ink/60 font-medium mb-3 leading-relaxed">{item.content}</p>
+                      )}
+                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-brand-ink/60 font-medium">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar size={14} className="text-brand-ink/40" />
+                          {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          )}
         </div>
       </main>
     </div>

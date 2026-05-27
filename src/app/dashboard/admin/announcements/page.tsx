@@ -17,6 +17,7 @@ interface Announcement {
   id: string;
   title: string;
   content: string;
+  category: string;
   createdAt: Date | string;
   author: {
     name: string | null;
@@ -123,7 +124,22 @@ export default async function AdminAnnouncementsPage({
                         className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl px-5 py-4 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none resize-none font-medium transition-all" 
                       />
                    </div>
-                   <button 
+                    <div>
+                       <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal mb-2.5 ml-1 transition-colors">Kategori</label>
+                       <select 
+                         name="category" 
+                         defaultValue="umum"
+                         className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl px-5 py-4 text-sm font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all appearance-none"
+                       >
+                         <option value="umum">Umum</option>
+                         <option value="kegiatan">Kegiatan</option>
+                         <option value="darurat">Darurat</option>
+                         <option value="kebersihan">Kebersihan</option>
+                         <option value="kesehatan">Kesehatan</option>
+                         <option value="keagamaan">Keagamaan</option>
+                       </select>
+                    </div>
+                    <button 
                     type="submit" 
                     className="w-full bg-slate-900 dark:bg-blue-600 text-white py-5 rounded-2xl font-bold text-[10px] uppercase tracking-normal hover:opacity-90 transition-all shadow-xl shadow-slate-900/10 active:scale-[0.98] flex items-center justify-center gap-3"
                    >

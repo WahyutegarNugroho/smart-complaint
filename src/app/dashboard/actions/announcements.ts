@@ -16,6 +16,7 @@ export async function createAnnouncement(formData: FormData) {
 
     const title = formData.get('title') as string
     const content = formData.get('content') as string
+    const category = (formData.get('category') as string) || 'umum'
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Isi pengumuman', 2000)
     if (errTitle || errContent) {
@@ -23,7 +24,7 @@ export async function createAnnouncement(formData: FormData) {
     }
 
     await prisma.announcement.create({
-      data: { title, content, authorId: profile.id }
+      data: { title, content, category, authorId: profile.id }
     })
 
     revalidatePath('/dashboard')
@@ -45,6 +46,7 @@ export async function updateAnnouncement(formData: FormData) {
     const id = formData.get('id') as string
     const title = formData.get('title') as string
     const content = formData.get('content') as string
+    const category = (formData.get('category') as string) || 'umum'
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Isi pengumuman', 2000)
     if (errTitle || errContent) {
@@ -53,7 +55,7 @@ export async function updateAnnouncement(formData: FormData) {
 
     await prisma.announcement.update({
       where: { id },
-      data: { title, content }
+      data: { title, content, category }
     })
 
     revalidatePath('/dashboard')

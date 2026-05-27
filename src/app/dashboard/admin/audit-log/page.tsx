@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
-import { ArrowLeft, History } from 'lucide-react'
+import { ArrowLeft, History, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import AuditLogActionFilter from '@/components/AuditLogActionFilter'
 
@@ -13,15 +13,19 @@ const ACTION_LABELS: Record<string, string> = {
   UPDATE_STATUS: 'Ubah Status',
 }
 
+const PAGE_SIZE = 20
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function AuditLogPage({
   searchParams
 }: {
-  searchParams: Promise<{ action?: string }>
+  searchParams: Promise<{ action?: string; page?: string }>
 }) {
-  const { action: filterAction } = await searchParams
+  const sp = await searchParams
+  const filterAction = sp.action
+  const page = Math.max(1, parseInt(sp.page || '1'))
   const supabase = await createClient()
 
   let logs: Array<{
@@ -31,6 +35,7 @@ export default async function AuditLogPage({
     createdAt: Date
     admin: { name: string | null }
   }> = []
+  let totalLogs = 0
 
   try {
     const { data: { user } } = await supabase.auth.getUser()
@@ -45,14 +50,25 @@ export default async function AuditLogPage({
     const whereClause: { action?: string } = {}
     if (filterAction) whereClause.action = filterAction
 
+    totalLogs = await prisma.auditLog.count({ where: whereClause })
+
     logs = await prisma.auditLog.findMany({
       where: whereClause,
       orderBy: { createdAt: 'desc' },
-      take: 100,
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
       include: { admin: true }
     })
   } catch (err) {
     console.error('AuditLogPage Error:', err)
+  }
+
+  const buildHref = (p: number) => {
+    const params = new URLSearchParams()
+    if (filterAction) params.set('action', filterAction)
+    if (p > 1) params.set('page', String(p))
+    const qs = params.toString()
+    return `/dashboard/admin/audit-log${qs ? '?' + qs : ''}`
   }
 
   return (
@@ -124,6 +140,35 @@ export default async function AuditLogPage({
               </div>
             )}
           </div>
+
+          {totalLogs > PAGE_SIZE && (
+          <div className="flex items-center justify-between pt-4">
+            <p className="text-xs text-brand-ink/50 font-medium">
+              {totalLogs > 0 ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalLogs)} dari ${totalLogs}` : ''}
+            </p>
+            <div className="flex items-center gap-2">
+              {page > 1 && (
+                <Link
+                  href={buildHref(page - 1)}
+                  className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                  aria-label="Halaman sebelumnya"
+                >
+                  <ChevronLeft size={16} />
+                </Link>
+              )}
+              <span className="text-xs font-bold text-brand-ink/60 px-3">{page}</span>
+              {page * PAGE_SIZE < totalLogs && (
+                <Link
+                  href={buildHref(page + 1)}
+                  className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                  aria-label="Halaman selanjutnya"
+                >
+                  <ChevronRight size={16} />
+                </Link>
+              )}
+            </div>
+          </div>
+          )}
         </section>
       </main>
     </div>
