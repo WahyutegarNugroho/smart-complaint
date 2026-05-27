@@ -1,0 +1,130 @@
+diff --git a/node_modules/pdfkit/js/pdfkit.es.js b/node_modules/pdfkit/js/pdfkit.es.js
+index 412c9ff..f4462cb 100644
+--- a/node_modules/pdfkit/js/pdfkit.es.js
++++ b/node_modules/pdfkit/js/pdfkit.es.js
+@@ -2433,46 +2433,46 @@ class PDFFont {
+ 
+ const STANDARD_FONTS = {
+   Courier() {
+-    return fs.readFileSync(__dirname + '/data/Courier.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier.afm'), 'utf8');
+   },
+   'Courier-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-Bold.afm'), 'utf8');
+   },
+   'Courier-Oblique'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-Oblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-Oblique.afm'), 'utf8');
+   },
+   'Courier-BoldOblique'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-BoldOblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-BoldOblique.afm'), 'utf8');
+   },
+   Helvetica() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica.afm'), 'utf8');
+   },
+   'Helvetica-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-Bold.afm'), 'utf8');
+   },
+   'Helvetica-Oblique'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-Oblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-Oblique.afm'), 'utf8');
+   },
+   'Helvetica-BoldOblique'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-BoldOblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-BoldOblique.afm'), 'utf8');
+   },
+   'Times-Roman'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Roman.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Roman.afm'), 'utf8');
+   },
+   'Times-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Bold.afm'), 'utf8');
+   },
+   'Times-Italic'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Italic.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Italic.afm'), 'utf8');
+   },
+   'Times-BoldItalic'() {
+-    return fs.readFileSync(__dirname + '/data/Times-BoldItalic.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-BoldItalic.afm'), 'utf8');
+   },
+   Symbol() {
+-    return fs.readFileSync(__dirname + '/data/Symbol.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Symbol.afm'), 'utf8');
+   },
+   ZapfDingbats() {
+-    return fs.readFileSync(__dirname + '/data/ZapfDingbats.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/ZapfDingbats.afm'), 'utf8');
+   }
+ };
+ class StandardFont extends PDFFont {
+diff --git a/node_modules/pdfkit/js/pdfkit.js b/node_modules/pdfkit/js/pdfkit.js
+index f7b3199..72f2f28 100644
+--- a/node_modules/pdfkit/js/pdfkit.js
++++ b/node_modules/pdfkit/js/pdfkit.js
+@@ -2413,46 +2413,46 @@ class PDFFont {
+ 
+ const STANDARD_FONTS = {
+   Courier() {
+-    return fs.readFileSync(__dirname + '/data/Courier.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier.afm'), 'utf8');
+   },
+   'Courier-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-Bold.afm'), 'utf8');
+   },
+   'Courier-Oblique'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-Oblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-Oblique.afm'), 'utf8');
+   },
+   'Courier-BoldOblique'() {
+-    return fs.readFileSync(__dirname + '/data/Courier-BoldOblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Courier-BoldOblique.afm'), 'utf8');
+   },
+   Helvetica() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica.afm'), 'utf8');
+   },
+   'Helvetica-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-Bold.afm'), 'utf8');
+   },
+   'Helvetica-Oblique'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-Oblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-Oblique.afm'), 'utf8');
+   },
+   'Helvetica-BoldOblique'() {
+-    return fs.readFileSync(__dirname + '/data/Helvetica-BoldOblique.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Helvetica-BoldOblique.afm'), 'utf8');
+   },
+   'Times-Roman'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Roman.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Roman.afm'), 'utf8');
+   },
+   'Times-Bold'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Bold.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Bold.afm'), 'utf8');
+   },
+   'Times-Italic'() {
+-    return fs.readFileSync(__dirname + '/data/Times-Italic.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-Italic.afm'), 'utf8');
+   },
+   'Times-BoldItalic'() {
+-    return fs.readFileSync(__dirname + '/data/Times-BoldItalic.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Times-BoldItalic.afm'), 'utf8');
+   },
+   Symbol() {
+-    return fs.readFileSync(__dirname + '/data/Symbol.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/Symbol.afm'), 'utf8');
+   },
+   ZapfDingbats() {
+-    return fs.readFileSync(__dirname + '/data/ZapfDingbats.afm', 'utf8');
++    return fs.readFileSync(require.resolve('./data/ZapfDingbats.afm'), 'utf8');
+   }
+ };
+ class StandardFont extends PDFFont {
