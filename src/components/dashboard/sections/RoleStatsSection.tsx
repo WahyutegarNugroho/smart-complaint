@@ -56,17 +56,18 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
       {stats.map((item, idx) => {
         const cs = colorStyles[item.color] || colorStyles.slate
         return (
-        <div key={idx} className="bg-white dark:bg-slate-900 p-5 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all group relative overflow-hidden">
+        <div key={idx} className="bg-brand-canvas p-5 md:p-6 rounded-2xl border border-brand-hairline transition-all group relative overflow-hidden">
             <div className="flex justify-between items-start mb-3 md:mb-4">
               <div className={`h-9 w-9 md:h-10 md:w-10 rounded-xl ${cs.bg} ${cs.darkBg} flex items-center justify-center ${cs.text} ${cs.darkText} border ${cs.border} ${cs.darkBorder} transition-colors`}>
                 <item.icon size={18} />
               </div>
             </div>
-            <p className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{item.val}</p>
-            <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-normal text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
+            <p className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">{item.val}</p>
+            <p className="text-[10px] md:text-[11px] font-semibold uppercase tracking-normal text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
         </div>
         )
       })}
     </section>
   )
 }
+

@@ -4,7 +4,7 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui;
-  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: var(--font-sf-mono), Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Brand Colors - Mapped to CSS Variables */
   --color-brand-primary: var(--brand-primary);
@@ -13,8 +13,19 @@
   --color-brand-ink: var(--brand-ink);
   --color-brand-hairline: var(--brand-hairline);
 
-  /* Brand Radius - Dynamic based on theme */
+  /* Brand Radius - Canonical Scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-brand: var(--brand-radius);
+
+  /* Semantic Status Colors */
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
+  --color-negative: var(--negative);
+  --color-body: var(--body);
+  --color-mute: var(--mute);
 }
 
 :root {
@@ -24,9 +35,18 @@
   --brand-canvas-soft: #e8ebe6;
   --brand-ink: #0e0f0c;
   --brand-hairline: rgba(14, 15, 12, 0.1);
-  --brand-radius: 12px; /* Unified: Modern & Efficient */
+  --brand-radius: 24px; /* Canonical: Buttons & Cards */
+
+  /* Semantic Primitives */
+  --positive: #16a34a;
+  --warning: #d97706;
+  --negative: #dc2626;
+  --body: #0e0f0c;
+  --mute: #737373;
   
   --font-inter: "Inter Variable", "Inter", sans-serif;
+  --font-plus-jakarta-sans: "Plus Jakarta Sans", sans-serif;
+  --font-sf-mono: "SFMono-Regular";
 }
 
 .dark {
@@ -36,6 +56,14 @@
   --brand-canvas-soft: #1a1a1a;
   --brand-ink: #f2f2f2;
   --brand-hairline: rgba(255, 255, 255, 0.05);
+
+  /* Semantic Primitives - Dark */
+  --positive: #22c55e;
+  --warning: #f59e0b;
+  --negative: #ef4444;
+  --body: #f2f2f2;
+  --mute: #a1a1aa;
+  
   color-scheme: dark;
 }
 
@@ -107,6 +135,13 @@
 
 .animate-page {
   animation: fade-slide-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Dark mode transition — ensure all theme-affected elements animate smoothly */
+@layer utilities {
+  .transition-colors {
+    transition-duration: 500ms;
+  }
 }
 
 /* Print Styles — base (applied to all pages) */

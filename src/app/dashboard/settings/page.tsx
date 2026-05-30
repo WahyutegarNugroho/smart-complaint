@@ -23,7 +23,7 @@ export default async function SettingsPage() {
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">
       
-      <main className="max-w-6xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
+      <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12">
         
         {/* 👋 HEADER SECTION */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -32,7 +32,7 @@ export default async function SettingsPage() {
                <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-normal">Konfigurasi Akun</span>
+               <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Konfigurasi Akun</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink transition-colors">Pengaturan Profil</h1>
             <p className="text-brand-ink/60 font-medium text-sm md:text-base transition-colors">Perbarui identitas dan informasi domisili Anda untuk verifikasi sistem.</p>
@@ -47,11 +47,11 @@ export default async function SettingsPage() {
 
         {/* 🚪 LOGOUT SECTION (For Mobile) */}
         <section className="pt-8 border-t border-brand-hairline flex flex-col items-center">
-          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mb-6">Sesi Akun</p>
+          <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mb-6">Sesi Akun</p>
           <form action={logout} className="w-full max-w-sm">
             <button 
               type="submit" 
-              className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-[2rem] bg-red-500/10 text-red-600 dark:text-red-500 font-bold text-xs uppercase tracking-normal border border-red-500/20 hover:bg-red-500/20 transition-all active:scale-95 cursor-pointer"
+              className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-3xl bg-red-500/10 text-red-600 dark:text-red-500 font-bold text-xs uppercase tracking-normal border border-red-500/20 hover:bg-red-500/20 transition-all active:scale-95 cursor-pointer"
             >
               <LogOut size={18} /> Keluar Dari Sistem
             </button>
@@ -62,3 +62,4 @@ export default async function SettingsPage() {
     </div>
   )
 }
+

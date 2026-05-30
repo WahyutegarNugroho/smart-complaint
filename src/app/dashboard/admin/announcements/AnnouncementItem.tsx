@@ -42,33 +42,33 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
 
   if (isEditing) {
     return (
-      <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] shadow-2xl border-2 border-blue-500/50 animate-in fade-in zoom-in-95 duration-300 transition-colors z-10 relative">
+      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-primary/50 animate-in fade-in zoom-in-95 duration-300 transition-colors z-10 relative">
         <form action={updateAnnouncement} onSubmit={() => setIsEditing(false)} className="space-y-6">
           <input type="hidden" name="id" value={item.id} />
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Judul</label>
+            <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal ml-1 transition-colors">Judul</label>
             <input 
               name="title" 
               defaultValue={item.title} 
               autoFocus
-              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl px-5 py-3.5 text-sm font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all" 
+              className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl px-5 py-3.5 text-sm font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/5 focus:border-brand-primary outline-none transition-all" 
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Konten</label>
+            <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal ml-1 transition-colors">Konten</label>
             <textarea 
               name="content" 
               defaultValue={item.content} 
               rows={5}
-              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl px-5 py-3.5 text-xs font-medium text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none resize-none transition-all" 
+              className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl px-5 py-3.5 text-xs font-medium text-brand-ink focus:ring-4 focus:ring-brand-primary/5 focus:border-brand-primary outline-none resize-none transition-all" 
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal ml-1 transition-colors">Kategori</label>
+            <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal ml-1 transition-colors">Kategori</label>
             <select 
               name="category" 
               defaultValue={item.category || 'umum'}
-              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl px-5 py-3.5 text-sm font-bold text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all appearance-none"
+              className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl px-5 py-3.5 text-sm font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/5 focus:border-brand-primary outline-none transition-all appearance-none"
             >
               <option value="umum">Umum</option>
               <option value="kegiatan">Kegiatan</option>
@@ -79,10 +79,10 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             </select>
           </div>
           <div className="flex items-center gap-3">
-            <button type="submit" className="flex-1 bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-xl active:scale-95">
+            <button type="submit" className="flex-1 bg-brand-ink text-brand-canvas py-4 rounded-xl text-[10px] font-semibold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-lg active:scale-95">
               <Check size={16} /> Simpan Perubahan
             </button>
-            <button type="button" onClick={() => setIsEditing(false)} className="px-8 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 py-4 rounded-xl text-[10px] font-bold uppercase tracking-normal hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95">
+            <button type="button" onClick={() => setIsEditing(false)} className="px-8 bg-brand-canvas-soft text-brand-ink/50 py-4 rounded-xl text-[10px] font-semibold uppercase tracking-normal hover:bg-brand-canvas transition-all active:scale-95">
               Batal
             </button>
           </div>
@@ -92,23 +92,23 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 group transition-all hover:shadow-xl relative overflow-hidden">
+    <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline group transition-all hover:shadow-xl relative overflow-hidden">
       <div className="flex justify-between items-start mb-6">
         <div className="space-y-1">
-           <h4 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight pr-8">{item.title}</h4>
+            <h4 className="text-xl md:text-2xl font-bold text-brand-ink group-hover:text-brand-primary transition-colors leading-tight pr-8">{item.title}</h4>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
-              <span className={"text-[9px] font-bold uppercase tracking-normal px-2 py-0.5 rounded-lg border " + (CATEGORY_STYLES[item.category]?.cls || CATEGORY_STYLES.umum.cls)}>
+              <span className={"text-[9px] font-semibold uppercase tracking-normal px-2 py-0.5 rounded-lg border " + (CATEGORY_STYLES[item.category]?.cls || CATEGORY_STYLES.umum.cls)}>
                 {CATEGORY_STYLES[item.category]?.label || 'Umum'}
               </span>
             </div>
            <div className="flex items-center gap-4 mt-2">
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">
-                 <User size={12} className="text-blue-500" />
+              <div className="flex items-center gap-1.5 text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal transition-colors">
+                 <User size={12} className="text-brand-primary" />
                  {item.author.name}
               </div>
-              <div className="h-1 w-1 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-normal transition-colors">
-                 <Calendar size={12} className="text-blue-500" />
+              <div className="h-1 w-1 bg-brand-hairline rounded-full"></div>
+              <div className="flex items-center gap-1.5 text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal transition-colors">
+                 <Calendar size={12} className="text-brand-primary" />
                  {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
               </div>
            </div>
@@ -118,13 +118,13 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
           <button 
             onClick={() => setIsEditing(true)}
             aria-label="Edit pengumuman"
-            className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 transition-all"
+            className="h-10 w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-primary border border-transparent hover:border-brand-primary/30 transition-all"
           >
             <Edit3 size={16} />
           </button>
           <form action={deleteAnnouncement}>
             <input type="hidden" name="id" value={item.id} />
-            <button type="button" onClick={() => setShowDeleteModal(true)} aria-label="Hapus pengumuman" className="h-10 w-10 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-red-500 border border-transparent hover:border-red-100 dark:hover:border-red-900/30 transition-all">
+            <button type="button" onClick={() => setShowDeleteModal(true)} aria-label="Hapus pengumuman" className="h-10 w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-negative border border-transparent hover:border-negative/30 transition-all">
               <Trash2 size={16} />
             </button>
           </form>
@@ -141,7 +141,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
       </div>
 
       <div className="relative">
-         <p className="text-[13px] md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-medium transition-colors pl-4 border-l-2 border-slate-100 dark:border-slate-800">
+         <p className="text-[13px] md:text-sm text-brand-ink/70 leading-relaxed whitespace-pre-wrap font-medium transition-colors pl-4 border-l-2 border-brand-hairline">
            {item.content}
          </p>
       </div>
@@ -152,3 +152,4 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
     </div>
   )
 }
+

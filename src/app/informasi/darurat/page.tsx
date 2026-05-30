@@ -18,14 +18,14 @@ export default function DaruratPage() {
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 animate-page">
       <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-10">
         <div className="space-y-3">
-          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
             <ArrowLeft size={14} /> Kembali
           </Link>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-red-500 rounded-xl flex items-center justify-center text-white">
               <PhoneCall size={20} />
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-brand-ink">Kontak Darurat</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-brand-ink">Kontak Darurat</h1>
           </div>
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Nomor kontak penting untuk situasi darurat di lingkungan Pesona Serpong.</p>
         </div>
@@ -39,7 +39,7 @@ export default function DaruratPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-brand-ink">{item.name}</h3>
-                  <a href={`tel:${item.phone.replace(/[^+\d]/g, '')}`} className="text-xl font-extrabold text-brand-primary hover:underline mt-1 block">
+                  <a href={`tel:${item.phone.replace(/[^+\d]/g, '')}`} className="text-xl font-bold text-brand-primary hover:underline mt-1 block">
                     {item.phone}
                   </a>
                 </div>
@@ -63,3 +63,5 @@ export default function DaruratPage() {
     </div>
   )
 }
+
+

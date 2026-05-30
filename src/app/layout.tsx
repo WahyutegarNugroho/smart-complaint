@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
   display: 'swap',
 });
@@ -55,7 +61,7 @@ export default function RootLayout({
           {`if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(e){console.error('SW registration failed:',e)})})}`}
         </Script>
       </head>
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} ${plusJakartaSans.variable} antialiased`}>
         {children}
       </body>
     </html>

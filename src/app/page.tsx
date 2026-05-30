@@ -96,12 +96,12 @@ export default async function LandingPage() {
             
             {/* Hero Content */}
             <div className="text-center lg:text-left z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand-hairline bg-brand-canvas px-4 py-2 text-[10px] font-bold uppercase tracking-normal text-brand-ink mb-10 shadow-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand-hairline bg-brand-canvas px-4 py-2 text-[10px] font-semibold uppercase tracking-normal text-brand-ink mb-10 shadow-sm">
                 <span className="flex h-2 w-2 rounded-full bg-brand-primary animate-pulse"></span>
                 Ekosistem Pengaduan Perumahan
               </div>
               
-              <h1 className="text-4xl sm:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight text-brand-ink leading-[1.1] lg:leading-[0.95] mb-6 sm:mb-8">
+              <h1 className="text-4xl sm:text-6xl lg:text-[5.5rem] font-display font-black tracking-tight text-brand-ink leading-[1.1] lg:leading-[0.95] mb-6 sm:mb-8">
                 Ciptakan Lingkungan <span className="text-brand-primary">Harmonis</span> di Pesona Serpong.
               </h1>
               
@@ -112,7 +112,7 @@ export default async function LandingPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
                 <Link
                   href="/register"
-                  className="w-full sm:w-auto btn-primary py-5 px-10 text-base shadow-2xl shadow-brand-primary/30"
+                  className="w-full sm:w-auto btn-primary py-5 px-10 text-base shadow-xl shadow-brand-primary/30"
                 >
                   Buat Laporan Sekarang
                 </Link>
@@ -131,7 +131,7 @@ export default async function LandingPage() {
                   {['A', 'B', 'C', 'D'].map((letter, i) => {
                     const colors = ['bg-brand-primary', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500']
                     return (
-                      <div key={i} className={`relative h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-4 ring-brand-canvas border border-brand-hairline ${colors[i]} flex items-center justify-center text-[#0e0f0c] text-xs sm:text-sm font-extrabold`}>
+                      <div key={i} className={`relative h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-4 ring-brand-canvas border border-brand-hairline ${colors[i]} flex items-center justify-center text-[#0e0f0c] text-xs sm:text-sm font-bold`}>
                         {letter}
                       </div>
                     )
@@ -145,13 +145,13 @@ export default async function LandingPage() {
 
             {/* Hero Card - Wise Style Surface Contrast */}
             <div className="relative hidden lg:block z-10">
-              <div className="relative rounded-[3rem] bg-brand-canvas shadow-2xl ring-1 ring-brand-hairline p-4 aspect-[4/5] overflow-hidden group">
+              <div className="relative rounded-3xl bg-brand-canvas shadow-xl ring-1 ring-brand-hairline p-4 aspect-[4/5] overflow-hidden group">
                 <Image
                   src="/hero.png"
                   alt="Pesona Serpong"
                   fill
                   unoptimized
-                  className="rounded-[2.5rem] object-cover transition-transform duration-1000 group-hover:scale-105"
+                  className="rounded-3xl object-cover transition-transform duration-1000 group-hover:scale-105"
                   priority
                 />
               </div>
@@ -164,23 +164,23 @@ export default async function LandingPage() {
       {/* Stats Section - SF Mono for Dark Mode */}
       <section id="statistik" className="relative z-20 py-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="rounded-brand bg-brand-ink p-12 shadow-2xl border border-brand-hairline">
+          <div className="rounded-brand bg-brand-ink p-12 shadow-xl border border-brand-hairline">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               <div className="text-center md:text-left">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{totalReports}</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-primary">Total Laporan</p>
+                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{totalReports}</p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-primary">Total Laporan</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-primary font-mono">{successRate}%</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Tuntas Ditangani</p>
+                <p className="text-5xl font-bold tracking-tight text-brand-primary font-mono">{successRate}%</p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Tuntas Ditangani</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Rata-Rata Penyelesaian</p>
+                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Rata-Rata Penyelesaian</p>
               </div>
               <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-extrabold tracking-tight text-brand-canvas font-mono">{activeBlocks}</p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-normal text-brand-canvas/50">Blok Terlaporkan</p>
+                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{activeBlocks}</p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Blok Terlaporkan</p>
               </div>
             </div>
           </div>
@@ -193,8 +193,8 @@ export default async function LandingPage() {
       <section id="fitur" className="py-32 bg-brand-canvas-soft">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mb-20 text-center lg:text-left">
-            <h2 className="text-[11px] font-bold tracking-normal text-brand-primary uppercase mb-4">Fitur Utama</h2>
-            <p className="text-4xl lg:text-5xl font-extrabold text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
+            <h2 className="text-[11px] font-semibold tracking-normal text-brand-primary uppercase mb-4">Fitur Utama</h2>
+            <p className="text-4xl lg:text-5xl font-display font-black text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -218,13 +218,13 @@ export default async function LandingPage() {
         </div>
         
         <div className="relative mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-brand-canvas mb-8 sm:mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-brand-canvas mb-8 sm:mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
           <p className="text-lg sm:text-xl text-brand-canvas/60 mb-10 sm:mb-14 max-w-2xl mx-auto font-medium">
             Suara Anda adalah penggerak perubahan. Laporkan kendala sekarang dan pantau progresnya secara transparan.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-10 sm:px-12 py-5 sm:py-6 text-lg sm:text-xl font-bold text-[#0e0f0c] shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all w-full sm:w-auto"
+            className="inline-flex items-center justify-center rounded-brand bg-brand-primary px-10 sm:px-12 py-5 sm:py-6 text-lg sm:text-xl font-bold text-[#0e0f0c] shadow-xl shadow-brand-primary/20 hover:scale-105 transition-all w-full sm:w-auto"
           >
             Daftar Sebagai Warga
           </Link>
@@ -254,7 +254,7 @@ export default async function LandingPage() {
             </div>
             
             <div>
-              <h4 className="text-[11px] font-bold text-brand-ink uppercase tracking-normal mb-8">Informasi</h4>
+              <h4 className="text-[11px] font-semibold text-brand-ink uppercase tracking-normal mb-8">Informasi</h4>
               <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-normal">
                 <li><Link href="/informasi/struktur" className="hover:text-brand-primary transition-colors">Struktur</Link></li>
                 <li><Link href="/informasi/keamanan" className="hover:text-brand-primary transition-colors">Keamanan</Link></li>
@@ -264,7 +264,7 @@ export default async function LandingPage() {
             </div>
             
             <div>
-              <h4 className="text-[11px] font-bold text-brand-ink uppercase tracking-[0.2em] mb-8">Bantuan</h4>
+              <h4 className="text-[11px] font-semibold text-brand-ink uppercase tracking-[0.2em] mb-8">Bantuan</h4>
               <ul className="space-y-5 text-[13px] font-bold text-brand-ink/40 uppercase tracking-normal">
                 <li><Link href="/bantuan/panduan" className="hover:text-brand-primary transition-colors">Panduan</Link></li>
                 <li><Link href="/bantuan/privasi" className="hover:text-brand-primary transition-colors">Privasi</Link></li>
@@ -273,7 +273,7 @@ export default async function LandingPage() {
             </div>
           </div>
           
-          <div className="pt-12 border-t border-brand-hairline flex flex-col md:flex-row justify-between items-center text-[11px] font-bold text-brand-ink/30 uppercase tracking-normal">
+          <div className="pt-12 border-t border-brand-hairline flex flex-col md:flex-row justify-between items-center text-[11px] font-semibold text-brand-ink/30 uppercase tracking-normal">
             <p>© {new Date().getFullYear()} Smart Complaint Pesona Serpong.</p>
             <p className="mt-4 md:mt-0">Dirancang untuk kenyamanan bersama.</p>
           </div>
@@ -316,3 +316,5 @@ const LANDING_FEATURES = [
     icon: Users,
   },
 ];
+
+

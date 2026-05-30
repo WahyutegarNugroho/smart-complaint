@@ -19,14 +19,14 @@ export default async function AnnouncementsSection() {
   return (
     <section id="announcements" className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-[10px] md:text-xs font-bold text-slate-900 dark:text-white uppercase tracking-normal">Informasi Warga</h3>
+        <h3 className="text-[10px] md:text-xs font-bold text-brand-ink uppercase tracking-normal">Informasi Warga</h3>
         <Bell size={16} className="text-blue-500" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {announcements.map((ann, idx) => (
-          <div key={ann.id} className={`p-5 md:p-6 rounded-2xl border transition-all duration-300 ${idx === 0 ? 'bg-slate-900 text-white border-transparent' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'}`}>
+          <div key={ann.id} className={`p-5 md:p-6 rounded-2xl border transition-all duration-300 ${idx === 0 ? 'bg-slate-900 text-white border-transparent' : 'bg-brand-canvas border-brand-hairline'}`}>
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-[9px] font-bold uppercase tracking-normal opacity-50">
+              <span className="text-[9px] font-semibold uppercase tracking-normal opacity-50">
                 {new Date(ann.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long' })}
               </span>
             </div>
@@ -40,3 +40,4 @@ export default async function AnnouncementsSection() {
     </section>
   )
 }
+

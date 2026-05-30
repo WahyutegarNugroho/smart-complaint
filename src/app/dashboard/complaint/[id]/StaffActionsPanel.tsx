@@ -13,27 +13,27 @@ export default function StaffActionsPanel({
   isAdmin: boolean
 }) {
   return (
-    <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-sm transition-all">
+    <div className="bg-brand-canvas p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all">
       <div className="flex items-center gap-4 mb-8">
         <div className="h-12 w-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 border border-amber-500/20">
           <ShieldAlert size={24} />
         </div>
         <div>
           <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Moderasi</h3>
-          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Kontrol Status Laporan</p>
+          <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Kontrol Status Laporan</p>
         </div>
       </div>
 
       <form action={updateComplaintStatus} className="space-y-6">
         <input type="hidden" name="id" value={complaintId} />
         <div>
-          <label className="block text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mb-3 ml-1">Ubah Progress</label>
+          <label className="block text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mb-3 ml-1">Ubah Progress</label>
           <div className="relative group">
             <select
               name="status"
               defaultValue={currentStatus}
               aria-label="Ubah status laporan"
-              className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-[11px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none appearance-none cursor-pointer transition-all"
+              className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-[11px] font-semibold text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none appearance-none cursor-pointer transition-all"
             >
               <option value="PENDING" className="dark:bg-brand-canvas">MENUNGGU KONFIRMASI</option>
               <option value="PROCESSING" className="dark:bg-brand-canvas">SEDANG DIPROSES</option>
@@ -51,10 +51,11 @@ export default function StaffActionsPanel({
 
       {isAdmin && (
         <div className="mt-10 pt-10 border-t border-brand-hairline">
-          <p className="text-[9px] font-bold text-red-500 uppercase tracking-normal mb-5 ml-1">Tindakan Destruktif</p>
+          <p className="text-[9px] font-semibold text-red-500 uppercase tracking-normal mb-5 ml-1">Tindakan Destruktif</p>
           <DeleteComplaintButton id={complaintId} />
         </div>
       )}
     </div>
   )
 }
+

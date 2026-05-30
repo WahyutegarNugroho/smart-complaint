@@ -139,13 +139,13 @@ export default function NotificationDropdown({ notifications: initialNotificatio
                     setNotifications(initialNotifications)
                   }
                 }}
-                className="text-[9px] font-bold text-brand-primary hover:text-brand-ink uppercase tracking-normal flex items-center gap-1 transition-colors cursor-pointer"
+                className="text-[9px] font-semibold text-brand-primary hover:text-brand-ink uppercase tracking-normal flex items-center gap-1 transition-colors cursor-pointer"
                 title="Tandai semua telah dibaca"
               >
                 <CheckCheck size={13} /> Sudah Dibaca
               </button>
               <span className="w-px h-4 bg-brand-hairline" />
-              <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[9px] font-bold px-2.5 py-0.5 rounded-lg uppercase tracking-normal">
+              <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[9px] font-semibold px-2.5 py-0.5 rounded-lg uppercase tracking-normal">
                 {unreadCount} Baru
               </span>
             </>
@@ -157,7 +157,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
         {notifications.length === 0 ? (
           <div className="p-8 text-center flex flex-col items-center justify-center text-brand-ink/40">
             <BellOff size={28} className="mb-2 text-brand-ink/20" />
-            <p className="text-[10px] font-bold uppercase tracking-wider">Belum Ada Notifikasi</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider">Belum Ada Notifikasi</p>
             <p className="text-[9px] font-medium text-brand-ink/50 mt-1">Laporan baru atau tanggapan akan muncul di sini</p>
           </div>
         ) : (
@@ -240,7 +240,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
           {/* Desktop Dropdown (Portal to body) */}
           {desktopPos && createPortal(
             <div
-              className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 text-brand-ink"
+              className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 text-brand-ink"
               style={{ top: desktopPos.top, left: desktopPos.left, width: '384px' }}
             >
               {dropdownContent}
@@ -252,3 +252,4 @@ export default function NotificationDropdown({ notifications: initialNotificatio
     </div>
   )
 }
+

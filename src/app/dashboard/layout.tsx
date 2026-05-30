@@ -87,7 +87,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-brand-canvas-soft flex flex-col md:flex-row font-sans selection:bg-brand-primary/20 text-brand-ink transition-colors duration-500">
 
       {/* Skip to content link */}
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-6 focus:py-4 focus:bg-brand-ink focus:text-brand-canvas focus:rounded-xl focus:text-sm focus:font-bold focus:shadow-2xl focus:outline-none">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-6 focus:py-4 focus:bg-brand-ink focus:text-brand-canvas focus:rounded-xl focus:text-sm focus:font-bold focus:shadow-xl focus:outline-none">
         Langsung ke konten utama
       </a>
 
@@ -102,7 +102,7 @@ export default async function DashboardLayout({
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-xl tracking-tight text-brand-ink leading-none">SmartComplaint<span>.</span></span>
-              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mt-1">Platform Pengaduan</span>
+              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mt-1">Platform Pengaduan</span>
             </div>
           </Link>
         </div>
@@ -110,7 +110,7 @@ export default async function DashboardLayout({
         {/* Desktop Quick Toolbar (Notifications & Theme Switcher) */}
         <div className="px-8 pb-4 flex items-center gap-3">
           <div className="flex-1 flex items-center gap-2 bg-brand-canvas-soft/80 border border-brand-hairline p-2.5 rounded-2xl shadow-sm justify-between">
-             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal pl-2">Aksi Cepat</span>
+             <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal pl-2">Aksi Cepat</span>
              <div className="flex items-center gap-2">
                 <NotificationDropdown notifications={notifications} />
                 <ThemeToggle />
@@ -122,7 +122,7 @@ export default async function DashboardLayout({
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
 
           <div className="px-4 mb-2 mt-4">
-            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
+            <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
           </div>
 
           <Link
@@ -152,7 +152,7 @@ export default async function DashboardLayout({
           )}
 
           <div className="px-4 mb-2 mt-8">
-            <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
+            <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
           </div>
 
           <Link
@@ -164,7 +164,7 @@ export default async function DashboardLayout({
               Menunggu
             </div>
             {stats.pending > 0 && (
-              <span className="bg-amber-500/10 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded-lg border border-amber-500/10">
+              <span className="bg-amber-500/10 text-amber-600 text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-amber-500/10">
                 {stats.pending}
               </span>
             )}
@@ -179,7 +179,7 @@ export default async function DashboardLayout({
               Diproses
             </div>
             {stats.processing > 0 && (
-              <span className="bg-blue-500/10 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-lg border border-blue-500/10">
+              <span className="bg-blue-500/10 text-blue-600 text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-blue-500/10">
                 {stats.processing}
               </span>
             )}
@@ -194,7 +194,7 @@ export default async function DashboardLayout({
               Selesai
             </div>
             {stats.completed > 0 && (
-              <span className="bg-brand-primary/10 text-brand-primary text-[10px] font-bold px-2 py-0.5 rounded-lg border border-brand-primary/20">
+              <span className="bg-brand-primary/10 text-brand-primary text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-brand-primary/20">
                 {stats.completed}
               </span>
             )}
@@ -203,7 +203,7 @@ export default async function DashboardLayout({
           {isAdmin && (
             <>
               <div className="px-4 mb-2 mt-8">
-                <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
+                <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
               </div>
               <Link
                 href="/dashboard/admin/users"
@@ -279,3 +279,4 @@ export default async function DashboardLayout({
     </div>
   )
 }
+

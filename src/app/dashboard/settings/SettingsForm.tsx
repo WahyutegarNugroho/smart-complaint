@@ -39,13 +39,13 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
 
   return (
     <form action={action} className="space-y-10">
-      <div className="bg-brand-canvas p-6 md:p-10 rounded-[2rem] border border-brand-hairline shadow-sm transition-all">
+      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all">
         <div className="space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             
             {/* Nama Lengkap */}
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nama Lengkap</label>
+              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nama Lengkap</label>
               <div className="relative group">
                 <User className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
@@ -60,7 +60,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
 
             {/* NIK */}
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Induk Kependudukan (NIK)</label>
+              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Induk Kependudukan (NIK)</label>
               <div className="relative group">
                 <Shield className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
                 <input
@@ -78,7 +78,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
 
           {/* Nomor Kontak WhatsApp */}
           <div className="space-y-3">
-            <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Kontak WhatsApp</label>
+            <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Kontak WhatsApp</label>
             <div className="relative group">
               <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
               <input
@@ -95,7 +95,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
           {/* RT & RW */}
           <div className="grid grid-cols-2 gap-8 md:gap-12">
             <div className="space-y-3 text-center">
-              <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal transition-colors">RT</label>
+              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal transition-colors">RT</label>
               <input
                 name="rt"
                 type="text"
@@ -105,7 +105,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
               />
             </div>
             <div className="space-y-3 text-center">
-              <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal transition-colors">RW</label>
+              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal transition-colors">RW</label>
               <input
                 name="rw"
                 type="text"
@@ -118,7 +118,7 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
 
           {/* Alamat Lengkap */}
           <div className="space-y-3">
-            <label className="block text-[10px] font-bold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Alamat Lengkap Domisili</label>
+            <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Alamat Lengkap Domisili</label>
             <div className="relative group">
               <Home className="absolute left-5 top-5 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
               <textarea
@@ -134,9 +134,9 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
       </div>
 
       <div className="flex items-center justify-end gap-6 transition-colors">
-        <a href="/dashboard" className="text-[10px] font-bold text-brand-ink/80 uppercase tracking-normal hover:text-brand-ink transition-colors">Batalkan</a>
+        <a href="/dashboard" className="text-[10px] font-semibold text-brand-ink/80 uppercase tracking-normal hover:text-brand-ink transition-colors">Batalkan</a>
         <SubmitButton
-          className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-12 py-5 rounded-[2rem] font-bold text-[11px] uppercase tracking-normal shadow-2xl hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-3 cursor-pointer"
+          className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-12 py-5 rounded-3xl font-bold text-[11px] uppercase tracking-normal shadow-xl hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-3 cursor-pointer"
           loadingText="Menyimpan..."
           icon={<Save size={18} />}
         >
@@ -146,3 +146,4 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
     </form>
   )
 }
+

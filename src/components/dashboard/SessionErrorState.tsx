@@ -16,7 +16,7 @@ export default function SessionErrorState({ error }: SessionErrorStateProps) {
         <ThemeToggle />
       </div>
 
-      <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-xl max-w-md w-full text-center space-y-6 relative z-10">
+      <div className="bg-brand-canvas p-8 rounded-3xl border border-brand-hairline shadow-xl max-w-md w-full text-center space-y-6 relative z-10">
          <div className="h-20 w-20 bg-amber-50 dark:bg-amber-900/20 rounded-3xl flex items-center justify-center text-amber-500 mx-auto">
             <AlertTriangle size={40} />
          </div>
@@ -30,7 +30,7 @@ export default function SessionErrorState({ error }: SessionErrorStateProps) {
 
          {error && (
            <div className="text-left bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 p-4 rounded-xl space-y-2">
-             <p className="text-[10px] font-bold text-red-500 uppercase tracking-normal">Detail Error (Debug):</p>
+             <p className="text-[10px] font-semibold text-red-500 uppercase tracking-normal">Detail Error (Debug):</p>
              <p className="text-xs font-mono text-red-600 dark:text-red-400 break-all">{error}</p>
            </div>
          )}
@@ -46,3 +46,4 @@ export default function SessionErrorState({ error }: SessionErrorStateProps) {
     </div>
   )
 }
+

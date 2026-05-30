@@ -72,7 +72,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-2xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none"
+        className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none"
       >
         <div className="sticky top-0 bg-brand-canvas/90 backdrop-blur-md border-b border-brand-hairline px-5 py-4 flex items-center justify-between z-10">
           <h2 className="text-sm font-bold text-brand-ink truncate pr-2">Detail Laporan</h2>
@@ -99,17 +99,17 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
               )}
 
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
                     <AlertTriangle size={10} />
                     Prioritas
                   </span>
                 )}
                 {escalationLabel && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
                     {escalationLabel}
                   </span>
                 )}
@@ -125,7 +125,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
                 {complaint.categoryName && (
                   <div className="flex items-center gap-3 text-brand-ink/60">
                     <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
-                      <span className="text-[10px] font-bold">{complaint.categoryName.charAt(0)}</span>
+                      <span className="text-[10px] font-semibold">{complaint.categoryName.charAt(0)}</span>
                     </span>
                     <span className="font-medium">{complaint.categoryName}</span>
                   </div>
@@ -181,11 +181,11 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
           ) : (
             <>
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
                     <AlertTriangle size={10} />
                     Prioritas
                   </span>
@@ -195,7 +195,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
               {complaint.categoryName && (
                 <div className="flex items-center gap-3 text-sm text-brand-ink/60">
                   <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
-                    <span className="text-[10px] font-bold">{complaint.categoryName.charAt(0)}</span>
+                    <span className="text-[10px] font-semibold">{complaint.categoryName.charAt(0)}</span>
                   </span>
                   <span className="font-medium">{complaint.categoryName}</span>
                 </div>
@@ -210,7 +210,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
 
               <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-800/30 rounded-xl text-amber-700 dark:text-amber-400">
                 <LockKeyhole size={14} className="shrink-0" />
-                <p className="text-[11px] font-bold leading-snug">
+                <p className="text-[11px] font-semibold leading-snug">
                   Detail lengkap laporan hanya dapat dilihat oleh pelapor
                 </p>
               </div>
@@ -221,3 +221,4 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
     </>
   )
 }
+

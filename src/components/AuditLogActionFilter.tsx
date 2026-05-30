@@ -21,7 +21,7 @@ export default function AuditLogActionFilter({ filterAction, baseUrl }: AuditLog
         defaultValue={filterAction || ''}
         aria-label="Filter tindakan"
         onChange={(e) => e.target.form?.requestSubmit()}
-        className="bg-brand-canvas-soft border border-brand-hairline rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-normal text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none cursor-pointer transition-all"
+        className="bg-brand-canvas-soft border border-brand-hairline rounded-xl px-4 py-3 text-[10px] font-semibold uppercase tracking-normal text-brand-ink focus:ring-4 focus:ring-brand-primary/5 outline-none cursor-pointer transition-all"
       >
         <option value="">Semua Tindakan</option>
         {Object.entries(ACTION_LABELS).map(([value, label]) => (
@@ -29,10 +29,11 @@ export default function AuditLogActionFilter({ filterAction, baseUrl }: AuditLog
         ))}
       </select>
       {filterAction && (
-        <a href={baseUrl} className="text-[10px] font-bold text-red-500 uppercase tracking-normal hover:underline">
+        <a href={baseUrl} className="text-[10px] font-semibold text-red-500 uppercase tracking-normal hover:underline">
           Reset
         </a>
       )}
     </form>
   )
 }
+

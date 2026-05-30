@@ -293,17 +293,17 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
           <div className="border-t border-brand-hairline px-4 py-2 flex items-center justify-between">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all"
+              className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all"
             >
               <Filter size={14} />
               Filter
               {activeFilterCount > 0 && (
-                <span className="bg-brand-primary text-[#0e0f0c] text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                <span className="bg-brand-primary text-[#0e0f0c] text-[9px] font-semibold px-1.5 py-0.5 rounded-full">
                   {activeFilterCount}
                 </span>
               )}
             </button>
-            <span className="text-[10px] font-bold text-brand-ink/40">
+            <span className="text-[10px] font-semibold text-brand-ink/40">
               {filteredCount} dari {complaints.length} titik
             </span>
           </div>
@@ -312,7 +312,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
           {showFilters && (
             <div className="border-t border-brand-hairline px-4 py-3 space-y-3">
               <div>
-                <label className="text-[9px] font-bold uppercase tracking-normal text-brand-ink/40 block mb-1.5">
+                <label className="text-[9px] font-semibold uppercase tracking-normal text-brand-ink/40 block mb-1.5">
                   Status
                 </label>
                 <div className="flex gap-1.5">
@@ -320,7 +320,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
                     <button
                       key={s}
                       onClick={() => setFilters((f) => ({ ...f, status: s }))}
-                      className={`text-[10px] font-bold px-3 py-1.5 rounded-xl border transition-all ${
+                      className={`text-[10px] font-semibold px-3 py-1.5 rounded-xl border transition-all ${
                         filters.status === s
                           ? 'bg-brand-ink text-brand-canvas border-brand-ink dark:bg-brand-primary dark:text-[#0e0f0c] dark:border-brand-primary'
                           : 'bg-brand-canvas-soft text-brand-ink/50 border-brand-hairline hover:border-brand-ink/20'
@@ -333,7 +333,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
               </div>
 
               <div>
-                <label className="text-[9px] font-bold uppercase tracking-normal text-brand-ink/40 block mb-1.5">
+                <label className="text-[9px] font-semibold uppercase tracking-normal text-brand-ink/40 block mb-1.5">
                   Kategori
                 </label>
                 <select
@@ -365,7 +365,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
                 className="w-3 h-3 rounded-full inline-block"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal">
+              <span className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal">
                 {STATUS_LABELS[status as keyof typeof STATUS_LABELS]}
               </span>
             </div>
@@ -373,7 +373,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
           <div className="w-px h-4 bg-brand-hairline" />
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-full bg-red-500 inline-block animate-pulse" />
-            <span className="text-[10px] font-bold text-red-500 uppercase tracking-normal">
+            <span className="text-[10px] font-semibold text-red-500 uppercase tracking-normal">
               Prioritas
             </span>
           </div>
@@ -389,3 +389,4 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
     </>
   )
 }
+

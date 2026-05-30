@@ -69,32 +69,32 @@ export default async function ExportPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 transition-colors duration-300 pb-20">
-      <main className="max-w-[1400px] mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12 no-print">
+    <div className="min-h-screen bg-brand-canvas text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-20">
+      <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12 no-print">
         {/* 👋 HEADER SECTION */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3 mb-2">
-               <Link href="/dashboard" className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
+               <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-normal">Manajemen Laporan</span>
+               <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Manajemen Laporan</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white transition-colors">Ekspor Data & Arsip</h1>
-            <p className="text-slate-400 dark:text-slate-500 font-medium text-sm md:text-base transition-colors">Unduh data laporan masyarakat untuk keperluan evaluasi berkala.</p>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink transition-colors">Ekspor Data & Arsip</h1>
+            <p className="text-brand-ink/50 font-medium text-sm md:text-base transition-colors">Unduh data laporan masyarakat untuk keperluan evaluasi berkala.</p>
           </div>
         </section>
 
         <section className="space-y-8">
            <ExportButtons />
 
-           <div className="bg-slate-50 dark:bg-slate-900/50 p-6 md:p-8 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-start gap-5 transition-colors">
-              <div className="h-12 w-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-blue-500 shrink-0 shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
-                 <CheckCircle2 size={24} />
-              </div>
-              <div>
-                 <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-normal mb-2 transition-colors">Panduan Ekspor</p>
-                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed transition-colors">
+            <div className="bg-brand-canvas-soft p-6 md:p-8 rounded-3xl border border-brand-hairline flex items-start gap-5 transition-colors">
+               <div className="h-12 w-12 bg-brand-canvas rounded-2xl flex items-center justify-center text-brand-primary shrink-0 shadow-sm border border-brand-hairline transition-colors">
+                  <CheckCircle2 size={24} />
+               </div>
+               <div>
+                  <p className="text-[11px] font-semibold text-brand-ink uppercase tracking-normal mb-2 transition-colors">Panduan Ekspor</p>
+                  <p className="text-sm text-brand-ink/50 font-medium leading-relaxed transition-colors">
                     Format CSV sangat cocok untuk diolah kembali di Excel, sementara Cetak PDF akan menghasilkan dokumen ringkasan yang siap dipresentasikan pada rapat warga atau pengurus RT/RW.
                  </p>
               </div>
@@ -279,3 +279,4 @@ export default async function ExportPage() {
     </div>
   )
 }
+

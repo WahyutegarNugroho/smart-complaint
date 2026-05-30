@@ -78,7 +78,7 @@ export default async function ComplaintDetailPage({
                <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
                   <ChevronLeft size={20} />
                </Link>
-               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-normal">Detail Operasional</span>
+               <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Detail Operasional</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">Informasi Laporan #{complaint.id.slice(-6).toUpperCase()}</h1>
             <p className="text-brand-ink/60 font-medium text-sm md:text-base no-print">Pantau riwayat penanganan dan koordinasi petugas lapangan.</p>
@@ -92,12 +92,12 @@ export default async function ComplaintDetailPage({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Main Content */}
           <div className="lg:col-span-7 space-y-8 print-full-width">
-            <div className="bg-brand-canvas rounded-[2rem] shadow-sm border border-brand-hairline overflow-hidden transition-all group">
+            <div className="bg-brand-canvas rounded-3xl shadow-sm border border-brand-hairline overflow-hidden transition-all group">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
                   <Image src={complaint.imageUrl} alt={complaint.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
-                    <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-bold uppercase tracking-normal flex items-center gap-2 shadow-2xl">
+                    <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-semibold uppercase tracking-normal flex items-center gap-2 shadow-xl">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi
                     </div>
                   )}
@@ -106,18 +106,18 @@ export default async function ComplaintDetailPage({
               
               <div className="p-8 md:p-10">
                 <div className="flex flex-wrap items-center gap-3 mb-8">
-                  <span className={`text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[complaint.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                  <span className={`text-[9px] font-semibold px-3 py-1 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[complaint.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
                     {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                   </span>
-    <span className="text-[9px] font-bold text-slate-500 dark:text-slate-600 uppercase tracking-normal bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
+    <span className="text-[9px] font-semibold text-slate-500 dark:text-slate-600 uppercase tracking-normal bg-slate-50 dark:bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-100 dark:border-slate-800 transition-colors">
       Blok Wilayah RT {complaint.rt} / RW {complaint.rw}
     </span>
-    <span className="text-[9px] font-bold px-3 py-1 rounded-lg uppercase tracking-normal bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+    <span className="text-[9px] font-semibold px-3 py-1 rounded-lg uppercase tracking-normal bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
       {complaint.categoryRel?.name || complaint.category}
     </span>
   </div>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 leading-tight transition-colors">{complaint.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-brand-ink mb-6 leading-tight transition-colors">{complaint.title}</h1>
                 <p className="text-slate-700 dark:text-slate-400 leading-relaxed text-[15px] font-medium whitespace-pre-wrap mb-10 transition-colors pl-6 border-l-2 border-slate-100 dark:border-slate-800">&quot;{complaint.content}&quot;</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4">
@@ -132,7 +132,7 @@ export default async function ComplaintDetailPage({
                        <Calendar size={14} />
                     </div>
                     <div>
-                      <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-normal">Tanggal Lapor</p>
+                      <p className="text-[9px] font-semibold text-brand-ink/40 uppercase tracking-normal">Tanggal Lapor</p>
                       <p className="text-[13px] font-bold text-brand-ink">{new Date(complaint.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                   </div>
@@ -153,7 +153,7 @@ export default async function ComplaintDetailPage({
                      )}
                   </div>
                   <div className="flex items-center gap-3">
-                     <span className="px-2.5 py-1 bg-brand-canvas-soft text-brand-ink/60 text-[9px] font-bold rounded-lg uppercase tracking-normal border border-brand-hairline">Warga RT {complaint.author?.rt || '-'}</span>
+                     <span className="px-2.5 py-1 bg-brand-canvas-soft text-brand-ink/60 text-[9px] font-semibold rounded-lg uppercase tracking-normal border border-brand-hairline">Warga RT {complaint.author?.rt || '-'}</span>
                      <span className="text-[11px] font-medium text-brand-ink/40">{complaint.author?.username || 'user'}</span>
                   </div>
                </div>
@@ -165,11 +165,11 @@ export default async function ComplaintDetailPage({
                   <h3 className="text-lg font-bold text-brand-ink flex items-center gap-3">
                      <MessageSquare size={22} className="text-brand-primary" /> Linimasa Diskusi
                   </h3>
-                  <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">{complaint.responses.length} Pesan</span>
+                  <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">{complaint.responses.length} Pesan</span>
                </div>
 
                {complaint.responses.length === 0 ? (
-                 <div className="bg-brand-canvas p-12 rounded-[2rem] border border-brand-hairline text-center transition-colors shadow-sm">
+                 <div className="bg-brand-canvas p-12 rounded-3xl border border-brand-hairline text-center transition-colors shadow-sm">
                     <div className="h-20 w-20 bg-brand-canvas-soft rounded-3xl flex items-center justify-center text-brand-ink/20 mx-auto mb-6 transition-all group-hover:scale-110">
                        <MessageSquare size={40} />
                     </div>
@@ -199,7 +199,7 @@ export default async function ComplaintDetailPage({
                )}
 
                {/* Response Form */}
-                <div className="mt-10 p-2 bg-brand-canvas rounded-[2rem] border border-brand-hairline shadow-xl transition-all focus-within:ring-4 focus-within:ring-brand-primary/5 no-print">
+                <div className="mt-10 p-2 bg-brand-canvas rounded-3xl border border-brand-hairline shadow-xl transition-all focus-within:ring-4 focus-within:ring-brand-primary/5 no-print">
                    <form action={respondToComplaint} className="relative">
                       <input type="hidden" name="complaintId" value={complaint.id} />
                       <input type="hidden" name="status" value={complaint.status} />
@@ -209,7 +209,7 @@ export default async function ComplaintDetailPage({
                         placeholder="Ketik tanggapan Anda di sini..." 
                         rows={4}
                         aria-label="Tulis tanggapan"
-                        className="w-full bg-transparent border-none rounded-[1.5rem] px-6 py-5 text-sm text-brand-ink placeholder:text-brand-ink/30 outline-none resize-none font-medium transition-all"
+                        className="w-full bg-transparent border-none rounded-3xl px-6 py-5 text-sm text-brand-ink placeholder:text-brand-ink/30 outline-none resize-none font-medium transition-all"
                       />
                       
                       <ResponseFileHandler />
@@ -231,14 +231,14 @@ export default async function ComplaintDetailPage({
           {/* Sidebar Actions */}
           <div className="lg:col-span-5 space-y-8 no-print">
             {isAuthor && complaint.status === 'PENDING' && (
-              <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-sm transition-all">
+              <div className="bg-brand-canvas p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all">
                 <div className="flex items-center gap-4 mb-8">
                    <div className="h-12 w-12 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 border border-red-500/20">
                       <Trash2 size={24} />
                    </div>
                    <div>
                       <h3 className="text-lg font-bold text-brand-ink leading-none mb-1">Batalkan Laporan</h3>
-                      <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">Tarik kembali laporan Anda</p>
+                      <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Tarik kembali laporan Anda</p>
                    </div>
                 </div>
                 <CitizenDeleteButton id={complaint.id} />
@@ -259,7 +259,7 @@ export default async function ComplaintDetailPage({
             />
 
             {/* Timeline / Progress */}
-            <div className="bg-brand-canvas p-8 rounded-[2rem] border border-brand-hairline shadow-sm relative overflow-hidden transition-all group">
+            <div className="bg-brand-canvas p-8 rounded-3xl border border-brand-hairline shadow-sm relative overflow-hidden transition-all group">
                <div className="absolute top-0 right-0 p-6 opacity-[0.02] dark:opacity-[0.05] group-hover:scale-110 transition-transform duration-700">
                   <Activity size={120} />
                </div>
@@ -311,7 +311,7 @@ export default async function ComplaintDetailPage({
         <div className="print-receipt p-8 max-w-2xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10 pb-8 border-b-2 border-slate-900">
-            <h1 className="text-2xl font-extrabold text-slate-900 mb-2">TANDA TERIMA LAPORAN</h1>
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">TANDA TERIMA LAPORAN</h1>
             <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">SmartComplaint — Pengaduan Masyarakat</p>
           </div>
 
@@ -389,3 +389,5 @@ export default async function ComplaintDetailPage({
     </div>
   )
 }
+
+

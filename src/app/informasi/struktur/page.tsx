@@ -11,14 +11,14 @@ export default function StrukturPage() {
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 animate-page">
       <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-10">
         <div className="space-y-3">
-          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
             <ArrowLeft size={14} /> Kembali
           </Link>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c]">
               <Building2 size={20} />
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-brand-ink">Struktur Pengurus</h1>
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-brand-ink">Struktur Pengurus</h1>
           </div>
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Susunan kepengurusan Perumahan Pesona Serpong.</p>
         </div>
@@ -71,3 +71,5 @@ export default function StrukturPage() {
     </div>
   )
 }
+
+

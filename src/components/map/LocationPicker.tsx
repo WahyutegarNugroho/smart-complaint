@@ -116,7 +116,7 @@ export default function LocationPicker({
 
   return (
     <div className="space-y-4">
-      <label className="text-[10px] font-bold text-brand-ink/60 uppercase tracking-normal ml-1">
+      <label className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">
         Lokasi Kejadian
       </label>
 
@@ -204,3 +204,4 @@ export default function LocationPicker({
     </div>
   )
 }
+

@@ -16,7 +16,7 @@ export default function EscalationStatus({
   if (escalationLevel === 'NONE') return null
 
   return (
-    <div className={`bg-brand-canvas p-8 rounded-[2rem] border shadow-sm transition-all ${
+    <div className={`bg-brand-canvas p-8 rounded-3xl border shadow-sm transition-all ${
       escalationLevel === 'LEVEL_3' ? 'border-red-500/30' :
       escalationLevel === 'LEVEL_2' ? 'border-amber-500/30' : 'border-orange-500/30'
     }`}>
@@ -33,7 +33,7 @@ export default function EscalationStatus({
             escalationLevel === 'LEVEL_3' ? '3' :
             escalationLevel === 'LEVEL_2' ? '2' : '1'
           }</h3>
-          <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal">
+          <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">
             {escalationLevel === 'LEVEL_3' ? 'Melebihi SLA penanganan' :
              escalationLevel === 'LEVEL_2' ? 'Melebihi SLA tanggapan awal' :
              'Perlu perhatian'}
@@ -62,3 +62,4 @@ export default function EscalationStatus({
     </div>
   )
 }
+

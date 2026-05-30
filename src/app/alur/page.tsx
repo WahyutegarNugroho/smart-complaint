@@ -44,14 +44,14 @@ export default function AlurPage() {
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-500 animate-page">
       <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-12 sm:space-y-16">
         <div className="space-y-4">
-          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
             <ArrowLeft size={14} /> Kembali ke Beranda
           </Link>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c]">
               <Zap size={20} />
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-brand-ink">
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-brand-ink">
               Alur Pengaduan Warga
             </h1>
           </div>
@@ -75,14 +75,14 @@ export default function AlurPage() {
                   <div className={`h-10 w-10 ${step.color} rounded-xl flex items-center justify-center text-white shrink-0`}>
                     <step.icon size={18} />
                   </div>
-                  <span className="text-[10px] font-bold text-brand-ink/30 uppercase tracking-wider">
+                  <span className="text-[10px] font-semibold text-brand-ink/30 uppercase tracking-wider">
                     Langkah {i + 1}
                   </span>
                 </div>
 
                 <div className="flex-1 bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm transition-all group-hover:shadow-xl group-hover:border-brand-primary/30">
                   <div className="hidden sm:flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-bold text-brand-ink/30 uppercase tracking-wider">
+                    <span className="text-[10px] font-semibold text-brand-ink/30 uppercase tracking-wider">
                       Langkah {i + 1}
                     </span>
                     <span className="h-px flex-1 bg-brand-hairline" />
@@ -95,8 +95,8 @@ export default function AlurPage() {
           </div>
         </div>
 
-        <div className="bg-brand-ink rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-2xl">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-canvas mb-4 tracking-tight">
+        <div className="bg-brand-ink rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-xl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-brand-canvas mb-4 tracking-tight">
             Siap Melapor?
           </h2>
           <p className="text-brand-canvas/60 font-medium text-sm sm:text-base mb-8 max-w-lg mx-auto">
@@ -104,7 +104,7 @@ export default function AlurPage() {
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-3 bg-brand-primary text-[#0e0f0c] font-bold px-8 py-4 rounded-2xl text-sm uppercase tracking-wider shadow-2xl shadow-brand-primary/20 hover:scale-105 transition-all"
+            className="inline-flex items-center gap-3 bg-brand-primary text-[#0e0f0c] font-bold px-8 py-4 rounded-2xl text-sm uppercase tracking-wider shadow-xl shadow-brand-primary/20 hover:scale-105 transition-all"
           >
             Buat Laporan Sekarang <ArrowRight size={18} />
           </Link>
@@ -113,3 +113,5 @@ export default function AlurPage() {
     </div>
   )
 }
+
+

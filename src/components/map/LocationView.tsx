@@ -50,7 +50,7 @@ export default function LocationView({ latitude, longitude, address, complaintId
           <MapPin size={18} />
         </div>
         <div>
-          <p className="text-[9px] font-bold text-brand-ink/40 uppercase tracking-normal">Lokasi Spesifik</p>
+          <p className="text-[9px] font-semibold text-brand-ink/40 uppercase tracking-normal">Lokasi Spesifik</p>
           <p className="text-[13px] font-bold text-brand-ink">{address}</p>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function LocationView({ latitude, longitude, address, complaintId
           </Marker>
         </MapContainer>
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-brand-canvas/90 text-brand-ink rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-[11px] font-bold shadow-lg">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-brand-canvas/90 text-brand-ink rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-[11px] font-semibold shadow-lg">
             <ExternalLink size={12} />
             Lihat di peta sebaran
           </div>
@@ -96,3 +96,4 @@ export default function LocationView({ latitude, longitude, address, complaintId
     </div>
   )
 }
+

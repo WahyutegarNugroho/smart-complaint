@@ -115,7 +115,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             const prefix = qs ? `?${qs}` : ''
             return (
               <>
-                <Link href={`/dashboard${prefix}`} className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-normal transition-all whitespace-nowrap ${!currentStatus ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}>
+                <Link href={`/dashboard${prefix}`} className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-semibold uppercase tracking-normal transition-all whitespace-nowrap ${!currentStatus ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}>
                   Semua
                 </Link>
                 {[
@@ -129,7 +129,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                     <Link
                       key={t.id}
                       href={`/dashboard?${p.toString()}`}
-                      className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-normal transition-all whitespace-nowrap ${currentStatus === t.id ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}
+                      className={`px-4 md:px-6 py-2 rounded-lg text-[9px] md:text-[10px] font-semibold uppercase tracking-normal transition-all whitespace-nowrap ${currentStatus === t.id ? 'bg-brand-canvas text-brand-ink shadow-sm border border-brand-hairline' : 'text-brand-ink/60 hover:text-brand-primary'}`}
                     >
                       {t.label}
                     </Link>
@@ -169,7 +169,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
                <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
                 <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
-               <button type="submit" className="px-6 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-2xl text-[10px] font-bold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer">
+               <button type="submit" className="px-6 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-2xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer">
                   Filter
                </button>
              </form>
@@ -184,7 +184,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         {rt && <input type="hidden" name="rt" value={rt} />}
         {rw && <input type="hidden" name="rw" value={rw} />}
         <div className="flex-1 min-w-[140px]">
-          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Kategori</label>
+          <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Kategori</label>
           <select name="category" defaultValue={categoryFilter || ''} aria-label="Filter kategori" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer">
             <option value="">Semua Kategori</option>
             {categoryOptions.map((cat) => (
@@ -193,18 +193,18 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           </select>
         </div>
         <div className="flex-1 min-w-[120px]">
-          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Dari Tanggal</label>
+          <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Dari Tanggal</label>
           <input name="fromDate" type="date" defaultValue={fromDate || ''} aria-label="Dari tanggal" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
         </div>
         <div className="flex-1 min-w-[120px]">
-          <label className="block text-[9px] font-bold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Sampai Tanggal</label>
+          <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Sampai Tanggal</label>
           <input name="toDate" type="date" defaultValue={toDate || ''} aria-label="Sampai tanggal" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
         </div>
-        <button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-bold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
+        <button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
           <Filter size={14} /> Terapkan
         </button>
         {(categoryFilter || fromDate || toDate) && (
-          <a href={`/dashboard${currentStatus ? `?status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`} className="px-4 py-3 text-[10px] font-bold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all">
+          <a href={`/dashboard${currentStatus ? `?status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`} className="px-4 py-3 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all">
             Reset
           </a>
         )}
@@ -235,10 +235,10 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   
                   <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                        <span className={`text-[10px] font-semibold px-3 py-1.5 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
                           {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                         </span>
-                        <span className="text-[9px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
+                        <span className="text-[9px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-wider border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
                           {item.categoryRel?.name || item.category}
                         </span>
                       </div>
@@ -270,14 +270,14 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                         )}
                         <div className="min-w-0">
                           {!isWarga && (
-                            <p className="text-[10px] font-bold text-brand-ink uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
+                            <p className="text-[10px] font-semibold text-brand-ink uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
                           )}
                           <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-brand-ink/80 font-bold text-[12px] uppercase tracking-wider transition-colors">
                             <div className="flex items-center gap-1.5">
                               <MapPin size={12} /> RT {item.rt}/{item.rw}
                             </div>
                             <div className="h-1 w-1 rounded-full bg-brand-hairline hidden md:block" />
-                            <span className="text-[11px] font-bold text-brand-ink/40 uppercase tracking-normal">
+                            <span className="text-[11px] font-semibold text-brand-ink/40 uppercase tracking-normal">
                               {dateStr}
                             </span>
                           </div>
@@ -289,7 +289,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   </div>
 
                   {item.isUrgent && item.status !== 'COMPLETED' && (
-                    <div className="absolute top-0 right-10">
+                    <div className="absolute top-0 right-6">
                       <div className="bg-red-500 text-white px-3 md:px-4 py-1.5 rounded-b-xl shadow-lg flex items-center gap-2">
                           <Zap size={12} fill="currentColor" className="text-red-100" />
                           <span className="text-[8px] md:text-[9px] font-black uppercase tracking-normal text-white">Prioritas</span>
@@ -307,7 +307,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       <div className="mt-16 flex flex-col items-center gap-4">
         {/* Page Size Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal">Tampilkan</span>
+          <span className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal">Tampilkan</span>
           <PageSizeSelector
             currentStatus={currentStatus}
             searchQuery={searchQuery}
@@ -318,7 +318,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             rw={rw}
             pageSize={pageSize}
           />
-          <span className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal">per halaman</span>
+          <span className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal">per halaman</span>
         </div>
 
         {totalPages > 1 && (
@@ -327,7 +327,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             {currentPage > 1 && (
               <Link
                 href={`/dashboard?page=${currentPage - 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
-                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-500 border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all gap-1.5"
+                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
               >
                 ← Sebelumnya
               </Link>
@@ -355,8 +355,8 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   href={`/dashboard?page=${pageNum}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
                   className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
                     currentPage === pageNum
-                        ? 'bg-slate-900 dark:bg-blue-600 text-white shadow-xl shadow-slate-900/10'
-                        : 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-100 dark:border-slate-800 hover:border-slate-200'
+                        ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] shadow-xl'
+                        : 'bg-brand-canvas text-brand-ink/40 border border-brand-hairline hover:border-brand-ink/20'
                   }`}
                 >
                   {pageNum}
@@ -368,7 +368,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             {currentPage < totalPages && (
               <Link
                 href={`/dashboard?page=${currentPage + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
-                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-500 border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all gap-1.5"
+                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
               >
                 Selanjutnya →
               </Link>
@@ -379,3 +379,4 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
     </section>
   )
 }
+

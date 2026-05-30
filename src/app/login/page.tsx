@@ -88,26 +88,26 @@ export default function LoginPage({
       <div className="w-full max-w-md py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-16">
           <Link href="/" className="inline-flex items-center gap-3 sm:gap-4 group">
-            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-ink text-brand-primary shadow-2xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-ink text-brand-primary shadow-xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
               <ShieldCheck size={28} className="sm:w-[32px] sm:h-[32px]" />
             </div>
             <div className="flex flex-col items-start text-left">
-              <span className="text-3xl font-extrabold text-brand-ink tracking-tight uppercase leading-none transition-colors">
+              <span className="text-3xl font-bold text-brand-ink tracking-tight uppercase leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
-              <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
+              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
             </div>
           </Link>
         </div>
 
-        <div className="card-base p-7 sm:p-12 shadow-2xl shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
+        <div className="card-base p-7 sm:p-12 shadow-xl shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
           <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-ink pointer-events-none hidden sm:block">
             <Activity size={150} />
           </div>
 
           <Link
             href="/"
-            className="inline-flex items-center gap-3 text-[10px] font-bold text-brand-ink/40 uppercase tracking-normal hover:text-brand-primary transition-colors mb-12 relative z-10"
+            className="inline-flex items-center gap-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal hover:text-brand-primary transition-colors mb-12 relative z-10"
           >
             <ArrowLeft size={16} /> Kembali ke Beranda
           </Link>
@@ -135,7 +135,7 @@ export default function LoginPage({
                     </span>
                   </div>
                 </div>
-                <p className="text-[10px] font-bold text-red-500/50 uppercase tracking-normal">
+                <p className="text-[10px] font-semibold text-red-500/50 uppercase tracking-normal">
                   Tunggu hingga waktu habis untuk mencoba lagi
                 </p>
               </div>
@@ -150,14 +150,14 @@ export default function LoginPage({
           ) : (
             <form action={login} className="space-y-8 relative z-10">
               {message && (
-                <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-bold text-brand-primary border border-brand-primary/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
+                <div className="rounded-brand bg-brand-primary/5 p-6 text-[11px] font-semibold text-brand-primary border border-brand-primary/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
                   <div className="h-2 w-2 bg-brand-primary rounded-full mt-1.5 flex-shrink-0"></div>
                   <div>{message}</div>
                 </div>
               )}
 
               {showRemaining && (
-                <div className={`rounded-brand p-6 text-[11px] font-bold uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4 border ${
+                <div className={`rounded-brand p-6 text-[11px] font-semibold uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4 border ${
                   remainingNum > 3 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' :
                   remainingNum > 1 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' :
                   'bg-red-500/10 text-red-600 border-red-500/20'
@@ -174,14 +174,14 @@ export default function LoginPage({
               )}
 
               {error && error !== 'locked' && (
-                <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-bold text-red-500 border border-red-500/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
+                <div className="rounded-brand bg-red-500/5 p-6 text-[11px] font-semibold text-red-500 border border-red-500/20 uppercase tracking-normal leading-relaxed transition-colors flex items-start gap-4">
                   <div className="h-2 w-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
                   <div>{error}</div>
                 </div>
               )}
 
               <div className="space-y-3 text-left">
-                <label htmlFor="login-email" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal ml-1">Email Warga / Petugas</label>
+                <label htmlFor="login-email" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal ml-1">Email Warga / Petugas</label>
                 <div className="relative group">
                   <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
                   <input
@@ -189,7 +189,7 @@ export default function LoginPage({
                     name="email"
                     type="email"
                     required
-                    className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-8 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
+                    className="block w-full rounded-xl border border-brand-hairline bg-brand-canvas-soft pl-16 pr-8 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-4 focus:ring-brand-primary/5 transition-all outline-none"
                     placeholder="name@pesonaserpong.com"
                   />
                 </div>
@@ -197,8 +197,8 @@ export default function LoginPage({
 
               <div className="space-y-3 text-left">
                 <div className="flex justify-between items-center px-1">
-                  <label htmlFor="login-password" className="text-[10px] font-bold text-brand-ink/50 uppercase tracking-normal">Kredensial Password</label>
-                  <Link href="/forgot-password" className="text-[9px] font-bold text-brand-primary uppercase tracking-normal hover:underline decoration-2">Lupa?</Link>
+                  <label htmlFor="login-password" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-normal">Kredensial Password</label>
+                  <Link href="/forgot-password" className="text-[9px] font-semibold text-brand-primary uppercase tracking-normal hover:underline decoration-2">Lupa?</Link>
                 </div>
                 <div className="relative group">
                   <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={20} />
@@ -207,7 +207,7 @@ export default function LoginPage({
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     required
-                    className="block w-full rounded-brand border border-brand-hairline bg-brand-canvas-soft pl-16 pr-14 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-8 focus:ring-brand-primary/5 transition-all outline-none"
+                    className="block w-full rounded-xl border border-brand-hairline bg-brand-canvas-soft pl-16 pr-14 py-5 text-base font-bold text-brand-ink placeholder:text-brand-ink/20 focus:border-brand-primary focus:bg-brand-canvas focus:ring-4 focus:ring-brand-primary/5 transition-all outline-none"
                     placeholder="••••••••"
                   />
                   <button
@@ -222,7 +222,7 @@ export default function LoginPage({
               </div>
 
               <SubmitButton
-                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-normal shadow-2xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
+                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-normal shadow-xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
                 icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
                 loadingText="Otentikasi..."
               >
@@ -234,7 +234,7 @@ export default function LoginPage({
           <div className="mt-12 pt-10 border-t border-brand-hairline text-center relative z-10 transition-colors">
             <p className="text-[11px] text-brand-ink/40 font-bold uppercase tracking-normal">
               Belum terdaftar?
-              <Link href="/register" className="font-extrabold text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
+              <Link href="/register" className="font-bold text-brand-primary hover:underline block mt-3 text-[13px] tracking-tight">
                 REGISTRASI WARGA BARU
               </Link>
             </p>
@@ -244,4 +244,6 @@ export default function LoginPage({
     </div>
   )
 }
+
+
 
