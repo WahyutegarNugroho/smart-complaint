@@ -68,18 +68,23 @@ Untuk mencegah *compounding errors*, pisahkan proses berpikir, perencanaan, dan 
 
 ### Routing Structure (Next.js App Router)
 ```
-src/app/                  ← Route groups & pages
-  (auth)/login/           ← public
-  (auth)/register/        ← public
-  (auth)/forgot-password/ ← public
+src/app/                  ← Pages
+  login/                  ← public
+  register/               ← public
+  forgot-password/        ← public
+  reset-password/         ← public
+  auth/actions.ts         ← Server Actions: login, signup, logout
   dashboard/              ← protected (static)
-  dashboard/(list)/       ← complaint list (tab groups)
   dashboard/create/       ← new complaint
   dashboard/complaint/[id]/ ← complaint detail
   dashboard/admin/        ← admin only
-  dashboard/users/        ← admin only
+  dashboard/map/          ← interactive map
+  dashboard/settings/     ← user settings
   api/                    ← API routes
-auth/actions.ts           ← Server Actions: login, signup, logout
+  informasi/              ← public info pages (darurat, keamanan, agenda, struktur)
+  bantuan/                ← help pages (panduan, privasi, kontak)
+  alur/                   ← complaint flow diagram
+  offline/                ← PWA offline fallback
 ```
 
 ### Layout Conventions
@@ -87,7 +92,7 @@ auth/actions.ts           ← Server Actions: login, signup, logout
 - `loading.tsx` → suspense fallback per segment.
 - `error.tsx` → error boundary per segment (`'use client'`).
 - `page.tsx` → konten utama. Default: Server Component.
-- Route groups `(auth)`, `(dashboard)` untuk organisasi tanpa memengaruhi URL.
+- Route group `(dashboard)` untuk organisasi tanpa memengaruhi URL.
 
 ### Page Conventions (params handling)
 ```ts
@@ -114,7 +119,8 @@ export default function Page({
 ### Component Organization
 ```
 src/
-  components/           ← shared components (SubmitButton, ConfirmModal, ThemeToggle, MobileBottomNav, SessionErrorState, NotificationDropdown, map/)
+  components/           ← shared components (SubmitButton, ConfirmModal, ThemeToggle, MobileBottomNav, SuccessToast, EmptyState, map/)
+  components/dashboard/ ← dashboard-specific (NotificationDropdown)
   lib/                  ← utilities (auth, authorization, prisma, profile, upload, validate, escalation, constants, login-rate-limit, redirect-guard)
   utils/supabase/       ← Supabase SSR (server, client, middleware)
   app/dashboard/actions/  ← Server Actions per domain

@@ -140,9 +140,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 - `SubmitButton` — Tombol dengan indikator loading spinner.
 - `SuccessToast` — Toast notifikasi sukses dengan animasi.
 - `MobileBottomNav` — Navigasi bawah floating khusus mobile (3 varian role).
-- `SessionErrorState` — Tampilan error ketika database/auth tidak tersedia.
-- `PageSizeSelector` — Pemilih ukuran halaman (12/24/48).
-- `SectionSkeleton` — Skeleton loading untuk konten async.
+- `NotificationDropdown` — Dropdown notifikasi in-app dengan polling 30 detik dan badge unread count.
 
 ### 16. CI/CD & Quality Assurance
 - **GitHub Actions CI**: `npm ci` → `npm audit` (high severity) → secret scanning → `prisma generate` → `tsc --noEmit` → ESLint → `npm test`.

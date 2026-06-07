@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { X, Calendar, MapPin, User, AlertTriangle, ArrowUpRight, LockKeyhole } from 'lucide-react'
 import type { ComplaintMarker } from './MapPageClient'
 import { STATUS_LABELS } from '@/lib/constants'
@@ -90,10 +91,13 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
             <>
               {complaint.imageUrl && (
                 <div className="rounded-2xl overflow-hidden border border-brand-hairline">
-                  <img
+                  <Image
                     src={complaint.imageUrl}
                     alt={complaint.title}
+                    width={448}
+                    height={192}
                     className="w-full h-48 object-cover"
+                    unoptimized
                   />
                 </div>
               )}
