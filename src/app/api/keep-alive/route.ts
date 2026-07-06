@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 
 // Pastikan route ini selalu dieksekusi secara dinamis dan tidak di-cache
 export const dynamic = 'force-dynamic';
