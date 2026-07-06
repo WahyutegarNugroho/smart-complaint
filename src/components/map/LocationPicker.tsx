@@ -8,14 +8,31 @@ import L from 'leaflet'
 const DEFAULT_CENTER: [number, number] = [-6.330579, 106.660773]
 const DEFAULT_ZOOM = 17
 
-const markerIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+const markerIcon = L.divIcon({
+  className: 'custom-marker-location-picker',
+  html: `<div style="
+    width: 24px; height: 36px;
+    position: relative;
+  ">
+    <div style="
+      width: 24px; height: 24px;
+      background: #9fe870;
+      border: 3px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    "></div>
+    <div style="
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #9fe870;
+      margin: -2px auto 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    "></div>
+  </div>`,
+  iconSize: [24, 36],
+  iconAnchor: [12, 36],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41],
 })
 
 function MapClickHandler({ onPositionChange }: { onPositionChange: (lat: number, lng: number) => void }) {
