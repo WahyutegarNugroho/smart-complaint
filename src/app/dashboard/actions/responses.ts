@@ -22,7 +22,11 @@ export async function respondToComplaint(formData: FormData) {
       select: { status: true, authorId: true, title: true }
     })
 
-    if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint?.authorId !== profile.id)) {
+    if (!existingComplaint) {
+      redirect(`/dashboard/complaint/${complaintId}?error=not_found`)
+    }
+
+    if (!profile || (profile.role === 'MASYARAKAT' && existingComplaint.authorId !== profile.id)) {
       redirect(`/dashboard/complaint/${complaintId}?error=forbidden`)
     }
 
