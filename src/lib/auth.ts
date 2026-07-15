@@ -33,6 +33,7 @@ export async function getAuthenticatedProfile() {
       phone: true,
       address: true,
       createdAt: true,
+      updatedAt: true,
     }
   })
   if (!profile) throw new Error('profile_not_found')
@@ -58,6 +59,7 @@ export async function getAuthenticatedProfileOptional() {
       phone: true,
       address: true,
       createdAt: true,
+      updatedAt: true,
     }
   })
   if (!profile) return null
