@@ -57,6 +57,7 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
           phone: true,
           address: true,
           createdAt: true,
+          updatedAt: true,
         }
       })
     }
