@@ -23,41 +23,43 @@ export default async function AdminUsersPage({
    const page = Math.max(1, parseInt(pageStr || '1'))
    const supabase = await createClient()
 
-const allUsers: Profile[] = []
-const totalUsers = 0
-   try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) redirect('/login')
+   let allUsers: Profile[] = []
+   let totalUsers = 0
 
-      const profile = await prisma.profile.findUnique({
-         where: { userId: user.id },
-         select: { role: true }
-      })
+    try {
+       const { data: { user } } = await supabase.auth.getUser()
+       if (!user) redirect('/login')
 
-      if (!profile || profile.role !== 'ADMIN') {
-         redirect('/dashboard')
-      }
+       const profile = await prisma.profile.findUnique({
+          where: { userId: user.id },
+          select: { role: true }
+       })
 
-      const whereClause: Prisma.ProfileWhereInput = {}
-      if (q) {
-         whereClause.OR = [
-            { name: { contains: q, mode: 'insensitive' } },
-            { username: { contains: q, mode: 'insensitive' } }
-         ]
-      }
-      if (role) whereClause.role = role as Role
-      if (rt) whereClause.rt = rt
-      if (rw) whereClause.rw = String(rw)
+       if (!profile || profile.role !== 'ADMIN') {
+          redirect('/dashboard')
+       }
 
-      [totalUsers, allUsers] = await Promise.all([
-        prisma.profile.count({ where: whereClause }),
-        prisma.profile.findMany({
+       const whereClause: Prisma.ProfileWhereInput = {}
+       if (q) {
+          whereClause.OR = [
+             { name: { contains: q, mode: 'insensitive' } },
+             { username: { contains: q, mode: 'insensitive' } }
+          ]
+       }
+       if (role) whereClause.role = role as Role
+       if (rt) whereClause.rt = rt
+       if (rw) whereClause.rw = rw
+
+       const fetchedUsers = await prisma.profile.findMany({
           where: whereClause,
           orderBy: { createdAt: 'desc' },
           skip: (page - 1) * PAGE_SIZE,
           take: PAGE_SIZE
-        }),
-      ])
+       })
+       const fetchedTotal = await prisma.profile.count({ where: whereClause })
+
+       allUsers = fetchedUsers
+       totalUsers = fetchedTotal
    } catch (err) {
       console.error('AdminUsersPage Data Error:', err)
       // Keep allUsers as empty array
