@@ -47,7 +47,7 @@ const totalUsers = 0
       }
       if (role) whereClause.role = role as Role
       if (rt) whereClause.rt = rt
-      if (rw) whereClause.rw = rw
+      if (rw) whereClause.rw = String(rw)
 
       [totalUsers, allUsers] = await Promise.all([
         prisma.profile.count({ where: whereClause }),
