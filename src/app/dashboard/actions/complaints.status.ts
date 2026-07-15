@@ -20,7 +20,7 @@ export async function toggleUrgentStatus(formData: FormData) {
       where: { userId: user.id },
       select: { id: true, role: true }
     })
-    if (!isStaff(profile)) {
+    if (!profile || !isStaff(profile)) {
       throw new Error('Izin ditolak')
     }
 
@@ -51,7 +51,7 @@ export async function updateComplaintStatus(formData: FormData) {
       where: { userId: user.id },
       select: { id: true, role: true }
     })
-    if (!isStaff(profile)) {
+    if (!profile || !isStaff(profile)) {
       throw new Error('Izin ditolak: Hanya petugas yang bisa mengubah status')
     }
 
