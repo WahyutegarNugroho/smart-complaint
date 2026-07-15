@@ -34,7 +34,7 @@ function validateMagicBytes(file: File, expectedType: string): Promise<boolean> 
       
       resolve(valid)
     }
-    reader.read(file.slice(0, 12))
+    reader.readAsArrayBuffer(file.slice(0, 12))
   })
 }
 
