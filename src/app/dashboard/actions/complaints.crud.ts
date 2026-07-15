@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma'
 import { validateString, validateRTRW, validateEnum } from '@/lib/validate'
 import { uploadImage, UPLOAD_ERROR_MAP } from '@/lib/upload'
 import { isRedirectError } from '@/lib/redirect-guard'
+import { isStaff } from '@/lib/authorization'
 import { getAuthenticatedUser, getAuthenticatedProfile } from '@/lib/auth'
 
 export async function createComplaint(formData: FormData) {
@@ -37,7 +38,7 @@ export async function createComplaint(formData: FormData) {
     const errRW = validateRTRW(rw, 'RW')
 
     if (errTitle || errContent || errLocation || !validCategory || errRT || errRW) {
-      const errorMsg = errTitle || errContent || errLocation || (errRT || errRW) || (!validCategory ? 'Kategori tidak valid' : '')
+      const errorMsg = errTitle ?? errContent ?? errLocation ?? errRT ?? errRW ?? (!validCategory ? 'Kategori tidak valid' : '')
       redirect(`/dashboard?error=${encodeURIComponent(errorMsg)}`)
     }
 
@@ -63,7 +64,7 @@ export async function createComplaint(formData: FormData) {
         content,
         category: validCategory,
         categoryId: validCategoryId,
-        isUrgent: formData.get('isUrgent') === 'true',
+        isUrgent: isStaff(profile) ? formData.get('isUrgent') === 'true' : false,
         incidentDate: validDate,
         location,
         latitude,
@@ -120,7 +121,7 @@ export async function updateComplaint(formData: FormData) {
     const errRW = validateRTRW(rw, 'RW')
 
     if (errTitle || errContent || errLocation || errRT || errRW) {
-      redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(errTitle || errContent || errLocation || errRT || errRW || '')}`)
+      redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(errTitle ?? errContent ?? errLocation ?? errRT ?? errRW ?? '')}`)
     }
 
     const imageFile = formData.get('image') as File
@@ -135,12 +136,16 @@ export async function updateComplaint(formData: FormData) {
       }
     }
 
+    const rawDate = formData.get('incidentDate') as string
+    const incidentDate = rawDate ? new Date(rawDate) : new Date()
+    const validDate = isNaN(incidentDate.getTime()) ? new Date() : incidentDate
+
     await prisma.complaint.update({
       where: { id: complaintId },
       data: {
         title,
         content,
-        incidentDate: new Date(formData.get('incidentDate') as string),
+        incidentDate: validDate,
         location,
         latitude,
         longitude,

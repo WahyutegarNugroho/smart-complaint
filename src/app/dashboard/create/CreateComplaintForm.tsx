@@ -19,6 +19,7 @@ import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
 import Image from 'next/image'
 import SubmitButton from '@/components/SubmitButton'
+import { suggestCategory } from '@/lib/constants'
 import { LocationPicker } from '@/components/map'
 
 interface CategoryChild {
@@ -114,26 +115,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
     }
   }, [preview])
 
-  // Category Auto Suggestion calculated on render
-  const titleLower = title.toLowerCase()
-  let suggestedCategory: string | null = null
-  if (titleLower.trim()) {
-    const keamananKeywords = ['maling', 'curiga', 'asing', 'ronda', 'pos', 'pencuri', 'berantem', 'ribut', 'kehilangan', 'copet', 'rampok', 'rusuh', 'hilang', 'aman', 'tetangga']
-    const kebersihanKeywords = ['sampah', 'bau', 'kotor', 'daun', 'selokan', 'mampet', 'lumpur', 'banjir', 'genangan', 'limbah', 'bangkai', 'lalat', 'bersih', 'rumput']
-    const fasilitasKeywords = ['paving', 'lampu', 'tiang', 'pipa', 'aspal', 'jalan', 'rusak', 'lubang', 'portal', 'pagar', 'taman', 'kabel', 'listrik', 'air']
-
-    const matchesKeamanan = keamananKeywords.some(keyword => titleLower.includes(keyword))
-    const matchesKebersihan = kebersihanKeywords.some(keyword => titleLower.includes(keyword))
-    const matchesFasilitas = fasilitasKeywords.some(keyword => titleLower.includes(keyword))
-
-    if (matchesKeamanan) {
-      suggestedCategory = 'keamanan'
-    } else if (matchesKebersihan) {
-      suggestedCategory = 'kebersihan'
-    } else if (matchesFasilitas) {
-      suggestedCategory = 'fasilitas'
-    }
-  }
+  const suggestedCategory = suggestCategory(title)
 
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">

@@ -3,12 +3,11 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
-import { validateString, validateEnum } from '@/lib/validate'
-import { resetEscalation } from '@/lib/escalation'
+import { validateString } from '@/lib/validate'
 import { uploadImage, UPLOAD_ERROR_MAP } from '@/lib/upload'
 import { isRedirectError } from '@/lib/redirect-guard'
-import { STATUS_LABELS } from '@/lib/constants'
 import { getAuthenticatedProfile, getAuthenticatedUserOptional } from '@/lib/auth'
+import { createAuditLog } from '@/lib/audit'
 
 export async function respondToComplaint(formData: FormData) {
   const complaintId = formData.get('complaintId') as string
@@ -33,8 +32,6 @@ export async function respondToComplaint(formData: FormData) {
       redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(errContent)}`)
     }
 
-    const status = formData.get('status') as 'PENDING' | 'PROCESSING' | 'COMPLETED'
-    const validStatus = validateEnum(status, ['PENDING', 'PROCESSING', 'COMPLETED'] as const)
     const imageFile = formData.get('responseImage') as File | null
     let responseImageUrl = null
 
@@ -47,11 +44,6 @@ export async function respondToComplaint(formData: FormData) {
       }
     }
 
-    let statusChanged = false
-    if (validStatus && validStatus !== existingComplaint?.status && profile.role !== 'MASYARAKAT') {
-      statusChanged = true
-    }
-
     await prisma.response.create({
       data: {
         content,
@@ -61,30 +53,13 @@ export async function respondToComplaint(formData: FormData) {
       }
     })
 
-    if (validStatus && profile.role !== 'MASYARAKAT') {
-      try {
-        await prisma.complaint.update({
-          where: { id: complaintId },
-          data: { status: validStatus }
-        })
-        if (validStatus === 'COMPLETED' || validStatus === 'PROCESSING') {
-          await resetEscalation(complaintId)
-        }
-      } catch (statusErr) {
-        console.error('Non-critical Status Update Error:', statusErr)
-      }
-    }
+    await createAuditLog('CREATE_RESPONSE', `Membuat tanggapan untuk laporan "${existingComplaint.title}" (${complaintId})`, profile.id)
 
     if (existingComplaint && existingComplaint.authorId !== profile.id) {
-      const statusText = (STATUS_LABELS[validStatus as keyof typeof STATUS_LABELS] || 'Menunggu').toUpperCase()
-      const message = statusChanged
-        ? `Laporan Anda "${existingComplaint.title}" mendapat tanggapan baru dari ${profile.name} dan statusnya diubah menjadi ${statusText}.`
-        : `Laporan Anda "${existingComplaint.title}" mendapat tanggapan baru dari ${profile.name}.`
-
       await prisma.notification.create({
         data: {
           userId: existingComplaint.authorId,
-          message,
+          message: `Laporan Anda "${existingComplaint.title}" mendapat tanggapan baru dari ${profile.name}.`,
           type: 'INFO'
         }
       })
@@ -112,17 +87,21 @@ export async function deleteResponse(responseId: string) {
     if (!profile) return { error: 'Profile not found' }
 
     const response = await prisma.response.findUnique({
-      where: { id: responseId }
+      where: { id: responseId },
+      select: { id: true, complaintId: true, officerId: true }
     })
     if (!response) return { error: 'Response not found' }
 
     if (response.officerId !== profile.id && profile.role !== 'ADMIN') {
+      await createAuditLog('DELETE_RESPONSE_FORBIDDEN', `Akses ditolak hapus tanggapan ${responseId} untuk laporan ${response.complaintId}`, profile.id)
       return { error: 'Forbidden' }
     }
 
     await prisma.response.delete({
       where: { id: responseId }
     })
+
+    await createAuditLog('DELETE_RESPONSE', `Menghapus tanggapan untuk laporan ${response.complaintId}`, profile.id)
 
     revalidatePath(`/dashboard/complaint/${response.complaintId}`)
     return { success: true }
@@ -134,6 +113,13 @@ export async function deleteResponse(responseId: string) {
 
 export async function editResponse(responseId: string, content: string) {
   try {
+    if (!content || content.trim().length === 0) {
+      return { error: 'Konten tidak boleh kosong' }
+    }
+    if (content.trim().length > 2000) {
+      return { error: 'Konten melebihi 2000 karakter' }
+    }
+
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return { error: 'Unauthorized' }
     const { user } = auth
@@ -144,11 +130,13 @@ export async function editResponse(responseId: string, content: string) {
     if (!profile) return { error: 'Profile not found' }
 
     const response = await prisma.response.findUnique({
-      where: { id: responseId }
+      where: { id: responseId },
+      select: { id: true, complaintId: true, officerId: true }
     })
     if (!response) return { error: 'Response not found' }
 
     if (response.officerId !== profile.id) {
+      await createAuditLog('EDIT_RESPONSE_FORBIDDEN', `Akses ditolak edit tanggapan ${responseId} untuk laporan ${response.complaintId}`, profile.id)
       return { error: 'Forbidden' }
     }
 
@@ -156,6 +144,8 @@ export async function editResponse(responseId: string, content: string) {
       where: { id: responseId },
       data: { content }
     })
+
+    await createAuditLog('EDIT_RESPONSE', `Mengedit tanggapan untuk laporan ${response.complaintId}`, profile.id)
 
     revalidatePath(`/dashboard/complaint/${response.complaintId}`)
     return { success: true }

@@ -13,23 +13,24 @@ import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
 import prisma from '@/lib/prisma';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function LandingPage() {
-  // Query dynamic stats
-  const totalReports = await prisma.complaint.count();
-  const completedReports = await prisma.complaint.count({
-    where: { status: 'COMPLETED' }
-  });
+  // Query dynamic stats — all parallel
+  const [totalReports, completedReports, completedComplaints, activeBlocksResult] = await Promise.all([
+    prisma.complaint.count(),
+    prisma.complaint.count({ where: { status: 'COMPLETED' } }),
+    prisma.complaint.findMany({
+      where: { status: 'COMPLETED' },
+      select: { createdAt: true, updatedAt: true }
+    }),
+    prisma.complaint.groupBy({
+      by: ['rt'],
+      where: { rt: { not: null } }
+    }),
+  ])
   
   const successRate = totalReports > 0 ? Math.round((completedReports / totalReports) * 100) : 100;
-  
-  // Calculate average response time
-  const completedComplaints = await prisma.complaint.findMany({
-    where: { status: 'COMPLETED' },
-    select: { createdAt: true, updatedAt: true }
-  });
   
   let averageResponseHours = 12;
   if (completedComplaints.length > 0) {
@@ -40,12 +41,7 @@ export default async function LandingPage() {
     averageResponseHours = Math.max(1, Math.round(totalHours / completedComplaints.length));
   }
 
-  // Count active blocks (RTs)
-  const activeBlocksResult = await prisma.complaint.groupBy({
-    by: ['rt'],
-    where: { rt: { not: null } }
-  });
-  const activeBlocks = activeBlocksResult.length || 5; // Default to 5 blocks if none
+  const activeBlocks = activeBlocksResult.length || 5;
 
 
 
@@ -150,7 +146,6 @@ export default async function LandingPage() {
                   src="/hero.png"
                   alt="Pesona Serpong"
                   fill
-                  unoptimized
                   className="rounded-3xl object-cover transition-transform duration-1000 group-hover:scale-105"
                   priority
                 />

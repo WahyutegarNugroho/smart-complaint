@@ -76,8 +76,7 @@ export default function LocationPicker({
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=id`,
-        { headers: { 'User-Agent': 'SmartComplaintApp/1.0' } }
+        `/api/geocode?action=reverse&lat=${lat}&lon=${lng}`
       )
       const data = await res.json()
       if (data.display_name) {
@@ -100,8 +99,7 @@ export default function LocationPicker({
     setSearching(true)
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1&accept-language=id`,
-        { headers: { 'User-Agent': 'SmartComplaintApp/1.0' } }
+        `/api/geocode?action=search&q=${encodeURIComponent(searchQuery)}`
       )
       const data = await res.json()
       if (data.length > 0) {

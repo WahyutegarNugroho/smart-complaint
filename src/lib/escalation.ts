@@ -20,6 +20,7 @@ export async function processEscalations() {
   const adminIds = await prisma.profile.findMany({
     where: { role: 'ADMIN' },
     select: { id: true },
+    take: 100,
   })
 
   for (const rule of SLA_RULES) {
@@ -31,6 +32,7 @@ export async function processEscalations() {
         escalationLevel: rule.prevLevel,
         createdAt: { lte: cutoff },
       },
+      take: 500,
     })
 
     for (const complaint of complaints) {

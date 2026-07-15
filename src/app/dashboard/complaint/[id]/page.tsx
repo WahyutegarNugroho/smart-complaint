@@ -47,24 +47,26 @@ export default async function ComplaintDetailPage({
   
   const { profile } = data
 
-  const complaint = await prisma.complaint.findUnique({
-    where: { id },
-  include: { 
-    author: true,
-    categoryRel: true,
-    responses: {
-      include: { officer: true },
-      orderBy: { createdAt: 'asc' }
-    }
-  }
-  })
+  const [complaint, escalationLogs] = await Promise.all([
+    prisma.complaint.findUnique({
+      where: { id },
+      include: { 
+        author: true,
+        categoryRel: true,
+        responses: {
+          include: { officer: true },
+          orderBy: { createdAt: 'asc' }
+        }
+      }
+    }),
+    getEscalationInfo(id),
+  ])
 
   if (!complaint) redirect('/dashboard')
 
   const canManage = isStaff(profile)
   const isAdmin = checkIsAdmin(profile)
   const isAuthor = complaint.authorId === profile.id
-  const escalationLogs = await getEscalationInfo(complaint.id)
 
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-32">
@@ -95,7 +97,7 @@ export default async function ComplaintDetailPage({
             <div className="bg-brand-canvas rounded-3xl shadow-sm border border-brand-hairline overflow-hidden transition-all group">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
-                  <Image src={complaint.imageUrl} alt={complaint.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <Image src={complaint.imageUrl} alt={complaint.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
                     <div className="absolute top-6 left-6 bg-red-500 text-white px-5 py-2 rounded-2xl text-[10px] font-semibold uppercase tracking-normal flex items-center gap-2 shadow-xl">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi
@@ -202,7 +204,6 @@ export default async function ComplaintDetailPage({
                 <div className="mt-10 p-2 bg-brand-canvas rounded-3xl border border-brand-hairline shadow-xl transition-all focus-within:ring-4 focus-within:ring-brand-primary/5 no-print">
                    <form action={respondToComplaint} className="relative">
                       <input type="hidden" name="complaintId" value={complaint.id} />
-                      <input type="hidden" name="status" value={complaint.status} />
                       <textarea 
                         name="content" 
                         required 

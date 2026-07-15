@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Users, Building2, ShieldCheck } from 'lucide-react'
 

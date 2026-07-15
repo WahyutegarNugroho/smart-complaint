@@ -62,7 +62,7 @@ export async function signup(formData: FormData) {
     redirect('/register?error=' + encodeURIComponent('Password minimal 6 karakter'))
   }
 
-  console.log(`Signup attempt for: ${email}`)
+  console.log('Signup attempt')
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -75,18 +75,18 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    console.error(`Supabase Auth Error: ${error.message}`)
+    console.error('Signup Auth Error:', error.message)
     redirect('/register?error=' + encodeURIComponent(error.message))
   }
 
-  console.log(`Supabase Auth Success for user: ${data.user?.id}`)
+  console.log('Signup Auth Success')
 
   if (data.user) {
     try {
-      console.log(`Attempting Prisma upsert for ${email}...`)
+      console.log('Attempting Prisma upsert...')
       await prisma.profile.upsert({
-        where: { username: email },
-        update: { userId: data.user.id },
+        where: { userId: data.user.id },
+        update: { username: email, name: fullName },
         create: {
           userId: data.user.id,
           username: email,
@@ -100,8 +100,7 @@ export async function signup(formData: FormData) {
       if (isRedirectError(dbError)) throw dbError;
       
       const error = dbError as Error;
-      console.error(`Prisma Error: ${error.message}`)
-      console.error('Database Error during signup:', error)
+      console.error('Signup Prisma Error:', error.message)
       
       const errorMessage = error.message?.includes('max clients reached') 
         ? 'Database sedang sibuk. Silahkan coba beberapa saat lagi.'

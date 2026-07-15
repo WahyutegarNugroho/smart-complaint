@@ -7,6 +7,7 @@ import { validateString } from '@/lib/validate'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
 import { requireAdmin } from '@/lib/authorization'
+import { createAuditLog } from '@/lib/audit'
 
 export async function createAnnouncement(formData: FormData) {
   try {
@@ -26,6 +27,8 @@ export async function createAnnouncement(formData: FormData) {
     await prisma.announcement.create({
       data: { title, content, category, authorId: profile.id }
     })
+
+    await createAuditLog('CREATE_ANNOUNCEMENT', `Membuat pengumuman "${title}"`, profile.id)
 
     revalidatePath('/dashboard')
     revalidatePath('/dashboard/admin/announcements')
@@ -58,6 +61,8 @@ export async function updateAnnouncement(formData: FormData) {
       data: { title, content, category }
     })
 
+    await createAuditLog('UPDATE_ANNOUNCEMENT', `Mengubah pengumuman "${title}" (${id})`, profile.id)
+
     revalidatePath('/dashboard')
     revalidatePath('/dashboard/admin/announcements')
     redirect('/dashboard/admin/announcements?message=Pengumuman berhasil diubah')
@@ -74,10 +79,13 @@ export async function deleteAnnouncement(formData: FormData) {
     if (!auth) return
     const { user } = auth
     const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
-    if (!profile || profile.role !== 'ADMIN') return
+    if (!profile || profile.role !== 'ADMIN') return redirect('/dashboard?error=forbidden')
 
     const id = formData.get('id') as string
     await prisma.announcement.delete({ where: { id } })
+
+    await createAuditLog('DELETE_ANNOUNCEMENT', `Menghapus pengumuman (${id})`, profile.id)
+
     revalidatePath('/dashboard')
     revalidatePath('/dashboard/admin/announcements')
   } catch (err) {

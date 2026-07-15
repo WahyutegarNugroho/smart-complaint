@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { rateLimit } from '@/lib/rate-limit'
 
 function escapeCsvField(value: string): string {
   const dangerous = /^[=+\-@\t]/
@@ -8,7 +9,10 @@ function escapeCsvField(value: string): string {
   return `"${dangerous.test(value) ? '\t' : ''}${escaped}"`
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  const rl = await rateLimit(request, { keyPrefix: 'export:csv', max: 10 })
+  if (rl) return rl
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })

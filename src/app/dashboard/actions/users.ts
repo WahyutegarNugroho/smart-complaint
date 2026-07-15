@@ -30,7 +30,7 @@ export async function updateUserRole(formData: FormData) {
     })
 
     revalidatePath('/dashboard/admin/users')
-    await createAuditLog('UPDATE_ROLE', `Mengubah role ${targetUser.username} dari ${targetUser.role} menjadi ${newRole}`)
+    await createAuditLog('UPDATE_ROLE', `Mengubah role ${targetUser.username} dari ${targetUser.role} menjadi ${newRole}`, adminProfile.id)
   } catch (err) {
     console.error('UpdateUserRole Error:', err)
   }
@@ -56,7 +56,7 @@ export async function toggleUserVerification(formData: FormData) {
     revalidatePath('/dashboard/admin/users')
     const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId }, select: { username: true } })
     if (targetUser) {
-      await createAuditLog('VERIFY_USER', `${currentStatus ? 'Mencabut' : 'Memverifikasi'} akun ${targetUser.username}`)
+      await createAuditLog('VERIFY_USER', `${currentStatus ? 'Mencabut' : 'Memverifikasi'} akun ${targetUser.username}`, adminProfile.id)
     }
   } catch (err) {
     console.error('ToggleUserVerification Error:', err)
@@ -70,7 +70,7 @@ export async function deleteUserAccount(formData: FormData) {
     const { user } = auth
     const adminProfile = await prisma.profile.findUnique({
       where: { userId: user.id },
-      select: { role: true }
+      select: { id: true, role: true }
     })
     if (!adminProfile || adminProfile.role !== 'ADMIN') return
 
@@ -80,7 +80,7 @@ export async function deleteUserAccount(formData: FormData) {
 
     await prisma.profile.delete({ where: { id: targetProfileId } })
     revalidatePath('/dashboard/admin/users')
-    await createAuditLog('DELETE_USER', `Menghapus akun ${targetUser.username} (${targetUser.name})`)
+    await createAuditLog('DELETE_USER', `Menghapus akun ${targetUser.username} (${targetUser.name})`, adminProfile.id)
   } catch (err) {
     console.error('DeleteUserAccount Error:', err)
   }

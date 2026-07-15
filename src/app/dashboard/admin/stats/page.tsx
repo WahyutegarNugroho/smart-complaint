@@ -22,42 +22,40 @@ export default async function AdminStatsPage() {
   const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
   if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
 
-  // Data for Status Chart
-  const statusCounts = await prisma.complaint.groupBy({
-    by: ['status'],
-    _count: { _all: true }
-  })
+  // Parallel queries
+  const [statusCounts, rtCounts, total, mappedComplaints] = await Promise.all([
+    prisma.complaint.groupBy({
+      by: ['status'],
+      _count: { _all: true }
+    }),
+    prisma.complaint.groupBy({
+      by: ['rt'],
+      _count: { _all: true },
+      orderBy: { rt: 'asc' }
+    }),
+    prisma.complaint.count(),
+    prisma.complaint.findMany({
+      where: {
+        latitude: { not: null },
+        longitude: { not: null }
+      },
+      select: {
+        id: true,
+        title: true,
+        latitude: true,
+        longitude: true,
+        status: true,
+        rt: true,
+        rw: true,
+        isUrgent: true,
+        createdAt: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 500
+    }),
+  ])
 
-  // Data for RT Chart
-  const rtCounts = await prisma.complaint.groupBy({
-    by: ['rt'],
-    _count: { _all: true },
-    orderBy: { rt: 'asc' }
-  })
-
-  const total = await prisma.complaint.count()
   const maxRTCount = Math.max(...rtCounts.map(r => r._count._all), 1)
-
-  // Data for Map
-  const mappedComplaints = await prisma.complaint.findMany({
-    where: {
-      latitude: { not: null },
-      longitude: { not: null }
-    },
-    select: {
-      id: true,
-      title: true,
-      latitude: true,
-      longitude: true,
-      status: true,
-      rt: true,
-      rw: true,
-      isUrgent: true,
-      createdAt: true
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 500
-  })
 
   const mapComplaints = mappedComplaints.map(c => ({
     ...c,
@@ -107,12 +105,11 @@ export default async function AdminStatsPage() {
                 ) : (
                    statusCounts.map(item => {
                      const percentage = total > 0 ? Math.round((item._count._all / total) * 100) : 0
-                     const colorMap = {
-                        PENDING: 'amber',
-                        PROCESSING: 'blue',
-                        COMPLETED: 'emerald'
-                     }
-                     const color = colorMap[item.status as keyof typeof colorMap] || 'slate'
+                      const statusBgMap: Record<string, string> = {
+                         PENDING: 'bg-amber-500 dark:bg-amber-400',
+                         PROCESSING: 'bg-blue-500 dark:bg-blue-400',
+                         COMPLETED: 'bg-emerald-500 dark:bg-emerald-400',
+                      }
                      
                      return (
                        <div key={item.status} className="space-y-3">
@@ -127,7 +124,7 @@ export default async function AdminStatsPage() {
                          </div>
                          <div className="h-2.5 w-full bg-brand-canvas-soft rounded-full overflow-hidden p-0.5 border border-brand-hairline">
                             <div 
-                             className={`h-full rounded-full transition-all duration-1000 bg-${color}-500 dark:bg-${color}-400 shadow-[0_0_10px_rgba(0,0,0,0.1)]`}
+                             className={`h-full rounded-full transition-all duration-1000 ${statusBgMap[item.status] || 'bg-slate-500 dark:bg-slate-400'} shadow-[0_0_10px_rgba(0,0,0,0.1)]`}
                              style={{ width: `${percentage}%` }}
                             />
                          </div>

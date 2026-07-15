@@ -18,7 +18,23 @@ export async function getAuthenticatedUserOptional() {
 
 export async function getAuthenticatedProfile() {
   const { supabase, user } = await getAuthenticatedUser()
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+    select: {
+      id: true,
+      userId: true,
+      name: true,
+      username: true,
+      role: true,
+      isVerified: true,
+      rt: true,
+      rw: true,
+      nik: true,
+      phone: true,
+      address: true,
+      createdAt: true,
+    }
+  })
   if (!profile) throw new Error('profile_not_found')
   return { supabase, user, profile }
 }
@@ -27,7 +43,23 @@ export async function getAuthenticatedProfileOptional() {
   const result = await getAuthenticatedUserOptional()
   if (!result) return null
   const { supabase, user } = result
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id } })
+  const profile = await prisma.profile.findUnique({
+    where: { userId: user.id },
+    select: {
+      id: true,
+      userId: true,
+      name: true,
+      username: true,
+      role: true,
+      isVerified: true,
+      rt: true,
+      rw: true,
+      nik: true,
+      phone: true,
+      address: true,
+      createdAt: true,
+    }
+  })
   if (!profile) return null
   return { supabase, user, profile }
 }

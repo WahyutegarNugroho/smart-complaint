@@ -17,3 +17,21 @@ export const STATUS_BADGE_CLASSES = {
 } as const
 
 export type ComplaintStatus = keyof typeof STATUS_LABELS
+
+export const CATEGORY_KEYWORDS = {
+  keamanan: ['maling', 'curiga', 'asing', 'ronda', 'pos', 'pencuri', 'berantem', 'ribut', 'kehilangan', 'copet', 'rampok', 'rusuh', 'hilang', 'aman', 'tetangga'],
+  kebersihan: ['sampah', 'bau', 'kotor', 'daun', 'selokan', 'mampet', 'lumpur', 'banjir', 'genangan', 'limbah', 'bangkai', 'lalat', 'bersih', 'rumput'],
+  fasilitas: ['paving', 'lampu', 'tiang', 'pipa', 'aspal', 'jalan', 'rusak', 'lubang', 'portal', 'pagar', 'taman', 'kabel', 'listrik', 'air'],
+} as const satisfies Record<string, readonly string[]>
+
+export type CategorySlug = keyof typeof CATEGORY_KEYWORDS
+
+export function suggestCategory(title: string): CategorySlug | null {
+  const lower = title.toLowerCase().trim()
+  if (!lower) return null
+  for (const [slug, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    if (keywords.some(kw => lower.includes(kw))) return slug as CategorySlug
+  }
+  return null
+}
+// ponytail: keyword-driven suggestion is heuristic-only. Upgrade to ML/DB when misclassifications exceed 20%.

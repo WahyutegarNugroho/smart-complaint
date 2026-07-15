@@ -10,10 +10,10 @@ export async function adminDeleteComplaint(formData: FormData) {
   let success = false
   try {
     const auth = await getAuthenticatedUserOptional()
-    if (!auth) return
+    if (!auth) return redirect('/login')
     const { user } = auth
     const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
-    if (!profile || profile.role !== 'ADMIN') return
+    if (!profile || profile.role !== 'ADMIN') return redirect('/dashboard?error=forbidden')
 
     const id = formData.get('id') as string
     const complaint = await prisma.complaint.findUnique({
@@ -21,7 +21,7 @@ export async function adminDeleteComplaint(formData: FormData) {
       select: { title: true, authorId: true, author: { select: { name: true } } }
     })
 
-    if (!complaint) return
+    if (!complaint) return redirect('/dashboard?error=not_found')
 
     await prisma.notification.create({
       data: {
@@ -36,7 +36,7 @@ export async function adminDeleteComplaint(formData: FormData) {
     revalidatePath('/dashboard')
     success = true
 
-    await createAuditLog('DELETE_REPORT', `Menghapus laporan "${complaint.title}" milik ${complaint.author?.name || 'Anonim'}`)
+    await createAuditLog('DELETE_REPORT', `Menghapus laporan "${complaint.title}" milik ${complaint.author?.name || 'Anonim'}`, profile.id)
   } catch (err) {
     console.error('AdminDeleteComplaint Error:', err)
   }

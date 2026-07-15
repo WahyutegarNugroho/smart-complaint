@@ -8,10 +8,170 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Profile {
+  id                 String         @id @default(cuid())
+  userId             String         @unique
+  nik                String?
+  name               String
+  username           String         @unique
+  role               Role           @default(MASYARAKAT)
+  phone              String?
+  address            String?
+  rt                 String?
+  rw                 String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  isVerified         Boolean        @default(false)
+  @@index([role])
+  @@index([isVerified])
+  announcements      Announcement[]
+  auditLogs          AuditLog[]
+  assignedComplaints Complaint[]    @relation("ComplaintAssignee")
+  complaints         Complaint[]    @relation("ComplaintAuthor")
+  notifications      Notification[]
+  responses          Response[]
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String?
+  icon        String?
+  parentId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[]  @relation("CategoryHierarchy")
+  complaints  Complaint[]
+
+  @@index([parentId])
+  @@index([slug])
+}
+
+model Complaint {
+  id              String          @id @default(cuid())
+  title           String
+  content         String
+  incidentDate    DateTime
+  location        String
+  imageUrl        String?
+  status          Status          @default(PENDING)
+  authorId        String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  isUrgent        Boolean         @default(false)
+  rt              String?
+  rw              String?
+  category        String          @default("umum")
+  assignedToId    String?
+  escalatedAt     DateTime?
+  escalationLevel EscalationLevel @default(NONE)
+  latitude        Float?
+  longitude       Float?
+  categoryId      String?
+  assignedTo      Profile?        @relation("ComplaintAssignee", fields: [assignedToId], references: [id])
+  author          Profile         @relation("ComplaintAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  categoryRel     Category?       @relation(fields: [categoryId], references: [id])
+  escalationLogs  EscalationLog[]
+  responses       Response[]
+
+  @@index([authorId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([rt])
+  @@index([rw])
+  @@index([category])
+  @@index([categoryId])
+  @@index([incidentDate])
+  @@index([status, createdAt])
+  @@index([latitude, longitude])
+  @@index([escalationLevel])
+  @@index([isUrgent])
+  @@index([assignedToId])
+}
+
+model Response {
+  id          String    @id @default(cuid())
+  content     String
+  complaintId String
+  officerId   String
+  createdAt   DateTime  @default(now())
+  imageUrl    String?
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  officer     Profile   @relation(fields: [officerId], references: [id], onDelete: Cascade)
+
+  @@index([complaintId])
+  @@index([officerId])
+  @@index([createdAt])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  category  String   @default("umum")
+  author    Profile  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([category])
+  @@index([authorId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  type      NotificationType @default(INFO)
+  user      Profile          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model EscalationLog {
+  id          String          @id @default(cuid())
+  complaintId String
+  fromLevel   EscalationLevel
+  toLevel     EscalationLevel
+  reason      String
+  createdAt   DateTime        @default(now())
+  complaint   Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  @@index([complaintId])
+  @@index([createdAt])
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  count     Int      @default(1)
+  resetAt   DateTime
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  details   String
+  adminId   String
+  createdAt DateTime @default(now())
+  admin     Profile  @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  @@index([action])
+  @@index([adminId])
+}
+
 enum Role {
-  MASYARAKAT
-  PETUGAS
   ADMIN
+  PETUGAS
+  MASYARAKAT
 }
 
 enum Status {
@@ -31,166 +191,4 @@ enum EscalationLevel {
   LEVEL_1
   LEVEL_2
   LEVEL_3
-}
-
-model Profile {
-  id         String   @id @default(cuid())
-  userId     String   @unique
-  username   String   @unique
-  name       String
-  nik       String?
-  phone     String?
-  address   String?
-  rt        String?
-  rw        String?
-  role      Role     @default(MASYARAKAT)
-  isVerified Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  complaints         Complaint[]       @relation("ComplaintAuthor")
-  assignedComplaints Complaint[]       @relation("ComplaintAssignee")
-  responses          Response[]
-  announcements      Announcement[]
-  notifications      Notification[]
-  auditLogs          AuditLog[]
-}
-
-model Category {
-  id          String     @id @default(cuid())
-  name        String
-  slug        String     @unique
-  description String?
-  icon        String?
-  parentId    String?
-  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[] @relation("CategoryHierarchy")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  complaints Complaint[]
-
-  @@index([parentId])
-  @@index([slug])
-}
-
-model Complaint {
-  id              String           @id @default(cuid())
-  title           String
-  content         String
-  location        String
-  latitude        Float?
-  longitude       Float?
-  rt              String?
-  rw              String?
-  incidentDate    DateTime
-  imageUrl        String?
-  status          Status           @default(PENDING)
-  isUrgent        Boolean          @default(false)
-  authorId        String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  category        String           @default("umum")
-  categoryId      String?
-  escalationLevel EscalationLevel  @default(NONE)
-  escalatedAt     DateTime?
-  assignedToId    String?
-
-  author       Profile      @relation("ComplaintAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  assignedTo   Profile?     @relation("ComplaintAssignee", fields: [assignedToId], references: [id])
-  categoryRel   Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  responses    Response[]
-  escalationLogs EscalationLog[]
-
-  @@index([authorId])
-  @@index([status])
-  @@index([createdAt])
-  @@index([rt])
-  @@index([rw])
-  @@index([category])
-  @@index([categoryId])
-  @@index([incidentDate])
-  @@index([status, createdAt])
-  @@index([latitude, longitude])
-  @@index([escalationLevel])
-}
-
-model Response {
-  id          String   @id @default(cuid())
-  content     String
-  imageUrl    String?
-  complaintId String
-  officerId   String
-  createdAt   DateTime @default(now())
-
-  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
-  officer   Profile   @relation(fields: [officerId], references: [id], onDelete: Cascade)
-
-  @@index([complaintId])
-  @@index([officerId])
-  @@index([createdAt])
-}
-
-model Announcement {
-    id        String   @id @default(cuid())
-    title     String
-    content   String
-    category  String   @default("umum")
-    authorId  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    author Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
-
-    @@index([createdAt])
-    @@index([category])
-    @@index([authorId])
-  }
-
-model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  message   String
-  type      NotificationType @default(INFO)
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([isRead])
-}
-
-model EscalationLog {
-  id           String           @id @default(cuid())
-  complaintId  String
-  fromLevel    EscalationLevel
-  toLevel      EscalationLevel
-  reason       String
-  createdAt    DateTime         @default(now())
-
-  complaint Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
-
-  @@index([complaintId])
-  @@index([createdAt])
-}
-
-model LoginAttempt {
-  id        String   @id @default(cuid())
-  ip        String   @unique
-  count     Int      @default(1)
-  resetAt   DateTime
-  updatedAt DateTime @updatedAt
-
-  @@index([resetAt])
-}
-
-model AuditLog {
-  id        String   @id @default(cuid())
-  action    String   // e.g., "UPDATE_STATUS", "DELETE_REPORT", "VERIFY_USER"
-  details   String
-  adminId   String
-  createdAt DateTime @default(now())
-
-  admin Profile @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }

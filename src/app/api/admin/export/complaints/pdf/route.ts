@@ -1,11 +1,15 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { rateLimit } from '@/lib/rate-limit'
 import PDFDocument from 'pdfkit'
 
 export const runtime = 'nodejs'
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  const rl = await rateLimit(request, { keyPrefix: 'export:pdf', max: 10 })
+  if (rl) return rl
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return new NextResponse('Unauthorized', { status: 401 })

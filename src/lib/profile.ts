@@ -19,7 +19,21 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
     }
 
     let profile = await prisma.profile.findUnique({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: {
+        id: true,
+        userId: true,
+        name: true,
+        username: true,
+        role: true,
+        isVerified: true,
+        rt: true,
+        rw: true,
+        nik: true,
+        phone: true,
+        address: true,
+        createdAt: true,
+      }
     })
 
     if (!profile) {
@@ -28,7 +42,21 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
           userId: user.id,
           username: user.email || `user_${user.id.slice(0, 8)}`,
           name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
-          role: 'MASYARAKAT'
+          role: 'MASYARAKAT',
+        },
+        select: {
+          id: true,
+          userId: true,
+          name: true,
+          username: true,
+          role: true,
+          isVerified: true,
+          rt: true,
+          rw: true,
+          nik: true,
+          phone: true,
+          address: true,
+          createdAt: true,
         }
       })
     }

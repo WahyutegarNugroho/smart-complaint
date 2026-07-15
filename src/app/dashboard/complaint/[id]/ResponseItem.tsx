@@ -154,7 +154,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
             {res.content}
             {res.imageUrl && (
               <div className="mt-4 rounded-2xl overflow-hidden border border-brand-hairline relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
-                <Image src={res.imageUrl} alt="Lampiran" fill unoptimized className="object-cover" />
+                <Image src={res.imageUrl} alt="Lampiran" fill className="object-cover" />
               </div>
             )}
           </div>

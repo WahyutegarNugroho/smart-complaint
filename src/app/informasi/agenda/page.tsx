@@ -1,10 +1,8 @@
-import React from 'react'
 import Link from 'next/link'
 import prisma from '@/lib/prisma'
 import { ArrowLeft, Calendar } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 60
 
 export const metadata = {
   title: 'Agenda Kegiatan | Smart Complaint',

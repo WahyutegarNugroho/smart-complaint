@@ -23,8 +23,8 @@ export default async function AdminUsersPage({
    const page = Math.max(1, parseInt(pageStr || '1'))
    const supabase = await createClient()
 
-   let allUsers: Profile[] = []
-   let totalUsers = 0
+const allUsers: Profile[] = []
+const totalUsers = 0
    try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) redirect('/login')
@@ -49,14 +49,15 @@ export default async function AdminUsersPage({
       if (rt) whereClause.rt = rt
       if (rw) whereClause.rw = rw
 
-      totalUsers = await prisma.profile.count({ where: whereClause })
-
-      allUsers = await prisma.profile.findMany({
-         where: whereClause,
-         orderBy: { createdAt: 'desc' },
-         skip: (page - 1) * PAGE_SIZE,
-         take: PAGE_SIZE
-      })
+      [totalUsers, allUsers] = await Promise.all([
+        prisma.profile.count({ where: whereClause }),
+        prisma.profile.findMany({
+          where: whereClause,
+          orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * PAGE_SIZE,
+          take: PAGE_SIZE
+        }),
+      ])
    } catch (err) {
       console.error('AdminUsersPage Data Error:', err)
       // Keep allUsers as empty array

@@ -97,7 +97,6 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
                     width={448}
                     height={192}
                     className="w-full h-48 object-cover"
-                    unoptimized
                   />
                 </div>
               )}

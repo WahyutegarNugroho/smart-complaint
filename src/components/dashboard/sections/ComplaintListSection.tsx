@@ -8,6 +8,24 @@ import { Prisma, Status } from '@prisma/client'
 import PageSizeSelector from './PageSizeSelector'
 import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
 
+function buildPaginationUrl(page: number, params: {
+  currentStatus?: string, searchQuery?: string, categoryFilter?: string,
+  fromDate?: string, toDate?: string, rt?: string, rw?: string, pageSize?: number
+}, basePageSize: number): string {
+  const p = new URLSearchParams()
+  if (page > 1) p.set('page', String(page))
+  if (params.currentStatus) p.set('status', params.currentStatus)
+  if (params.searchQuery) p.set('q', params.searchQuery)
+  if (params.categoryFilter) p.set('category', params.categoryFilter)
+  if (params.fromDate) p.set('fromDate', params.fromDate)
+  if (params.toDate) p.set('toDate', params.toDate)
+  if (params.rt) p.set('rt', params.rt)
+  if (params.rw) p.set('rw', params.rw)
+  if (params.pageSize && params.pageSize !== basePageSize) p.set('pageSize', String(params.pageSize))
+  const qs = p.toString()
+  return `/dashboard${qs ? `?${qs}` : ''}`
+}
+
 interface ComplaintListSectionProps {
   profileId: string
   isWarga: boolean
@@ -250,7 +268,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   <div className="space-y-1.5 md:space-y-2">
                       {item.imageUrl && (
                         <div className="h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-brand-hairline relative">
-                          <Image src={item.imageUrl} alt={item.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                          <Image src={item.imageUrl} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                         </div>
                       )}
                       <h4 className="text-base md:text-lg font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors leading-tight truncate pl-5">
@@ -326,7 +344,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             {/* Previous */}
             {currentPage > 1 && (
               <Link
-                href={`/dashboard?page=${currentPage - 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                href={buildPaginationUrl(currentPage - 1, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
                 className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
               >
                 ← Sebelumnya
@@ -352,7 +370,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
               return (
                 <Link
                   key={i}
-                  href={`/dashboard?page=${pageNum}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                  href={buildPaginationUrl(pageNum, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
                   className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
                     currentPage === pageNum
                         ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] shadow-xl'
@@ -367,7 +385,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             {/* Next */}
             {currentPage < totalPages && (
               <Link
-                href={`/dashboard?page=${currentPage + 1}${currentStatus ? `&status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${categoryFilter ? `&category=${categoryFilter}` : ''}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}${pageSize !== 12 ? `&pageSize=${pageSize}` : ''}`}
+                href={buildPaginationUrl(currentPage + 1, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
                 className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
               >
                 Selanjutnya →

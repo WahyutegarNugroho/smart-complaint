@@ -31,23 +31,15 @@ export async function recordFailedAttempt(ip: string) {
   try {
     const now = new Date()
     const resetAt = new Date(now.getTime() + LOCK_DURATION_MS)
-    const existing = await prisma.loginAttempt.findUnique({ where: { ip } })
 
-    if (!existing || now > existing.resetAt) {
-      await prisma.loginAttempt.upsert({
-        where: { ip },
-        update: { count: 1, resetAt },
-        create: { ip, count: 1, resetAt },
-      })
-      return { locked: false, remainingSeconds: 0, remainingAttempts: MAX_ATTEMPTS - 1 }
-    }
-
-    const currentCount = existing.count + 1
-    await prisma.loginAttempt.update({
+    await prisma.loginAttempt.upsert({
       where: { ip },
-      data: { count: currentCount, resetAt },
+      update: { count: { increment: 1 }, resetAt },
+      create: { ip, count: 1, resetAt },
     })
 
+    const record = await prisma.loginAttempt.findUnique({ where: { ip } })
+    const currentCount = record?.count ?? 1
     const remainingAttempts = Math.max(0, MAX_ATTEMPTS - currentCount)
 
     if (currentCount >= MAX_ATTEMPTS) {

@@ -50,15 +50,16 @@ export default async function AuditLogPage({
     const whereClause: { action?: string } = {}
     if (filterAction) whereClause.action = filterAction
 
-    totalLogs = await prisma.auditLog.count({ where: whereClause })
-
-    logs = await prisma.auditLog.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: { admin: true }
-    })
+    ;[totalLogs, logs] = await Promise.all([
+      prisma.auditLog.count({ where: whereClause }),
+      prisma.auditLog.findMany({
+        where: whereClause,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+        include: { admin: true }
+      }),
+    ])
   } catch (err) {
     console.error('AuditLogPage Error:', err)
   }

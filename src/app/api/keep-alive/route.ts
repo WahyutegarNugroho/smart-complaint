@@ -8,7 +8,7 @@ export async function GET() {
   try {
     // Melakukan query sangat ringan ke database untuk mengirimkan sinyal aktivitas
     // Ini akan mencegah Supabase dari mem-pause project karena inaktif
-    await prisma.$queryRaw`SELECT 1`;
+    await prisma.complaint.count({ take: 1 });
 
     return NextResponse.json(
       { 
