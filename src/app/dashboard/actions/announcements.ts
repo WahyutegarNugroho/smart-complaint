@@ -78,7 +78,7 @@ export async function deleteAnnouncement(formData: FormData) {
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return
     const { user } = auth
-    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
+    const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
     if (!profile || profile.role !== 'ADMIN') return redirect('/dashboard?error=forbidden')
 
     const id = formData.get('id') as string
