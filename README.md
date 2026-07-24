@@ -6,7 +6,7 @@
 [![Prisma ORM](https://img.shields.io/badge/Prisma-6.19.3-2d3748?style=for-the-badge&logo=prisma)](https://prisma.io)
 [![Supabase Backend](https://img.shields.io/badge/Supabase-Enabled-3ecf8e?style=for-the-badge&logo=supabase)](https://supabase.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178c6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
-[![Vitest](https://img.shields.io/badge/Vitest-4.1.7-6b9f3c?style=for-the-badge&logo=vitest)](https://vitest.dev)
+[![Vitest](https://img.shields.io/badge/Vitest-4.1.10-6b9f3c?style=for-the-badge&logo=vitest)](https://vitest.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](#license)
 
 ---
@@ -54,7 +54,10 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 ### 3. Siklus Hidup Status & Tanggapan
 - Status: `PENDING` → `PROCESSING` → `COMPLETED`.
 - Petugas bisa menambahkan tanggapan, mengupload foto penyelesaian, dan mengubah status.
-- Warga bisa mengedit atau menarik laporan yang masih berstatus PENDING.
+- Warga bisa mengedit atau menarik laporan yang masih berstatus PENDING (halaman edit + tombol hapus).
+- Admin dapat menghapus laporan dengan audit trail (notifikasi DELETE ke warga terkait).
+- Petugas dapat mengupload foto pada tanggapan (ResponseFileHandler).
+- Setiap laporan memiliki tombol cetak tanda terima (PDF receipt).
 - Toggle urgensi oleh petugas.
 - Notifikasi otomatis ke pembuat laporan saat ada perubahan status atau tanggapan baru.
 
@@ -64,7 +67,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
   - **LEVEL_2**: 48 jam di PENDING (notifikasi ke semua admin).
   - **LEVEL_3**: 72 jam di PROCESSING.
 - Riwayat eskalasi lengkap dengan log (EscalationLog).
-- Eskalasi otomatis di-reset ke `NONE` saat laporan ditangani.
+- Eskalasi otomatis di-reset ke `NONE` saat laporan ditangani (perubahan status atau tanggapan baru).
 - Cron endpoint aman dengan `CRON_SECRET` (Bearer token).
 
 ### 5. Sistem Pengumuman Resmi
@@ -84,7 +87,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 ### 7. Dashboard & Navigasi Berbasis Role
 - **Warga**: Beranda (statistik pribadi), Peta, Lapor Masalah, Aduan Saya, Pengaturan Profil.
 - **Petugas**: Monitor semua laporan, Peta, Tugas, Proses, Profil.
-- **Admin**: Stats (analitik lengkap), Peta, Manajemen Warga, Manajemen Pengumuman, Audit Log, Export.
+- **Admin**: Stats (analitik lengkap — `/dashboard/admin/stats`), Peta, Manajemen Warga, Manajemen Pengumuman, Audit Log, Export.
 - **Desktop Sidebar** + **Mobile Bottom Navigation** yang adaptif per role.
 - Navigasi dengan shortcut keyboard (skip-to-content link).
 
@@ -109,7 +112,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 - Pagination dengan riwayat lengkap.
 
 ### 11. Ekspor Data
-- Unduh laporan dalam format **PDF** (ringkasan eksekutif via PDFKit), **CSV** (dengan proteksi CSV injection), dan **XLSX** (2 sheet: data + summary via xlsx library).
+- Unduh laporan dalam format **PDF** (ringkasan eksekutif via PDFKit), **CSV** (dengan proteksi CSV injection), dan **XLSX** (2 sheet: data + summary via exceljs).
 - Limit paginasi (max 5000 record) untuk keamanan.
 - Halaman ekspor khusus untuk Admin.
 
@@ -143,7 +146,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 - `NotificationDropdown` — Dropdown notifikasi in-app dengan polling 30 detik dan badge unread count.
 
 ### 16. CI/CD & Quality Assurance
-- **GitHub Actions CI**: `npm ci` → `npm audit` (high severity) → secret scanning → `prisma generate` → `tsc --noEmit` → ESLint → `npm test`.
+- **GitHub Actions CI**: `pnpm install` → `pnpm audit` (high severity) → secret scanning → `prisma generate` → `tsc --noEmit` → ESLint → `pnpm test`.
 - **Vitest** untuk unit test (validasi input).
 - **TypeScript strict** dengan zero toleransi error.
 - **ESLint** konfigurasi ketat.
@@ -165,7 +168,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 | **Leaflet + react-leaflet** | Peta Interaktif | Open-source, ringan, marker clustering (leaflet.markercluster). |
 | **Lucide React** | Ikon | Ringan, modern, aksesibel. |
 | **PDFKit** | Generate PDF | Library PDF server-side yang stabil dan ringan. |
-| **xlsx** | Generate XLSX | Membuat file Excel tanpa dependency berat. |
+| **exceljs** | Generate XLSX | Membuat file Excel dengan 2 sheet (data + ringkasan). |
 | **Vitest** | Testing | Fast, compatible dengan Vite/Next.js, jsdom environment. |
 | **patch-package** | Dependency Mgmt | Memperbaiki bug library tanpa menunggu maintainer. |
 
@@ -193,7 +196,7 @@ SmartComplaint menyediakan **command center terpadu** di mana setiap laporan ter
 
 ### Prasyarat
 - Node.js v18+
-- npm atau yarn
+- pnpm (recommended) atau npm
 - Database PostgreSQL (via Supabase atau lokal)
 - Project Supabase (Auth + Storage bucket `complaints`)
 
@@ -205,7 +208,7 @@ git clone https://github.com/WahyutegarNugroho/smart-complaint.git
 cd smart-complaint
 
 # 2. Install dependencies
-npm install
+pnpm install
 
 # 3. Buat file .env
 # Salin dari .env.example dan isi konfigurasi:
@@ -216,12 +219,12 @@ npx prisma db push
 npx prisma generate
 
 # 5. Jalankan development server
-npm run dev
+pnpm run dev
 # Buka http://localhost:3000
 
 # Build untuk production
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 ### Environment Variables (.env)
@@ -246,14 +249,14 @@ NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 | Script | Deskripsi |
 |:---|:---|
-| `npm run dev` | Jalankan development server |
-| `npm run build` | Build untuk production (dengan Prisma generate) |
-| `npm start` | Jalankan production server |
-| `npm run lint` | Jalankan ESLint |
-| `npm test` | Jalankan unit test (Vitest) |
-| `npm run migrate:dev` | Buat migrasi database baru |
-| `npm run migrate:deploy` | Terapkan migrasi ke database |
-| `npm run migrate:status` | Cek status migrasi |
+| `pnpm run dev` | Jalankan development server |
+| `pnpm run build` | Build untuk production (dengan Prisma generate) |
+| `pnpm start` | Jalankan production server |
+| `pnpm run lint` | Jalankan ESLint |
+| `pnpm test` | Jalankan unit test (Vitest) |
+| `pnpm run migrate:dev` | Buat migrasi database baru |
+| `pnpm run migrate:deploy` | Terapkan migrasi ke database |
+| `pnpm run migrate:status` | Cek status migrasi |
 | `npx prisma studio` | Buka Prisma Studio (GUI database) |
 | `npx prisma db seed` | Seed database (kategori default) |
 
