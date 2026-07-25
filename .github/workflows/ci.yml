@@ -13,15 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 22
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - name: Dependency audit
-        run: npm audit --audit-level=high || true
+        run: pnpm audit --audit-level=high || true
 
       - name: Scan for secrets in git history
         run: |
@@ -30,10 +32,10 @@ jobs:
             exit 1
           fi
 
-      - run: npx prisma generate
+      - run: pnpm prisma generate
 
-      - run: npx tsc --noEmit
+      - run: pnpm tsc --noEmit
 
-      - run: npm run lint
+      - run: pnpm lint
 
-      - run: npm test
+      - run: pnpm test
