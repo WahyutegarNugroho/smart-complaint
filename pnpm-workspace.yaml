@@ -1,10 +1,10 @@
-allowBuilds:
-  '@prisma/client': set this to true or false
-  '@prisma/engines': set this to true or false
-  postinstall-postinstall: set this to true or false
-  prisma: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - postinstall-postinstall
+  - prisma
+  - sharp
+  - unrs-resolver
 minimumReleaseAgeExclude:
   - postcss@8.5.10
   - uuid@11.1.1

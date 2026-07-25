@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.17.0",
-  "pnpm": {
-    "onlyBuiltDependencies": ["@prisma/client", "@prisma/engines", "prisma", "postinstall-postinstall", "sharp", "unrs-resolver"]
-  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
