@@ -39,7 +39,7 @@ export default function DashboardError({
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
           <button
             onClick={reset}
-            className="flex-1 bg-brand-ink text-brand-canvas py-4 rounded-2xl font-bold text-xs uppercase tracking-normal shadow-lg shadow-brand-ink/10 hover:opacity-90 transition-all flex items-center justify-center gap-3 active:scale-95"
+            className="flex-1 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4 rounded-2xl font-bold text-xs uppercase tracking-normal shadow-lg shadow-brand-ink/10 hover:opacity-90 transition-all flex items-center justify-center gap-3 active:scale-95"
           >
             <RotateCcw size={18} /> Coba Lagi
           </button>

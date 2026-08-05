@@ -26,14 +26,14 @@ export function ExportButtons() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
       {/* CSV Export */}
       <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all hover:shadow-xl group">
-        <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/50 border border-brand-hairline mb-8 transition-colors group-hover:bg-brand-ink group-hover:text-brand-canvas">
+        <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/50 border border-brand-hairline mb-8 transition-colors group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c]">
           <FileText size={28} />
         </div>
         <h2 className="text-xl md:text-2xl font-bold text-brand-ink mb-2 transition-colors">CSV</h2>
         <p className="text-sm text-brand-ink/50 font-medium mb-10 leading-relaxed transition-colors">Data mentah dalam format CSV — kompatibel dengan Excel/Spreadsheet apapun.</p>
         <button 
           onClick={handleCsv} 
-          className="w-full bg-brand-ink text-brand-canvas py-4 rounded-2xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-ink/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4 rounded-2xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-ink/10 active:scale-95 flex items-center justify-center gap-3"
         >
           <Download size={18} /> Unduh CSV
         </button>

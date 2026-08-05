@@ -159,23 +159,23 @@ export default async function LandingPage() {
       {/* Stats Section - SF Mono for Dark Mode */}
       <section id="statistik" className="relative z-20 py-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="rounded-brand bg-brand-ink p-12 shadow-xl border border-brand-hairline">
+          <div className="rounded-brand bg-brand-panel p-12 shadow-xl border border-brand-hairline">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
               <div className="text-center md:text-left">
-                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{totalReports}</p>
+                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{totalReports}</p>
                 <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-primary">Total Laporan</p>
               </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
+              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
                 <p className="text-5xl font-bold tracking-tight text-brand-primary font-mono">{successRate}%</p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Tuntas Ditangani</p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Tuntas Ditangani</p>
               </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Rata-Rata Penyelesaian</p>
+              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
+                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Rata-Rata Penyelesaian</p>
               </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-canvas/10 md:pl-12">
-                <p className="text-5xl font-bold tracking-tight text-brand-canvas font-mono">{activeBlocks}</p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-canvas/50">Blok Terlaporkan</p>
+              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
+                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{activeBlocks}</p>
+                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Blok Terlaporkan</p>
               </div>
             </div>
           </div>
@@ -207,14 +207,14 @@ export default async function LandingPage() {
       </section>
 
       {/* CTA Section - Polarity Flip */}
-      <section className="relative py-40 overflow-hidden bg-brand-ink border-y border-brand-hairline">
+      <section className="relative py-40 overflow-hidden bg-brand-panel border-y border-brand-hairline">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--brand-primary)_0%,_transparent_70%)]" />
         </div>
         
         <div className="relative mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-brand-canvas mb-8 sm:mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
-          <p className="text-lg sm:text-xl text-brand-canvas/60 mb-10 sm:mb-14 max-w-2xl mx-auto font-medium">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-brand-panel-fg mb-8 sm:mb-10 tracking-tight">Wujudkan Pesona Serpong yang Lebih Nyaman!</h2>
+          <p className="text-lg sm:text-xl text-brand-panel-fg/60 mb-10 sm:mb-14 max-w-2xl mx-auto font-medium">
             Suara Anda adalah penggerak perubahan. Laporkan kendala sekarang dan pantau progresnya secara transparan.
           </p>
           <Link

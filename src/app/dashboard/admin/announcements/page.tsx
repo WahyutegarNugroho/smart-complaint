@@ -141,7 +141,7 @@ export default async function AdminAnnouncementsPage({
                     </div>
                     <button 
                     type="submit" 
-                    className="w-full bg-brand-ink text-brand-canvas py-5 rounded-2xl font-bold text-[10px] uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-ink/10 active:scale-[0.98] flex items-center justify-center gap-3"
+                    className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-5 rounded-2xl font-bold text-[10px] uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-ink/10 active:scale-[0.98] flex items-center justify-center gap-3"
                    >
                       <Send size={16} /> Terbitkan Informasi
                    </button>

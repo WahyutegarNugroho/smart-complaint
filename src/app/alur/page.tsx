@@ -95,11 +95,11 @@ export default function AlurPage() {
           </div>
         </div>
 
-        <div className="bg-brand-ink rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-xl">
-          <h2 className="text-2xl sm:text-3xl font-bold text-brand-canvas mb-4 tracking-tight">
+        <div className="bg-brand-panel rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-xl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-brand-panel-fg mb-4 tracking-tight">
             Siap Melapor?
           </h2>
-          <p className="text-brand-canvas/60 font-medium text-sm sm:text-base mb-8 max-w-lg mx-auto">
+          <p className="text-brand-panel-fg/60 font-medium text-sm sm:text-base mb-8 max-w-lg mx-auto">
             Bergabunglah dengan 500+ warga Pesona Serpong yang telah menggunakan platform ini untuk lingkungan yang lebih baik.
           </p>
           <Link

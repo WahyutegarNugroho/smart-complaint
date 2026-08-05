@@ -79,7 +79,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             </select>
           </div>
           <div className="flex items-center gap-3">
-            <button type="submit" className="flex-1 bg-brand-ink text-brand-canvas py-4 rounded-xl text-[10px] font-semibold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-lg active:scale-95">
+            <button type="submit" className="flex-1 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4 rounded-xl text-[10px] font-semibold uppercase tracking-normal flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-lg active:scale-95">
               <Check size={16} /> Simpan Perubahan
             </button>
             <button type="button" onClick={() => setIsEditing(false)} className="px-8 bg-brand-canvas-soft text-brand-ink/50 py-4 rounded-xl text-[10px] font-semibold uppercase tracking-normal hover:bg-brand-canvas transition-all active:scale-95">

@@ -62,7 +62,7 @@ export default async function AdminAnalyticsSection() {
 
       {/* Quick Info & Health */}
       <div className="lg:col-span-4 space-y-6 flex flex-col">
-          <div className="flex-1 bg-brand-ink p-6 md:p-8 rounded-3xl text-brand-canvas shadow-xl relative overflow-hidden flex flex-col justify-between">
+          <div className="flex-1 bg-brand-panel p-6 md:p-8 rounded-3xl text-brand-panel-fg shadow-xl relative overflow-hidden flex flex-col justify-between">
             <div className="absolute -right-8 -top-8 opacity-10 rotate-12">
               <Activity size={180} />
             </div>
@@ -78,7 +78,7 @@ export default async function AdminAnalyticsSection() {
                 </div>
             </div>
 
-            <Link href="/dashboard/admin/users" className="relative z-10 mt-8 flex items-center justify-between p-4 bg-brand-canvas/10 hover:bg-brand-canvas/20 text-brand-canvas rounded-2xl transition-all group backdrop-blur-md border border-brand-canvas/10 cursor-pointer">
+            <Link href="/dashboard/admin/users" className="relative z-10 mt-8 flex items-center justify-between p-4 bg-brand-panel-fg/10 hover:bg-brand-panel-fg/20 text-brand-panel-fg rounded-2xl transition-all group backdrop-blur-md border border-brand-panel-fg/10 cursor-pointer">
                 <span className="text-[9px] font-semibold uppercase tracking-normal">Verifikasi {unverifiedUsers} Warga</span>
                 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>

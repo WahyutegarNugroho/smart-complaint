@@ -87,7 +87,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-brand-canvas-soft flex flex-col md:flex-row font-sans selection:bg-brand-primary/20 text-brand-ink transition-colors duration-500">
 
       {/* Skip to content link */}
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-6 focus:py-4 focus:bg-brand-ink focus:text-brand-canvas focus:rounded-xl focus:text-sm focus:font-bold focus:shadow-xl focus:outline-none">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-6 focus:py-4 focus:bg-brand-panel focus:text-brand-panel-fg focus:rounded-xl focus:text-sm focus:font-bold focus:shadow-xl focus:outline-none">
         Langsung ke konten utama
       </a>
 

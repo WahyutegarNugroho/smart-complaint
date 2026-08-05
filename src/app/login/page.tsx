@@ -88,7 +88,7 @@ export default function LoginPage({
       <div className="w-full max-w-md py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-16">
           <Link href="/" className="inline-flex items-center gap-3 sm:gap-4 group">
-            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-ink text-brand-primary shadow-xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-panel text-brand-primary shadow-xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
               <ShieldCheck size={28} className="sm:w-[32px] sm:h-[32px]" />
             </div>
             <div className="flex flex-col items-start text-left">
@@ -222,7 +222,7 @@ export default function LoginPage({
               </div>
 
               <SubmitButton
-                className="w-full h-16 rounded-brand bg-brand-ink text-brand-canvas text-[13px] font-bold uppercase tracking-normal shadow-xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
+                className="w-full h-16 rounded-brand bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] text-[13px] font-bold uppercase tracking-normal shadow-xl shadow-brand-ink/20 hover:bg-brand-primary hover:text-[#0e0f0c] transition-all active:scale-[0.98] group mt-10"
                 icon={<ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />}
                 loadingText="Otentikasi..."
               >

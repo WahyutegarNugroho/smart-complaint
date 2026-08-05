@@ -158,8 +158,8 @@ export default async function AdminStatsPage() {
                      return (
                        <div key={item.rt} className="flex-1 flex flex-col items-center gap-4 group">
                           <div className="w-full bg-brand-canvas-soft rounded-xl relative transition-all duration-500 group-hover:bg-brand-primary/10 flex items-end p-0.5" style={{ height: `${height}%`, minHeight: '8px' }}>
-                             <div className="w-full bg-brand-ink rounded-lg h-full opacity-10 group-hover:opacity-100 transition-opacity"></div>
-                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-brand-ink text-brand-canvas text-[10px] font-semibold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg border border-brand-canvas/10">
+                             <div className="w-full bg-brand-panel rounded-lg h-full opacity-10 group-hover:opacity-100 transition-opacity"></div>
+                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-brand-panel text-brand-panel-fg text-[10px] font-semibold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg border border-brand-panel-fg/10">
                                {item._count._all} Laporan
                             </div>
                          </div>

@@ -301,7 +301,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                           </div>
                         </div>
                       </div>
-                      <div className="h-10 w-10 md:h-12 md:w-12 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink group-hover:text-brand-canvas transition-all duration-500 shadow-inner">
+                      <div className="h-10 w-10 md:h-12 md:w-12 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-500 shadow-inner">
                         <ArrowRight size={18} />
                       </div>
                   </div>
