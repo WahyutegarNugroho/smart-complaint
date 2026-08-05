@@ -7,22 +7,14 @@ import { validateEnum } from '@/lib/validate'
 import { resetEscalation } from '@/lib/escalation'
 import { isRedirectError } from '@/lib/redirect-guard'
 import { STATUS_LABELS } from '@/lib/constants'
-import { getAuthenticatedUser } from '@/lib/auth'
-import { isStaff } from '@/lib/authorization'
+import { requireStaff } from '@/lib/role-guard'
 import { createAuditLog } from '@/lib/audit'
 
 
 export async function toggleUrgentStatus(formData: FormData) {
   let complaintId = ''
   try {
-    const { user } = await getAuthenticatedUser()
-    const profile = await prisma.profile.findUnique({
-      where: { userId: user.id },
-      select: { id: true, role: true }
-    })
-    if (!profile || !isStaff(profile)) {
-      throw new Error('Izin ditolak')
-    }
+    const { profile } = await requireStaff()
 
     complaintId = formData.get('id') as string
     const isUrgent = formData.get('isUrgent') === 'true'
@@ -45,17 +37,11 @@ export async function toggleUrgentStatus(formData: FormData) {
 }
 
 export async function updateComplaintStatus(formData: FormData) {
+  let id = ''
   try {
-    const { user } = await getAuthenticatedUser()
-    const profile = await prisma.profile.findUnique({
-      where: { userId: user.id },
-      select: { id: true, role: true }
-    })
-    if (!profile || !isStaff(profile)) {
-      throw new Error('Izin ditolak: Hanya petugas yang bisa mengubah status')
-    }
+    const { profile } = await requireStaff()
 
-    const id = formData.get('id') as string
+    id = formData.get('id') as string
     const rawStatus = formData.get('status') as string
     const status = validateEnum(rawStatus, ['PENDING', 'PROCESSING', 'COMPLETED'] as const)
     if (!status) throw new Error('Status tidak valid')
@@ -86,5 +72,7 @@ export async function updateComplaintStatus(formData: FormData) {
     revalidatePath('/dashboard')
   } catch (err) {
     console.error('UpdateComplaintStatus Error:', err)
+    if (id) redirect(`/dashboard/complaint/${id}?error=Gagal mengubah status`)
+    redirect('/dashboard?error=Gagal mengubah status')
   }
 }

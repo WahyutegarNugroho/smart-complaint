@@ -48,3 +48,6 @@ next-env.d.ts
 *_output*.txt
 test_write.txt
 *.log
+
+.codebase-memory/
+

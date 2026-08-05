@@ -1,25 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { createClient } from '@/utils/supabase/server'
-import { rateLimit } from '@/lib/rate-limit'
+import { guardAdminExport } from '@/lib/admin-export'
 import ExcelJS from 'exceljs'
 
 export async function GET(request: NextRequest) {
-  const rl = await rateLimit(request, { keyPrefix: 'export:xlsx', max: 10 })
-  if (rl) return rl
-
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return new NextResponse('Unauthorized', { status: 401 })
-
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id },
-    select: { role: true }
-  })
-
-  if (!profile || profile.role !== 'ADMIN') {
-    return new NextResponse('Forbidden', { status: 403 })
-  }
+  const ctx = await guardAdminExport(request, 'export:xlsx')
+  if (ctx instanceof NextResponse) return ctx
 
   try {
     const { searchParams } = new URL(request.url)
