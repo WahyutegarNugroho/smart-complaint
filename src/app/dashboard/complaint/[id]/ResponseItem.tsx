@@ -73,7 +73,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
       <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
         <div className="flex items-center gap-3 px-1">
           <span className="text-[11px] font-semibold text-brand-ink/80">{res.officer?.name || 'Petugas'}</span>
-          <span className="text-[8px] font-bold text-brand-ink/30 uppercase tracking-normal">
+          <span className="text-[10px] font-mono tabular-nums text-brand-ink/40">
             {timeStr}
           </span>
           
@@ -88,29 +88,34 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                   <MoreVertical size={14} />
                 </button>
                
-               {showMenu && (
-                 <>
-                   <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)}></div>
-                   <div className="absolute top-full right-0 mt-1 w-32 bg-brand-canvas border border-brand-hairline rounded-xl shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                     {canEdit && (
-                       <button 
-                         onClick={() => { setIsEditing(true); setShowMenu(false); }}
-                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary transition-all cursor-pointer"
-                       >
-                         <Edit2 size={12} /> Edit
-                       </button>
-                     )}
-                      {canDelete && (
-                        <button 
-                          onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
-                         className="w-full flex items-center gap-2 px-4 py-2 text-[10px] font-semibold uppercase tracking-normal text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
-                       >
-                         {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Hapus
-                       </button>
-                     )}
-                   </div>
-                 </>
-               )}
+                 {showMenu && (
+                   <>
+                     <button
+                       type="button"
+                       className="fixed inset-0 z-10 cursor-default bg-transparent w-full h-full border-none p-0"
+                       onClick={() => setShowMenu(false)}
+                       aria-label="Tutup menu tanggapan"
+                     />
+                     <div className="absolute top-full right-0 mt-1 w-32 bg-brand-canvas border border-brand-hairline rounded-lg shadow-lg z-20 overflow-hidden">
+                       {canEdit && (
+                         <button 
+                           onClick={() => { setIsEditing(true); setShowMenu(false); }}
+                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-brand-ink hover:bg-brand-canvas-soft transition-colors cursor-pointer"
+                         >
+                           <Edit2 size={12} /> Edit
+                         </button>
+                       )}
+                        {canDelete && (
+                          <button 
+                            onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
+                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+                         >
+                           {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Hapus
+                         </button>
+                       )}
+                     </div>
+                   </>
+                 )}
             </div>
           )}
         </div>

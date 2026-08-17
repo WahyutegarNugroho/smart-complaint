@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, ShieldCheck, PhoneCall, Bell } from 'lucide-react'
+import { ArrowLeft, ShieldCheck } from 'lucide-react'
 
 export const metadata = {
   title: 'Keamanan | Smart Complaint',
@@ -22,39 +22,39 @@ export default function KeamananPage() {
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Informasi dan panduan keamanan untuk warga Pesona Serpong.</p>
         </div>
 
-        <div className="bg-brand-canvas border border-brand-hairline rounded-2xl p-8 sm:p-10 shadow-sm space-y-8">
-          <div className="flex items-center gap-4 p-5 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-            <div className="h-12 w-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-600 shrink-0">
-              <PhoneCall size={24} />
-            </div>
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline">
+          <div className="p-5 flex items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-bold text-amber-800 dark:text-amber-300">Kontak Darurat</h3>
-              <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">Pos Keamanan: (021) 1234-5678</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Kontak Cepat Keamanan</p>
+              <h2 className="text-sm font-semibold text-brand-ink mt-0.5">Pos Keamanan Utama</h2>
             </div>
+            <a 
+              href="tel:02112345678"
+              aria-label="Hubungi Pos Keamanan di (021) 1234-5678" 
+              className="px-4 py-2 bg-brand-canvas-soft hover:bg-brand-hairline border border-brand-hairline rounded-lg text-sm font-mono font-bold tabular-nums text-brand-ink transition-colors"
+            >
+              (021) 1234-5678
+            </a>
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-brand-ink">Layanan Keamanan 24 Jam</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-brand-ink/50 mb-3">Jadwal & Titik Jaga</h3>
+            <div className="divide-y divide-brand-hairline border border-brand-hairline rounded-lg">
               {[
-                { title: 'Pos Satpam Utama', desc: 'Gerbang Utama — Siaga 24 jam', icon: ShieldCheck },
-                { title: 'Pos Satpam 2', desc: 'Jalan Flamboyan — Siaga 24 jam', icon: ShieldCheck },
-                { title: 'Pos Satpam 3', desc: 'Jalan Anggrek — 18.00 - 06.00', icon: ShieldCheck },
-                { title: 'Patroli Malam', desc: 'Setiap jam 22.00 - 05.00', icon: Bell },
+                { title: 'Pos Utama', desc: 'Gerbang Utama', schedule: '24 Jam' },
+                { title: 'Pos Jaga 2', desc: 'Jalan Flamboyan', schedule: '24 Jam' },
+                { title: 'Pos Jaga 3', desc: 'Jalan Anggrek', schedule: '18.00 - 06.00 WIB' },
+                { title: 'Patroli Lingkungan', desc: 'Keliling Blok A - F', schedule: '22.00 - 05.00 WIB' },
               ].map((item, i) => (
-                <div key={i} className="bg-brand-canvas-soft rounded-xl p-4 border border-brand-hairline flex items-center gap-3">
-                  <item.icon size={18} className="text-brand-primary shrink-0" />
+                <div key={i} className="p-3.5 flex items-center justify-between text-xs">
                   <div>
-                    <h4 className="text-sm font-bold text-brand-ink">{item.title}</h4>
-                    <p className="text-xs text-brand-ink/50 font-medium">{item.desc}</p>
+                    <span className="font-semibold text-brand-ink block">{item.title}</span>
+                    <span className="text-brand-ink/60">{item.desc}</span>
                   </div>
+                  <span className="font-mono text-brand-primary tabular-nums font-medium">{item.schedule}</span>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5">
-            <p className="text-sm font-bold text-red-600 dark:text-red-400">Jika terjadi keadaan darurat, segera hubungi pos keamanan terdekat atau laporkan melalui platform Smart Complaint.</p>
           </div>
         </div>
       </main>

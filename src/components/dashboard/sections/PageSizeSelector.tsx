@@ -25,9 +25,10 @@ export default function PageSizeSelector(props: PageSizeSelectorProps) {
       {rw && <input type="hidden" name="rw" value={rw} />}
       <select
         name="pageSize"
+        aria-label="Jumlah laporan per halaman"
         defaultValue={pageSize}
         onChange={(e) => e.target.form?.requestSubmit()}
-        className="bg-brand-canvas border border-brand-hairline rounded-xl px-3 py-2 text-xs font-bold text-brand-ink outline-none cursor-pointer"
+        className="bg-brand-canvas border border-brand-hairline rounded-lg px-2.5 py-1.5 text-xs font-mono tabular-nums font-bold text-brand-ink outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-primary"
       >
         <option value="12">12</option>
         <option value="24">24</option>

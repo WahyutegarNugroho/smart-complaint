@@ -51,37 +51,28 @@ export default async function AgendaPage() {
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Jadwal kegiatan dan acara warga Perumahan Pesona Serpong.</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline">
           {announcements.length === 0 ? (
-            <div className="bg-brand-canvas border border-brand-hairline rounded-2xl p-16 text-center">
-              <Calendar size={48} className="text-brand-ink/10 mx-auto mb-4" />
-              <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-normal">Belum ada agenda</p>
+            <div className="p-12 text-center text-xs text-brand-ink/50">
+              Belum ada agenda kegiatan yang dijadwalkan.
             </div>
           ) : (
             announcements.map((item) => {
               const cat = CATEGORY_MAP[item.category] || CATEGORY_MAP.umum
               return (
-                <div key={item.id} className="bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:border-brand-primary/30 transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
-                      <Calendar size={20} />
+                <div key={item.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                  <div className="space-y-1 flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className={"text-[10px] font-semibold uppercase px-2 py-0.5 rounded border " + cat.cls}>{cat.label}</span>
+                      <h2 className="text-sm font-bold text-brand-ink truncate">{item.title}</h2>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className={"text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-lg border " + cat.cls}>{cat.label}</span>
-                      </div>
-                      <h3 className="text-lg font-bold text-brand-ink mb-2">{item.title}</h3>
-                      {item.content && (
-                        <p className="text-sm text-brand-ink/60 font-medium mb-3 leading-relaxed">{item.content}</p>
-                      )}
-                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-brand-ink/60 font-medium">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar size={14} className="text-brand-ink/40" />
-                          {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        </span>
-                      </div>
-                    </div>
+                    {item.content && (
+                      <p className="text-xs text-brand-ink/70 leading-relaxed line-clamp-2">{item.content}</p>
+                    )}
                   </div>
+                  <span className="text-xs font-mono tabular-nums text-brand-ink/50 shrink-0 pt-0.5">
+                    {new Date(item.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                  </span>
                 </div>
               )
             })

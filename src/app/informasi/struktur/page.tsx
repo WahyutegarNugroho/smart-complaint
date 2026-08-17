@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, Users, Building2, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Building2 } from 'lucide-react'
 
 export const metadata = {
   title: 'Struktur Pengurus | Smart Complaint',
@@ -22,48 +22,46 @@ export default function StrukturPage() {
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Susunan kepengurusan Perumahan Pesona Serpong.</p>
         </div>
 
-        <div className="bg-brand-canvas border border-brand-hairline rounded-2xl p-8 sm:p-10 shadow-sm space-y-8">
-          <div className="text-center border-b border-brand-hairline pb-8">
-            <div className="h-16 w-16 bg-brand-primary rounded-2xl flex items-center justify-center text-[#0e0f0c] mx-auto mb-4">
-              <Users size={32} />
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline">
+          <div className="p-5 flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-primary">Ketua RW</p>
+              <h2 className="text-base font-bold text-brand-ink mt-0.5">Pengurus RW Pesona Serpong</h2>
             </div>
-            <h2 className="text-xl font-bold text-brand-ink">Ketua RW</h2>
-            <p className="text-sm text-brand-ink/50 font-medium">....</p>
+            <span className="text-xs font-mono text-brand-ink/40">Periode Aktif</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {[
-              { role: 'Sekretaris', name: '....' },
-              { role: 'Bendahara', name: '....' },
-              { role: 'Keamanan', name: '....' },
-              { role: 'Kebersihan', name: '....' },
-            ].map((item, i) => (
-              <div key={i} className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline">
-                <h3 className="text-sm font-bold text-brand-primary uppercase tracking-wider">{item.role}</h3>
-                <p className="text-base font-bold text-brand-ink mt-1">{item.name}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="border-t border-brand-hairline pt-8">
-            <h3 className="text-lg font-bold text-brand-ink mb-6 text-center">Ketua RT</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-brand-ink/50 mb-3">Seksi & Bidang Kerja</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { rt: 'RT 01', name: '....' },
-                { rt: 'RT 02', name: '....' },
-                { rt: 'RT 03', name: '....' },
+                { role: 'Sekretaris', name: 'Sekretariat RW' },
+                { role: 'Bendahara', name: 'Keuangan RW' },
+                { role: 'Keamanan', name: 'Seksi Keamanan & Ketertiban' },
+                { role: 'Kebersihan', name: 'Seksi Kebersihan & Lingkungan' },
               ].map((item, i) => (
-                <div key={i} className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline text-center">
-                  <h4 className="text-sm font-bold text-brand-primary uppercase tracking-wider">{item.rt}</h4>
-                  <p className="text-base font-bold text-brand-ink mt-1">{item.name}</p>
+                <div key={i} className="p-3 bg-brand-canvas-soft border border-brand-hairline rounded-lg">
+                  <span className="text-[10px] font-bold text-brand-primary uppercase">{item.role}</span>
+                  <p className="text-xs font-medium text-brand-ink mt-0.5">{item.name}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-brand-canvas-soft rounded-xl p-5 border border-brand-hairline flex items-start gap-3">
-            <ShieldCheck size={18} className="text-brand-primary shrink-0 mt-0.5" />
-            <p className="text-sm text-brand-ink/60 font-medium">Setiap RT memiliki Ketua RT yang bertanggung jawab langsung kepada Ketua RW. Hubungi pengurus RT/RW Anda untuk informasi lebih lanjut.</p>
+          <div className="p-5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-brand-ink/50 mb-3">Rukun Tetangga (RT)</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { rt: 'RT 01', name: 'Koordinator RT 01' },
+                { rt: 'RT 02', name: 'Koordinator RT 02' },
+                { rt: 'RT 03', name: 'Koordinator RT 03' },
+              ].map((item, i) => (
+                <div key={i} className="p-3 bg-brand-canvas-soft border border-brand-hairline rounded-lg text-center">
+                  <span className="text-[10px] font-bold text-brand-primary uppercase">{item.rt}</span>
+                  <p className="text-xs font-medium text-brand-ink mt-0.5">{item.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </main>

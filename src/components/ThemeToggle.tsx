@@ -62,8 +62,8 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-3 rounded-brand bg-brand-canvas text-brand-ink hover:bg-brand-primary hover:text-[#0e0f0c] transition-all border border-brand-hairline shadow-sm flex items-center justify-center group shrink-0"
-      aria-label="Toggle Dark Mode"
+      className="p-2.5 rounded-lg bg-brand-canvas text-brand-ink hover:bg-brand-canvas-soft transition-colors border border-brand-hairline shadow-sm flex items-center justify-center group shrink-0 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:outline-none"
+      aria-label="Ganti tema tampilan"
     >
       {isDark ? (
         <Sun size={18} className="group-hover:rotate-45 transition-transform" />

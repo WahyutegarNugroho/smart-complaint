@@ -30,33 +30,30 @@ export default function DaruratPage() {
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Nomor kontak penting untuk situasi darurat di lingkungan Pesona Serpong.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline">
           {EMERGENCY_CONTACTS.map((item, i) => (
-            <div key={i} className="bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:border-brand-primary/30 transition-all">
-              <div className="flex items-center gap-4">
-                <div className={`h-12 w-12 ${item.color} rounded-xl flex items-center justify-center text-white shrink-0`}>
-                  <item.icon size={22} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-brand-ink">{item.name}</h3>
-                  <a href={`tel:${item.phone.replace(/[^+\d]/g, '')}`} className="text-xl font-bold text-brand-primary hover:underline mt-1 block">
-                    {item.phone}
-                  </a>
-                </div>
+            <div key={i} className="p-4 sm:p-5 flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-sm font-semibold text-brand-ink">{item.name}</h2>
+                <p className="text-xs text-brand-ink/50 mt-0.5">Layanan Tanggap Darurat</p>
               </div>
+              <a 
+                href={`tel:${item.phone.replace(/[^+\d]/g, '')}`} 
+                aria-label={`Hubungi ${item.name} di ${item.phone}`}
+                className="px-4 py-2 bg-brand-canvas-soft hover:bg-brand-hairline border border-brand-hairline rounded-lg text-sm font-bold font-mono tabular-nums text-brand-primary transition-colors focus-visible:ring-2 focus-visible:ring-brand-primary"
+              >
+                {item.phone}
+              </a>
             </div>
           ))}
         </div>
 
-        <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-red-600 dark:text-red-400 mb-3">Penggunaan Darurat</h2>
-          <ul className="space-y-2 text-sm text-brand-ink/70 font-medium">
-            {['Gunakan nomor di atas hanya untuk keadaan darurat yang membutuhkan respon cepat.', 'Untuk laporan non-darurat, gunakan platform Smart Complaint agar tercatat dengan baik.', 'Pastikan Anda berada di lokasi yang aman saat menghubungi kontak darurat.'].map((item, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                {item}
-              </li>
-            ))}
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl p-5 space-y-2">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-brand-ink">Ketentuan Penggunaan Darurat</h2>
+          <ul className="space-y-1.5 text-xs text-brand-ink/70 leading-relaxed list-disc list-inside">
+            <li>Gunakan nomor di atas khusus keadaan darurat yang membutuhkan tindakan segera.</li>
+            <li>Untuk laporan pemeliharaan rutin/non-darurat, kirim aduan melalui aplikasi agar terdokumentasi.</li>
+            <li>Pastikan Anda berada di posisi aman saat melakukan panggilan.</li>
           </ul>
         </div>
       </main>

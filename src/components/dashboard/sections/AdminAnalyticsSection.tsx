@@ -1,5 +1,5 @@
 import React from 'react'
-import { Activity, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import prisma from '@/lib/prisma'
 
@@ -38,49 +38,45 @@ export default async function AdminAnalyticsSection() {
   }
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+    <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
       {/* Analytics Chart */}
-      <div className="lg:col-span-8 bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm flex flex-col min-h-[350px]">
-        <div className="flex items-center justify-between mb-10 md:mb-12">
+      <div className="lg:col-span-8 bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline flex flex-col min-h-[300px]">
+        <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mb-1">Analisis Kerja</h3>
-                   <p className="text-xl font-bold text-brand-ink">Tren Mingguan</p>
+              <p className="text-[10px] font-bold text-brand-primary uppercase tracking-wider">Aktivitas Mingguan</p>
+              <h2 className="text-base font-bold text-brand-ink">Tren Masuk Aduan</h2>
             </div>
         </div>
         
-        <div className="flex-1 flex items-end justify-between gap-2 md:gap-4 transition-all">
+        <div className="flex-1 flex items-end justify-between gap-2 md:gap-3">
             {chartData.map((item, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-4 group">
-                <div className="w-full bg-brand-canvas-soft rounded-xl relative transition-all duration-500 flex items-end p-0.5" style={{ height: `${(item.count / maxChart) * 100}%`, minHeight: '8px' }}>
-                    <div className="w-full bg-brand-primary rounded-lg h-full opacity-10 group-hover:opacity-100 transition-opacity"></div>
+            <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                <div className="w-full bg-brand-canvas-soft rounded-lg relative flex items-end p-0.5" style={{ height: `${(item.count / maxChart) * 100}%`, minHeight: '6px' }}>
+                    <div className="w-full bg-brand-primary rounded-md h-full opacity-30 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <span className="text-[9px] font-semibold text-brand-ink/40 uppercase tracking-normal">{item.day}</span>
+                <span className="text-[10px] font-mono tabular-nums text-brand-ink/50">{item.day}</span>
               </div>
             ))}
         </div>
       </div>
 
       {/* Quick Info & Health */}
-      <div className="lg:col-span-4 space-y-6 flex flex-col">
-          <div className="flex-1 bg-brand-panel p-6 md:p-8 rounded-3xl text-brand-panel-fg shadow-xl relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute -right-8 -top-8 opacity-10 rotate-12">
-              <Activity size={180} />
-            </div>
-            
-            <div className="relative z-10 space-y-8">
-                <h3 className="text-[9px] font-semibold text-white/50 uppercase tracking-normal">Penanganan</h3>
+      <div className="lg:col-span-4 flex flex-col">
+          <div className="flex-1 bg-brand-panel p-5 md:p-6 rounded-xl text-brand-panel-fg border border-brand-hairline flex flex-col justify-between">
+            <div className="space-y-4">
+                <p className="text-[10px] font-bold text-brand-primary uppercase tracking-wider">Tingkat Penanganan</p>
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-white/60 uppercase tracking-normal">Rate Selesai</p>
-                  <p className="text-4xl md:text-5xl font-bold tracking-tight">{completionRate}%</p>
+                  <p className="text-3xl md:text-4xl font-bold tracking-tight font-mono tabular-nums">{completionRate}%</p>
+                  <p className="text-xs text-brand-panel-fg/60">Aduan Tuntas</p>
                 </div>
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-brand-primary rounded-full transition-all duration-1000" style={{ width: `${completionRate}%` }}></div>
+                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-brand-primary rounded-full" style={{ width: `${completionRate}%` }}></div>
                 </div>
             </div>
 
-            <Link href="/dashboard/admin/users" className="relative z-10 mt-8 flex items-center justify-between p-4 bg-brand-panel-fg/10 hover:bg-brand-panel-fg/20 text-brand-panel-fg rounded-2xl transition-all group backdrop-blur-md border border-brand-panel-fg/10 cursor-pointer">
-                <span className="text-[9px] font-semibold uppercase tracking-normal">Verifikasi {unverifiedUsers} Warga</span>
-                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            <Link href="/dashboard/admin/users" className="mt-6 flex items-center justify-between p-3 bg-brand-panel-fg/10 hover:bg-brand-panel-fg/20 text-brand-panel-fg rounded-lg transition-colors border border-brand-panel-fg/10">
+                <span className="text-xs font-semibold tabular-nums font-mono">{unverifiedUsers} Warga Menunggu Verifikasi</span>
+                <ChevronRight size={14} />
             </Link>
           </div>
       </div>
