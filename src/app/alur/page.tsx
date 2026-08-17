@@ -23,7 +23,7 @@ const STEPS = [
     icon: ClipboardCheck,
     title: 'Ditinjau Petugas',
     desc: 'Petugas menerima notifikasi dan meninjau laporan yang masuk. Laporan akan divalidasi dan dikategorikan sebelum ditindaklanjuti ke tahap penanganan.',
-    color: 'bg-purple-500',
+    color: 'bg-brand-primary',
   },
   {
     icon: CheckCircle2,

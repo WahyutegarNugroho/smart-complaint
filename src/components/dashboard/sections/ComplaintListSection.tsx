@@ -245,10 +245,10 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             
             return (
               <Link key={item.id} href={`/dashboard/complaint/${item.id}`} className="group h-full">
-                <div className={`h-full bg-brand-canvas p-4 md:p-5 rounded-xl border transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1 flex flex-col gap-4 md:gap-5 relative overflow-hidden ${
+                <div className={`h-full bg-brand-canvas p-4 md:p-5 rounded-xl border flex flex-col gap-4 md:gap-5 relative overflow-hidden ${
                   item.isUrgent && item.status !== 'COMPLETED' 
                     ? 'border-red-100 dark:border-red-900/50 bg-red-50/10 dark:bg-red-900/5' 
-                    : 'border-brand-hairline hover:border-brand-primary/50'
+                    : 'border-brand-hairline hover:border-brand-primary/50 transition-colors'
                 }`}>
                   
                   <div className="flex justify-between items-center">
@@ -260,7 +260,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                           {item.categoryRel?.name || item.category}
                         </span>
                       </div>
-                      <div className="h-9 w-9 md:h-10 md:w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/40 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-brand-ink transition-all shadow-sm">
+                      <div className="h-9 w-9 md:h-10 md:w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/40 border border-brand-hairline">
                         <Camera size={16} />
                       </div>
                   </div>

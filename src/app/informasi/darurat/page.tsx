@@ -10,7 +10,7 @@ const EMERGENCY_CONTACTS = [
   { name: 'Pos Keamanan Pesona Serpong', phone: '(021) 1234-5678', icon: Shield, color: 'bg-blue-500' },
   { name: 'Pemadam Kebakaran', phone: '113', icon: Flame, color: 'bg-red-500' },
   { name: 'Ambulans / Rumah Sakit', phone: '118 / 119', icon: Ambulance, color: 'bg-emerald-500' },
-  { name: 'Kepolisian', phone: '110', icon: Shield, color: 'bg-indigo-500' },
+  { name: 'Kepolisian', phone: '110', icon: Shield, color: 'bg-brand-primary' },
 ]
 
 export default function DaruratPage() {

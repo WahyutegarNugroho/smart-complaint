@@ -59,29 +59,22 @@ export default function PanduanPage() {
           <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
             <ArrowLeft size={14} /> Kembali
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c]">
-              <FileText size={20} />
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-brand-ink">Panduan Pengguna</h1>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-ink">Panduan Pengguna</h1>
           <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Pelajari cara menggunakan platform Smart Complaint untuk warga Pesona Serpong.</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline shadow-sm">
           {GUIDES.map((guide, i) => (
-            <div key={i} className="bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="h-12 w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-primary border border-brand-hairline">
-                  <guide.icon size={22} />
-                </div>
-                <h2 className="text-lg font-bold text-brand-ink">{guide.title}</h2>
+            <div key={i} className="p-5 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <guide.icon size={18} className="text-brand-primary shrink-0" />
+                <h2 className="text-sm font-bold text-brand-ink">{guide.title}</h2>
               </div>
-              <ol className="space-y-3">
+              <ol className="space-y-2.5">
                 {guide.steps.map((step, j) => (
                   <li key={j} className="flex items-start gap-3 text-sm text-brand-ink/70 font-medium">
-                    <span className="h-6 w-6 bg-brand-primary/10 text-brand-primary text-[10px] font-semibold rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                      {j + 1}
+                    <span className="font-mono tabular-nums text-[10px] font-semibold text-brand-ink/30 mt-1 shrink-0 w-4 text-right">
+                      {j + 1}.
                     </span>
                     {step}
                   </li>
@@ -94,5 +87,3 @@ export default function PanduanPage() {
     </div>
   )
 }
-
-
