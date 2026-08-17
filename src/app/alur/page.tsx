@@ -75,18 +75,18 @@ export default function AlurPage() {
           ))}
         </ol>
 
-        <div className="bg-brand-panel rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-xl">
-          <h2 className="text-2xl sm:text-3xl font-bold text-brand-panel-fg mb-4 tracking-tight">
+        <div className="bg-brand-panel rounded-xl p-8 sm:p-10 text-center border border-brand-hairline shadow-sm">
+          <h2 className="text-xl sm:text-2xl font-bold text-brand-panel-fg mb-3 tracking-tight">
             Siap Melapor?
           </h2>
-          <p className="text-brand-panel-fg/60 font-medium text-sm sm:text-base mb-8 max-w-lg mx-auto">
+          <p className="text-brand-panel-fg/60 font-medium text-sm sm:text-base mb-6 max-w-lg mx-auto">
             Bergabunglah dengan 500+ warga Pesona Serpong yang telah menggunakan platform ini untuk lingkungan yang lebih baik.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-3 bg-brand-primary text-[#0e0f0c] font-bold px-8 py-4 rounded-2xl text-sm uppercase tracking-wider shadow-xl shadow-brand-primary/20 hover:scale-105 transition-all"
+            className="inline-flex items-center gap-2 bg-brand-primary text-[#0e0f0c] font-semibold px-6 py-3 rounded-lg text-sm uppercase tracking-wider shadow-sm hover:opacity-90 transition-opacity"
           >
-            Buat Laporan Sekarang <ArrowRight size={18} />
+            Buat Laporan Sekarang <ArrowRight size={16} />
           </Link>
         </div>
       </main>

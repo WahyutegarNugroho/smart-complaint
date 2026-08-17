@@ -141,12 +141,12 @@ export default async function LandingPage() {
 
             {/* Hero Card - Wise Style Surface Contrast */}
             <div className="relative hidden lg:block z-10">
-              <div className="relative rounded-3xl bg-brand-canvas shadow-xl ring-1 ring-brand-hairline p-4 aspect-[4/5] overflow-hidden group">
+              <div className="relative rounded-xl bg-brand-canvas shadow-sm ring-1 ring-brand-hairline p-4 aspect-[4/5] overflow-hidden group">
                 <Image
                   src="/hero.png"
                   alt="Pesona Serpong"
                   fill
-                  className="rounded-3xl object-cover transition-transform duration-1000 group-hover:scale-105"
+                  className="rounded-lg object-cover transition-transform duration-700 group-hover:scale-105"
                   priority
                 />
               </div>

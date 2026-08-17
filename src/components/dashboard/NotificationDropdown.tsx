@@ -233,14 +233,14 @@ export default function NotificationDropdown({ notifications: initialNotificatio
           />
 
           {/* Mobile Dropdown */}
-          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 md:hidden text-brand-ink">
+          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-xl shadow-lg overflow-hidden md:hidden text-brand-ink">
             {dropdownContent}
           </div>
 
           {/* Desktop Dropdown (Portal to body) */}
           {desktopPos && createPortal(
             <div
-              className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-3xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 text-brand-ink"
+              className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-xl shadow-lg overflow-hidden text-brand-ink"
               style={{ top: desktopPos.top, left: desktopPos.left, width: '384px' }}
             >
               {dropdownContent}

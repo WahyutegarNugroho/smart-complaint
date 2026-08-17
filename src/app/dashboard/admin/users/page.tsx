@@ -86,36 +86,36 @@ export default async function AdminUsersPage({
 
             {/* 🔍 FILTER & SEARCH AREA */}
             <section className="space-y-6 md:space-y-8">
-               <div className="bg-brand-canvas p-4 md:p-5 rounded-3xl border border-brand-hairline shadow-sm transition-all focus-within:shadow-xl group">
-                  <form className="flex flex-col lg:flex-row items-center gap-4 md:gap-6">
-                     <div className="flex-1 flex items-center gap-4 w-full px-4">
-                         <Search size={18} className="text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" />
+               <div className="bg-brand-canvas p-4 rounded-xl border border-brand-hairline shadow-sm">
+                  <form className="flex flex-col lg:flex-row items-center gap-3">
+                     <div className="flex-1 flex items-center gap-3 w-full px-3">
+                         <Search size={16} className="text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" />
                          <input
                             name="q"
                             type="text"
                             defaultValue={q}
                             placeholder="Cari nama atau username warga..."
                             aria-label="Cari warga"
-                             className="flex-1 bg-transparent border-none text-sm font-bold text-brand-ink placeholder:text-brand-ink/30 outline-none h-12"
+                             className="flex-1 bg-transparent border-none text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 outline-none h-11"
                          />
                      </div>
 
-                      <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-brand-hairline pt-4 lg:pt-0 lg:pl-6 px-2">
+                      <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-brand-hairline pt-3 lg:pt-0 lg:pl-5 px-2">
                         <div className="flex gap-2 w-full sm:w-auto">
-                            <select name="role" defaultValue={role} aria-label="Filter role" className="flex-1 sm:w-32 bg-brand-canvas-soft border-none rounded-xl px-4 h-12 text-[10px] font-black uppercase text-brand-ink/70 focus:ring-4 focus:ring-brand-primary/10 outline-none cursor-pointer appearance-none text-center">
+                            <select name="role" defaultValue={role} aria-label="Filter role" className="flex-1 sm:w-32 bg-brand-canvas-soft border border-brand-hairline rounded-lg px-3 h-10 text-[10px] font-bold uppercase text-brand-ink/70 focus:ring-2 focus:ring-brand-primary outline-none cursor-pointer appearance-none text-center">
                               <option value="">Role</option>
                               <option value="MASYARAKAT">Warga</option>
                               <option value="PETUGAS">Petugas</option>
                               <option value="ADMIN">Admin</option>
                            </select>
-                            <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-16 bg-brand-canvas-soft border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 outline-none transition-colors" />
-                             <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-16 bg-brand-canvas-soft border-none rounded-xl px-2 h-12 text-[10px] font-black text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 outline-none transition-colors" />
+                            <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-16 bg-brand-canvas-soft border border-brand-hairline rounded-lg px-2 h-10 text-[10px] font-mono font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
+                             <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-16 bg-brand-canvas-soft border border-brand-hairline rounded-lg px-2 h-10 text-[10px] font-mono font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
                         </div>
-                        <button type="submit" className="flex-1 sm:flex-none h-12 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-8 rounded-xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg active:scale-95">
+                        <button type="submit" className="flex-1 sm:flex-none h-10 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-6 rounded-lg text-[10px] font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm">
                            Terapkan
                         </button>
                         {(q || role || rt || rw) && (
-                           <Link href="/dashboard/admin/users" className="h-12 flex items-center px-4 text-[10px] font-semibold uppercase text-brand-ink/40 tracking-normal hover:text-brand-ink rounded-xl transition-all">
+                           <Link href="/dashboard/admin/users" className="h-10 flex items-center px-3 text-[10px] font-semibold uppercase text-brand-ink/40 tracking-wider hover:text-brand-ink rounded-lg transition-colors">
                               Reset
                            </Link>
                         )}
@@ -124,24 +124,24 @@ export default async function AdminUsersPage({
                </div>
 
                {/* 📋 USERS TABLE CARD */}
-                <div className="bg-brand-canvas rounded-3xl border border-brand-hairline shadow-sm overflow-hidden">
+                <div className="bg-brand-canvas rounded-xl border border-brand-hairline shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                      <table className="w-full text-left border-separate border-spacing-0">
                         <thead>
                             <tr className="bg-brand-canvas-soft/50 border-b border-brand-hairline">
-                                <th className="px-6 sm:px-8 py-6 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Profil Penduduk</th>
-                                <th className="hidden md:table-cell px-6 sm:px-8 py-6 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Domisili</th>
-                                <th className="hidden sm:table-cell px-6 sm:px-8 py-6 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Status Akses</th>
-                                 <th className="sticky right-0 pl-2 pr-6 sm:pl-4 sm:pr-8 py-6 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal text-right z-10">Kelola</th>
+                                <th className="px-5 sm:px-6 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Profil Penduduk</th>
+                                <th className="hidden md:table-cell px-5 sm:px-6 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Domisili</th>
+                                <th className="hidden sm:table-cell px-5 sm:px-6 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Status Akses</th>
+                                 <th className="sticky right-0 pl-2 pr-5 sm:pl-4 sm:pr-6 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider text-right z-10">Kelola</th>
                            </tr>
                         </thead>
                          <tbody className="divide-y divide-brand-hairline">
                            {allUsers.length === 0 ? (
                               <tr>
-                                 <td colSpan={4} className="px-8 py-20 text-center">
-                                     <div className="flex flex-col items-center justify-center text-brand-ink/20">
-                                       <Users size={64} className="mb-4" />
-                                       <p className="text-sm font-bold uppercase tracking-normal">Data Tidak Ditemukan</p>
+                                 <td colSpan={4} className="px-8 py-14 text-center">
+                                     <div className="flex flex-col items-center justify-center text-brand-ink/30">
+                                       <Users size={36} className="mb-3" />
+                                       <p className="text-xs font-semibold uppercase tracking-wider">Data Tidak Ditemukan</p>
                                     </div>
                                  </td>
                               </tr>
@@ -156,28 +156,28 @@ export default async function AdminUsersPage({
                 </div>
 
                 {totalUsers > PAGE_SIZE && (
-                <div className="flex items-center justify-between px-6 py-4 bg-brand-canvas rounded-2xl border border-brand-hairline">
-                   <p className="text-xs text-brand-ink/40">
+                <div className="flex items-center justify-between px-4 py-3 bg-brand-canvas rounded-xl border border-brand-hairline">
+                   <p className="text-xs font-mono tabular-nums text-brand-ink/40">
                     {totalUsers > 0 ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalUsers)} dari ${totalUsers}` : 'Tidak ada data'}
                   </p>
                   <div className="flex items-center gap-2">
                     {page > 1 && (
                       <Link
                         href={`/dashboard/admin/users?page=${page - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
-                        className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                        className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
                         aria-label="Halaman sebelumnya"
                       >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={15} />
                       </Link>
                     )}
-                    <span className="text-xs font-bold text-brand-ink/60 px-3">{page}</span>
+                    <span className="text-xs font-mono tabular-nums font-bold text-brand-ink/60 px-3">{page}</span>
                     {page * PAGE_SIZE < totalUsers && (
                       <Link
                         href={`/dashboard/admin/users?page=${page + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
-                        className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                        className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
                         aria-label="Halaman selanjutnya"
                       >
-                        <ChevronRight size={16} />
+                        <ChevronRight size={15} />
                       </Link>
                     )}
                   </div>

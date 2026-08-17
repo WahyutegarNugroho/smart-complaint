@@ -23,58 +23,62 @@ export function ExportButtons() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <div className="bg-brand-canvas rounded-xl border border-brand-hairline shadow-sm divide-y divide-brand-hairline">
       {/* CSV Export */}
-      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all hover:shadow-xl group">
-        <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/50 border border-brand-hairline mb-8 transition-colors group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c]">
-          <FileText size={28} />
+      <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="h-10 w-10 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-ink/60 border border-brand-hairline shrink-0">
+          <FileText size={18} />
         </div>
-        <h2 className="text-xl md:text-2xl font-bold text-brand-ink mb-2 transition-colors">CSV</h2>
-        <p className="text-sm text-brand-ink/50 font-medium mb-10 leading-relaxed transition-colors">Data mentah dalam format CSV — kompatibel dengan Excel/Spreadsheet apapun.</p>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-sm font-bold text-brand-ink">CSV</h2>
+          <p className="text-xs text-brand-ink/50 mt-0.5">Data mentah — kompatibel dengan Excel / Spreadsheet apapun.</p>
+        </div>
         <button 
           onClick={handleCsv} 
-          className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-4 rounded-2xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-ink/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full sm:w-auto bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-4 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Download size={18} /> Unduh CSV
+          <Download size={15} /> Unduh CSV
         </button>
       </div>
 
       {/* Excel Export */}
-      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all hover:shadow-xl group">
-        <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-positive border border-brand-hairline mb-8 transition-colors group-hover:bg-positive group-hover:text-white">
-          <FileSpreadsheet size={28} />
+      <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="h-10 w-10 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-positive border border-brand-hairline shrink-0">
+          <FileSpreadsheet size={18} />
         </div>
-        <h2 className="text-xl md:text-2xl font-bold text-brand-ink mb-2 transition-colors">Excel (.xlsx)</h2>
-        <p className="text-sm text-brand-ink/50 font-medium mb-10 leading-relaxed transition-colors">Format Excel dengan 2 sheet (data + ringkasan), lebih rapi dan terstruktur.</p>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-sm font-bold text-brand-ink">Excel (.xlsx)</h2>
+          <p className="text-xs text-brand-ink/50 mt-0.5">Format Excel dengan 2 sheet (data + ringkasan).</p>
+        </div>
         <button 
           onClick={handleExcel} 
-          className="w-full bg-positive text-white py-4 rounded-2xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-positive/10 active:scale-95 flex items-center justify-center gap-3"
+          className="w-full sm:w-auto bg-positive text-white px-4 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Download size={18} /> Unduh Excel
+          <Download size={15} /> Unduh Excel
         </button>
       </div>
 
       {/* PDF Export */}
-      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all hover:shadow-xl group">
-        <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-primary border border-brand-hairline mb-8 transition-colors group-hover:bg-brand-primary group-hover:text-brand-ink">
-          <FileBarChart size={28} />
+      <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="h-10 w-10 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-primary border border-brand-hairline shrink-0">
+          <FileBarChart size={18} />
         </div>
-        <h2 className="text-xl md:text-2xl font-bold text-brand-ink mb-2 transition-colors">PDF (Server)</h2>
-        <p className="text-sm text-brand-ink/50 font-medium mb-10 leading-relaxed transition-colors">Dokumen PDF terformat dengan cover, ringkasan, dan tabel detail — generated server-side.</p>
-        <button 
-          onClick={handlePdf} 
-          className="w-full bg-brand-primary text-brand-ink py-4 rounded-2xl text-[10px] font-semibold uppercase tracking-normal hover:opacity-90 transition-all shadow-lg shadow-brand-primary/10 active:scale-95 flex items-center justify-center gap-3"
-        >
-          <FileBarChart size={18} /> Unduh PDF
-        </button>
-        <div className="mt-4 text-center">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-sm font-bold text-brand-ink">PDF (Server)</h2>
+          <p className="text-xs text-brand-ink/50 mt-0.5">Dokumen PDF terformat dengan cover, ringkasan, dan tabel detail.</p>
           <button 
             onClick={handlePrint} 
-            className="text-[10px] font-semibold text-brand-ink/50 underline hover:text-brand-ink/70 transition-all"
+            className="mt-1 text-xs font-medium text-brand-ink/50 underline hover:text-brand-ink/70 transition-colors cursor-pointer"
           >
-            Atau cetak via browser (browser print)
+            Atau cetak via browser
           </button>
         </div>
+        <button 
+          onClick={handlePdf} 
+          className="w-full sm:w-auto bg-brand-primary text-brand-ink px-4 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <FileBarChart size={15} /> Unduh PDF
+        </button>
       </div>
     </div>
   )

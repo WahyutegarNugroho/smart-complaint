@@ -38,25 +38,25 @@ export default async function SettingsPage() {
             <p className="text-brand-ink/60 font-medium text-sm md:text-base transition-colors">Perbarui identitas dan informasi domisili Anda untuk verifikasi sistem.</p>
           </div>
 
-          <div className="h-16 w-16 bg-brand-ink dark:bg-brand-primary rounded-2xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shrink-0 font-bold text-2xl transition-all">
+          <div className="h-11 w-11 bg-brand-ink dark:bg-brand-primary rounded-lg flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shrink-0 font-bold text-base">
              {profile.name?.[0] || '?'}
           </div>
         </section>
 
         <SettingsForm profile={profile} action={updateProfile} />
 
-        {/* 🚪 LOGOUT SECTION (For Mobile) */}
-        <section className="pt-8 border-t border-brand-hairline flex flex-col items-center">
-          <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mb-6">Sesi Akun</p>
+        {/* 🚪 LOGOUT SECTION */}
+        <section className="pt-6 border-t border-brand-hairline flex flex-col items-center">
+          <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider mb-4">Sesi Akun</p>
           <form action={logout} className="w-full max-w-sm">
             <button 
               type="submit" 
-              className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-3xl bg-red-500/10 text-red-600 dark:text-red-500 font-bold text-xs uppercase tracking-normal border border-red-500/20 hover:bg-red-500/20 transition-all active:scale-95 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2.5 px-6 py-3 rounded-lg bg-red-500/10 text-red-600 dark:text-red-500 font-semibold text-xs uppercase tracking-wider border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500"
             >
-              <LogOut size={18} /> Keluar Dari Sistem
+              <LogOut size={16} /> Keluar Dari Sistem
             </button>
           </form>
-          <p className="mt-8 text-[10px] font-medium text-brand-ink/40">Smart Complaint v2.0 • Sesi Aman Terenkripsi</p>
+          <p className="mt-6 text-[10px] font-medium text-brand-ink/40">Smart Complaint v2.0 • Sesi Aman Terenkripsi</p>
         </section>
       </main>
     </div>

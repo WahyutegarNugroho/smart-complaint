@@ -88,13 +88,13 @@ export default async function ExportPage() {
         <section className="space-y-8">
            <ExportButtons />
 
-            <div className="bg-brand-canvas-soft p-6 md:p-8 rounded-3xl border border-brand-hairline flex items-start gap-5 transition-colors">
-               <div className="h-12 w-12 bg-brand-canvas rounded-2xl flex items-center justify-center text-brand-primary shrink-0 shadow-sm border border-brand-hairline transition-colors">
-                  <CheckCircle2 size={24} />
+            <div className="bg-brand-canvas-soft p-4 md:p-5 rounded-xl border border-brand-hairline flex items-start gap-4">
+               <div className="h-9 w-9 bg-brand-canvas rounded-lg flex items-center justify-center text-brand-primary shrink-0 shadow-sm border border-brand-hairline">
+                  <CheckCircle2 size={18} />
                </div>
                <div>
-                  <p className="text-[11px] font-semibold text-brand-ink uppercase tracking-normal mb-2 transition-colors">Panduan Ekspor</p>
-                  <p className="text-sm text-brand-ink/50 font-medium leading-relaxed transition-colors">
+                  <p className="text-[10px] font-semibold text-brand-ink uppercase tracking-wider">Panduan Ekspor</p>
+                  <p className="text-xs text-brand-ink/50 mt-1 leading-relaxed">
                     Format CSV sangat cocok untuk diolah kembali di Excel, sementara Cetak PDF akan menghasilkan dokumen ringkasan yang siap dipresentasikan pada rapat warga atau pengurus RT/RW.
                  </p>
               </div>
@@ -130,7 +130,7 @@ export default async function ExportPage() {
 
         {/* ===== COVER PAGE ===== */}
         <div className="flex flex-col items-center justify-center min-h-[90vh] text-center px-16">
-          <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center text-white mb-10">
+          <div className="w-16 h-16 bg-slate-900 rounded-xl flex items-center justify-center text-white mb-10">
             <FileBarChart size={44} />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-4">

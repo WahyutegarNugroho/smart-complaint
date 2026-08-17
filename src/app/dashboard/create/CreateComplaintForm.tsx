@@ -140,32 +140,32 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             type="button"
             onClick={() => setIsUrgent(!isUrgent)}
             aria-label={isUrgent ? 'Setel sebagai normal' : 'Setel sebagai urgensi'}
-            className={`flex items-center gap-4 px-6 py-3 rounded-2xl border transition-all duration-300 cursor-pointer ${
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border transition-colors cursor-pointer ${
               isUrgent 
-                ? 'bg-red-500/10 border-red-500/20 shadow-xl shadow-red-500/5' 
+                ? 'bg-red-500/10 border-red-500/20 shadow-md' 
                 : 'bg-brand-canvas border-brand-hairline shadow-sm'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center transition-colors ${isUrgent ? 'bg-red-500 text-white' : 'bg-brand-canvas-soft text-brand-ink/40'}`}>
-              <AlertTriangle size={20} />
+            <div className={`h-8 w-8 rounded-lg flex items-center justify-center transition-colors ${isUrgent ? 'bg-red-500 text-white' : 'bg-brand-canvas-soft text-brand-ink/40'}`}>
+              <AlertTriangle size={18} />
             </div>
             <div className="text-left">
-              <p className={`text-[9px] font-semibold uppercase tracking-normal ${isUrgent ? 'text-red-600 dark:text-red-400' : 'text-brand-ink/50'}`}>Tingkat Urgensi</p>
-              <p className="text-sm font-bold">{isUrgent ? 'Darurat / Penting' : 'Normal / Rutin'}</p>
+              <p className={`text-[9px] font-semibold uppercase tracking-wider ${isUrgent ? 'text-red-600 dark:text-red-400' : 'text-brand-ink/50'}`}>Tingkat Urgensi</p>
+              <p className="text-xs font-bold">{isUrgent ? 'Darurat / Penting' : 'Normal / Rutin'}</p>
             </div>
           </button>
         </section>
 
         {/* ⚠️ INCOMPLETE PROFILE BANNER */}
         {isProfileIncomplete && (
-          <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-3xl p-6 sm:p-8 flex items-start gap-4 transition-all duration-300">
-            <div className="h-12 w-12 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center shrink-0 border border-amber-500/20">
-              <ShieldAlert size={24} />
+          <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 sm:p-5 flex items-start gap-3">
+            <div className="h-9 w-9 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg flex items-center justify-center shrink-0 border border-amber-500/20">
+              <ShieldAlert size={18} />
             </div>
-            <div className="space-y-1">
-              <h4 className="text-sm font-black uppercase tracking-wider text-amber-800 dark:text-amber-300">Profil Anda Belum Lengkap</h4>
-              <p className="text-xs text-amber-700/80 dark:text-amber-400/80 leading-relaxed font-medium">
-                Beberapa data penting Anda (seperti NIK, nomor WhatsApp, atau alamat domisili) belum terisi. Mohon lengkapi profil Anda di menu <Link href="/dashboard/settings" className="font-bold underline hover:text-amber-900 dark:hover:text-amber-200">Pengaturan Profil</Link> untuk mempermudah petugas memverifikasi dan merespon laporan Anda.
+            <div className="space-y-0.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Profil Anda Belum Lengkap</h4>
+              <p className="text-[10px] text-amber-700/80 dark:text-amber-400/80 leading-relaxed font-medium">
+                Beberapa data penting Anda (NIK, nomor WhatsApp, alamat domisili) belum terisi. Mohon lengkapi di <Link href="/dashboard/settings" className="font-bold underline hover:text-amber-900 dark:hover:text-amber-200">Pengaturan Profil</Link> untuk mempermudah verifikasi petugas.
               </p>
             </div>
           </div>
@@ -181,13 +181,13 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
           <input type="hidden" name="isUrgent" value={isUrgent.toString()} />
           
           {/* LEFT: Main Information */}
-          <div className="lg:col-span-7 space-y-8">
-            <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm space-y-10 transition-colors">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline shadow-sm space-y-6">
               
               {/* Category Selector */}
-              <div className="space-y-4">
-                <label className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">Pilih Kategori Masalah</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="space-y-3">
+                <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Pilih Kategori Masalah</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {categories.map((cat) => {
                     const Icon = ICON_MAP[cat.icon || 'Lightbulb'] || Lightbulb
                     return (
@@ -201,16 +201,14 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                             setSelectedChildId(cat.children[0].id)
                           }
                         }}
-                        className={`flex flex-col items-center justify-center gap-4 p-5 rounded-2xl border transition-all cursor-pointer ${
+                        className={`flex flex-col items-center justify-center gap-3 p-4 rounded-lg border transition-colors cursor-pointer ${
                           selectedParent === cat.slug 
-                            ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] border-transparent shadow-xl' 
+                            ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] border-transparent shadow-md' 
                             : 'bg-brand-canvas-soft border-brand-hairline text-brand-ink/65 hover:bg-brand-canvas'
                         }`}
                       >
-                        <div className={`transition-transform duration-500 ${selectedParent === cat.slug ? 'scale-110' : ''}`}>
-                           <Icon size={24} />
-                        </div>
-                        <span className="text-[10px] font-semibold uppercase tracking-normal">{cat.name}</span>
+                        <Icon size={20} />
+                        <span className="text-[10px] font-semibold uppercase tracking-wider">{cat.name}</span>
                       </button>
                     )
                   })}
@@ -227,23 +225,23 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                         value={selectedChildId}
                         onChange={(e) => setSelectedChildId(e.target.value)}
                         aria-label="Sub kategori"
-                        className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-5 py-4 text-sm font-bold text-brand-ink appearance-none outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all cursor-pointer"
+                        className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-bold text-brand-ink appearance-none outline-none focus:ring-2 focus:ring-brand-primary transition-colors cursor-pointer"
                       >
                         <option value="">Pilih sub-kategori...</option>
                         {children.map((child) => (
                           <option key={child.id} value={child.id}>{child.name}</option>
                         ))}
                       </select>
-                      <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" />
+                      <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" />
                     </div>
                   )
                 })()}
               </div>
 
               {/* Title Input */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="title" className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">Judul / Subjek</label>
+                  <label htmlFor="title" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Judul / Subjek</label>
                   {suggestedCategory && selectedParent !== suggestedCategory && (
                     <button 
                       type="button" 
@@ -256,9 +254,9 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                           setSelectedChildId('')
                         }
                       }}
-                      className="text-[9px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-lg hover:bg-emerald-500/20 transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
-                      <Lightbulb size={10} /> Saran Kategori: {(suggestedCategory).toUpperCase()} (Terapkan)
+                      <Lightbulb size={10} /> Saran: {(suggestedCategory).toUpperCase()} (Terapkan)
                     </button>
                   )}
                 </div>
@@ -270,74 +268,74 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Contoh: Perbaikan Lampu Jalan Mati"
-                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300"
+                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-3 text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
                 />
               </div>
 
               {/* Description Input */}
-              <div className="space-y-3">
-                <label htmlFor="content" className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">Detail Kronologi</label>
+              <div className="space-y-2">
+                <label htmlFor="content" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Detail Kronologi</label>
                 <textarea 
                   id="content"
                   name="content"
-                  rows={6}
+                  rows={5}
                   required
                   placeholder="Jelaskan detail masalah, perkiraan waktu kejadian, dan dampak yang dirasakan..."
-                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 resize-none leading-relaxed"
+                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-3 text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-2 focus:ring-brand-primary outline-none resize-none leading-relaxed"
                 />
               </div>
-            </div>
-
-            {/* Info Box */}
-            <div className="bg-brand-canvas border border-brand-hairline p-6 md:p-8 rounded-3xl flex gap-6 transition-colors group">
-              <div className="h-14 w-14 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-primary shadow-sm shrink-0 border border-brand-hairline transition-transform group-hover:rotate-6">
-                <Info size={28} />
-              </div>
-              <div className="space-y-1.5 pt-1">
-                <p className="text-sm font-bold text-brand-ink">Standar Pelayanan</p>
-                <p className="text-[13px] font-medium text-brand-ink/80 leading-relaxed">
-                  Laporan akan diproses oleh tim operasional dalam waktu maksimal 24 jam kerja. Pastikan data yang Anda lampirkan akurat untuk mempercepat proses investigasi.
-                </p>
+              
+              {/* Info Box */}
+              <div className="bg-brand-canvas border border-brand-hairline p-4 rounded-xl flex gap-4">
+                <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
+                  <Info size={18} />
+                </div>
+                <div className="space-y-1 pt-0.5">
+                  <p className="text-xs font-bold text-brand-ink">Standar Pelayanan</p>
+                  <p className="text-[11px] font-medium text-brand-ink/80 leading-relaxed">
+                    Laporan akan diproses oleh tim operasional dalam waktu maksimal 24 jam kerja. Pastikan data yang Anda lampirkan akurat untuk mempercepat proses investigasi.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT: Visual & Location */}
-          <div className="lg:col-span-5 space-y-8">
+{/* RIGHT: Visual & Location */}
+          <div className="lg:col-span-5 space-y-6">
             
             {/* Photo Attachment */}
-            <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm space-y-6 transition-colors">
-              <label className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">Lampiran Foto Bukti</label>
+            <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm space-y-4">
+              <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Lampiran Foto Bukti</label>
               
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative group h-72 cursor-pointer border-2 border-dashed rounded-3xl transition-all flex flex-col items-center justify-center overflow-hidden ${
-                  preview ? 'border-brand-primary bg-brand-canvas-soft shadow-xl' : 'border-brand-hairline hover:border-brand-primary bg-brand-canvas-soft/30'
+                className={`relative group h-56 cursor-pointer border-2 border-dashed rounded-xl transition-colors flex flex-col items-center justify-center overflow-hidden ${
+                  preview ? 'border-brand-primary bg-brand-canvas-soft shadow-md' : 'border-brand-hairline hover:border-brand-primary bg-brand-canvas-soft/30'
                 }`}
               >
                 {preview ? (
                   <>
                     <Image src={preview} alt="Preview" fill className="object-cover" unoptimized />
-                    <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
                         type="button"
                         onClick={(e) => { e.stopPropagation(); removePreview(); }}
-                        className="bg-brand-canvas p-4 rounded-2xl text-red-500 shadow-xl flex items-center gap-3 text-[10px] font-semibold uppercase tracking-normal hover:scale-105 transition-transform"
+                        className="bg-brand-canvas p-2.5 rounded-lg text-red-500 shadow-lg flex items-center gap-2 text-xs font-semibold hover:bg-brand-canvas-soft transition-colors"
                       >
-                        <X size={18} /> Ganti Gambar
+                        <X size={16} /> Ganti Gambar
                       </button>
                     </div>
                   </>
                 ) : (
-                  <div className="text-center space-y-6">
-                    <div className="h-20 w-20 bg-brand-canvas rounded-3xl flex items-center justify-center text-brand-ink/20 mx-auto shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all border border-brand-hairline">
-                      <Camera size={32} />
+                  <div className="text-center space-y-4">
+                    <div className="h-12 w-12 bg-brand-canvas rounded-lg flex items-center justify-center text-brand-ink/20 mx-auto shadow-sm border border-brand-hairline">
+                      <Camera size={24} />
                     </div>
                     <div>
-                      <p className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal">Klik untuk Mengunggah</p>
-                      <p className="text-[9px] font-medium text-brand-ink/40 mt-2 uppercase tracking-normal">Max Size 5MB (JPG/PNG)</p>
+                      <p className="text-xs font-semibold text-brand-ink/60 uppercase tracking-wider">Klik untuk Mengunggah</p>
+                      <p className="text-[10px] font-medium text-brand-ink/40 mt-1 uppercase tracking-wider">Max 5MB (JPG/PNG)</p>
                       {fileError && (
-                        <p className="text-[9px] font-semibold text-red-500 uppercase tracking-normal mt-2 max-w-[250px] mx-auto leading-relaxed">{fileError}</p>
+                        <p className="text-[10px] font-semibold text-red-500 uppercase tracking-wider mt-2 max-w-[250px] mx-auto leading-relaxed">{fileError}</p>
                       )}
                     </div>
                   </div>
@@ -347,40 +345,40 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             </div>
 
             {/* Location & Metadata */}
-            <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm space-y-8 transition-colors">
+            <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm space-y-6">
                <LocationPicker />
 
-               <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-3 text-center">
-                    <label htmlFor="rt" className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal block">RT</label>
-                    <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
-                  </div>
-                  <div className="space-y-3 text-center">
-                    <label htmlFor="rw" className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal block">RW</label>
-                    <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-4 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300" />
-                  </div>
-               </div>
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2 text-center">
+                   <label htmlFor="rt" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider block">RT</label>
+                   <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
+                 </div>
+                 <div className="space-y-2 text-center">
+                   <label htmlFor="rw" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider block">RW</label>
+                   <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
+                </div>
+             </div>
 
-               <div className="space-y-3">
-                  <label htmlFor="incidentDate" className="text-[10px] font-semibold text-brand-ink/60 uppercase tracking-normal ml-1">Waktu Temuan</label>
-                  <div className="relative group">
-                    <CalendarIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
-                    <input 
-                      id="incidentDate"
-                      name="incidentDate"
-                      type="date" 
-                      required
-                      className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 appearance-none"
-                    />
-                  </div>
-               </div>
-            </div>
+             <div className="space-y-2">
+                <label htmlFor="incidentDate" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Waktu Temuan</label>
+                <div className="relative group">
+                  <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
+                  <input 
+                    id="incidentDate"
+                    name="incidentDate"
+                    type="date" 
+                    required
+                    className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-12 pr-4 py-2.5 text-sm font-mono tabular-nums text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors appearance-none"
+                  />
+                </div>
+             </div>
+           </div>
 
             {/* Submit Button */}
             <SubmitButton 
-              className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-6 rounded-3xl font-bold text-[11px] uppercase tracking-normal shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-4 cursor-pointer"
+              className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-3.5 rounded-lg font-semibold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm flex items-center justify-center gap-2"
               loadingText="Mengirim Data..."
-              icon={<Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
+              icon={<Send size={16} />}
             >
               Terbitkan Laporan
             </SubmitButton>

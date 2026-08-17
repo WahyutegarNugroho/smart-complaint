@@ -88,48 +88,48 @@ export default async function AuditLogPage({
           </div>
         </section>
 
-        <section className="space-y-6">
-          <div className="bg-brand-canvas p-4 rounded-2xl border border-brand-hairline shadow-sm">
+        <section className="space-y-5">
+          <div className="bg-brand-canvas p-4 rounded-xl border border-brand-hairline shadow-sm">
             <AuditLogActionFilter filterAction={filterAction} baseUrl="/dashboard/admin/audit-log" />
           </div>
 
-          <div className="bg-brand-canvas rounded-3xl border border-brand-hairline shadow-sm overflow-hidden">
+          <div className="bg-brand-canvas rounded-xl border border-brand-hairline shadow-sm overflow-hidden">
             {logs.length === 0 ? (
-              <div className="p-16 text-center">
-                <div className="h-16 w-16 bg-brand-canvas-soft rounded-3xl flex items-center justify-center text-brand-ink/20 mx-auto mb-4">
-                  <History size={32} />
+              <div className="p-14 text-center">
+                <div className="h-12 w-12 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-ink/30 mx-auto mb-3 border border-brand-hairline">
+                  <History size={24} />
                 </div>
-                <p className="text-sm font-bold text-brand-ink/40 uppercase tracking-normal">Belum ada aktivitas</p>
+                <p className="text-xs font-semibold text-brand-ink/50 uppercase tracking-wider">Belum ada aktivitas</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-separate border-spacing-0">
                   <thead>
                     <tr className="bg-brand-canvas-soft/50 border-b border-brand-hairline">
-                      <th className="px-6 py-5 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Tindakan</th>
-                      <th className="px-6 py-5 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Detail</th>
-                      <th className="px-6 py-5 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Oleh</th>
-                      <th className="px-6 py-5 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">Waktu</th>
+                      <th className="px-5 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Tindakan</th>
+                      <th className="px-5 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Detail</th>
+                      <th className="px-5 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Oleh</th>
+                      <th className="px-5 py-4 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Waktu</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-brand-hairline">
                     {logs.map((log) => (
                       <tr key={log.id} className="hover:bg-brand-canvas-soft/30 transition-colors">
-                        <td className="px-6 py-5">
-                          <span className="text-[10px] font-semibold bg-brand-canvas-soft px-3 py-1.5 rounded-lg uppercase tracking-normal border border-brand-hairline">
+                        <td className="px-5 py-4">
+                          <span className="text-[10px] font-semibold bg-brand-canvas-soft px-2.5 py-1 rounded-md uppercase tracking-wider border border-brand-hairline">
                             {ACTION_LABELS[log.action] || log.action}
                           </span>
                         </td>
-                        <td className="px-6 py-5">
-                          <p className="text-[13px] font-medium text-brand-ink/80 max-w-md truncate">{log.details}</p>
+                        <td className="px-5 py-4">
+                          <p className="text-xs font-medium text-brand-ink/80 max-w-md truncate">{log.details}</p>
                         </td>
-                        <td className="px-6 py-5">
-                          <p className="text-[13px] font-bold text-brand-ink">{log.admin?.name || '-'}</p>
+                        <td className="px-5 py-4">
+                          <p className="text-xs font-bold text-brand-ink">{log.admin?.name || '-'}</p>
                         </td>
-                        <td className="px-6 py-5">
-                          <p className="text-[12px] font-medium text-brand-ink/50">
+                        <td className="px-5 py-4">
+                          <p className="text-[11px] font-mono tabular-nums text-brand-ink/50">
                             {new Date(log.createdAt).toLocaleDateString('id-ID', {
-                              day: 'numeric', month: 'short', year: 'numeric',
+                              day: '2-digit', month: 'short', year: 'numeric',
                               hour: '2-digit', minute: '2-digit'
                             })}
                           </p>
@@ -143,28 +143,28 @@ export default async function AuditLogPage({
           </div>
 
           {totalLogs > PAGE_SIZE && (
-          <div className="flex items-center justify-between pt-4">
-            <p className="text-xs text-brand-ink/50 font-medium">
+          <div className="flex items-center justify-between pt-3">
+            <p className="text-xs font-mono tabular-nums text-brand-ink/50">
               {totalLogs > 0 ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalLogs)} dari ${totalLogs}` : ''}
             </p>
             <div className="flex items-center gap-2">
               {page > 1 && (
                 <Link
                   href={buildHref(page - 1)}
-                  className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
                   aria-label="Halaman sebelumnya"
                 >
-                  <ChevronLeft size={16} />
+                  <ChevronLeft size={15} />
                 </Link>
               )}
-              <span className="text-xs font-bold text-brand-ink/60 px-3">{page}</span>
+              <span className="text-xs font-mono tabular-nums font-bold text-brand-ink/60 px-3">{page}</span>
               {page * PAGE_SIZE < totalLogs && (
                 <Link
                   href={buildHref(page + 1)}
-                  className="h-9 w-9 flex items-center justify-center rounded-xl border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
                   aria-label="Halaman selanjutnya"
                 >
-                  <ChevronRight size={16} />
+                  <ChevronRight size={15} />
                 </Link>
               )}
             </div>

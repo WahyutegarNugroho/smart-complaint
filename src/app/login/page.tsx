@@ -1,7 +1,7 @@
 'use client'
 
 import { login } from '@/app/auth/actions'
-import { ShieldCheck, ArrowRight, Lock, Mail, Activity, ArrowLeft, Eye, EyeOff, Clock } from 'lucide-react'
+import { ShieldCheck, ArrowRight, Lock, Mail, ArrowLeft, Eye, EyeOff, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SubmitButton from '@/components/SubmitButton'
@@ -86,63 +86,60 @@ export default function LoginPage({
       </div>
 
       <div className="w-full max-w-md py-8 sm:py-12">
-        <div className="text-center mb-8 sm:mb-16">
+        <div className="text-center mb-8 sm:mb-12">
           <Link href="/" className="inline-flex items-center gap-3 sm:gap-4 group">
-            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-brand bg-brand-panel text-brand-primary shadow-xl shadow-brand-primary/10 group-hover:rotate-12 transition-transform border border-brand-hairline">
-              <ShieldCheck size={28} className="sm:w-[32px] sm:h-[32px]" />
+            <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-brand-panel text-brand-primary border border-brand-hairline">
+              <ShieldCheck size={24} />
             </div>
             <div className="flex flex-col items-start text-left">
-              <span className="text-3xl font-bold text-brand-ink tracking-tight uppercase leading-none transition-colors">
+              <span className="text-2xl font-bold text-brand-ink tracking-tight uppercase leading-none transition-colors">
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
-              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal mt-1.5 leading-none transition-colors">Platform Pengaduan Warga</span>
+              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider mt-1 leading-none transition-colors">Platform Pengaduan Warga</span>
             </div>
           </Link>
         </div>
 
-        <div className="card-base p-7 sm:p-12 shadow-xl shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
-          <div className="absolute top-0 right-0 p-10 opacity-[0.03] text-brand-ink pointer-events-none hidden sm:block">
-            <Activity size={150} />
-          </div>
+        <div className="card-base p-6 sm:p-8 shadow-lg shadow-brand-ink/5 dark:shadow-black/40 relative overflow-hidden transition-all">
 
           <Link
             href="/"
-            className="inline-flex items-center gap-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal hover:text-brand-primary transition-colors mb-12 relative z-10"
+            className="inline-flex items-center gap-2.5 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors mb-8 relative z-10"
           >
-            <ArrowLeft size={16} /> Kembali ke Beranda
+            <ArrowLeft size={14} /> Kembali ke Beranda
           </Link>
 
           {locked ? (
-            <div className="relative z-10 space-y-8">
-              <div className="rounded-brand bg-red-500/10 p-8 text-center space-y-6 border border-red-500/20">
+            <div className="relative z-10 space-y-6">
+              <div className="rounded-xl bg-red-500/10 p-6 text-center space-y-5 border border-red-500/20">
                 <div className="flex justify-center">
-                  <div className="h-20 w-20 bg-red-500/20 rounded-3xl flex items-center justify-center mx-auto border border-red-500/20">
-                    <Clock size={40} className="text-red-500" />
+                  <div className="h-14 w-14 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto border border-red-500/20">
+                    <Clock size={28} className="text-red-500" />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <h2 className="text-lg font-black text-red-600 uppercase tracking-normal">
+                <div className="space-y-1.5">
+                  <h2 className="text-base font-bold text-red-600 uppercase tracking-wider">
                     Terlalu Banyak Percobaan
                   </h2>
-                  <p className="text-[12px] font-bold text-red-500/70 uppercase tracking-wider leading-relaxed">
+                  <p className="text-[11px] font-medium text-red-500/70 uppercase tracking-wider leading-relaxed">
                     Akun Anda diblokir sementara karena 5 kali gagal login berturut-turut
                   </p>
                 </div>
                 <div className="flex justify-center">
-                  <div className="bg-red-500/10 rounded-2xl px-10 py-5 border border-red-500/10">
-                    <span className="text-5xl font-black text-red-600 tabular-nums tracking-tight">
+                  <div className="bg-red-500/10 rounded-lg px-8 py-4 border border-red-500/10">
+                    <span className="text-4xl font-black text-red-600 tabular-nums tracking-tight">
                       {formatCountdown(countdown)}
                     </span>
                   </div>
                 </div>
-                <p className="text-[10px] font-semibold text-red-500/50 uppercase tracking-normal">
+                <p className="text-[10px] font-semibold text-red-500/50 uppercase tracking-wider">
                   Tunggu hingga waktu habis untuk mencoba lagi
                 </p>
               </div>
 
               <SubmitButton
                 disabled={true}
-                className="w-full h-16 rounded-brand bg-red-300 text-white text-[13px] font-bold uppercase tracking-normal cursor-not-allowed mt-10"
+                className="w-full h-12 rounded-lg bg-red-300 text-white text-xs font-bold uppercase tracking-wider cursor-not-allowed"
               >
                 Masuk
               </SubmitButton>

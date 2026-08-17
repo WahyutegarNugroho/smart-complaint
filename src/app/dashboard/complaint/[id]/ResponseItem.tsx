@@ -133,14 +133,14 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
               value={content}
               onChange={(e) => setContent(e.target.value)}
               aria-label="Edit tanggapan"
-              className="w-full p-4 rounded-2xl bg-brand-canvas-soft border-2 border-brand-primary/30 text-sm text-brand-ink focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] outline-none transition-all duration-300 resize-none"
+              className="w-full p-3 rounded-xl bg-brand-canvas-soft border-2 border-brand-primary/30 text-sm text-brand-ink focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all resize-none"
               rows={3}
             />
             <div className="flex justify-end gap-2">
                 <button 
                   onClick={() => setIsEditing(false)}
                   aria-label="Batal edit"
-                  className="p-2 rounded-xl bg-brand-canvas border border-brand-hairline text-brand-ink/60 hover:bg-brand-canvas-soft transition-all cursor-pointer"
+                  className="p-2 rounded-lg bg-brand-canvas border border-brand-hairline text-brand-ink/60 hover:bg-brand-canvas-soft transition-colors cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -148,17 +148,17 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                   onClick={handleEdit}
                   disabled={isSaving}
                   aria-label="Simpan edit"
-                  className="p-2 rounded-xl bg-brand-primary text-[#0e0f0c] hover:opacity-90 transition-all flex items-center gap-2 cursor-pointer"
+                  className="p-2 rounded-lg bg-brand-primary text-[#0e0f0c] hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                  {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                </button>
             </div>
           </div>
         ) : (
-          <div className={`p-5 rounded-3xl text-[14px] leading-relaxed font-medium transition-all shadow-sm ${isOfficer ? 'bg-brand-canvas border border-brand-hairline text-brand-ink' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'}`}>
+          <div className={`p-4 rounded-xl text-sm leading-relaxed font-medium shadow-sm ${isOfficer ? 'bg-brand-canvas border border-brand-hairline text-brand-ink' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'}`}>
             {res.content}
             {res.imageUrl && (
-              <div className="mt-4 rounded-2xl overflow-hidden border border-brand-hairline relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
+              <div className="mt-3 rounded-lg overflow-hidden border border-brand-hairline relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
                 <Image src={res.imageUrl} alt="Lampiran" fill className="object-cover" />
               </div>
             )}

@@ -38,107 +38,107 @@ export default function SettingsForm({ profile, action }: SettingsFormProps) {
   }
 
   return (
-    <form action={action} className="space-y-10">
-      <div className="bg-brand-canvas p-6 md:p-8 rounded-3xl border border-brand-hairline shadow-sm transition-all">
-        <div className="space-y-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+    <form action={action} className="space-y-8">
+      <div className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline shadow-sm">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             
             {/* Nama Lengkap */}
-            <div className="space-y-3">
-              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nama Lengkap</label>
+            <div className="space-y-2">
+              <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">Nama Lengkap</label>
               <div className="relative group">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
                 <input
                   name="name"
                   type="text"
                   defaultValue={profile.name}
                   required
-                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
+                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
                 />
               </div>
             </div>
 
             {/* NIK */}
-            <div className="space-y-3">
-              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Induk Kependudukan (NIK)</label>
+            <div className="space-y-2">
+              <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">Nomor Induk Kependudukan (NIK)</label>
               <div className="relative group">
-                <Shield className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
+                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
                 <input
                   name="nik"
                   type="text"
                   value={nik}
                   onChange={handleNikChange}
-                  placeholder="Masukkan 16 digit NIK"
+                  placeholder="16 digit NIK"
                   maxLength={16}
-                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
+                  className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-11 pr-4 py-2.5 text-sm font-mono tabular-nums text-brand-ink placeholder:text-brand-ink/30 focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
                 />
               </div>
             </div>
           </div>
 
           {/* Nomor Kontak WhatsApp */}
-          <div className="space-y-3">
-            <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Nomor Kontak WhatsApp</label>
+          <div className="space-y-2">
+            <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">Nomor Kontak WhatsApp</label>
             <div className="relative group">
-              <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
               <input
                 name="phone"
                 type="text"
                 value={phone}
                 onChange={handlePhoneChange}
                 placeholder="Contoh: 08xxxxxxxxxx"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-4.5 text-[15px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-11 pr-4 py-2.5 text-sm font-mono tabular-nums text-brand-ink placeholder:text-brand-ink/30 focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
               />
             </div>
           </div>
 
           {/* RT & RW */}
-          <div className="grid grid-cols-2 gap-8 md:gap-12">
-            <div className="space-y-3 text-center">
-              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal transition-colors">RT</label>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2 text-center">
+              <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">RT</label>
               <input
                 name="rt"
                 type="text"
                 defaultValue={profile.rt || ''}
                 placeholder="001"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
               />
             </div>
-            <div className="space-y-3 text-center">
-              <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal transition-colors">RW</label>
+            <div className="space-y-2 text-center">
+              <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">RW</label>
               <input
                 name="rw"
                 type="text"
                 defaultValue={profile.rw || ''}
                 placeholder="001"
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl px-6 py-4.5 text-[15px] font-bold text-center text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
               />
             </div>
           </div>
 
           {/* Alamat Lengkap */}
-          <div className="space-y-3">
-            <label className="block text-[10px] font-semibold text-brand-ink/75 uppercase tracking-normal ml-1 transition-colors">Alamat Lengkap Domisili</label>
+          <div className="space-y-2">
+            <label className="block text-[10px] font-semibold text-brand-ink/60 uppercase tracking-wider">Alamat Lengkap Domisili</label>
             <div className="relative group">
-              <Home className="absolute left-5 top-5 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={20} />
+              <Home className="absolute left-4 top-3 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
               <textarea
                 name="address"
-                rows={4}
+                rows={3}
                 defaultValue={profile.address || ''}
                 placeholder="Sebutkan Blok dan Nomor Rumah Anda..."
-                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-14 pr-6 py-5 text-[15px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary focus:shadow-[0_0_15px_rgba(0,217,146,0.15)] transition-all duration-300 outline-none resize-none leading-relaxed"
+                className="block w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-11 pr-4 py-3 text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-2 focus:ring-brand-primary outline-none resize-none leading-relaxed transition-colors"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-6 transition-colors">
-        <a href="/dashboard" className="text-[10px] font-semibold text-brand-ink/80 uppercase tracking-normal hover:text-brand-ink transition-colors">Batalkan</a>
+      <div className="flex items-center justify-end gap-4">
+        <a href="/dashboard" className="text-xs font-semibold text-brand-ink/60 uppercase tracking-wider hover:text-brand-ink transition-colors">Batalkan</a>
         <SubmitButton
-          className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-12 py-5 rounded-3xl font-bold text-[11px] uppercase tracking-normal shadow-xl hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-3 cursor-pointer"
+          className="bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] px-6 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2"
           loadingText="Menyimpan..."
-          icon={<Save size={18} />}
+          icon={<Save size={16} />}
         >
           Simpan Perubahan
         </SubmitButton>
