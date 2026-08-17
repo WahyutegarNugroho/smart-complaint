@@ -156,27 +156,25 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section - SF Mono for Dark Mode */}
-      <section id="statistik" className="relative z-20 py-10">
+      {/* Stats Section */}
+      <section id="statistik" className="py-12 border-y border-brand-hairline bg-brand-panel text-brand-panel-fg">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="rounded-brand bg-brand-panel p-12 shadow-xl border border-brand-hairline">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-              <div className="text-center md:text-left">
-                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{totalReports}</p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-primary">Total Laporan</p>
-              </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
-                <p className="text-5xl font-bold tracking-tight text-brand-primary font-mono">{successRate}%</p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Tuntas Ditangani</p>
-              </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
-                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{averageResponseHours}<span className="text-2xl opacity-50">h</span></p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Rata-Rata Penyelesaian</p>
-              </div>
-              <div className="text-center md:text-left md:border-l md:border-brand-panel-fg/10 md:pl-12">
-                <p className="text-5xl font-bold tracking-tight text-brand-panel-fg font-mono">{activeBlocks}</p>
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-normal text-brand-panel-fg/50">Blok Terlaporkan</p>
-              </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight font-mono tabular-nums">{totalReports}</p>
+              <p className="mt-2 text-xs text-brand-panel-fg/60">Total Laporan</p>
+            </div>
+            <div className="md:border-l md:border-brand-panel-fg/10 md:pl-8">
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-primary font-mono tabular-nums">{successRate}%</p>
+              <p className="mt-2 text-xs text-brand-panel-fg/60">Tuntas Ditangani</p>
+            </div>
+            <div className="md:border-l md:border-brand-panel-fg/10 md:pl-8">
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight font-mono tabular-nums">{averageResponseHours}<span className="text-xl opacity-60"> jam</span></p>
+              <p className="mt-2 text-xs text-brand-panel-fg/60">Rata-Rata Penyelesaian</p>
+            </div>
+            <div className="md:border-l md:border-brand-panel-fg/10 md:pl-8">
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight font-mono tabular-nums">{activeBlocks}</p>
+              <p className="mt-2 text-xs text-brand-panel-fg/60">Blok Terlaporkan</p>
             </div>
           </div>
         </div>
@@ -184,22 +182,24 @@ export default async function LandingPage() {
 
 
 
-      {/* Features Section - Hairline Cards on Dark / White Cards on Sage */}
-      <section id="fitur" className="py-32 bg-brand-canvas-soft">
+      {/* Features Section */}
+      <section id="fitur" className="py-20 bg-brand-canvas">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mb-20 text-center lg:text-left">
-            <h2 className="text-[11px] font-semibold tracking-normal text-brand-primary uppercase mb-4">Fitur Utama</h2>
-            <p className="text-4xl lg:text-5xl font-display font-black text-brand-ink tracking-tight">Modernisasi Lingkungan.</p>
+          <div className="mb-12">
+            <h2 className="text-xs font-bold tracking-wider text-brand-primary uppercase mb-2">Layanan Warga</h2>
+            <p className="text-2xl lg:text-3xl font-bold text-brand-ink tracking-tight">Transparan, Cepat, dan Tercatat.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LANDING_FEATURES.map((f, i) => (
-              <div key={i} className="card-base p-10 group hover:border-brand-primary/50">
-                <div className="w-14 h-14 rounded-brand bg-brand-canvas-soft text-brand-primary flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                  <f.icon size={28} />
+              <div key={i} className="p-6 rounded-xl border border-brand-hairline bg-brand-canvas-soft flex flex-col gap-4">
+                <div className="w-10 h-10 rounded-lg bg-brand-canvas border border-brand-hairline text-brand-primary flex items-center justify-center">
+                  <f.icon size={20} />
                 </div>
-                <h3 className="text-2xl font-bold text-brand-ink mb-4">{f.title}</h3>
-                <p className="text-brand-ink/60 leading-relaxed font-medium">{f.desc}</p>
+                <div>
+                  <h3 className="text-base font-bold text-brand-ink mb-1">{f.title}</h3>
+                  <p className="text-xs text-brand-ink/70 leading-relaxed">{f.desc}</p>
+                </div>
               </div>
             ))}
           </div>

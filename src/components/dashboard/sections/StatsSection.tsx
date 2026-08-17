@@ -39,16 +39,14 @@ export default async function StatsSection({ profileId, isWarga }: StatsSectionP
   ]
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
       {items.map((item, idx) => (
-        <div key={idx} className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline transition-all group relative overflow-hidden">
-          <div className="flex justify-between items-start mb-3 md:mb-4">
-            <div className={`h-9 w-9 md:h-10 md:w-10 rounded-xl bg-brand-canvas-soft flex items-center justify-center text-brand-ink/60 border border-brand-hairline`}>
-              <item.icon size={18} />
-            </div>
+        <div key={idx} className="bg-brand-canvas p-4 md:p-5 rounded-lg border border-brand-hairline flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-[11px] font-medium text-brand-ink/60">{item.label}</span>
+            <item.icon size={16} className="text-brand-ink/40" />
           </div>
-          <p className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">{item.val}</p>
-          <p className="text-[10px] md:text-[11px] font-semibold uppercase tracking-normal text-brand-ink/40 mt-1">{item.label}</p>
+          <p className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink font-mono tabular-nums">{item.val}</p>
         </div>
       ))}
     </section>

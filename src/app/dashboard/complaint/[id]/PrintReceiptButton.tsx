@@ -7,9 +7,10 @@ export default function PrintReceiptButton() {
   return (
     <button
       onClick={() => window.print()}
-      className="no-print btn-secondary py-3 sm:py-4 px-6 sm:px-8 text-[10px] sm:text-[11px] tracking-normal uppercase shadow-sm w-full sm:w-auto text-center flex items-center justify-center gap-2 bg-brand-canvas border border-brand-hairline rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-800 transition-all cursor-pointer font-bold"
+      aria-label="Cetak tanda terima bukti laporan"
+      className="no-print py-2.5 px-4 text-xs font-semibold rounded-lg bg-brand-canvas border border-brand-hairline text-brand-ink hover:bg-brand-canvas-soft transition-colors flex items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-primary"
     >
-      <Printer size={16} /> Cetak Tanda Terima
+      <Printer size={15} /> Cetak Tanda Terima
     </button>
   )
 }

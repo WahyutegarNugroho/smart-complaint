@@ -60,40 +60,20 @@ export default function AlurPage() {
           </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute left-6 sm:left-7 top-0 bottom-0 w-0.5 bg-brand-hairline hidden sm:block" />
-          <div className="space-y-8 sm:space-y-12">
-            {STEPS.map((step, i) => (
-              <div key={i} className="relative flex flex-col sm:flex-row gap-6 sm:gap-10 group">
-                <div className="hidden sm:flex flex-col items-center shrink-0">
-                  <div className={`h-14 w-14 ${step.color} rounded-2xl flex items-center justify-center text-white shadow-xl ring-4 ring-brand-canvas relative z-10 transition-transform group-hover:scale-110`}>
-                    <step.icon size={24} />
-                  </div>
-                </div>
-
-                <div className="sm:hidden flex items-center gap-4">
-                  <div className={`h-10 w-10 ${step.color} rounded-xl flex items-center justify-center text-white shrink-0`}>
-                    <step.icon size={18} />
-                  </div>
-                  <span className="text-[10px] font-semibold text-brand-ink/30 uppercase tracking-wider">
-                    Langkah {i + 1}
-                  </span>
-                </div>
-
-                <div className="flex-1 bg-brand-canvas border border-brand-hairline rounded-2xl p-6 sm:p-8 shadow-sm transition-all group-hover:shadow-xl group-hover:border-brand-primary/30">
-                  <div className="hidden sm:flex items-center gap-3 mb-4">
-                    <span className="text-[10px] font-semibold text-brand-ink/30 uppercase tracking-wider">
-                      Langkah {i + 1}
-                    </span>
-                    <span className="h-px flex-1 bg-brand-hairline" />
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-brand-ink mb-3">{step.title}</h3>
-                  <p className="text-sm sm:text-base text-brand-ink/70 font-medium leading-relaxed">{step.desc}</p>
-                </div>
+        <ol className="relative divide-y divide-brand-hairline border-y border-brand-hairline">
+          {STEPS.map((step, i) => (
+            <li key={i} className="py-6 sm:py-8 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
+              <div className="flex items-center gap-3 sm:w-44 shrink-0">
+                <span className="font-mono text-sm font-bold text-brand-primary tabular-nums">0{i + 1}.</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-brand-ink/50">Langkah</span>
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="flex-1 space-y-1">
+                <h2 className="text-base sm:text-lg font-bold text-brand-ink">{step.title}</h2>
+                <p className="text-xs sm:text-sm text-brand-ink/70 leading-relaxed">{step.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
 
         <div className="bg-brand-panel rounded-3xl p-8 sm:p-12 text-center border border-brand-hairline shadow-xl">
           <h2 className="text-2xl sm:text-3xl font-bold text-brand-panel-fg mb-4 tracking-tight">

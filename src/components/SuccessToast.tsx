@@ -20,25 +20,24 @@ export default function SuccessToast({ message }: SuccessToastProps) {
   if (!isVisible || !message) return null
 
   return (
-    <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4 animate-in slide-in-from-top-10 duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
-       <div className="bg-brand-canvas border border-brand-hairline rounded-3xl p-5 shadow-xl shadow-brand-ink/5 dark:shadow-black/40 flex items-center gap-5 relative overflow-hidden">
-           <div className="h-12 w-12 bg-brand-primary rounded-2xl flex items-center justify-center text-[#0e0f0c] shrink-0 shadow-xl shadow-brand-primary/20 rotate-3">
-              <CheckCircle2 size={24} />
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4 animate-in slide-in-from-top-6 duration-300">
+       <div className="bg-brand-canvas border border-brand-hairline rounded-xl p-4 shadow-lg flex items-center gap-3 relative overflow-hidden">
+           <div className="h-9 w-9 bg-brand-primary text-[#0e0f0c] rounded-lg flex items-center justify-center shrink-0">
+              <CheckCircle2 size={18} />
            </div>
-           <div className="flex-1 min-w-0 pt-1">
-              <p className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal mb-1">Sistem Berhasil</p>
-              <p className="text-sm font-bold text-brand-ink truncate tracking-tight">{message}</p>
+           <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-brand-ink truncate">{message}</p>
            </div>
            <button 
              onClick={() => setIsVisible(false)}
-             aria-label="Tutup notifikasi"
-             className="h-10 w-10 rounded-xl hover:bg-brand-canvas-soft flex items-center justify-center text-brand-ink/30 hover:text-brand-ink transition-all active:scale-90"
+             aria-label="Tutup notifikasi berhasil"
+             className="h-8 w-8 rounded-lg hover:bg-brand-canvas-soft flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-colors"
            >
-              <X size={18} />
+              <X size={16} />
            </button>
            
            {/* Progress Bar */}
-           <div className="absolute bottom-0 left-0 h-1 bg-brand-hairline w-full">
+           <div className="absolute bottom-0 left-0 h-0.5 bg-brand-hairline w-full">
               <div className="h-full bg-brand-primary animate-shrink-width" style={{ animationDuration: '5000ms' }} />
           </div>
        </div>

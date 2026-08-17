@@ -145,9 +145,9 @@ export default function NotificationDropdown({ notifications: initialNotificatio
                 <CheckCheck size={13} /> Sudah Dibaca
               </button>
               <span className="w-px h-4 bg-brand-hairline" />
-              <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[9px] font-semibold px-2.5 py-0.5 rounded-lg uppercase tracking-normal">
-                {unreadCount} Baru
-              </span>
+          <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[10px] font-semibold px-2 py-0.5 rounded uppercase tracking-normal tabular-nums">
+            {unreadCount} Baru
+          </span>
             </>
           )}
         </div>
@@ -217,7 +217,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
       >
         <Bell size={20} />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-black tracking-tighter border-2 border-brand-canvas animate-pulse">
+          <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold tabular-nums border border-brand-canvas">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}

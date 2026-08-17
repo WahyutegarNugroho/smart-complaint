@@ -62,8 +62,8 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
   }
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[420px] z-[60] animate-in slide-in-from-bottom-10 duration-700">
-      <div className="bg-brand-canvas/90 backdrop-blur-3xl border border-brand-hairline rounded-3xl px-2 py-3 flex items-center justify-around shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+    <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 w-[94%] max-w-[420px] z-[60]">
+      <nav aria-label="Navigasi Bawah" className="bg-brand-canvas border border-brand-hairline rounded-xl px-2 py-2 flex items-center justify-around shadow-lg">
 
         {navItems.map((item, index) => {
           const Icon = item.icon
@@ -71,9 +71,9 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
 
           if (item.isCenter) {
             return (
-              <Link key={index} href={item.href} className="flex flex-col items-center justify-center -translate-y-10 group">
-                <div className="h-16 w-16 bg-brand-ink dark:bg-brand-primary rounded-2xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shadow-[0_15px_30px_rgba(0,217,146,0.3)] border-4 border-brand-canvas-soft group-active:scale-90 transition-all duration-300">
-                  <Icon size={32} />
+              <Link key={index} href={item.href} aria-label={item.label} className="flex flex-col items-center justify-center -translate-y-5 group">
+                <div className="h-12 w-12 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shadow-md border-2 border-brand-canvas group-active:scale-95 transition-transform">
+                  <Icon size={24} />
                 </div>
               </Link>
             )
@@ -83,18 +83,15 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
             <Link
               key={index}
               href={item.href}
-              className={`relative flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all duration-300 ${active ? 'text-brand-primary' : 'text-brand-ink/40 active:scale-95'}`}
+              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${active ? 'text-brand-primary font-semibold' : 'text-brand-ink/60 hover:text-brand-ink'}`}
             >
-              <Icon size={22} className={`${active ? 'scale-110 drop-shadow-[0_0_8px_rgba(0,217,146,0.4)]' : 'opacity-70'}`} />
-              <span className={`text-[9px] font-semibold uppercase tracking-normal ${active ? 'opacity-100' : 'opacity-50'}`}>{item.label}</span>
-              {active && (
-                <div className="absolute -bottom-1 w-1 h-1 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(0,217,146,0.8)]" />
-              )}
+              <Icon size={20} />
+              <span className="text-[10px] uppercase tracking-normal">{item.label}</span>
             </Link>
           )
         })}
 
-      </div>
+      </nav>
     </div>
   )
 }
