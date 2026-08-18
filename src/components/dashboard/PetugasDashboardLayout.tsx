@@ -19,10 +19,10 @@ export default function PetugasDashboardLayout({ profile, successMessage, childr
        <main className="max-w-7xl mx-auto p-4 sm:p-8 md:p-12 space-y-8 sm:space-y-12">
          
          {/* 👋 HEADER SECTION */}
-         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-hairline pb-8 sm:pb-12">
-           <div className="space-y-2">
-             <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-brand-ink transition-colors leading-none">Halo, {profile.name}</h1>
-             <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-normal leading-relaxed">Panel Monitoring Petugas Pesona Serpong</p>
+         <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-hairline pb-6">
+           <div className="space-y-1">
+             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-brand-ink leading-tight">Halo, {profile.name}</h1>
+             <p className="text-xs text-brand-ink/50">Pantau dan proses pengaduan warga yang masuk ke sistem.</p>
            </div>
          </section>
 
