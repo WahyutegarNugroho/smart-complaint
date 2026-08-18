@@ -161,19 +161,28 @@ export default async function ExportPage() {
           </div>
 
           {/* KPI Cards */}
-          <div className="grid grid-cols-4 gap-4 mb-10">
-            {[
-              { label: 'Total Laporan', value: total, color: 'bg-slate-900' },
-              { label: 'Menunggu', value: pending, color: 'bg-amber-500' },
-              { label: 'Diproses', value: processing, color: 'bg-blue-500' },
-              { label: 'Selesai', value: completed, color: 'bg-emerald-500' },
-            ].map(kpi => (
-              <div key={kpi.label} className="border border-slate-200 rounded-xl p-6 text-center">
-                <div className={'w-3 h-3 rounded-full mx-auto mb-3 ' + kpi.color} />
-                <p className="text-3xl font-bold text-slate-900 mb-1">{kpi.value}</p>
-                <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">{kpi.label}</p>
+          <div className="flex gap-4 mb-10">
+            <div className="flex-1 bg-slate-900 text-white rounded-xl p-6 flex flex-col justify-between min-h-[120px]">
+              <div>
+                <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">Total Laporan</p>
+                <p className="text-4xl font-bold tracking-tight mt-2 font-mono tabular-nums">{total}</p>
               </div>
-            ))}
+            </div>
+            <div className="flex-[3] grid grid-cols-3 gap-4">
+              {[
+                { label: 'Menunggu', value: pending, color: 'bg-amber-500' },
+                { label: 'Diproses', value: processing, color: 'bg-blue-500' },
+                { label: 'Selesai', value: completed, color: 'bg-emerald-500' },
+              ].map(kpi => (
+                <div key={kpi.label} className="border border-slate-200 rounded-xl p-5 flex flex-col justify-between min-h-[120px]">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">{kpi.label}</p>
+                    <div className={'w-2 h-2 rounded-full ' + kpi.color} />
+                  </div>
+                  <p className="text-2xl font-bold text-slate-900 font-mono tabular-nums">{kpi.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Urgent Alert */}

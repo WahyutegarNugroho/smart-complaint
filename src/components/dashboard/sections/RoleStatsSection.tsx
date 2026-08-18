@@ -52,21 +52,38 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
   }
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-      {stats.map((item, idx) => {
-        const cs = colorStyles[item.color] || colorStyles.slate
-        return (
-        <div key={idx} className="bg-brand-canvas p-5 md:p-6 rounded-2xl border border-brand-hairline transition-all group relative overflow-hidden">
-            <div className="flex justify-between items-start mb-3 md:mb-4">
-              <div className={`h-9 w-9 md:h-10 md:w-10 rounded-xl ${cs.bg} ${cs.darkBg} flex items-center justify-center ${cs.text} ${cs.darkText} border ${cs.border} ${cs.darkBorder} transition-colors`}>
-                <item.icon size={18} />
+    <section className="flex flex-col md:flex-row gap-4 md:gap-6">
+      {/* Accent/Core Metric Block */}
+      <div className="flex-1 bg-brand-panel p-5 md:p-6 rounded-xl text-brand-panel-fg border border-brand-hairline flex flex-col justify-between min-h-[150px]">
+        <div className="flex justify-between items-start mb-2">
+          <span className="text-[10px] font-bold text-brand-primary uppercase tracking-wider">{stats[0].label}</span>
+          <Inbox size={18} className="text-brand-primary" />
+        </div>
+        <div>
+          <p className="text-4xl md:text-5xl font-bold tracking-tight font-mono tabular-nums">{stats[0].val}</p>
+          <p className="text-xs text-brand-panel-fg/60 mt-1">Total aduan masuk</p>
+        </div>
+      </div>
+
+      {/* Grid of details */}
+      <div className="flex-[3] grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {stats.slice(1).map((item, idx) => {
+          const cs = colorStyles[item.color] || colorStyles.slate
+          return (
+            <div key={idx} className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline transition-all flex flex-col justify-between min-h-[150px]">
+              <div className="flex justify-between items-start mb-3">
+                <div className={`h-8 w-8 rounded-lg ${cs.bg} ${cs.darkBg} flex items-center justify-center ${cs.text} ${cs.darkText} border ${cs.border} ${cs.darkBorder} transition-colors`}>
+                  <item.icon size={16} />
+                </div>
+              </div>
+              <div>
+                <p className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink font-mono tabular-nums">{item.val}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-normal text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
               </div>
             </div>
-            <p className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">{item.val}</p>
-            <p className="text-[10px] md:text-[11px] font-semibold uppercase tracking-normal text-slate-400 dark:text-slate-500 mt-1">{item.label}</p>
-        </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </section>
   )
 }

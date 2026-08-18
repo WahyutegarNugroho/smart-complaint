@@ -145,7 +145,7 @@ export default function LocationPicker({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSearch() } }}
             placeholder="Cari alamat atau tempat..."
-            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-12 pr-4 py-3.5 text-[13px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
+            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
           />
           {searching && (
             <Loader2 size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary animate-spin" />
@@ -155,7 +155,7 @@ export default function LocationPicker({
           type="button"
           onClick={handleGeolocate}
           disabled={geoLoading}
-          className="h-12 w-12 bg-brand-canvas-soft border border-brand-hairline rounded-2xl flex items-center justify-center text-brand-ink/50 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer disabled:opacity-50 shrink-0"
+          className="h-12 w-12 bg-brand-canvas-soft border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer disabled:opacity-50 shrink-0"
           title="Gunakan lokasi saya"
         >
           {geoLoading ? <Loader2 size={18} className="animate-spin" /> : <Crosshair size={18} />}
@@ -163,7 +163,7 @@ export default function LocationPicker({
       </div>
 
       {/* Map */}
-      <div className="h-64 md:h-80 rounded-2xl overflow-hidden border border-brand-hairline shadow-sm">
+      <div className="h-64 md:h-80 rounded-xl overflow-hidden border border-brand-hairline shadow-sm">
         <MapContainer
           center={[lat, lng]}
           zoom={DEFAULT_ZOOM}
@@ -207,7 +207,7 @@ export default function LocationPicker({
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Atau ketik alamat manual..."
-          className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-2xl pl-12 pr-4 py-3.5 text-[13px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
+            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
         />
       </div>
 

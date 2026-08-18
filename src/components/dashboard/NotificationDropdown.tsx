@@ -228,7 +228,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
         <>
           {/* Mobile Overlay Backdrop */}
           <div 
-            className="fixed inset-0 bg-brand-canvas-soft/80 backdrop-blur-sm z-40 md:hidden animate-in fade-in duration-200"
+            className="fixed inset-0 bg-brand-canvas-soft/90 z-40 md:hidden animate-in fade-in duration-200"
             onClick={() => setIsOpen(false)}
           />
 

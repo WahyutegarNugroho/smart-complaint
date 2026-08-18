@@ -66,7 +66,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[1000] transition-opacity"
+        className="fixed inset-0 bg-black/40 z-[1000] transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -75,7 +75,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
         tabIndex={-1}
         className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none"
       >
-        <div className="sticky top-0 bg-brand-canvas/90 backdrop-blur-md border-b border-brand-hairline px-5 py-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-brand-canvas border-b border-brand-hairline px-5 py-4 flex items-center justify-between z-10">
           <h2 className="text-sm font-bold text-brand-ink truncate pr-2">Detail Laporan</h2>
           <button
             onClick={onClose}

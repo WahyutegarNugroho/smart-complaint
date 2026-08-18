@@ -3,10 +3,13 @@ import React from 'react'
 export default function SectionSkeleton({ type }: { type: 'stats' | 'announcements' | 'list' | 'detail' | 'form' | 'users' | 'export' | 'chart' }) {
   if (type === 'stats') {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 animate-pulse">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline space-y-4 h-28"></div>
-        ))}
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 animate-pulse">
+        <div className="flex-1 bg-brand-canvas p-5 rounded-xl border border-brand-hairline h-32"></div>
+        <div className="flex-[3] grid grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline h-32"></div>
+          ))}
+        </div>
       </div>
     )
   }

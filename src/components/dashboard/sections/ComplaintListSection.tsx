@@ -176,7 +176,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
               defaultValue={searchQuery}
               placeholder={isWarga ? "Cari laporan Anda..." : "Cari laporan warga..."}
               aria-label="Cari laporan"
-              className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl pl-14 pr-4 py-4 text-sm font-medium text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all shadow-sm"
+              className="w-full bg-brand-canvas border border-brand-hairline rounded-xl pl-14 pr-4 py-4 text-sm font-medium text-brand-ink focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all shadow-sm"
             />
           </form>
         </div>
@@ -185,9 +185,9 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
              <form className="flex gap-2 w-full" action="/dashboard" method="GET">
                {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
                {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
-               <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
-                <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-full bg-brand-canvas border border-brand-hairline rounded-2xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
-               <button type="submit" className="px-6 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-2xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer">
+                <input name="rt" type="text" defaultValue={rt} placeholder="RT" aria-label="Filter RT" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
+                <input name="rw" type="text" defaultValue={rw} placeholder="RW" aria-label="Filter RW" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 text-sm font-bold text-center outline-none focus:border-brand-primary text-brand-ink transition-all shadow-sm" />
+               <button type="submit" className="px-6 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer">
                   Filter
                </button>
              </form>
@@ -301,7 +301,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                           </div>
                         </div>
                       </div>
-                      <div className="h-10 w-10 md:h-12 md:w-12 bg-brand-canvas-soft rounded-2xl flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-500 shadow-inner">
+                      <div className="h-10 w-10 md:h-12 md:w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-500 shadow-inner">
                         <ArrowRight size={18} />
                       </div>
                   </div>
@@ -342,11 +342,12 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         {totalPages > 1 && (
           <div className="flex items-center gap-2">
             {/* Previous */}
-            {currentPage > 1 && (
-              <Link
-                href={buildPaginationUrl(currentPage - 1, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
-                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
-              >
+        {currentPage > 1 && (
+          <Link
+            href={buildPaginationUrl(currentPage - 1, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
+            className="h-12 px-4 rounded-xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
+            aria-label="Halaman sebelumnya"
+          >
                 ← Sebelumnya
               </Link>
             )}
@@ -371,7 +372,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                 <Link
                   key={i}
                   href={buildPaginationUrl(pageNum, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
-                  className={`h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold transition-all ${
+                  className={`h-12 w-12 rounded-xl flex items-center justify-center text-xs font-bold transition-all ${
                     currentPage === pageNum
                         ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] shadow-xl'
                         : 'bg-brand-canvas text-brand-ink/40 border border-brand-hairline hover:border-brand-ink/20'
@@ -386,7 +387,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
             {currentPage < totalPages && (
               <Link
                 href={buildPaginationUrl(currentPage + 1, { currentStatus, searchQuery, categoryFilter, fromDate, toDate, rt, rw, pageSize }, 12)}
-                className="h-12 px-4 rounded-2xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
+                className="h-12 px-4 rounded-xl flex items-center justify-center text-xs font-bold bg-brand-canvas text-brand-ink/50 border border-brand-hairline hover:border-brand-ink/20 transition-all gap-1.5"
               >
                 Selanjutnya →
               </Link>

@@ -45,7 +45,7 @@ export default function LocationView({ latitude, longitude, address, complaintId
 
   if (latitude === null || longitude === null) {
     return (
-      <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-2xl border border-brand-hairline transition-colors">
+      <div className="flex items-center gap-4 p-5 bg-brand-canvas-soft rounded-xl border border-brand-hairline transition-colors">
         <div className="h-10 w-10 bg-brand-canvas rounded-xl flex items-center justify-center text-brand-ink shadow-sm border border-brand-hairline">
           <MapPin size={18} />
         </div>
@@ -59,7 +59,7 @@ export default function LocationView({ latitude, longitude, address, complaintId
 
   return (
     <div
-      className="rounded-2xl overflow-hidden border border-brand-hairline shadow-sm cursor-pointer group transition-all hover:shadow-lg"
+      className="rounded-xl overflow-hidden border border-brand-hairline shadow-sm cursor-pointer group transition-all hover:shadow-lg"
       onClick={goToMap}
       role="button"
       tabIndex={0}

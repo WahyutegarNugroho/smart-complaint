@@ -48,7 +48,7 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-brand-canvas-soft selection:bg-brand-primary selection:text-brand-ink font-sans overflow-x-hidden animate-page">
       {/* Navigation - Clean & Brand Native */}
-      <nav className="fixed top-0 z-50 w-full border-b border-brand-hairline bg-brand-canvas/80 backdrop-blur-xl">
+      <nav className="fixed top-0 z-50 w-full border-b border-brand-hairline bg-brand-canvas shadow-sm">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex h-20 justify-between items-center">
             <div className="flex items-center gap-2 sm:gap-3">

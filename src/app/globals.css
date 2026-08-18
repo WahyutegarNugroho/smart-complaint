@@ -105,7 +105,7 @@
 
 @layer components {
   .glass {
-    @apply bg-white/70 dark:bg-black/50 backdrop-blur-md border border-white/20 dark:border-white/10;
+    @apply bg-brand-canvas border border-brand-hairline;
   }
   
   .card-base {

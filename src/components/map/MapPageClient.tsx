@@ -266,7 +266,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
 
       {/* Floating Filter Bar */}
       <div className="absolute top-3 left-3 right-14 md:left-4 md:right-auto md:w-80 z-[1000]">
-        <div className="bg-brand-canvas/90 backdrop-blur-xl border border-brand-hairline rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl shadow-xl overflow-hidden">
           {/* Search input */}
           <div className="flex items-center gap-2 px-4 py-2.5">
             <Search size={16} className="text-brand-ink/30 shrink-0" />
@@ -357,7 +357,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
 
       {/* Legend */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
-        <div className="bg-brand-canvas/90 backdrop-blur-xl border border-brand-hairline rounded-2xl shadow-xl px-4 py-2.5 flex items-center gap-4">
+        <div className="bg-brand-canvas border border-brand-hairline rounded-xl shadow-xl px-4 py-2.5 flex items-center gap-4">
           <Layers size={14} className="text-brand-ink/30 shrink-0" />
           {(Object.entries(STATUS_HEX) as [string, string][]).map(([status, color]) => (
             <div key={status} className="flex items-center gap-1.5">
