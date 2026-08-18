@@ -8,12 +8,12 @@ export const metadata = {
 }
 
 const CATEGORY_MAP: Record<string, { label: string; cls: string }> = {
-  umum: { label: 'Umum', cls: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800' },
-  kegiatan: { label: 'Kegiatan', cls: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' },
-  darurat: { label: 'Darurat', cls: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' },
-  kebersihan: { label: 'Kebersihan', cls: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800' },
-  kesehatan: { label: 'Kesehatan', cls: 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-800' },
-  keagamaan: { label: 'Keagamaan', cls: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' },
+  umum: { label: 'Umum', cls: 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline' },
+  kegiatan: { label: 'Kegiatan', cls: 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline' },
+  darurat: { label: 'Darurat', cls: 'bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400' },
+  kebersihan: { label: 'Kebersihan', cls: 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline' },
+  kesehatan: { label: 'Kesehatan', cls: 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline' },
+  keagamaan: { label: 'Keagamaan', cls: 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline' },
 }
 
 export default async function AgendaPage() {

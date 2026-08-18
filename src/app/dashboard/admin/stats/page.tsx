@@ -3,10 +3,8 @@ import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { 
   ArrowLeft,
-  Activity,
   PieChart as PieIcon,
   Map,
-  TrendingUp,
   Inbox,
   MapPin
 } from 'lucide-react'
@@ -172,36 +170,19 @@ export default async function AdminStatsPage() {
           </div>
         </section>
 
-        {/* 📋 SUMMARY CARDS */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-brand-canvas p-4 md:p-5 rounded-xl border border-brand-hairline flex items-center gap-4 shadow-sm">
-               <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-primary border border-brand-hairline">
-                  <Activity size={18} />
-               </div>
-               <div>
-                  <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Rata-rata Laporan</p>
-                  <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{(total / Math.max(rtCounts.length, 1)).toFixed(1)} <span className="text-xs text-brand-ink/50 font-medium tracking-wider uppercase ml-1">Per RT</span></p>
-               </div>
+        {/* 📋 SUMMARY — Dense Data Strip */}
+        <section className="bg-brand-canvas rounded-xl border border-brand-hairline divide-y sm:divide-y-0 sm:divide-x divide-brand-hairline grid grid-cols-1 sm:grid-cols-3">
+            <div className="p-4 flex items-center justify-between gap-3">
+                <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Rata-rata Laporan / RT</p>
+                <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{(total / Math.max(rtCounts.length, 1)).toFixed(1)}</p>
             </div>
-
-            <div className="bg-brand-canvas p-4 md:p-5 rounded-xl border border-brand-hairline flex items-center gap-4 shadow-sm">
-               <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-positive border border-brand-hairline">
-                  <TrendingUp size={18} />
-               </div>
-               <div>
-                  <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Total Entri</p>
-                  <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{total} <span className="text-xs text-brand-ink/50 font-medium tracking-wider uppercase ml-1">Laporan Warga</span></p>
-               </div>
+            <div className="p-4 flex items-center justify-between gap-3">
+                <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Total Entri</p>
+                <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{total}</p>
             </div>
-
-            <div className="bg-brand-canvas p-4 md:p-5 rounded-xl border border-brand-hairline flex items-center gap-4 shadow-sm">
-               <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-warning border border-brand-hairline">
-                  <Inbox size={18} />
-               </div>
-               <div>
-                  <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Cakupan Wilayah</p>
-                  <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{rtCounts.length} <span className="text-xs text-brand-ink/50 font-medium tracking-wider uppercase ml-1">RT Terdata</span></p>
-               </div>
+            <div className="p-4 flex items-center justify-between gap-3">
+                <p className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Cakupan Wilayah</p>
+                <p className="text-base font-mono tabular-nums font-bold text-brand-ink">{rtCounts.length} RT</p>
             </div>
         </section>
 
