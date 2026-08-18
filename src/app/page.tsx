@@ -20,8 +20,8 @@ export default async function LandingPage() {
   const [totalReports, completedReports, avgHoursResult, activeBlocksResult] = await Promise.all([
     prisma.complaint.count(),
     prisma.complaint.count({ where: { status: 'COMPLETED' } }),
-    prisma.$queryRaw<{ avgHours: number | null }[]>`
-      SELECT AVG(EXTRACT(EPOCH FROM ("updatedAt" - "createdAt")) / 3600) AS "avgHours"
+    prisma.$queryRaw<{ avg_hours: number | null }[]>`
+      SELECT AVG(EXTRACT(EPOCH FROM ("updatedAt" - "createdAt")) / 3600) AS avg_hours
       FROM "Complaint"
       WHERE "status" = 'COMPLETED'
     `,
@@ -33,7 +33,7 @@ export default async function LandingPage() {
   
   const successRate = totalReports > 0 ? Math.round((completedReports / totalReports) * 100) : 100;
 
-  const avgHours = avgHoursResult?.[0]?.avgHours;
+  const avgHours = avgHoursResult?.[0]?.avg_hours;
   const averageResponseHours = avgHours && avgHours > 0 ? Math.max(1, Math.round(avgHours)) : 12;
 
   const activeBlocks = activeBlocksResult.length || 5;

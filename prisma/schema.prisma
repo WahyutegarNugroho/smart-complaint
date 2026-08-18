@@ -24,6 +24,7 @@ model Profile {
   isVerified         Boolean        @default(false)
   @@index([role])
   @@index([isVerified])
+  @@index([role, isVerified])
   announcements      Announcement[]
   auditLogs          AuditLog[]
   assignedComplaints Complaint[]    @relation("ComplaintAssignee")
@@ -85,6 +86,9 @@ model Complaint {
   @@index([categoryId])
   @@index([incidentDate])
   @@index([status, createdAt])
+  @@index([status, isUrgent])
+  @@index([authorId, status])
+  @@index([category, status])
   @@index([latitude, longitude])
   @@index([escalationLevel])
   @@index([isUrgent])
@@ -132,6 +136,7 @@ model Notification {
 
   @@index([userId])
   @@index([isRead])
+  @@index([userId, isRead, createdAt])
 }
 
 model EscalationLog {
