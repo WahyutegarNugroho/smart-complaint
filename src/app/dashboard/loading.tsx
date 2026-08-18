@@ -9,7 +9,7 @@ export default function DashboardLoading() {
           <div className="h-8 w-64 bg-brand-hairline rounded-xl"></div>
           <div className="h-4 w-48 bg-brand-hairline rounded-lg"></div>
         </div>
-        <div className="h-12 w-40 bg-brand-hairline rounded-2xl"></div>
+          <div className="h-12 w-40 bg-brand-hairline rounded-xl"></div>
       </div>
 
       {/* 📊 KPI CARDS SKELETON */}
@@ -42,7 +42,7 @@ export default function DashboardLoading() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-brand-canvas p-5 rounded-2xl border border-brand-hairline space-y-4 h-64">
+            <div key={i} className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline space-y-4 h-64">
               <div className="flex justify-between">
                 <div className="h-6 w-20 bg-brand-hairline rounded-lg"></div>
                 <div className="h-10 w-10 bg-brand-hairline rounded-xl"></div>

@@ -90,7 +90,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
           {canViewFull ? (
             <>
               {complaint.imageUrl && (
-                <div className="rounded-2xl overflow-hidden border border-brand-hairline">
+                <div className="rounded-xl overflow-hidden border border-brand-hairline">
                   <Image
                     src={complaint.imageUrl}
                     alt={complaint.title}

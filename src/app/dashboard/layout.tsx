@@ -109,7 +109,7 @@ export default async function DashboardLayout({
 
         {/* Desktop Quick Toolbar (Notifications & Theme Switcher) */}
         <div className="px-8 pb-4 flex items-center gap-3">
-          <div className="flex-1 flex items-center gap-2 bg-brand-canvas-soft/80 border border-brand-hairline p-2.5 rounded-2xl shadow-sm justify-between">
+          <div className="flex-1 flex items-center gap-2 bg-brand-canvas-soft/80 border border-brand-hairline p-2.5 rounded-xl shadow-sm justify-between">
              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal pl-2">Aksi Cepat</span>
              <div className="flex items-center gap-2">
                 <NotificationDropdown notifications={notifications} />
@@ -232,7 +232,7 @@ export default async function DashboardLayout({
 
         {/* User Profile & Logout */}
         <div className="p-4 border-t border-brand-hairline bg-brand-canvas-soft/30 transition-colors">
-          <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-brand-canvas hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-brand-hairline cursor-pointer">
+          <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-canvas hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-brand-hairline cursor-pointer">
             <div className="h-10 w-10 bg-brand-canvas-soft text-brand-ink font-bold text-sm shrink-0 flex items-center justify-center rounded-xl transition-colors">
               {(profile.name || '?').charAt(0).toUpperCase()}
             </div>

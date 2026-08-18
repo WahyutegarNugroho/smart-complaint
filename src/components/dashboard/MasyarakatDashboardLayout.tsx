@@ -45,16 +45,16 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
         )}
 
         {/* 👋 HEADER SECTION */}
-        <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-brand-hairline pb-8 sm:pb-12">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-brand-ink transition-colors leading-none">Halo, {profile?.name || 'Warga'}</h1>
-            <p className="text-brand-ink/40 font-bold text-[10px] sm:text-[13px] uppercase tracking-normal leading-relaxed">Platform Pengaduan Warga Pesona Serpong</p>
+        <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-hairline pb-6">
+          <div className="space-y-1">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-brand-ink leading-tight">Halo, {profile?.name || 'Warga'}</h1>
+            <p className="text-xs text-brand-ink/50">Pantau status pengaduan Anda dan kirim laporan baru jika ada kendala lingkungan.</p>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 shrink-0">
              <Link
                 href="/dashboard/create"
-                className="btn-primary py-3 sm:py-4 px-6 sm:px-8 text-[10px] sm:text-[11px] tracking-normal uppercase shadow-xl shadow-brand-primary/20 w-full sm:w-auto text-center inline-flex items-center justify-center gap-2"
+                className="btn-primary py-3 px-6 text-[10px] tracking-normal uppercase w-full sm:w-auto text-center inline-flex items-center justify-center gap-2"
              >
                 <Plus size={18} /> Buat Laporan
              </Link>

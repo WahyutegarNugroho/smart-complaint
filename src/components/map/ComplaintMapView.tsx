@@ -25,7 +25,7 @@ interface ComplaintMapViewProps {
 export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) {
   if (complaints.length === 0) {
     return (
-      <div className="h-64 rounded-2xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40">
+      <div className="h-64 rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40">
         <div className="text-center">
           <MapPin size={32} className="mx-auto mb-2 opacity-30" />
           <p className="text-sm font-bold uppercase tracking-normal">Belum ada data lokasi</p>
@@ -37,7 +37,7 @@ export default function ComplaintMapView({ complaints }: ComplaintMapViewProps) 
   const center: [number, number] = [complaints[0].latitude, complaints[0].longitude]
 
   return (
-    <div className="h-[500px] rounded-2xl overflow-hidden border border-brand-hairline shadow-sm">
+    <div className="h-[500px] rounded-xl overflow-hidden border border-brand-hairline shadow-sm">
       <MapContainer
         center={center}
         zoom={15}

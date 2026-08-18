@@ -121,7 +121,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
         </div>
 
           {errorMsg && (
-            <div className="w-full p-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 font-medium">
+            <div className="w-full p-3 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 font-medium">
               {errorMsg}
               <button onClick={() => setErrorMsg(null)} className="ml-2 text-red-400 hover:text-red-600">&times;</button>
             </div>

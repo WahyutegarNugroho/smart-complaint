@@ -7,7 +7,7 @@ export const LocationPicker = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[400px] rounded-2xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
+      <div className="h-[400px] rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
         <p className="text-sm font-bold uppercase tracking-normal">Memuat peta...</p>
       </div>
     ),
@@ -19,7 +19,7 @@ export const LocationView = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-48 rounded-2xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
+      <div className="h-48 rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
         <p className="text-[10px] font-semibold uppercase tracking-normal">Memuat peta...</p>
       </div>
     ),
@@ -31,7 +31,7 @@ export const ComplaintMapView = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[500px] rounded-2xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
+      <div className="h-[500px] rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/40 animate-pulse">
         <p className="text-sm font-bold uppercase tracking-normal">Memuat peta sebaran...</p>
       </div>
     ),

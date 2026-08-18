@@ -31,7 +31,7 @@ export default function ResponseFileHandler() {
       {preview && (
         <div className="px-6 mb-2">
            <div className="relative inline-block group">
-              <div className="h-20 w-20 rounded-2xl overflow-hidden border-2 border-blue-500/30 shadow-lg relative">
+              <div className="h-20 w-20 rounded-xl overflow-hidden border-2 border-blue-500/30 shadow-lg relative">
                 <Image src={preview} alt="Preview" fill unoptimized className="object-cover" />
               </div>
               <button 
