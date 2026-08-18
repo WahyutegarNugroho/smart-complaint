@@ -99,7 +99,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       prisma.complaint.findMany({
         where: whereClause,
         orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-        include: { author: true, categoryRel: { select: { name: true } } }, 
+        include: { author: { select: { name: true } }, categoryRel: { select: { name: true } } }, 
         take: pageSize,
         skip: (currentPage - 1) * pageSize
       }),

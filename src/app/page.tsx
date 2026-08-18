@@ -17,13 +17,14 @@ export const revalidate = 60;
 
 export default async function LandingPage() {
   // Query dynamic stats — all parallel
-  const [totalReports, completedReports, completedComplaints, activeBlocksResult] = await Promise.all([
+  const [totalReports, completedReports, avgHoursResult, activeBlocksResult] = await Promise.all([
     prisma.complaint.count(),
     prisma.complaint.count({ where: { status: 'COMPLETED' } }),
-    prisma.complaint.findMany({
-      where: { status: 'COMPLETED' },
-      select: { createdAt: true, updatedAt: true }
-    }),
+    prisma.$queryRaw<{ avgHours: number | null }[]>`
+      SELECT AVG(EXTRACT(EPOCH FROM ("updatedAt" - "createdAt")) / 3600) AS "avgHours"
+      FROM "Complaint"
+      WHERE "status" = 'COMPLETED'
+    `,
     prisma.complaint.groupBy({
       by: ['rt'],
       where: { rt: { not: null } }
@@ -31,15 +32,9 @@ export default async function LandingPage() {
   ])
   
   const successRate = totalReports > 0 ? Math.round((completedReports / totalReports) * 100) : 100;
-  
-  let averageResponseHours = 12;
-  if (completedComplaints.length > 0) {
-    const totalHours = completedComplaints.reduce((acc, c) => {
-      const diffMs = c.updatedAt.getTime() - c.createdAt.getTime();
-      return acc + (diffMs / (1000 * 60 * 60));
-    }, 0);
-    averageResponseHours = Math.max(1, Math.round(totalHours / completedComplaints.length));
-  }
+
+  const avgHours = avgHoursResult?.[0]?.avgHours;
+  const averageResponseHours = avgHours && avgHours > 0 ? Math.max(1, Math.round(avgHours)) : 12;
 
   const activeBlocks = activeBlocksResult.length || 5;
 
@@ -138,6 +133,7 @@ export default async function LandingPage() {
                     src="/hero.png"
                     alt="Pesona Serpong"
                     fill
+                    sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover"
                     priority
                   />
