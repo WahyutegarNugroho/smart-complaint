@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Zap, ArrowLeft, FileText, MapPin, ClipboardCheck, CheckCircle2, Users, ArrowRight } from 'lucide-react'
+import { FileText, MapPin, ClipboardCheck, CheckCircle2, Users, ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'Alur Pengaduan | Smart Complaint',
@@ -8,85 +8,75 @@ export const metadata = {
 
 const STEPS = [
   {
-    icon: FileText,
+    num: '01',
     title: 'Kirim Laporan',
-    desc: 'Warga mengirimkan laporan melalui platform dengan mengisi detail masalah, foto, dan lokasi kejadian. Laporan akan langsung tercatat di sistem.',
-    color: 'bg-blue-500',
+    desc: 'Warga mengirimkan laporan melalui platform dengan mengisi detail masalah, foto, dan lokasi kejadian.',
+    icon: FileText,
   },
   {
-    icon: MapPin,
+    num: '02',
     title: 'Verifikasi Lokasi',
-    desc: 'Sistem mendeteksi otomatis blok dan nomor rumah berdasarkan koordinat GPS. Pengurus RT/RW dapat memverifikasi kebenaran data domisili pelapor.',
-    color: 'bg-amber-500',
+    desc: 'Sistem mendeteksi otomatis blok dan nomor rumah berdasarkan koordinat GPS.',
+    icon: MapPin,
   },
   {
-    icon: ClipboardCheck,
+    num: '03',
     title: 'Ditinjau Petugas',
-    desc: 'Petugas menerima notifikasi dan meninjau laporan yang masuk. Laporan akan divalidasi dan dikategorikan sebelum ditindaklanjuti ke tahap penanganan.',
-    color: 'bg-brand-primary',
+    desc: 'Petugas menerima notifikasi, meninjau dan mengkategorikan laporan sebelum ditindaklanjuti.',
+    icon: ClipboardCheck,
   },
   {
-    icon: CheckCircle2,
+    num: '04',
     title: 'Proses Penanganan',
-    desc: 'Petugas lapangan melakukan investigasi dan perbaikan sesuai dengan jenis laporan. Perkembangan penanganan dapat dipantau secara real-time oleh warga.',
-    color: 'bg-brand-primary',
+    desc: 'Petugas lapangan melakukan investigasi dan perbaikan sesuai jenis laporan.',
+    icon: CheckCircle2,
   },
   {
-    icon: Users,
+    num: '05',
     title: 'Selesai & Evaluasi',
-    desc: 'Laporan ditutup setelah masalah teratasi. Warga mendapat notifikasi penyelesaian dan dapat memberikan umpan balik untuk evaluasi kinerja pengurus.',
-    color: 'bg-emerald-500',
+    desc: 'Laporan ditutup setelah masalah teratasi. Warga mendapat notifikasi penyelesaian.',
+    icon: Users,
   },
 ]
 
 export default function AlurPage() {
   return (
-    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-500 animate-page">
-      <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-12 sm:space-y-16">
-        <div className="space-y-4">
+    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans animate-page">
+      <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-10">
+        <div className="space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
-            <ArrowLeft size={14} /> Kembali ke Beranda
+            ← Kembali ke Beranda
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c]">
-              <Zap size={20} />
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-brand-ink">
-              Alur Pengaduan Warga
-            </h1>
-          </div>
-          <p className="text-brand-ink/60 font-medium text-sm sm:text-base leading-relaxed max-w-2xl">
-            Pelajari bagaimana proses pengaduan berjalan — dari laporan masuk hingga penyelesaian. Transparan, cepat, dan terintegrasi.
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-ink">Alur Kerja Pengaduan</h1>
+          <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">
+            Dari pengiriman laporan hingga penyelesaian — semua tahap terdokumentasi dan transparan.
           </p>
         </div>
 
-        <ol className="relative divide-y divide-brand-hairline border-y border-brand-hairline">
+        <div className="space-y-0 divide-y divide-brand-hairline border-y border-brand-hairline">
           {STEPS.map((step, i) => (
-            <li key={i} className="py-6 sm:py-8 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
-              <div className="flex items-center gap-3 sm:w-44 shrink-0">
-                <span className="font-mono text-sm font-bold text-brand-primary tabular-nums">0{i + 1}.</span>
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-ink/50">Langkah</span>
+            <div key={i} className="py-5 flex gap-5 sm:gap-8">
+              <div className="flex items-center gap-3 shrink-0 pt-0.5">
+                <span className="text-xl font-bold text-brand-primary font-mono tabular-nums">{step.num}</span>
               </div>
-              <div className="flex-1 space-y-1">
-                <h2 className="text-base sm:text-lg font-bold text-brand-ink">{step.title}</h2>
-                <p className="text-xs sm:text-sm text-brand-ink/70 leading-relaxed">{step.desc}</p>
+              <div className="space-y-1">
+                <h2 className="text-base font-bold text-brand-ink">{step.title}</h2>
+                <p className="text-xs text-brand-ink/70 leading-relaxed">{step.desc}</p>
               </div>
-            </li>
+            </div>
           ))}
-        </ol>
+        </div>
 
-        <div className="bg-brand-panel rounded-xl p-8 sm:p-10 text-center border border-brand-hairline shadow-sm">
-          <h2 className="text-xl sm:text-2xl font-bold text-brand-panel-fg mb-3 tracking-tight">
-            Siap Melapor?
-          </h2>
-          <p className="text-brand-panel-fg/60 font-medium text-sm sm:text-base mb-6 max-w-lg mx-auto">
-            Bergabunglah dengan 500+ warga Pesona Serpong yang telah menggunakan platform ini untuk lingkungan yang lebih baik.
-          </p>
+        <div className="bg-brand-panel rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-brand-hairline">
+          <div className="space-y-1 text-left">
+            <h2 className="text-lg font-bold text-brand-panel-fg tracking-tight">Siap Melapor?</h2>
+            <p className="text-xs text-brand-panel-fg/60">Buat akun warga untuk mulai mengirim laporan ke pengurus.</p>
+          </div>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 bg-brand-primary text-[#0e0f0c] font-semibold px-6 py-3 rounded-lg text-sm uppercase tracking-wider shadow-sm hover:opacity-90 transition-opacity"
+            className="bg-brand-primary text-[#0e0f0c] font-bold px-5 py-2.5 rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-opacity shrink-0 inline-flex items-center gap-2"
           >
-            Buat Laporan Sekarang <ArrowRight size={16} />
+            Daftar Warga <ArrowRight size={14} />
           </Link>
         </div>
       </main>

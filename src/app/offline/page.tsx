@@ -1,38 +1,30 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import { WifiOff } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Offline - Smart Complaint',
+  title: 'Offline | Smart Complaint',
 }
 
 export default function OfflinePage() {
   return (
-    <div style={{
-      fontFamily: 'system-ui, sans-serif',
-      background: '#101010',
-      color: '#f2f2f2',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      padding: '2rem',
-    }}>
-      <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>📡</div>
-        <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#9fe870' }}>Koneksi Terputus</h1>
-        <p style={{ fontSize: '0.9rem', color: '#888', lineHeight: 1.6, marginBottom: '2rem' }}>
-          Anda sedang offline. Silakan periksa koneksi internet Anda dan coba lagi.
-        </p>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/" style={{
-          display: 'inline-block',
-          padding: '0.8rem 2rem',
-          background: '#9fe870',
-          color: '#0e0f0c',
-          textDecoration: 'none',
-          borderRadius: '12px',
-          fontWeight: 'bold',
-          fontSize: '0.85rem',
-        }}>Coba Lagi</a>
+    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink flex items-center justify-center p-6 font-sans">
+      <div className="text-center max-w-sm space-y-4">
+        <div className="h-12 w-12 rounded-lg bg-brand-panel text-brand-primary flex items-center justify-center mx-auto">
+          <WifiOff size={24} />
+        </div>
+        <div className="space-y-1">
+          <h1 className="text-xl font-bold tracking-tight">Koneksi Terputus</h1>
+          <p className="text-xs text-brand-ink/60 leading-relaxed">
+            Perangkat Anda sedang tidak terhubung ke internet. Periksa koneksi data atau Wi-Fi untuk melanjutkan.
+          </p>
+        </div>
+        <Link 
+          href="/" 
+          className="btn-primary inline-block py-2.5 px-6 text-xs uppercase tracking-wider"
+        >
+          Muat Ulang
+        </Link>
       </div>
     </div>
   )
