@@ -267,7 +267,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
 
                   <div className="space-y-1.5 md:space-y-2">
                       {item.imageUrl && (
-                        <div className="h-32 md:h-40 w-full rounded-xl overflow-hidden mb-4 border border-brand-hairline relative">
+                        <div className="h-32 md:h-40 w-full rounded-lg overflow-hidden mb-4 border border-brand-hairline relative">
                           <Image src={item.imageUrl} alt={item.title} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 40vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                         </div>
                       )}
