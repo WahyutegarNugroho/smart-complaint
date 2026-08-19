@@ -38,8 +38,6 @@ export default async function LandingPage() {
 
   const activeBlocks = activeBlocksResult.length || 5;
 
-
-
   return (
     <div className="min-h-screen bg-brand-canvas-soft selection:bg-brand-primary selection:text-brand-ink font-sans overflow-x-hidden animate-page">
       {/* Navigation - Clean & Brand Native */}
@@ -56,9 +54,9 @@ export default async function LandingPage() {
             </div>
             
             <div className="hidden md:flex items-center space-x-10 text-[13px] font-bold uppercase tracking-normal text-brand-ink/60">
-              <a href="#fitur" className="hover:text-brand-primary transition-colors">Fitur</a>
-              <Link href="/alur" className="hover:text-brand-primary transition-colors">Alur</Link>
-              <a href="#statistik" className="hover:text-brand-primary transition-colors">Statistik</a>
+              <a href="#fitur" className="hover:text-brand-primary transition-colors">Kategori</a>
+              <Link href="/alur" className="hover:text-brand-primary transition-colors">Alur Pelayanan</Link>
+              <a href="#statistik" className="hover:text-brand-primary transition-colors">Statistik Wilayah</a>
             </div>
 
             <div className="flex items-center space-x-3 sm:space-x-6">
@@ -80,24 +78,24 @@ export default async function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section - Asymmetric Data-First */}
+      {/* Hero Section - Asymmetric Data-First & Content Split (No Centered Slop) */}
       <section className="relative pt-28 pb-14 lg:pt-36 lg:pb-20 bg-brand-canvas-soft border-b border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
-            {/* Hero Content - 7 cols */}
-            <div className="lg:col-span-7 text-left">
-              <div className="inline-flex items-center gap-2 rounded-md border border-brand-hairline bg-brand-canvas px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-ink mb-6">
+            {/* Left Column: Contextual & Structural Data */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-md border border-brand-hairline bg-brand-canvas px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-ink">
                 <span className="h-2 w-2 rounded-full bg-brand-primary"></span>
-                Layanan Warga Pesona Serpong
+                Sistem Pengaduan Pesona Serpong
               </div>
               
-              <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-brand-ink leading-[1.05] mb-5">
-                Pengaduan dan Pemeliharaan Lingkungan Warga.
+              <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-brand-ink leading-[1.05]">
+                Laporkan Kendala Lingkungan. Pantau Proses Perbaikan.
               </h1>
               
-              <p className="text-base text-brand-ink/70 max-w-xl leading-relaxed mb-8 font-medium">
-                Laporkan kerusakan jalan, fasilitas umum, kebersihan, atau gangguan keamanan. Laporan langsung diteruskan ke pengurus RT/RW dan petugas lapangan.
+              <p className="text-base text-brand-ink/70 max-w-xl leading-relaxed font-medium">
+                Pusat aduan infrastruktur, kebersihan, dan keamanan warga Pesona Serpong. Laporan langsung dikirim ke pengurus RT/RW untuk penanganan terintegrasi.
               </p>
               
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -111,29 +109,57 @@ export default async function LandingPage() {
                   href="/alur"
                   className="inline-flex items-center justify-center gap-2 rounded-brand bg-brand-canvas px-6 py-3.5 text-xs font-bold text-brand-ink border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
                 >
-                  Lihat Alur Kerja
+                  Prosedur Penanganan
                   <ArrowRight size={14} />
                 </Link>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-brand-hairline flex items-center gap-4 text-xs text-brand-ink/60">
-                <span className="font-mono tabular-nums font-bold text-brand-ink">{totalReports}</span> laporan terdaftar
+              <div className="pt-6 border-t border-brand-hairline flex items-center gap-4 text-xs text-brand-ink/60">
+                <span>Total <span className="font-mono tabular-nums font-bold text-brand-ink">{totalReports}</span> aduan warga</span>
                 <span className="text-brand-hairline">•</span>
-                <span className="font-mono tabular-nums font-bold text-brand-primary">{successRate}%</span> tuntas
+                <span>Penyelesaian <span className="font-mono tabular-nums font-bold text-brand-primary">{successRate}%</span></span>
                 <span className="text-brand-hairline">•</span>
-                <span className="font-mono tabular-nums font-bold text-brand-ink">{activeBlocks}</span> wilayah RT
+                <span>Aktif di <span className="font-mono tabular-nums font-bold text-brand-ink">{activeBlocks}</span> RT</span>
               </div>
             </div>
 
-            {/* Hero Card - 5 cols */}
+            {/* Right Column: Dynamic Stats & Asymmetric Real Data Visualization */}
             <div className="lg:col-span-5">
-              <div className="rounded-xl bg-brand-canvas border border-brand-hairline p-3 overflow-hidden shadow-sm">
-                <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden">
+              <div className="rounded-xl bg-brand-canvas border border-brand-hairline p-5 space-y-6 shadow-sm">
+                <div className="flex items-center justify-between border-b border-brand-hairline pb-3">
+                  <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider">Metrik Operasional</span>
+                  <span className="text-[10px] font-mono tabular-nums font-bold text-brand-primary uppercase tracking-normal">Live</span>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs font-semibold text-brand-ink mb-1.5">
+                      <span>Efisiensi Respons Tindakan</span>
+                      <span className="font-mono tabular-nums">{successRate}%</span>
+                    </div>
+                    <div className="h-2 bg-brand-canvas-soft rounded-full overflow-hidden border border-brand-hairline">
+                      <div className="h-full bg-brand-primary rounded-full" style={{ width: `${successRate}%` }}></div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div className="bg-brand-canvas-soft p-3 rounded-lg border border-brand-hairline">
+                      <span className="text-[9px] font-semibold text-brand-ink/50 uppercase block">Respons Lapangan</span>
+                      <span className="text-lg font-bold font-mono tabular-nums text-brand-ink mt-0.5 block">{averageResponseHours} jam</span>
+                    </div>
+                    <div className="bg-brand-canvas-soft p-3 rounded-lg border border-brand-hairline">
+                      <span className="text-[9px] font-semibold text-brand-ink/50 uppercase block">Wilayah Terintegrasi</span>
+                      <span className="text-lg font-bold font-mono tabular-nums text-brand-ink mt-0.5 block">{activeBlocks} RT</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative aspect-[16/9] w-full rounded-lg overflow-hidden border border-brand-hairline bg-brand-canvas-soft">
                   <Image
                     src="/hero.png"
-                    alt="Pesona Serpong"
+                    alt="Peta wilayah operasional Pesona Serpong"
                     fill
-                    sizes="(min-width: 1024px) 40vw, 100vw"
+                    sizes="(min-width: 1024px) 35vw, 90vw"
                     className="object-cover"
                     priority
                   />
@@ -145,88 +171,94 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section - Tabular Numbers */}
-      <section id="statistik" className="py-8 bg-brand-panel text-brand-panel-fg border-b border-brand-hairline">
+      {/* Dynamic Activity Summary (Replaces Banned Cards Row Layout) */}
+      <section id="statistik" className="py-6 bg-brand-panel text-brand-panel-fg border-b border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-y md:divide-y-0 md:divide-x divide-brand-panel-fg/10">
-            <div className="pt-4 md:pt-0 md:pl-0">
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight font-mono tabular-nums">{totalReports}</p>
-              <p className="mt-1 text-xs text-brand-panel-fg/60">Total Laporan Masuk</p>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-8">
+            <div className="min-w-0">
+              <span className="text-[9px] font-bold text-brand-primary uppercase tracking-wider block">Pemantauan Terkini</span>
+              <span className="text-xs text-brand-panel-fg/60 mt-0.5 block">Akumulasi laporan dan kinerja tindak lanjut petugas di area pemukiman</span>
             </div>
-            <div className="pt-4 md:pt-0 md:pl-6">
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-primary font-mono tabular-nums">{successRate}%</p>
-              <p className="mt-1 text-xs text-brand-panel-fg/60">Tingkat Penanganan</p>
-            </div>
-            <div className="pt-4 md:pt-0 md:pl-6">
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight font-mono tabular-nums">{averageResponseHours} <span className="text-sm font-sans opacity-60">jam</span></p>
-              <p className="mt-1 text-xs text-brand-panel-fg/60">Waktu Respons Rata-rata</p>
-            </div>
-            <div className="pt-4 md:pt-0 md:pl-6">
-              <p className="text-2xl sm:text-3xl font-bold tracking-tight font-mono tabular-nums">{activeBlocks}</p>
-              <p className="mt-1 text-xs text-brand-panel-fg/60">Wilayah RT Aktif</p>
+            
+            <div className="w-full md:w-auto grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-8 border-t border-brand-panel-fg/10 pt-4 md:pt-0 md:border-t-0">
+              <div>
+                <span className="text-[9px] text-brand-panel-fg/50 uppercase block">Aduan Masuk</span>
+                <span className="text-xl font-bold font-mono tabular-nums mt-0.5 block">{totalReports}</span>
+              </div>
+              <div>
+                <span className="text-[9px] text-brand-panel-fg/50 uppercase block">Tingkat Solusi</span>
+                <span className="text-xl font-bold font-mono tabular-nums text-brand-primary mt-0.5 block">{successRate}%</span>
+              </div>
+              <div>
+                <span className="text-[9px] text-brand-panel-fg/50 uppercase block">Rata-rata Penanganan</span>
+                <span className="text-xl font-bold font-mono tabular-nums mt-0.5 block">{averageResponseHours} jam</span>
+              </div>
+              <div>
+                <span className="text-[9px] text-brand-panel-fg/50 uppercase block">Wilayah Aktif</span>
+                <span className="text-xl font-bold font-mono tabular-nums mt-0.5 block">{activeBlocks} RT</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section - Dense Asymmetric Split */}
+      {/* Categories & Actions Section - Dense & Structured */}
       <section id="fitur" className="py-14 bg-brand-canvas border-b border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-primary mb-1">Cakupan Layanan</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-brand-ink tracking-tight">Kategori & Fasilitas Pelaporan</h2>
-            </div>
-            <Link href="/bantuan/panduan" className="text-xs font-semibold text-brand-ink/60 hover:text-brand-ink transition-colors flex items-center gap-1">
-              Petunjuk penggunaan →
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* Primary Feature 6 cols */}
-            <div className="md:col-span-6 p-6 rounded-xl border border-brand-hairline bg-brand-canvas-soft flex flex-col justify-between min-h-[220px]">
-              <div className="space-y-3">
-                <div className="h-9 w-9 rounded-lg bg-brand-panel text-brand-primary flex items-center justify-center">
-                  <Zap size={18} />
-                </div>
-                <h3 className="text-base font-bold text-brand-ink">{LANDING_FEATURES[0].title}</h3>
-                <p className="text-xs text-brand-ink/70 leading-relaxed max-w-md">{LANDING_FEATURES[0].desc}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Grid Content: Context & Action Callouts */}
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary block">Kategori Laporan</span>
+                <h2 className="text-2xl font-bold text-brand-ink tracking-tight mt-1">Sektor Penanganan Pengaduan Lingkungan</h2>
               </div>
-              <span className="text-[10px] font-mono font-semibold text-brand-ink/40 uppercase tracking-wider pt-4">Pelaporan 24 Jam</span>
+              <p className="text-xs text-brand-ink/75 leading-relaxed font-medium">
+                Setiap laporan diklasifikasikan ke bidang operasional spesifik guna memastikan delegasi tugas yang akurat ke tim pemeliharaan RT/RW.
+              </p>
+              <div>
+                <Link href="/bantuan/panduan" className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:text-brand-ink transition-colors">
+                  Panduan Pelaporan Warga →
+                </Link>
+              </div>
             </div>
 
-            {/* Sub features 6 cols split into 2x2 grid */}
-            <div className="md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {LANDING_FEATURES.slice(1, 5).map((f, i) => (
-                <div key={i} className="p-4 rounded-xl border border-brand-hairline bg-brand-canvas flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xs font-bold text-brand-ink mb-1">{f.title}</h3>
-                    <p className="text-xs text-brand-ink/60 leading-relaxed line-clamp-3">{f.desc}</p>
+            {/* Right Grid Content: Dense Asymmetric Listing (Not Uniform Cards Grid) */}
+            <div className="lg:col-span-7 border border-brand-hairline rounded-xl bg-brand-canvas-soft divide-y divide-brand-hairline overflow-hidden">
+              {LANDING_FEATURES.map((f, i) => (
+                <div key={i} className="p-4 sm:p-5 flex gap-4 items-start hover:bg-brand-canvas transition-colors">
+                  <div className="h-8 w-8 bg-brand-canvas border border-brand-hairline rounded-lg flex items-center justify-center text-brand-ink/60 shrink-0">
+                    <f.icon size={16} />
+                  </div>
+                  <div className="space-y-1 min-w-0">
+                    <h3 className="text-xs font-bold text-brand-ink uppercase tracking-normal">{f.title}</h3>
+                    <p className="text-xs text-brand-ink/60 leading-relaxed">{f.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* CTA Section - Flattened, Direct */}
-      <section className="py-14 bg-brand-panel text-brand-panel-fg">
+      {/* CTA Section - Simple & Directly Semantic */}
+      <section className="py-12 bg-brand-panel text-brand-panel-fg">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-left">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Punya kendala di lingkungan rumah Anda?</h2>
-            <p className="text-xs sm:text-sm text-brand-panel-fg/60">Daftarkan akun warga atau masuk untuk memantau status aduan yang sedang berjalan.</p>
+            <h2 className="text-xl font-bold tracking-tight">Kirimkan kendala lingkungan Anda sekarang</h2>
+            <p className="text-xs text-brand-panel-fg/60">Daftarkan akun atau masuk untuk melaporkan kendala dan melihat progress pengerjaan.</p>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
             <Link
               href="/register"
-              className="btn-primary py-3 px-6 text-xs uppercase tracking-wider"
+              className="flex-1 md:flex-none btn-primary py-3 px-6 text-xs text-center uppercase tracking-wider"
             >
-              Daftar Warga
+              Daftar Akun
             </Link>
             <Link
               href="/login"
-              className="px-6 py-3 rounded-brand border border-brand-panel-fg/20 text-brand-panel-fg text-xs font-bold hover:bg-brand-panel-fg/10 transition-colors uppercase tracking-wider"
+              className="flex-1 md:flex-none px-6 py-3 rounded-brand border border-brand-panel-fg/20 text-brand-panel-fg text-xs font-bold text-center hover:bg-brand-panel-fg/10 transition-colors uppercase tracking-wider"
             >
               Masuk
             </Link>
@@ -234,7 +266,7 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Footer - Dense Directory Grid */}
+      {/* Footer - Clear Directory Map */}
       <footer className="bg-brand-canvas py-12 border-t border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10">
@@ -280,36 +312,35 @@ export default async function LandingPage() {
   );
 }
 
-
 const LANDING_FEATURES = [
   { 
     title: 'Lapor Dari Rumah', 
-    desc: 'Tidak perlu mencari pengurus RT secara fisik. Kirim laporan kapan saja, di mana saja.', 
+    desc: 'Kirim laporan kendala lingkungan kapan saja secara online tanpa harus mencari pengurus RT secara fisik.', 
     icon: Zap,
   },
   { 
     title: 'Titik Lokasi Akurat', 
-    desc: 'Deteksi otomatis blok dan nomor rumah menggunakan GPS untuk mempermudah perbaikan.', 
+    desc: 'Deteksi otomatis koordinat lokasi dan data RT/RW untuk mempermudah pengerjaan tim di lapangan.', 
     icon: MapPin,
   },
   { 
-    title: 'Timeline Progres', 
-    desc: 'Lihat kapan laporan Anda mulai diproses dan estimasi waktu penyelesaian dari pengurus.', 
+    title: 'Progress Transparan', 
+    desc: 'Pantau tahapan status perbaikan laporan dari mulai diterima, dikerjakan, hingga dinyatakan selesai.', 
     icon: Clock,
   },
   { 
-    title: 'Laporan Kebersihan', 
-    desc: 'Kelola jadwal pengambilan sampah dan laporan area hijau yang kurang terawat.', 
+    title: 'Sektor Kebersihan', 
+    desc: 'Penanganan aduan pembuangan sampah liar, tumpukan limbah jalanan, serta area hijau terbengkalai.', 
     icon: BarChart3,
   },
   { 
-    title: 'Akses Keamanan', 
-    desc: 'Laporkan hal mencurigakan langsung ke tim Security perumahan secara cepat.', 
+    title: 'Sektor Keamanan', 
+    desc: 'Saluran pelaporan cepat untuk gangguan ketertiban umum dan kendala keamanan lingkungan pemukiman.', 
     icon: ShieldCheck,
   },
   { 
-    title: 'Data Terpusat', 
-    desc: 'Semua data pengaduan tersimpan rapi untuk bahan evaluasi rapat bulanan warga.', 
+    title: 'Data Evaluasi Warga', 
+    desc: 'Akumulasi seluruh data laporan tersimpan rapi sebagai bahan pertimbangan rapat berkala warga.', 
     icon: Users,
   },
 ];
