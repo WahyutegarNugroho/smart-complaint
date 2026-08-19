@@ -10,7 +10,7 @@ export default function DeleteComplaintButton({ id }: { id: string }) {
 
   return (
     <>
-      <form action={adminDeleteComplaint}>
+      <form action={adminDeleteComplaint} data-id={id}>
         <input type="hidden" name="id" value={id} />
         <button
           type="button"

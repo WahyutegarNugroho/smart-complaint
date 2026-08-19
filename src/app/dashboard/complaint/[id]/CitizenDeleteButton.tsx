@@ -10,7 +10,7 @@ export default function CitizenDeleteButton({ id }: { id: string }) {
 
   return (
     <>
-      <form action={deleteComplaint}>
+      <form action={deleteComplaint} data-id={id}>
         <input type="hidden" name="id" value={id} />
         <button
           type="button"
