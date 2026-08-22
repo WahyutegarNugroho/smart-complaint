@@ -138,14 +138,14 @@ export default function LocationPicker({
       {/* Search + Geolocate */}
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30" size={16} />
+          <Search aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30" size={16} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSearch() } }}
             placeholder="Cari alamat atau tempat..."
-            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
+            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-medium text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
           />
           {searching && (
             <Loader2 size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-primary animate-spin" />
@@ -155,10 +155,10 @@ export default function LocationPicker({
           type="button"
           onClick={handleGeolocate}
           disabled={geoLoading}
-          className="h-12 w-12 bg-brand-canvas-soft border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer disabled:opacity-50 shrink-0"
-          title="Gunakan lokasi saya"
+          className="h-12 w-12 bg-brand-canvas-soft border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-primary hover:border-brand-primary transition-all cursor-pointer disabled:opacity-50 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          aria-label={geoLoading ? 'Sedang mencari lokasi...' : 'Gunakan lokasi saya'}
         >
-          {geoLoading ? <Loader2 size={18} className="animate-spin" /> : <Crosshair size={18} />}
+          {geoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Crosshair aria-hidden="true" size={18} />}
         </button>
       </div>
 
@@ -199,20 +199,20 @@ export default function LocationPicker({
 
       {/* Manual address fallback */}
       <div className="relative group">
-        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={16} />
-        <input
+        <MapPin aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={16} />
+<input
           name="location"
           type="text"
           required
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Atau ketik alamat manual..."
-            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all"
+            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-xl pl-12 pr-4 py-3.5 text-[13px] font-bold text-brand-ink placeholder:text-brand-ink/30 focus:ring-4 focus:ring-brand-primary/10 focus:border-brand-primary outline-none transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
         />
       </div>
 
       <p className="text-[10px] font-medium text-brand-ink/40 flex items-center gap-1.5">
-        <MapPin size={12} />
+        <MapPin aria-hidden="true" size={12} />
         Koordinat: {lat.toFixed(6)}, {lng.toFixed(6)}
         {dragging && <span className="text-brand-primary ml-2">Geser pin untuk menyesuaikan...</span>}
       </p>

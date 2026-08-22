@@ -126,9 +126,9 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3 mb-2">
-               <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
-                  <ChevronLeft size={20} />
-               </Link>
+<Link href="/dashboard" aria-label="Kembali ke dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                   <ChevronLeft aria-hidden="true" size={20} />
+                </Link>
                <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Layanan Warga</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink">Buat Laporan Baru</h1>
@@ -136,18 +136,18 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
           </div>
 
           {/* Urgent Toggle */}
-          <button 
-            type="button"
-            onClick={() => setIsUrgent(!isUrgent)}
-            aria-label={isUrgent ? 'Setel sebagai normal' : 'Setel sebagai urgensi'}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border transition-colors cursor-pointer ${
-              isUrgent 
-                ? 'bg-red-500/10 border-red-500/20 shadow-md' 
-                : 'bg-brand-canvas border-brand-hairline shadow-sm'
-            }`}
-          >
+<button
+             type="button"
+             onClick={() => setIsUrgent(!isUrgent)}
+             aria-label={isUrgent ? 'Setel sebagai normal' : 'Setel sebagai urgensi'}
+             className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 ${
+               isUrgent 
+                 ? 'bg-red-500/10 border-red-500/20 shadow-md' 
+                 : 'bg-brand-canvas border-brand-hairline shadow-sm'
+             }`}
+           >
             <div className={`h-8 w-8 rounded-lg flex items-center justify-center transition-colors ${isUrgent ? 'bg-red-500 text-white' : 'bg-brand-canvas-soft text-brand-ink/40'}`}>
-              <AlertTriangle size={18} />
+              <AlertTriangle aria-hidden="true" size={18} />
             </div>
             <div className="text-left">
               <p className={`text-[9px] font-semibold uppercase tracking-wider ${isUrgent ? 'text-red-600 dark:text-red-400' : 'text-brand-ink/50'}`}>Tingkat Urgensi</p>
@@ -186,56 +186,27 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               
               {/* Category Selector */}
               <div className="space-y-3">
-                <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Pilih Kategori Masalah</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {categories.map((cat) => {
-                    const Icon = ICON_MAP[cat.icon || 'Lightbulb'] || Lightbulb
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedParent(cat.slug)
-                          setSelectedChildId('')
-                          if (cat.children?.length === 1) {
-                            setSelectedChildId(cat.children[0].id)
-                          }
-                        }}
-                        className={`flex flex-col items-center justify-center gap-3 p-4 rounded-lg border transition-colors cursor-pointer ${
-                          selectedParent === cat.slug 
-                            ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] border-transparent shadow-md' 
-                            : 'bg-brand-canvas-soft border-brand-hairline text-brand-ink/65 hover:bg-brand-canvas'
-                        }`}
-                      >
-                        <Icon size={20} />
-                        <span className="text-[10px] font-semibold uppercase tracking-wider">{cat.name}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {/* Subcategory Dropdown */}
-                {(() => {
-                  const parent = categories.find((c) => c.slug === selectedParent)
-                  const children = parent?.children || []
-                  if (children.length <= 1) return null
-                  return (
-                    <div className="relative">
-                      <select
-                        value={selectedChildId}
-                        onChange={(e) => setSelectedChildId(e.target.value)}
-                        aria-label="Sub kategori"
-                        className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-bold text-brand-ink appearance-none outline-none focus:ring-2 focus:ring-brand-primary transition-colors cursor-pointer"
-                      >
-                        <option value="">Pilih sub-kategori...</option>
-                        {children.map((child) => (
-                          <option key={child.id} value={child.id}>{child.name}</option>
-                        ))}
-                      </select>
-                      <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" />
-                    </div>
-                  )
-                })()}
+<label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Pilih Kategori Masalah</label>
+                <select
+                  value={selectedParent}
+                  onChange={(e) => {
+                    setSelectedParent(e.target.value)
+                    setSelectedChildId('')
+                    if (e.target.value === 'umum' && categories.length > 0) {
+                      const umum = categories.find((c: any) => c.slug === 'umum')
+                      if (umum?.children?.length === 1) {
+                        setSelectedChildId(umum.children[0].id)
+                      }
+                    }
+                  }}
+                  aria-label="Pilih kategori masalah"
+                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-3 text-sm font-medium text-brand-ink focus:outline-none focus:ring-2 focus-ring-brand-primary transition-colors cursor-pointer"
+                >
+                  <option value="">Pilih Kategori...</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.slug}>{cat.name}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Title Input */}
@@ -254,9 +225,9 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                           setSelectedChildId('')
                         }
                       }}
-                      className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-lg hover:bg-emerald-500/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+                      className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-lg hover:bg-emerald-500/20 transition-colors flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                     >
-                      <Lightbulb size={10} /> Saran: {(suggestedCategory).toUpperCase()} (Terapkan)
+                      <Lightbulb aria-hidden="true" size={10} /> Saran: {(suggestedCategory).toUpperCase()} (Terapkan)
                     </button>
                   )}
                 </div>
@@ -286,10 +257,10 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               </div>
               
               {/* Info Box */}
-              <div className="bg-brand-canvas border border-brand-hairline p-4 rounded-xl flex gap-4">
-                <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
-                  <Info size={18} />
-                </div>
+<div className="bg-brand-canvas border border-brand-hairline p-4 rounded-xl flex gap-4">
+                 <div className="h-9 w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-primary shrink-0 border border-brand-hairline">
+                   <Info aria-hidden="true" size={18} />
+                 </div>
                 <div className="space-y-1 pt-0.5">
                   <p className="text-xs font-bold text-brand-ink">Standar Pelayanan</p>
                   <p className="text-[11px] font-medium text-brand-ink/80 leading-relaxed">
@@ -307,30 +278,33 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
             <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm space-y-4">
               <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Lampiran Foto Bukti</label>
               
-              <div 
-                onClick={() => fileInputRef.current?.click()}
-                className={`relative group h-56 cursor-pointer border-2 border-dashed rounded-xl transition-colors flex flex-col items-center justify-center overflow-hidden ${
-                  preview ? 'border-brand-primary bg-brand-canvas-soft shadow-md' : 'border-brand-hairline hover:border-brand-primary bg-brand-canvas-soft/30'
-                }`}
-              >
+<div 
+                 onClick={() => fileInputRef.current?.click()}
+                 role="button"
+                 tabIndex={0}
+                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click() }}
+                 className={`relative group h-56 cursor-pointer border-2 border-dashed rounded-xl transition-colors flex flex-col items-center justify-center overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 ${
+                   preview ? 'border-brand-primary bg-brand-canvas-soft shadow-md' : 'border-brand-hairline hover:border-brand-primary bg-brand-canvas-soft/30'
+                 }`}
+               >
                 {preview ? (
                   <>
                     <Image src={preview} alt="Preview" fill className="object-cover" unoptimized />
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); removePreview(); }}
-                        className="bg-brand-canvas p-2.5 rounded-lg text-red-500 shadow-lg flex items-center gap-2 text-xs font-semibold hover:bg-brand-canvas-soft transition-colors"
-                      >
-                        <X size={16} /> Ganti Gambar
-                      </button>
+<button 
+                         type="button"
+                         onClick={(e) => { e.stopPropagation(); removePreview(); }}
+                         className="bg-brand-canvas p-2.5 rounded-lg text-red-500 shadow-lg flex items-center gap-2 text-xs font-semibold hover:bg-brand-canvas-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                       >
+                         <X aria-hidden="true" size={16} /> Ganti Gambar
+                       </button>
                     </div>
                   </>
                 ) : (
                   <div className="text-center space-y-4">
-                    <div className="h-12 w-12 bg-brand-canvas rounded-lg flex items-center justify-center text-brand-ink/20 mx-auto shadow-sm border border-brand-hairline">
-                      <Camera size={24} />
-                    </div>
+<div className="h-12 w-12 bg-brand-canvas rounded-lg flex items-center justify-center text-brand-ink/20 mx-auto shadow-sm border border-brand-hairline">
+                       <Camera aria-hidden="true" size={24} />
+                     </div>
                     <div>
                       <p className="text-xs font-semibold text-brand-ink/60 uppercase tracking-wider">Klik untuk Mengunggah</p>
                       <p className="text-[10px] font-medium text-brand-ink/40 mt-1 uppercase tracking-wider">Max 5MB (JPG/PNG)</p>
@@ -362,7 +336,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
              <div className="space-y-2">
                 <label htmlFor="incidentDate" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Waktu Temuan</label>
                 <div className="relative group">
-                  <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
+                  <CalendarIcon aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/30 group-focus-within:text-brand-primary transition-colors" size={18} />
                   <input 
                     id="incidentDate"
                     name="incidentDate"
