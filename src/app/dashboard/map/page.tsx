@@ -68,8 +68,8 @@ export default async function MapPage({
     ...c,
     latitude: c.latitude!,
     longitude: c.longitude!,
-    createdAt: c.createdAt.toISOString(),
-    incidentDate: c.incidentDate.toISOString(),
+    createdAt: c.createdAt ? new Date(c.createdAt).toISOString() : new Date().toISOString(),
+    incidentDate: c.incidentDate ? new Date(c.incidentDate).toISOString() : new Date().toISOString(),
     categoryName: c.categoryRel?.name || c.category
   }))
 
