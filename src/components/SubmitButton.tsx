@@ -24,11 +24,12 @@ export default function SubmitButton({
     <button
       type="submit"
       disabled={pending || disabled}
-      className={`${className} ${pending ? 'cursor-not-allowed opacity-80' : ''}`}
+      aria-busy={pending || undefined}
+      className={`${className} ${pending ? 'cursor-not-allowed opacity-60' : ''}`}
     >
       {pending ? (
         <div className="flex items-center justify-center gap-2 w-full">
-          <Loader2 className="animate-spin" size={18} />
+          <Loader2 aria-hidden="true" className="animate-spin" size={18} />
           <span className="uppercase tracking-normal">{loadingText}</span>
         </div>
       ) : (

@@ -29,8 +29,8 @@ export default async function SettingsPage() {
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3 mb-2">
-               <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm">
-                  <ChevronLeft size={20} />
+               <Link href="/dashboard" aria-label="Kembali ke dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                  <ChevronLeft aria-hidden="true" size={20} />
                </Link>
                <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Konfigurasi Akun</span>
             </div>
@@ -53,7 +53,7 @@ export default async function SettingsPage() {
               type="submit" 
               className="w-full flex items-center justify-center gap-2.5 px-6 py-3 rounded-lg bg-red-500/10 text-red-600 dark:text-red-500 font-semibold text-xs uppercase tracking-wider border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500"
             >
-              <LogOut size={16} /> Keluar Dari Sistem
+              <LogOut aria-hidden="true" size={16} /> Keluar Dari Sistem
             </button>
           </form>
           <p className="mt-6 text-[10px] font-medium text-brand-ink/40">Smart Complaint v2.0 • Sesi Aman Terenkripsi</p>
