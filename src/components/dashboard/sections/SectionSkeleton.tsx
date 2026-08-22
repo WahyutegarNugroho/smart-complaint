@@ -3,9 +3,9 @@ import React from 'react'
 export default function SectionSkeleton({ type }: { type: 'stats' | 'announcements' | 'list' | 'detail' | 'form' | 'users' | 'export' | 'chart' }) {
   if (type === 'stats') {
     return (
-      <div className="flex flex-col md:flex-row gap-4 animate-pulse">
-        {/* Primary Hero / Status Summary Skeleton */}
-        <div className="flex-1 bg-brand-panel p-5 md:p-6 rounded-xl border border-brand-hairline flex flex-col justify-between min-h-[140px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4 animate-pulse">
+        {/* Hero metric Skeleton - Total Laporan */}
+        <div className="lg:col-span-5 bg-brand-panel p-5 md:p-6 rounded-xl border border-brand-hairline flex flex-col justify-between min-h-[140px]">
           <div className="flex justify-between items-center mb-2">
             <div className="h-3 w-24 bg-brand-hairline rounded"></div>
             <div className="h-5 w-5 bg-brand-hairline rounded-md"></div>
@@ -16,15 +16,15 @@ export default function SectionSkeleton({ type }: { type: 'stats' | 'announcemen
           </div>
         </div>
 
-        {/* Symmetric metrics breakdown in 1 row Skeleton */}
-        <div className="flex-[2] grid grid-cols-3 gap-3 md:gap-4">
+        {/* Status breakdown Skeleton - dense list */}
+        <div className="lg:col-span-7 bg-brand-canvas rounded-xl border border-brand-hairline divide-y divide-brand-hairline overflow-hidden">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-brand-canvas p-4 md:p-5 rounded-xl border border-brand-hairline flex flex-col justify-between min-h-[140px]">
-              <div className="flex justify-between items-center mb-2">
-                <div className="h-3.5 w-16 bg-brand-hairline rounded"></div>
-                <div className="h-4 w-4 bg-brand-hairline rounded-md"></div>
+            <div key={i} className="px-4 md:px-5 py-3.5 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-4 w-4 bg-brand-hairline rounded shrink-0"></div>
+                <div className="h-5 w-16 bg-brand-hairline rounded"></div>
               </div>
-              <div className="h-8 w-8 bg-brand-hairline rounded"></div>
+              <div className="h-6 w-10 bg-brand-hairline rounded"></div>
             </div>
           ))}
         </div>
