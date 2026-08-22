@@ -91,6 +91,10 @@
     color: var(--brand-ink);
   }
 
+  a, button, input, select, textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/80 focus-visible:ring-offset-2;
+  }
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
@@ -114,7 +118,7 @@
   }
 
   .btn-primary {
-    @apply bg-brand-primary text-[#0e0f0c] font-bold py-3 px-8 rounded-brand hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-brand-primary/10;
+    @apply bg-brand-primary text-[#0e0f0c] font-bold py-3 px-8 rounded-brand hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-brand-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/80 focus-visible:ring-offset-2;
   }
 }
 

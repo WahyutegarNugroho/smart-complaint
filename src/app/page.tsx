@@ -45,7 +45,7 @@ export default async function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex h-20 justify-between items-center">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-brand bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-brand bg-brand-primary text-[#0e0f0c] shadow-lg shadow-brand-primary/20" aria-label="Smart Complaint">
                 <Zap size={18} className="sm:w-[22px] sm:h-[22px]" fill="currentColor" />
               </div>
               <span className="text-base sm:text-xl font-bold text-brand-ink tracking-tight uppercase">
