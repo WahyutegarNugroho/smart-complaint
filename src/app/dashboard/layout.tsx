@@ -19,6 +19,7 @@ import {
 import { logout } from '@/app/auth/actions'
 import MobileBottomNav from '@/components/MobileBottomNav'
 import ThemeToggle from '@/components/ThemeToggle'
+import SidebarLink from '@/components/dashboard/SidebarLink'
 import { getCachedProfile } from '@/lib/profile'
 import SessionErrorState from '@/components/dashboard/SessionErrorState'
 import NotificationDropdown from '@/components/dashboard/NotificationDropdown'
@@ -96,9 +97,9 @@ export default async function DashboardLayout({
 
         {/* Logo Section */}
         <div className="px-8 pt-8 pb-4">
-          <Link href="/dashboard" className="flex items-center gap-3 group cursor-pointer">
+          <Link href="/dashboard" aria-label="SmartComplaint - Beranda" className="flex items-center gap-3 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-xl">
             <div className={`h-10 w-10 ${isAdmin ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'} rounded-xl flex items-center justify-center shadow-xl transition-all duration-300 group-hover:scale-105`}>
-              <ShieldCheck size={24} />
+              <ShieldCheck aria-hidden="true" size={24} />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-xl tracking-tight text-brand-ink leading-none">SmartComplaint<span>.</span></span>
@@ -125,114 +126,62 @@ export default async function DashboardLayout({
             <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
           </div>
 
-          <Link
-            href="/dashboard"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm"
-          >
-            <LayoutDashboard size={18} className="opacity-70 group-hover:opacity-100" />
-            Beranda Utama
-          </Link>
-
-          <Link
-            href="/dashboard/map"
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm"
-          >
-            <Map size={18} className="opacity-70 group-hover:opacity-100" />
-            Peta Laporan
-          </Link>
+          <SidebarLink href="/dashboard" label="Beranda Utama" icon={LayoutDashboard} />
+          <SidebarLink href="/dashboard/map" label="Peta Laporan" icon={Map} />
 
           {isWarga && (
-            <Link
-              href="/dashboard/create"
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
-            >
-              <PlusCircle size={18} className="opacity-70 group-hover:opacity-100" />
-              Lapor Masalah
-            </Link>
+            <SidebarLink href="/dashboard/create" label="Lapor Masalah" icon={PlusCircle} />
           )}
 
           <div className="px-4 mb-2 mt-8">
             <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
           </div>
 
-          <Link
+          <SidebarLink
             href="/dashboard?status=PENDING"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-amber-500 hover:shadow-sm transition-all group"
-          >
-            <div className="flex items-center gap-3">
-              <Clock size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-amber-500" />
-              Menunggu
-            </div>
-            {stats.pending > 0 && (
-              <span className="bg-amber-500/10 text-amber-600 text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-amber-500/10">
-                {stats.pending}
-              </span>
-            )}
-          </Link>
+            label="Menunggu"
+            icon={Clock}
+            badge={stats.pending}
+            badgeClassName="bg-amber-500/10 text-amber-600 border border-amber-500/10"
+            className="hover:text-amber-500"
+            activeClassName="text-amber-500"
+          />
 
-          <Link
+          <SidebarLink
             href="/dashboard?status=PROCESSING"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-blue-500 hover:shadow-sm transition-all group"
-          >
-            <div className="flex items-center gap-3">
-              <Activity size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-blue-500" />
-              Diproses
-            </div>
-            {stats.processing > 0 && (
-              <span className="bg-blue-500/10 text-blue-600 text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-blue-500/10">
-                {stats.processing}
-              </span>
-            )}
-          </Link>
+            label="Diproses"
+            icon={Activity}
+            badge={stats.processing}
+            badgeClassName="bg-blue-500/10 text-blue-600 border border-blue-500/10"
+            className="hover:text-blue-500"
+            activeClassName="text-blue-500"
+          />
 
-          <Link
+          <SidebarLink
             href="/dashboard?status=COMPLETED"
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[13px] font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
-          >
-            <div className="flex items-center gap-3">
-              <CheckCircle2 size={18} className="opacity-70 group-hover:opacity-100 group-hover:text-brand-primary" />
-              Selesai
-            </div>
-            {stats.completed > 0 && (
-              <span className="bg-brand-primary/10 text-brand-primary text-[10px] font-semibold px-2 py-0.5 rounded-lg border border-brand-primary/20">
-                {stats.completed}
-              </span>
-            )}
-          </Link>
+            label="Selesai"
+            icon={CheckCircle2}
+            badge={stats.completed}
+            badgeClassName="bg-brand-primary/10 text-brand-primary border border-brand-primary/20"
+            className="hover:text-brand-primary"
+            activeClassName="text-brand-primary"
+          />
 
           {isAdmin && (
             <>
               <div className="px-4 mb-2 mt-8">
                 <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
               </div>
-              <Link
-                href="/dashboard/admin/users"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
-              >
-                <Users size={18} className="opacity-70 group-hover:opacity-100" />
-                Data Penduduk
-              </Link>
-              <Link
-                href="/dashboard/admin/announcements"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
-              >
-                <Megaphone size={18} className="opacity-70 group-hover:opacity-100" />
-                Manajemen Pengumuman
-              </Link>
-              <Link
-                href="/dashboard/admin/audit-log"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink/70 hover:bg-brand-canvas-soft hover:text-brand-primary hover:shadow-sm transition-all group"
-              >
-                <History size={18} className="opacity-70 group-hover:opacity-100" />
-                Aktivitas Admin
-              </Link>
+              <SidebarLink href="/dashboard/admin/users" label="Data Penduduk" icon={Users} />
+              <SidebarLink href="/dashboard/admin/announcements" label="Manajemen Pengumuman" icon={Megaphone} />
+              <SidebarLink href="/dashboard/admin/audit-log" label="Aktivitas Admin" icon={History} />
             </>
           )}
         </nav>
 
         {/* User Profile & Logout */}
         <div className="p-4 border-t border-brand-hairline bg-brand-canvas-soft/30 transition-colors">
-          <Link href="/dashboard/settings" className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-canvas hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-brand-hairline cursor-pointer">
+          <Link href="/dashboard/settings" aria-label={`Pengaturan akun ${profile.name}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-canvas hover:shadow-sm transition-all group mb-2 border border-transparent hover:border-brand-hairline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary">
             <div className="h-10 w-10 bg-brand-canvas-soft text-brand-ink font-bold text-sm shrink-0 flex items-center justify-center rounded-xl transition-colors">
               {(profile.name || '?').charAt(0).toUpperCase()}
             </div>
@@ -240,12 +189,12 @@ export default async function DashboardLayout({
               <p className="text-xs font-bold text-brand-ink truncate leading-none transition-colors">{profile.name}</p>
               <p className="text-[10px] font-medium text-brand-ink/40 mt-1 transition-colors">Pengaturan Akun</p>
             </div>
-            <ChevronRight size={14} className="text-brand-ink/30 group-hover:text-brand-primary transition-colors" />
+            <ChevronRight aria-hidden="true" size={14} className="text-brand-ink/30 group-hover:text-brand-primary transition-colors" />
           </Link>
 
           <form action={logout}>
-            <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-all group cursor-pointer">
-              <LogOut size={16} className="opacity-70 group-hover:opacity-100" />
+            <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600 transition-all group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+              <LogOut aria-hidden="true" size={16} className="opacity-70 group-hover:opacity-100" />
               Keluar Akun
             </button>
           </form>
@@ -259,7 +208,7 @@ export default async function DashboardLayout({
       <header className="md:hidden bg-brand-canvas border-b border-brand-hairline px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-500 no-print">
         <div className="flex items-center gap-3">
           <div className={`h-8 w-8 ${isAdmin ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'} rounded-lg flex items-center justify-center shadow-lg`}>
-            <ShieldCheck size={18} />
+            <ShieldCheck aria-hidden="true" size={18} />
           </div>
           <span className="font-bold text-sm tracking-tight text-brand-ink uppercase transition-colors">SmartComplaint<span>.</span></span>
         </div>

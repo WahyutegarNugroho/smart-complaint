@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   Home, Plus, Settings2, Inbox, Map,
   LayoutDashboard, ClipboardList, Activity, UserCircle,
@@ -14,7 +14,6 @@ interface NavItem {
   label: string
   icon: React.ElementType
   isCenter?: boolean
-  active?: boolean
 }
 
 const WARGA_NAV: NavItem[] = [
@@ -36,7 +35,7 @@ const PETUGAS_NAV: NavItem[] = [
 const ADMIN_NAV: NavItem[] = [
   { href: '/dashboard', label: 'Stats', icon: BarChart },
   { href: '/dashboard/map', label: 'Peta', icon: Map },
-  { href: '/dashboard', label: 'Admin', icon: LayoutGrid, isCenter: true },
+  { href: '/dashboard/admin/users', label: 'Admin', icon: LayoutGrid, isCenter: true },
   { href: '/dashboard/admin/users', label: 'Warga', icon: Users },
   { href: '/dashboard/settings', label: 'Profil', icon: Settings2 },
 ]
@@ -53,11 +52,17 @@ interface MobileBottomNavProps {
 
 export default function MobileBottomNav({ role }: MobileBottomNavProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const navItems = NAV_MAP[role] || ADMIN_NAV
 
   const isActive = (item: NavItem) => {
     if (item.isCenter) return false
-    if (item.href.includes('status=')) return pathname.includes(item.href.split('status=')[1])
+    const qIndex = item.href.indexOf('?')
+    if (qIndex !== -1) {
+      const basePath = item.href.slice(0, qIndex)
+      const wantedStatus = new URLSearchParams(item.href.slice(qIndex + 1)).get('status')
+      return pathname === basePath && searchParams.get('status') === wantedStatus
+    }
     return pathname === item.href
   }
 
@@ -71,9 +76,9 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
 
           if (item.isCenter) {
             return (
-              <Link key={index} href={item.href} aria-label={item.label} className="flex flex-col items-center justify-center -translate-y-5 group">
-                <div className="h-12 w-12 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shadow-md border-2 border-brand-canvas group-active:scale-95 transition-transform">
-                  <Icon size={24} />
+              <Link key={index} href={item.href} aria-label={item.label} className="flex items-center justify-center -translate-y-5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-xl">
+                <div className="h-14 w-14 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shadow-md border-2 border-brand-canvas group-active:scale-95 transition-transform">
+                  <Icon aria-hidden="true" size={24} />
                 </div>
               </Link>
             )
@@ -83,9 +88,10 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
             <Link
               key={index}
               href={item.href}
-              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors ${active ? 'text-brand-primary font-semibold' : 'text-brand-ink/60 hover:text-brand-ink'}`}
+              aria-current={active ? 'page' : undefined}
+              className={`flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[48px] px-2 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${active ? 'text-brand-primary font-semibold' : 'text-brand-ink/60 hover:text-brand-ink'}`}
             >
-              <Icon size={20} />
+              <Icon aria-hidden="true" size={20} />
               <span className="text-[10px] uppercase tracking-normal">{item.label}</span>
             </Link>
           )
@@ -95,4 +101,3 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
     </div>
   )
 }
-
