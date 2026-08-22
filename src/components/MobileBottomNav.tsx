@@ -61,7 +61,7 @@ function ActiveMobileBottomNav({ role }: MobileBottomNavProps) {
     if (qIndex !== -1) {
       const basePath = item.href.slice(0, qIndex)
       const wantedStatus = new URLSearchParams(item.href.slice(qIndex + 1)).get('status')
-      return pathname === basePath && searchParams.get('status') === wantedStatus
+      return pathname === basePath && searchParams && searchParams.get('status') === wantedStatus
     }
     return pathname === item.href
   }

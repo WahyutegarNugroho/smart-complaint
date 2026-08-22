@@ -36,7 +36,7 @@ function ActiveSidebarLink({
       : null
 
   const active = wantedStatus
-    ? pathname === basePath && searchParams.get('status') === wantedStatus
+    ? pathname === basePath && searchParams && searchParams.get('status') === wantedStatus
     : pathname === basePath
 
   return (
