@@ -32,6 +32,12 @@ import { isStaff, isAdmin as checkIsAdmin } from '@/lib/authorization'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+function safeFormatDate(dateVal: any, options?: Intl.DateTimeFormatOptions) {
+  if (!dateVal) return '-'
+  const date = new Date(dateVal)
+  return isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', options)
+}
+
 export default async function ComplaintDetailPage({
   params
 }: {
@@ -134,7 +140,7 @@ export default async function ComplaintDetailPage({
                     </div>
                     <div>
                       <p className="text-[10px] font-medium text-brand-ink/50 uppercase">Tanggal Lapor</p>
-                      <p className="text-xs font-mono font-bold tabular-nums text-brand-ink">{new Date(complaint.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                      <p className="text-xs font-mono font-bold tabular-nums text-brand-ink">{safeFormatDate(complaint.createdAt, { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                     </div>
                   </div>
                 </div>
@@ -329,7 +335,7 @@ export default async function ComplaintDetailPage({
             </div>
             <div>
               <p className="meta-label">Tanggal Lapor</p>
-              <p className="meta-value">{new Date(complaint.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p className="meta-value">{safeFormatDate(complaint.createdAt, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
             </div>
             <div>
               <p className="meta-label">Prioritas</p>
@@ -362,7 +368,7 @@ export default async function ComplaintDetailPage({
                 <div key={res.id} className="response-item mb-3">
                   <p className="text-[9pt] font-bold text-slate-800">{res.officer?.name || 'Petugas'}</p>
                   <p className="text-[9pt] text-slate-600 mt-0.5">{res.content}</p>
-                  <p className="text-[7pt] text-slate-400 mt-0.5">{new Date(res.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                  <p className="text-[7pt] text-slate-400 mt-0.5">{safeFormatDate(res.createdAt, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
               ))}
             </div>
@@ -370,7 +376,7 @@ export default async function ComplaintDetailPage({
 
           {/* Signature */}
           <div className="mt-16 pt-8 border-t border-slate-200 text-center">
-            <p className="text-[9pt] text-slate-500 mb-8">Dicetak pada {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+            <p className="text-[9pt] text-slate-500 mb-8">Dicetak pada {safeFormatDate(new Date(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
             <div className="inline-block text-center">
               <div className="w-48 border-t-2 border-slate-900 mx-auto pt-2">
                 <p className="text-[9pt] font-bold text-slate-900">{complaint.author?.name || 'Pengguna'}</p>

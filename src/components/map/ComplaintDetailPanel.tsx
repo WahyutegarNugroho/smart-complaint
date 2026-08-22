@@ -52,12 +52,16 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
   if (!complaint) return null
 
   const status = statusConfig[complaint.status as keyof typeof statusConfig] || statusConfig.PENDING
-  const date = new Date(complaint.createdAt).toLocaleDateString('id-ID', {
-    day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-  })
-  const incidentDate = new Date(complaint.incidentDate).toLocaleDateString('id-ID', {
-    day: 'numeric', month: 'long', year: 'numeric'
-  })
+  const date = complaint.createdAt 
+    ? new Date(complaint.createdAt).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      })
+    : '-'
+  const incidentDate = complaint.incidentDate 
+    ? new Date(complaint.incidentDate).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      })
+    : '-'
   const escalationLabel = escalationLabels[complaint.escalationLevel] || ''
   const isOwnComplaint = complaint.authorId === currentUserId
   const canViewFull = userRole !== 'MASYARAKAT' || isOwnComplaint

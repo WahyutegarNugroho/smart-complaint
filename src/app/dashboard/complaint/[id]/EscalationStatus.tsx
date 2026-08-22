@@ -55,10 +55,12 @@ export default function EscalationStatus({
               <div>
                 <p className="text-xs font-semibold text-brand-ink">{log.reason}</p>
                 <p className="text-[10px] font-mono tabular-nums text-brand-ink/40">
-                  {new Date(log.createdAt).toLocaleDateString('id-ID', {
-                    day: '2-digit', month: 'short', year: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
-                  })}
+                  {log.createdAt 
+                    ? new Date(log.createdAt).toLocaleDateString('id-ID', {
+                        day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                      })
+                    : '-'}
                 </p>
               </div>
             </div>
