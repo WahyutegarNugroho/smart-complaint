@@ -8,12 +8,9 @@ import {
   X,
   Info,
   ShieldAlert,
-  Trash2,
   Lightbulb,
   AlertTriangle,
-  Hammer,
-  ChevronLeft,
-  ChevronDown
+  ChevronLeft
 } from 'lucide-react'
 import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
@@ -44,10 +41,6 @@ interface ProfileData {
   nik?: string | null
   phone?: string | null
   address?: string | null
-}
-
-const ICON_MAP: Record<string, React.ElementType> = {
-  ShieldAlert, Trash2, Hammer, Lightbulb,
 }
 
 export default function CreateComplaintForm({ profile }: { profile: ProfileData }) {
@@ -193,7 +186,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     setSelectedParent(e.target.value)
                     setSelectedChildId('')
                     if (e.target.value === 'umum' && categories.length > 0) {
-                      const umum = categories.find((c: any) => c.slug === 'umum')
+                      const umum = categories.find((c: CategoryParent) => c.slug === 'umum')
                       if (umum?.children?.length === 1) {
                         setSelectedChildId(umum.children[0].id)
                       }
