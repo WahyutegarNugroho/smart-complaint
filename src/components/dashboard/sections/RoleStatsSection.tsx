@@ -57,7 +57,7 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
       <div className="flex-1 bg-brand-panel p-5 md:p-6 rounded-xl text-brand-panel-fg border border-brand-hairline flex flex-col justify-between min-h-[150px]">
         <div className="flex justify-between items-start mb-2">
           <span className="text-[10px] font-bold text-brand-primary uppercase tracking-wider">{stats[0].label}</span>
-          <Inbox size={18} className="text-brand-primary" />
+          <Inbox aria-hidden="true" size={18} className="text-brand-primary" />
         </div>
         <div>
           <p className="text-4xl md:text-5xl font-bold tracking-tight font-mono tabular-nums">{stats[0].val}</p>
@@ -73,7 +73,7 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
             <div key={idx} className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline transition-all flex flex-col justify-between min-h-[150px]">
               <div className="flex justify-between items-start mb-3">
                 <div className={`h-8 w-8 rounded-lg ${cs.bg} ${cs.darkBg} flex items-center justify-center ${cs.text} ${cs.darkText} border ${cs.border} ${cs.darkBorder} transition-colors`}>
-                  <item.icon size={16} />
+                  <item.icon aria-hidden="true" size={16} />
                 </div>
               </div>
               <div>

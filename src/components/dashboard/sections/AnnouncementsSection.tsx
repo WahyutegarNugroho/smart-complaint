@@ -20,7 +20,7 @@ export default async function AnnouncementsSection() {
     <section id="announcements" className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-[10px] md:text-xs font-bold text-brand-ink uppercase tracking-normal">Informasi Warga</h3>
-        <Bell size={16} className="text-blue-500" />
+        <Bell aria-hidden="true" size={16} className="text-blue-500" />
       </div>
       <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         <div className="flex-1">

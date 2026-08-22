@@ -26,7 +26,7 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
           <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
               <div className="h-9 w-9 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg flex items-center justify-center shrink-0 border border-amber-500/20">
-                <ShieldAlert size={18} />
+                <ShieldAlert aria-hidden="true" size={18} />
               </div>
               <div className="space-y-1">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Akun Belum Terverifikasi</h4>
@@ -56,7 +56,7 @@ export default function MasyarakatDashboardLayout({ profile, successMessage, chi
                 href="/dashboard/create"
                 className="btn-primary py-3 px-6 text-[10px] tracking-normal uppercase w-full sm:w-auto text-center inline-flex items-center justify-center gap-2"
              >
-                <Plus size={18} /> Buat Laporan
+                <Plus aria-hidden="true" size={18} /> Buat Laporan
              </Link>
           </div>
         </section>

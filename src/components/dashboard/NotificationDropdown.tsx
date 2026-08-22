@@ -156,7 +156,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
       <div className="max-h-80 overflow-y-auto divide-y divide-brand-hairline">
         {notifications.length === 0 ? (
           <div className="p-8 text-center flex flex-col items-center justify-center text-brand-ink/40">
-            <BellOff size={28} className="mb-2 text-brand-ink/20" />
+            <BellOff aria-hidden="true" size={28} className="mb-2 text-brand-ink/20" />
             <p className="text-[10px] font-semibold uppercase tracking-wider">Belum Ada Notifikasi</p>
             <p className="text-[9px] font-medium text-brand-ink/50 mt-1">Laporan baru atau tanggapan akan muncul di sini</p>
           </div>
@@ -169,11 +169,11 @@ export default function NotificationDropdown({ notifications: initialNotificatio
               <div className="shrink-0 pt-0.5">
                 {notif.type === 'DELETE' ? (
                   <div className="h-8 w-8 bg-red-500/10 text-red-500 rounded-lg flex items-center justify-center border border-red-500/20">
-                    <ShieldAlert size={16} />
+                    <ShieldAlert aria-hidden="true" size={16} />
                   </div>
                 ) : (
                   <div className={`h-8 w-8 rounded-lg flex items-center justify-center border ${notif.isRead ? 'bg-brand-canvas-soft text-brand-ink/40 border-brand-hairline' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'}`}>
-                    <Bell size={16} />
+                    <Bell aria-hidden="true" size={16} />
                   </div>
                 )}
               </div>
@@ -215,7 +215,7 @@ export default function NotificationDropdown({ notifications: initialNotificatio
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Bell size={20} />
+        <Bell aria-hidden="true" size={20} />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold tabular-nums border border-brand-canvas">
             {unreadCount > 9 ? '9+' : unreadCount}

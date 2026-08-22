@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Search, Inbox, Camera, MapPin, ArrowRight, Zap, Filter } from 'lucide-react'
+import { Search, Inbox, MapPin, ArrowRight, Zap, Filter } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import Image from 'next/image'
@@ -162,7 +162,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       {/* SEARCH & FILTER BAR */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div className="lg:col-span-8 relative group">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/40 transition-colors group-focus-within:text-brand-primary" size={16} />
+          <Search aria-hidden="true" className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-ink/40 transition-colors group-focus-within:text-brand-primary" size={16} />
           <form action="/dashboard" method="GET">
             {currentStatus && <input type="hidden" name="status" value={currentStatus} />}
             {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
@@ -218,9 +218,9 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Sampai Tanggal</label>
           <input name="toDate" type="date" defaultValue={toDate || ''} aria-label="Sampai tanggal" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all" />
         </div>
-        <button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
-          <Filter size={14} /> Terapkan
-        </button>
+<button type="submit" className="px-5 py-3 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-brand-ink rounded-xl text-[10px] font-semibold uppercase tracking-normal shadow-sm hover:opacity-90 transition-all cursor-pointer flex items-center gap-2">
+            <Filter aria-hidden="true" size={14} /> Terapkan
+          </button>
         {(categoryFilter || fromDate || toDate) && (
           <a href={`/dashboard${currentStatus ? `?status=${currentStatus}` : ''}${searchQuery ? `&q=${searchQuery}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`} className="px-4 py-3 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all">
             Reset
@@ -228,7 +228,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         )}
       </form>
 
-      {/* REPORT GRID */}
+      {/* REPORT TABLE - Dense list layout with column headers (not card grid) */}
       {complaints.length === 0 ? (
         <EmptyState 
           icon={Inbox}
@@ -238,82 +238,85 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
           actionLabel="Reset Filter"
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-20">
+        <div className="bg-brand-canvas rounded-xl border border-brand-hairline divide-y divide-brand-hairline overflow-hidden pb-20">
+          {/* Column Headers */}
+          <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 text-[9px] font-semibold text-brand-ink/50 uppercase tracking-wider border-b border-brand-hairline">
+            <span>Judul</span>
+            <span>Kategori</span>
+            <span>Status</span>
+            <span>Lokasi</span>
+            <span className="text-right">Aksi</span>
+          </div>
+
           {complaints.map((item) => {
             const date = new Date(item.createdAt)
             const dateStr = isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
             
             return (
-              <Link key={item.id} href={`/dashboard/complaint/${item.id}`} className="group h-full">
-                <div className={`h-full bg-brand-canvas p-4 md:p-5 rounded-xl border flex flex-col gap-4 md:gap-5 relative overflow-hidden ${
+              <Link key={item.id} href={`/dashboard/complaint/${item.id}`} className="group">
+                <div className={`grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 md:gap-4 px-5 py-4 hover:bg-brand-canvas-soft/50 transition-colors ${
                   item.isUrgent && item.status !== 'COMPLETED' 
-                    ? 'border-red-100 dark:border-red-900/50 bg-red-50/10 dark:bg-red-900/5' 
-                    : 'border-brand-hairline hover:border-brand-primary/50 transition-colors'
+                    ? 'bg-red-50/10 dark:bg-red-900/5' 
+                    : ''
                 }`}>
                   
-                  <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-semibold px-3 py-1.5 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
-                          {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
-                        </span>
-                        <span className="text-[9px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-wider border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
-                          {item.categoryRel?.name || item.category}
-                        </span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    {item.imageUrl && (
+                      <div className="h-12 w-12 rounded-lg overflow-hidden border border-brand-hairline flex-shrink-0 relative">
+                        <Image src={item.imageUrl} alt={item.title} fill sizes="48px" className="object-cover" />
                       </div>
-                      <div className="h-9 w-9 md:h-10 md:w-10 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/40 border border-brand-hairline">
-                        <Camera size={16} />
-                      </div>
-                  </div>
-
-                  <div className="space-y-1.5 md:space-y-2">
-                      {item.imageUrl && (
-                        <div className="h-32 md:h-40 w-full rounded-lg overflow-hidden mb-4 border border-brand-hairline relative">
-                          <Image src={item.imageUrl} alt={item.title} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 40vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
-                        </div>
-                      )}
-                      <h4 className="text-base md:text-lg font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors leading-tight truncate pl-5">
+                    )}
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors truncate">
                         {item.title}
                       </h4>
-                      <p className={`text-[12px] md:text-[13px] text-brand-ink/75 font-medium leading-relaxed line-clamp-2 pl-5 border-l-2 border-brand-hairline transition-colors`}>
+                      <p className="text-xs text-brand-ink/55 line-clamp-1 leading-relaxed truncate mt-0.5">
                         &quot;{item.content}&quot;
                       </p>
-                  </div>
-
-                  <div className="mt-auto pt-4 md:pt-5 border-t border-brand-hairline flex items-center justify-between transition-colors">
-                      <div className="flex items-center gap-2 md:gap-3">
-                        {!isWarga && (
-                          <div className="h-8 w-8 md:h-9 md:w-9 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-ink/40 font-bold text-[10px] uppercase">
-                            {(item.author?.name || 'U').charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          {!isWarga && (
-                            <p className="text-[10px] font-semibold text-brand-ink uppercase truncate max-w-[100px] leading-tight mb-1">{item.author?.name || 'Anonim'}</p>
-                          )}
-                          <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-brand-ink/80 font-bold text-[12px] uppercase tracking-wider transition-colors">
-                            <div className="flex items-center gap-1.5">
-                              <MapPin size={12} /> RT {item.rt}/{item.rw}
-                            </div>
-                            <div className="h-1 w-1 rounded-full bg-brand-hairline hidden md:block" />
-                            <span className="text-[11px] font-semibold text-brand-ink/40 uppercase tracking-normal">
-                              {dateStr}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="h-10 w-10 md:h-12 md:w-12 bg-brand-canvas-soft rounded-xl flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-500 shadow-inner">
-                        <ArrowRight size={18} />
-                      </div>
-                  </div>
-
-                  {item.isUrgent && item.status !== 'COMPLETED' && (
-                    <div className="absolute top-0 right-6">
-                      <div className="bg-red-500 text-white px-3 md:px-4 py-1.5 rounded-b-xl shadow-lg flex items-center gap-2">
-                          <Zap size={12} fill="currentColor" className="text-red-100" />
-                          <span className="text-[8px] md:text-[9px] font-black uppercase tracking-normal text-white">Prioritas</span>
-                      </div>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="hidden md:flex items-center">
+                    <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
+                      {item.categoryRel?.name || item.category}
+                    </span>
+                  </div>
+
+                  <div className="hidden md:flex items-center gap-2">
+                    <span className={`text-[10px] font-semibold px-3 py-1.5 rounded-lg uppercase tracking-normal border transition-colors ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                      {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
+                    </span>
+                  </div>
+
+<div className="hidden md:flex items-center gap-1.5 text-brand-ink/70 font-bold text-xs uppercase tracking-wider">
+                            <MapPin aria-hidden="true" size={12} /> RT {item.rt}/{item.rw}
+                  </div>
+
+                  <div className="hidden md:flex items-center justify-end gap-2">
+                    <span className="text-[11px] font-semibold text-brand-ink/40 uppercase tracking-normal">
+                      {dateStr}
+                    </span>
+                    <div className="h-8 w-8 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-300">
+                      <ArrowRight aria-hidden="true" size={14} />
+                    </div>
+                  </div>
+
+                  {/* Mobile footer row */}
+                  <div className="flex md:hidden items-center justify-between pt-2 border-t border-brand-hairline">
+                    <div className="flex items-center gap-2 text-brand-ink/60">
+                      <span className={`text-[10px] font-semibold px-2 py-1 rounded-md uppercase tracking-normal border ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
+                        {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
+                      </span>
+                      <span className="text-xs text-brand-ink/50">RT {item.rt}/{item.rw}</span>
+                      <span className="text-[10px] text-brand-ink/35 uppercase">{dateStr}</span>
+                    </div>
+                    {item.isUrgent && item.status !== 'COMPLETED' && (
+                      <div className="flex items-center gap-1.5 text-red-500">
+                        <Zap aria-hidden="true" size={12} fill="currentColor" />
+                        <span className="text-[9px] font-black uppercase tracking-normal">Prioritas</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Link>
             )
