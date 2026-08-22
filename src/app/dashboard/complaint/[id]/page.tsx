@@ -32,7 +32,7 @@ import { isStaff, isAdmin as checkIsAdmin } from '@/lib/authorization'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-function safeFormatDate(dateVal: any, options?: Intl.DateTimeFormatOptions) {
+function safeFormatDate(dateVal: Date | string | number | null | undefined, options?: Intl.DateTimeFormatOptions) {
   if (!dateVal) return '-'
   const date = new Date(dateVal)
   return isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID', options)
