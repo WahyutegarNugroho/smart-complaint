@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { Notification } from '@prisma/client'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import {
   LayoutDashboard,
   PlusCircle,
@@ -120,64 +121,72 @@ export default async function DashboardLayout({
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-
-          <div className="px-4 mb-2 mt-4">
-            <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
+        <Suspense fallback={
+          <div className="flex-1 px-4 py-4 space-y-3 animate-pulse">
+            <div className="h-10 bg-brand-canvas-soft rounded-xl"></div>
+            <div className="h-10 bg-brand-canvas-soft rounded-xl"></div>
+            <div className="h-10 bg-brand-canvas-soft rounded-xl"></div>
           </div>
+        }>
+          <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
 
-          <SidebarLink href="/dashboard" label="Beranda Utama" icon={LayoutDashboard} />
-          <SidebarLink href="/dashboard/map" label="Peta Laporan" icon={Map} />
+            <div className="px-4 mb-2 mt-4">
+              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
+            </div>
 
-          {isWarga && (
-            <SidebarLink href="/dashboard/create" label="Lapor Masalah" icon={PlusCircle} />
-          )}
+            <SidebarLink href="/dashboard" label="Beranda Utama" icon={LayoutDashboard} />
+            <SidebarLink href="/dashboard/map" label="Peta Laporan" icon={Map} />
 
-          <div className="px-4 mb-2 mt-8">
-            <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
-          </div>
+            {isWarga && (
+              <SidebarLink href="/dashboard/create" label="Lapor Masalah" icon={PlusCircle} />
+            )}
 
-          <SidebarLink
-            href="/dashboard?status=PENDING"
-            label="Menunggu"
-            icon={Clock}
-            badge={stats.pending}
-            badgeClassName="bg-amber-500/10 text-amber-600 border border-amber-500/10"
-            className="hover:text-amber-500"
-            activeClassName="text-amber-500"
-          />
+            <div className="px-4 mb-2 mt-8">
+              <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Status Pengaduan</span>
+            </div>
 
-          <SidebarLink
-            href="/dashboard?status=PROCESSING"
-            label="Diproses"
-            icon={Activity}
-            badge={stats.processing}
-            badgeClassName="bg-blue-500/10 text-blue-600 border border-blue-500/10"
-            className="hover:text-blue-500"
-            activeClassName="text-blue-500"
-          />
+            <SidebarLink
+              href="/dashboard?status=PENDING"
+              label="Menunggu"
+              icon={Clock}
+              badge={stats.pending}
+              badgeClassName="bg-amber-500/10 text-amber-600 border border-amber-500/10"
+              className="hover:text-amber-500"
+              activeClassName="text-amber-500"
+            />
 
-          <SidebarLink
-            href="/dashboard?status=COMPLETED"
-            label="Selesai"
-            icon={CheckCircle2}
-            badge={stats.completed}
-            badgeClassName="bg-brand-primary/10 text-brand-primary border border-brand-primary/20"
-            className="hover:text-brand-primary"
-            activeClassName="text-brand-primary"
-          />
+            <SidebarLink
+              href="/dashboard?status=PROCESSING"
+              label="Diproses"
+              icon={Activity}
+              badge={stats.processing}
+              badgeClassName="bg-blue-500/10 text-blue-600 border border-blue-500/10"
+              className="hover:text-blue-500"
+              activeClassName="text-blue-500"
+            />
 
-          {isAdmin && (
-            <>
-              <div className="px-4 mb-2 mt-8">
-                <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
-              </div>
-              <SidebarLink href="/dashboard/admin/users" label="Data Penduduk" icon={Users} />
-              <SidebarLink href="/dashboard/admin/announcements" label="Manajemen Pengumuman" icon={Megaphone} />
-              <SidebarLink href="/dashboard/admin/audit-log" label="Aktivitas Admin" icon={History} />
-            </>
-          )}
-        </nav>
+            <SidebarLink
+              href="/dashboard?status=COMPLETED"
+              label="Selesai"
+              icon={CheckCircle2}
+              badge={stats.completed}
+              badgeClassName="bg-brand-primary/10 text-brand-primary border border-brand-primary/20"
+              className="hover:text-brand-primary"
+              activeClassName="text-brand-primary"
+            />
+
+            {isAdmin && (
+              <>
+                <div className="px-4 mb-2 mt-8">
+                  <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
+                </div>
+                <SidebarLink href="/dashboard/admin/users" label="Data Penduduk" icon={Users} />
+                <SidebarLink href="/dashboard/admin/announcements" label="Manajemen Pengumuman" icon={Megaphone} />
+                <SidebarLink href="/dashboard/admin/audit-log" label="Aktivitas Admin" icon={History} />
+              </>
+            )}
+          </nav>
+        </Suspense>
 
         {/* User Profile & Logout */}
         <div className="p-4 border-t border-brand-hairline bg-brand-canvas-soft/30 transition-colors">
@@ -202,7 +211,11 @@ export default async function DashboardLayout({
       </aside>
 
       {/* 📱 Mobile Bottom Navigation */}
-      <div className="no-print"><MobileBottomNav role={profile.role} /></div>
+      <div className="no-print">
+        <Suspense fallback={<div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[94%] max-w-[420px] h-[66px] bg-brand-canvas border border-brand-hairline rounded-xl shadow-lg animate-pulse" />}>
+          <MobileBottomNav role={profile.role} />
+        </Suspense>
+      </div>
 
       {/* 📱 Mobile Top Bar */}
       <header className="md:hidden bg-brand-canvas border-b border-brand-hairline px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-500 no-print">
