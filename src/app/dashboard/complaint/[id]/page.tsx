@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
-import Image from 'next/image'
 import { 
   Calendar, 
   Clock, 
@@ -97,7 +96,7 @@ export default async function ComplaintDetailPage({
             <div className="bg-brand-canvas rounded-xl shadow-sm border border-brand-hairline overflow-hidden transition-colors">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
-                  <Image src={complaint.imageUrl} alt={complaint.title} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+                  <img src={complaint.imageUrl} alt={complaint.title} className="absolute inset-0 w-full h-full object-cover" />
                   {complaint.isUrgent && complaint.status !== 'COMPLETED' && (
                     <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 shadow-md">
                       <Zap size={14} fill="currentColor" /> Prioritas Tinggi

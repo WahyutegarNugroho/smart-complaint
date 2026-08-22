@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
-import Image from 'next/image'
 import SubmitButton from '@/components/SubmitButton'
 import { suggestCategory } from '@/lib/constants'
 import { LocationPicker } from '@/components/map'
@@ -282,7 +281,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                >
                 {preview ? (
                   <>
-                    <Image src={preview} alt="Preview" fill className="object-cover" unoptimized />
+                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
 <button 
                          type="button"

@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import Image from 'next/image'
 import { MoreVertical, Edit2, Trash2, Check, X, Loader2 } from 'lucide-react'
 import { deleteResponse, editResponse } from '@/app/dashboard/actions'
 import ConfirmModal from '@/components/ConfirmModal'
@@ -159,7 +158,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
             {res.content}
             {res.imageUrl && (
               <div className="mt-3 rounded-lg overflow-hidden border border-brand-hairline relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
-                <Image src={res.imageUrl} alt="Lampiran" fill sizes="(min-width: 1024px) 35vw, (min-width: 640px) 50vw, 80vw" className="object-cover" />
+                <img src={res.imageUrl} alt="Lampiran" className="absolute inset-0 w-full h-full object-cover" />
               </div>
             )}
           </div>

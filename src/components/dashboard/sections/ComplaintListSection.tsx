@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Search, Inbox, MapPin, ArrowRight, Zap, Filter } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
-import Image from 'next/image'
 import { Prisma, Status } from '@prisma/client'
 import PageSizeSelector from './PageSizeSelector'
 import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
@@ -273,7 +272,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                   <div className="flex items-center gap-3 min-w-0">
                     {item.imageUrl && (
                       <div className="h-12 w-12 rounded-lg overflow-hidden border border-brand-hairline flex-shrink-0 relative">
-                        <Image src={item.imageUrl} alt={item.title} fill sizes="48px" className="object-cover" />
+                        <img src={item.imageUrl} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
                       </div>
                     )}
                     <div className="min-w-0">

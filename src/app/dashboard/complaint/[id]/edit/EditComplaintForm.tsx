@@ -3,7 +3,6 @@
 import { updateComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import { X, UploadCloud, Save, ChevronLeft } from 'lucide-react'
 
 interface ComplaintData {
@@ -159,7 +158,7 @@ export default function EditComplaintForm({
                   </label>
                 ) : (
                   <div className="relative rounded-lg overflow-hidden border border-brand-hairline aspect-video group">
-                    <Image src={previewUrl} alt="Preview" fill className="object-cover transition-transform duration-300 group-hover:scale-102" />
+                    <img src={previewUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-102" />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                        <label htmlFor="image-upload" className="cursor-pointer bg-brand-canvas text-brand-ink px-6 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider shadow-lg hover:bg-brand-canvas-soft transition-colors">Ganti Foto Bukti</label>
                     </div>
