@@ -275,13 +275,13 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
               placeholder="Cari laporan..."
               value={filters.search}
               onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-              className="flex-1 bg-transparent text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:outline-none"
+              className="flex-1 bg-transparent text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded"
               aria-label="Cari laporan berdasarkan judul, isi, atau lokasi"
             />
             {filters.search && (
               <button
                 onClick={() => setFilters((f) => ({ ...f, search: '' }))}
-                className="h-6 w-6 rounded-lg flex items-center justify-center text-brand-ink/30 hover:text-brand-ink hover:bg-brand-canvas-soft transition-all"
+                className="h-6 w-6 rounded-lg flex items-center justify-center text-brand-ink/30 hover:text-brand-ink hover:bg-brand-canvas-soft transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
                 aria-label="Hapus pencarian"
               >
                 <X size={14} />
@@ -293,7 +293,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
           <div className="border-t border-brand-hairline px-4 py-2 flex items-center justify-between">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all"
+              className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-normal text-brand-ink/50 hover:text-brand-ink transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded"
             >
               <Filter size={14} />
               Filter
@@ -320,7 +320,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
                     <button
                       key={s}
                       onClick={() => setFilters((f) => ({ ...f, status: s }))}
-                      className={`text-[10px] font-semibold px-3 py-1.5 rounded-xl border transition-all ${
+                      className={`text-[10px] font-semibold px-3 py-1.5 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
                         filters.status === s
                           ? 'bg-brand-ink text-brand-canvas border-brand-ink dark:bg-brand-primary dark:text-[#0e0f0c] dark:border-brand-primary'
                           : 'bg-brand-canvas-soft text-brand-ink/50 border-brand-hairline hover:border-brand-ink/20'
@@ -339,7 +339,7 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
                 <select
                   value={filters.categoryId}
                   onChange={(e) => setFilters((f) => ({ ...f, categoryId: e.target.value }))}
-                  className="w-full text-sm font-medium bg-brand-canvas-soft border border-brand-hairline rounded-xl px-3 py-2 text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                  className="w-full text-sm font-medium bg-brand-canvas-soft border border-brand-hairline rounded-xl px-3 py-2 text-brand-ink focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
                   aria-label="Filter kategori"
                 >
                   <option value="">Semua Kategori</option>

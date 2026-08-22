@@ -73,15 +73,15 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none"
+        className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
       >
         <div className="sticky top-0 bg-brand-canvas border-b border-brand-hairline px-5 py-4 flex items-center justify-between z-10">
           <h2 className="text-sm font-bold text-brand-ink truncate pr-2">Detail Laporan</h2>
-          <button
-            onClick={onClose}
-            className="h-8 w-8 rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all shrink-0"
-            aria-label="Tutup panel"
-          >
+<button
+              onClick={onClose}
+              className="h-8 w-8 rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 shrink-0"
+              aria-label="Tutup panel"
+            >
             <X size={16} />
           </button>
         </div>
