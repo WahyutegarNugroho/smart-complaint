@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 interface SidebarLinkProps {
   href: string
   label: string
-  /** Pass rendered JSX icon, e.g. <LayoutDashboard size={18} /> */
+  /** Pass rendered JSX icon, e.g. <LayoutDashboard size={16} /> */
   iconNode: React.ReactNode
   badge?: number
   badgeClassName?: string
@@ -83,16 +83,16 @@ export default function SidebarLink({
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
+      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${
         active
-          ? `bg-brand-canvas-soft shadow-sm border border-brand-hairline ${activeClassName}`
-          : `border border-transparent text-brand-ink/70 hover:bg-brand-canvas-soft hover:shadow-sm ${className}`
+          ? `bg-brand-canvas-soft ${activeClassName}`
+          : `text-brand-ink/70 hover:bg-brand-canvas-soft ${className}`
       }`}
     >
-      <span className="flex items-center gap-3 min-w-0 flex-1">
+      <span className="flex items-center gap-2.5 min-w-0 flex-1">
         <span
           aria-hidden="true"
-          className={`shrink-0 [&>svg]:size-[18px] ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
+          className={`shrink-0 [&>svg]:size-[16px] ${active ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}
         >
           {iconNode}
         </span>
@@ -100,7 +100,7 @@ export default function SidebarLink({
       </span>
       {badge > 0 && (
         <span
-          className={`shrink-0 text-[10px] font-semibold font-mono tabular-nums px-2 py-0.5 rounded-lg border ${badgeClassName}`}
+          className={`shrink-0 text-[10px] font-semibold font-mono tabular-nums px-1.5 py-0.5 rounded border ${badgeClassName}`}
         >
           {badge}
         </span>
