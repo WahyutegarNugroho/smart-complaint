@@ -134,11 +134,11 @@ export default async function DashboardLayout({
               <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal opacity-50">Modul Navigasi</span>
             </div>
 
-            <SidebarLink href="/dashboard" label="Beranda Utama" icon={LayoutDashboard} />
-            <SidebarLink href="/dashboard/map" label="Peta Laporan" icon={Map} />
+            <SidebarLink href="/dashboard" label="Beranda Utama" iconNode={<LayoutDashboard size={18} />} />
+            <SidebarLink href="/dashboard/map" label="Peta Laporan" iconNode={<Map size={18} />} />
 
             {isWarga && (
-              <SidebarLink href="/dashboard/create" label="Lapor Masalah" icon={PlusCircle} />
+              <SidebarLink href="/dashboard/create" label="Lapor Masalah" iconNode={<PlusCircle size={18} />} />
             )}
 
             <div className="px-4 mb-2 mt-8">
@@ -148,7 +148,7 @@ export default async function DashboardLayout({
             <SidebarLink
               href="/dashboard?status=PENDING"
               label="Menunggu"
-              icon={Clock}
+              iconNode={<Clock size={18} />}
               badge={stats.pending}
               badgeClassName="bg-amber-500/10 text-amber-600 border border-amber-500/10"
               className="hover:text-amber-500"
@@ -158,7 +158,7 @@ export default async function DashboardLayout({
             <SidebarLink
               href="/dashboard?status=PROCESSING"
               label="Diproses"
-              icon={Activity}
+              iconNode={<Activity size={18} />}
               badge={stats.processing}
               badgeClassName="bg-blue-500/10 text-blue-600 border border-blue-500/10"
               className="hover:text-blue-500"
@@ -168,7 +168,7 @@ export default async function DashboardLayout({
             <SidebarLink
               href="/dashboard?status=COMPLETED"
               label="Selesai"
-              icon={CheckCircle2}
+              iconNode={<CheckCircle2 size={18} />}
               badge={stats.completed}
               badgeClassName="bg-brand-primary/10 text-brand-primary border border-brand-primary/20"
               className="hover:text-brand-primary"
@@ -180,9 +180,9 @@ export default async function DashboardLayout({
                 <div className="px-4 mb-2 mt-8">
                   <span className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider opacity-50">Administrasi</span>
                 </div>
-                <SidebarLink href="/dashboard/admin/users" label="Data Penduduk" icon={Users} />
-                <SidebarLink href="/dashboard/admin/announcements" label="Manajemen Pengumuman" icon={Megaphone} />
-                <SidebarLink href="/dashboard/admin/audit-log" label="Aktivitas Admin" icon={History} />
+                <SidebarLink href="/dashboard/admin/users" label="Data Penduduk" iconNode={<Users size={18} />} />
+                <SidebarLink href="/dashboard/admin/announcements" label="Manajemen Pengumuman" iconNode={<Megaphone size={18} />} />
+                <SidebarLink href="/dashboard/admin/audit-log" label="Aktivitas Admin" iconNode={<History size={18} />} />
               </>
             )}
           </nav>

@@ -7,7 +7,8 @@ import { usePathname } from 'next/navigation'
 interface SidebarLinkProps {
   href: string
   label: string
-  icon: React.ElementType
+  /** Pass rendered JSX icon, e.g. <LayoutDashboard size={18} /> */
+  iconNode: React.ReactNode
   badge?: number
   badgeClassName?: string
   /** Extra inactive-state hover classes, e.g. 'hover:text-amber-500' */
@@ -57,7 +58,7 @@ export function useUrlSearchParams() {
 export default function SidebarLink({
   href,
   label,
-  icon: Icon,
+  iconNode,
   badge = 0,
   badgeClassName = 'bg-brand-canvas-soft text-brand-ink/60 border-brand-hairline',
   className = '',
@@ -89,11 +90,12 @@ export default function SidebarLink({
       }`}
     >
       <span className="flex items-center gap-3 min-w-0 flex-1">
-        <Icon
+        <span
           aria-hidden="true"
-          size={18}
-          className={`shrink-0 ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
-        />
+          className={`shrink-0 [&>svg]:size-[18px] ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
+        >
+          {iconNode}
+        </span>
         <span className="truncate">{label}</span>
       </span>
       {badge > 0 && (
