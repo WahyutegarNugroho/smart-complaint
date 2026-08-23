@@ -32,40 +32,81 @@ export default function SectionSkeleton({ type }: { type: 'stats' | 'announcemen
 
   if (type === 'announcements') {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="flex items-center justify-between">
-          <div className="h-4 w-28 bg-brand-hairline rounded-md"></div>
-          <div className="h-4 w-4 bg-brand-hairline rounded-full"></div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-          <div className="flex-1 bg-slate-900 p-5 md:p-6 rounded-xl border border-transparent min-h-[160px] flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="h-4 w-12 bg-brand-hairline rounded"></div>
-                <div className="h-3 w-16 bg-brand-hairline rounded"></div>
+      <div className="animate-pulse space-y-6">
+        {/* Header skeleton */}
+        <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 bg-brand-hairline rounded-lg"></div>
+            <div className="space-y-1">
+              <div className="h-5 w-48 bg-brand-hairline rounded"></div>
+              <div className="h-3 w-56 bg-brand-hairline rounded"></div>
+            </div>
+          </div>
+        </header>
+
+        {/* Success message skeleton (conditional) */}
+        <div className="h-12 bg-brand-hairline/10 rounded-lg"></div>
+
+        {/* Main content - asymmetric grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Form skeleton - left column */}
+          <div className="lg:col-span-1">
+            <div className="bg-brand-canvas rounded-xl border border-brand-hairline p-4 md:p-5 sticky top-24">
+              <div className="flex items-center gap-2 border-b border-brand-hairline pb-3 mb-4">
+                <div className="h-8 w-8 bg-brand-hairline rounded-lg"></div>
+                <div>
+                  <div className="h-4 w-20 bg-brand-hairline rounded"></div>
+                  <div className="h-2.5 w-24 bg-brand-hairline rounded"></div>
+                </div>
               </div>
-              <div className="h-5 w-3/4 bg-brand-hairline rounded mb-3"></div>
-              <div className="space-y-1.5">
-                <div className="h-3 w-full bg-brand-hairline rounded"></div>
-                <div className="h-3 w-2/3 bg-brand-hairline rounded"></div>
+              <div className="space-y-3">
+                <div className="h-10 bg-brand-hairline rounded-lg"></div>
+                <div className="h-20 bg-brand-hairline rounded-lg"></div>
+                <div className="h-10 bg-brand-hairline rounded-lg"></div>
+                <div className="h-10 bg-brand-hairline rounded-lg"></div>
               </div>
             </div>
           </div>
-          <div className="flex-[2] grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[1, 2].map((i) => (
-              <div key={i} className="bg-brand-canvas p-5 md:p-6 rounded-xl border border-brand-hairline min-h-[160px] flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-3.5 w-16 bg-brand-hairline rounded"></div>
+
+          {/* List skeleton - right column (2/3) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="h-4 w-32 bg-brand-hairline rounded"></div>
+              <div className="h-3 w-20 bg-brand-hairline rounded font-mono"></div>
+            </div>
+
+            {/* Announcement items skeleton */}
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-brand-canvas rounded-lg border border-brand-hairline p-4">
+                  <div className="flex justify-between items-start gap-3 mb-2">
+                    <div className="min-w-0">
+                      <div className="h-5 w-3/4 bg-brand-hairline rounded mb-2"></div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <div className="h-4 w-16 bg-brand-hairline rounded border"></div>
+                        <div className="h-3 w-20 bg-brand-hairline rounded"></div>
+                        <div className="h-3 w-24 bg-brand-hairline rounded font-mono"></div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <div className="h-9 w-9 bg-brand-hairline rounded-lg"></div>
+                      <div className="h-9 w-9 bg-brand-hairline rounded-lg"></div>
+                    </div>
                   </div>
-                  <div className="h-5 w-3/4 bg-brand-hairline rounded mb-3"></div>
-                  <div className="space-y-1.5">
-                    <div className="h-3 w-full bg-brand-hairline rounded"></div>
-                    <div className="h-3 w-2/3 bg-brand-hairline rounded"></div>
-                  </div>
+                  <div className="h-4 w-full bg-brand-hairline rounded"></div>
                 </div>
+              ))}
+            </div>
+
+            {/* Pagination skeleton */}
+            <nav className="flex items-center justify-between pt-2 border-t border-brand-hairline">
+              <div className="h-3 w-56 bg-brand-hairline rounded font-mono"></div>
+              <div className="flex items-center gap-1">
+                <div className="h-8 w-8 bg-brand-hairline rounded-lg"></div>
+                <div className="h-8 w-10 bg-brand-hairline rounded-lg"></div>
+                <div className="h-8 w-8 bg-brand-hairline rounded-lg"></div>
               </div>
-            ))}
+            </nav>
           </div>
         </div>
       </div>
