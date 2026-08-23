@@ -10,12 +10,16 @@ import { checkLoginAttempt, recordFailedAttempt, resetLoginAttempts } from '@/li
 import { isRedirectError } from '@/lib/redirect-guard'
 
 export async function login(formData: FormData) {
+  console.log('[LOGIN] action started')
   const supabase = await createClient()
   const headerList = await headers()
   const ip = headerList.get('x-real-ip') || headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  console.log('[LOGIN] ip:', ip)
 
   const check = await checkLoginAttempt(ip)
+  console.log('[LOGIN] rate-limit check:', check)
   if (check.locked) {
+    console.log('[LOGIN] locked, redirecting')
     redirect('/login?error=locked&remaining=' + check.remainingSeconds)
   }
 
@@ -23,10 +27,12 @@ export async function login(formData: FormData) {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
+  console.log('[LOGIN] attempting signIn for:', data.email)
 
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
+    console.error('[LOGIN] supabase auth error:', error.message, error.status)
     const result = await recordFailedAttempt(ip)
     if (result.locked) {
       redirect('/login?error=locked&remaining=' + result.remainingSeconds)
@@ -34,12 +40,15 @@ export async function login(formData: FormData) {
     redirect('/login?error=' + encodeURIComponent(error.message) + '&remainingAttempts=' + result.remainingAttempts)
   }
 
+  console.log('[LOGIN] auth success, resetting rate limit')
   await resetLoginAttempts(ip)
 
   // 🔄 Force session refresh to ensure cookies are set
-  await supabase.auth.getUser()
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  console.log('[LOGIN] getUser after login:', user?.id, userError?.message)
 
   revalidatePath('/', 'layout')
+  console.log('[LOGIN] redirecting to /dashboard')
   redirect('/dashboard')
 }
 

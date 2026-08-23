@@ -15,8 +15,10 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
     if (authError || !user) {
+      console.log('[getCachedProfile] unauthenticated:', authError?.message)
       return { profile: null, user: null, status: 'UNAUTHENTICATED' }
     }
+    console.log('[getCachedProfile] user found:', user.id)
 
     let profile = await prisma.profile.findUnique({
       where: { userId: user.id },
@@ -38,6 +40,7 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
     })
 
     if (!profile) {
+      console.log('[getCachedProfile] profile not found, creating...')
       profile = await prisma.profile.create({
         data: {
           userId: user.id,
@@ -61,6 +64,9 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
           updatedAt: true,
         }
       })
+      console.log('[getCachedProfile] profile created:', profile.id)
+    } else {
+      console.log('[getCachedProfile] profile loaded:', profile.id, profile.role)
     }
 
     return { profile, user, status: 'AUTHENTICATED' }
