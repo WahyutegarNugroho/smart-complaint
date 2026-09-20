@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Plus, ShieldAlert } from 'lucide-react'
 import SuccessToast from '@/components/SuccessToast'
+import ErrorToast from '@/components/ErrorToast'
 
 interface LayoutProps {
   profile: {
@@ -10,14 +11,16 @@ interface LayoutProps {
     isVerified: boolean
   }
   successMessage?: string
+  errorMessage?: string
   children: React.ReactNode
 }
 
-export default function MasyarakatDashboardLayout({ profile, successMessage, children }: LayoutProps) {
+export default function MasyarakatDashboardLayout({ profile, successMessage, errorMessage, children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-500 pb-20 animate-page">
       
       {successMessage && <SuccessToast message={successMessage} />}
+      {errorMessage && <ErrorToast message={errorMessage} />}
 
       <main className="max-w-7xl mx-auto p-4 sm:p-8 md:p-12 space-y-8 sm:space-y-12">
         

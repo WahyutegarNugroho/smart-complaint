@@ -312,16 +312,16 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
 
             {/* Location & Metadata */}
             <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm space-y-6">
-               <LocationPicker />
+               <LocationPicker initialAddress={profile?.address || 'Perumahan Pesona Serpong'} />
 
               <div className="grid grid-cols-2 gap-4">
                  <div className="space-y-2 text-center">
                    <label htmlFor="rt" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider block">RT</label>
-                   <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
+                   <input id="rt" name="rt" type="text" required defaultValue={profile?.rt || '001'} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
                  </div>
                  <div className="space-y-2 text-center">
                    <label htmlFor="rw" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider block">RW</label>
-                   <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || ''} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
+                   <input id="rw" name="rw" type="text" required defaultValue={profile?.rw || '001'} placeholder="001" className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors" />
                 </div>
              </div>
 
@@ -334,6 +334,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     name="incidentDate"
                     type="date" 
                     required
+                    defaultValue={new Date().toISOString().split('T')[0]}
                     className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg pl-12 pr-4 py-2.5 text-sm font-mono tabular-nums text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors appearance-none"
                   />
                 </div>

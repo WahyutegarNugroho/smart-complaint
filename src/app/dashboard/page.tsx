@@ -21,6 +21,7 @@ export default async function DashboardPage({
   searchParams: Promise<{ 
     status?: string, 
     message?: string,
+    error?: string,
     q?: string, 
     rt?: string, 
     rw?: string,
@@ -31,7 +32,7 @@ export default async function DashboardPage({
   }>
 }) {
   const params = await searchParams
-  const { status: rawStatus, message: successMessage } = params
+  const { status: rawStatus, message: successMessage, error: errorMessage } = params
 
   const data = await getCachedProfile()
   
@@ -54,7 +55,7 @@ export default async function DashboardPage({
 
   if (isAdmin) {
     return (
-      <AdminDashboardLayout profile={profile} successMessage={successMessage}>
+      <AdminDashboardLayout profile={profile} successMessage={successMessage} errorMessage={errorMessage}>
         {!rawStatus && (
           <>
             <Suspense fallback={<SectionSkeleton type="stats" />}>
@@ -74,7 +75,7 @@ export default async function DashboardPage({
 
   if (isPetugas) {
     return (
-      <PetugasDashboardLayout profile={profile} successMessage={successMessage}>
+      <PetugasDashboardLayout profile={profile} successMessage={successMessage} errorMessage={errorMessage}>
         {!rawStatus && (
           <Suspense fallback={<SectionSkeleton type="stats" />}>
             <RoleStatsSection role="petugas" />
@@ -89,7 +90,7 @@ export default async function DashboardPage({
 
   if (isWarga) {
     return (
-      <MasyarakatDashboardLayout profile={profile} successMessage={successMessage}>
+      <MasyarakatDashboardLayout profile={profile} successMessage={successMessage} errorMessage={errorMessage}>
         {!rawStatus && (
           <Suspense fallback={<SectionSkeleton type="stats" />}>
             <StatsSection profileId={profile.id} isWarga={true} />

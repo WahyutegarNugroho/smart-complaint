@@ -65,10 +65,11 @@ export default function LocationPicker({
   initialLng?: number | null
   initialAddress?: string | null
 }) {
+  const fallbackAddress = initialAddress?.trim() || 'Perumahan Pesona Serpong'
   const [lat, setLat] = useState<number>(initialLat && !isNaN(initialLat) ? initialLat : DEFAULT_CENTER[0])
   const [lng, setLng] = useState<number>(initialLng && !isNaN(initialLng) ? initialLng : DEFAULT_CENTER[1])
-  const [address, setAddress] = useState(initialAddress ?? '')
-  const [searchQuery, setSearchQuery] = useState(initialAddress ?? '')
+  const [address, setAddress] = useState(fallbackAddress)
+  const [searchQuery, setSearchQuery] = useState(fallbackAddress)
   const [searching, setSearching] = useState(false)
   const [geoLoading, setGeoLoading] = useState(false)
   const [dragging, setDragging] = useState(false)

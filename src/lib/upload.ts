@@ -4,38 +4,34 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_SIZE = 5 * 1024 * 1024
 const BUCKET = 'complaints'
 
-function validateMagicBytes(file: File, expectedType: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onload = function (e) {
-      const buffer = new Uint8Array(e.target?.result as ArrayBuffer)
-      let valid = false
-      
-      switch (expectedType) {
-        case 'image/jpeg':
-          valid = buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF &&
-            [0xE0, 0xE1, 0xE2, 0xE8].includes(buffer[3])
-          break
-        case 'image/png':
-          valid = buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47 &&
-                  buffer[4] === 0x0D && buffer[5] === 0x0A && buffer[6] === 0x1A && buffer[7] === 0x0A
-          break
-        case 'image/webp':
-          valid = buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
-                  buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50
-          break
-        case 'image/gif':
-          valid = buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46 &&
-                  (buffer[3] === 0x38 && (buffer[4] === 0x37 || buffer[4] === 0x39) && buffer[5] === 0x61)
-          break
-        default:
-          valid = false
-      }
-      
-      resolve(valid)
+export async function validateMagicBytes(file: File, expectedType: string): Promise<boolean> {
+  try {
+    const arrayBuffer = await file.slice(0, 12).arrayBuffer()
+    const buffer = new Uint8Array(arrayBuffer)
+    if (buffer.length < 4) return false
+
+    switch (expectedType) {
+      case 'image/jpeg':
+        return buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF &&
+          [0xE0, 0xE1, 0xE2, 0xE8].includes(buffer[3])
+      case 'image/png':
+        return buffer.length >= 8 &&
+          buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47 &&
+          buffer[4] === 0x0D && buffer[5] === 0x0A && buffer[6] === 0x1A && buffer[7] === 0x0A
+      case 'image/webp':
+        return buffer.length >= 12 &&
+          buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
+          buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50
+      case 'image/gif':
+        return buffer.length >= 6 &&
+          buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46 &&
+          (buffer[3] === 0x38 && (buffer[4] === 0x37 || buffer[4] === 0x39) && buffer[5] === 0x61)
+      default:
+        return false
     }
-    reader.readAsArrayBuffer(file.slice(0, 12))
-  })
+  } catch {
+    return false
+  }
 }
 
 export const UPLOAD_ERROR_MAP: Record<string, string> = {
