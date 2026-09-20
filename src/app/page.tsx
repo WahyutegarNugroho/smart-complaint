@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
   Zap,
   MapPin,
   Clock,
@@ -30,7 +30,7 @@ export default async function LandingPage() {
       where: { rt: { not: null } }
     }),
   ])
-  
+
   const successRate = totalReports > 0 ? Math.round((completedReports / totalReports) * 100) : 100;
 
   const avgHours = avgHoursResult?.[0]?.avg_hours;
@@ -52,7 +52,7 @@ export default async function LandingPage() {
                 Smart<span className="text-brand-primary">Complaint</span>
               </span>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-10 text-[13px] font-bold uppercase tracking-normal text-brand-ink/60">
               <a href="#fitur" className="hover:text-brand-primary transition-colors">Kategori</a>
               <Link href="/alur" className="hover:text-brand-primary transition-colors">Alur Pelayanan</Link>
@@ -82,22 +82,22 @@ export default async function LandingPage() {
       <section className="relative pt-28 pb-14 lg:pt-36 lg:pb-20 bg-brand-canvas-soft border-b border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
+
             {/* Left Column: Contextual & Structural Data */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 rounded-md border border-brand-hairline bg-brand-canvas px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-ink">
                 <span className="h-2 w-2 rounded-full bg-brand-primary"></span>
                 Sistem Pengaduan Pesona Serpong
               </div>
-              
+
               <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-brand-ink leading-[1.05]">
-                Laporkan Kendala Lingkungan. Pantau Proses Perbaikan.
+                Laporkan Kendala Lingkungan dan Pantau Proses Perbaikan.
               </h1>
-              
+
               <p className="text-base text-brand-ink/70 max-w-xl leading-relaxed font-medium">
                 Pusat aduan infrastruktur, kebersihan, dan keamanan warga Pesona Serpong. Laporan langsung dikirim ke pengurus RT/RW untuk penanganan terintegrasi.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <Link
                   href="/register"
@@ -130,7 +130,7 @@ export default async function LandingPage() {
                   <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-wider">Metrik Operasional</span>
                   <span className="text-[10px] font-mono tabular-nums font-bold text-brand-primary uppercase tracking-normal">Live</span>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between text-xs font-semibold text-brand-ink mb-1.5">
@@ -179,7 +179,7 @@ export default async function LandingPage() {
               <span className="text-[9px] font-bold text-brand-primary uppercase tracking-wider block">Pemantauan Terkini</span>
               <span className="text-xs text-brand-panel-fg/60 mt-0.5 block">Akumulasi laporan dan kinerja tindak lanjut petugas di area pemukiman</span>
             </div>
-            
+
             <div className="w-full md:w-auto grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-8 border-t border-brand-panel-fg/10 pt-4 md:pt-0 md:border-t-0">
               <div>
                 <span className="text-[9px] text-brand-panel-fg/50 uppercase block">Aduan Masuk</span>
@@ -206,7 +206,7 @@ export default async function LandingPage() {
       <section id="fitur" className="py-14 bg-brand-canvas border-b border-brand-hairline">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* Left Grid Content: Context & Action Callouts */}
             <div className="lg:col-span-5 space-y-6">
               <div>
@@ -281,7 +281,7 @@ export default async function LandingPage() {
                 Sistem pengelolaan pengaduan warga resmi Perumahan Pesona Serpong, Tangerang Selatan.
               </p>
             </div>
-            
+
             <div className="md:col-span-3 space-y-3">
               <h4 className="text-[10px] font-bold text-brand-ink uppercase tracking-wider">Informasi Lingkungan</h4>
               <ul className="space-y-2 text-xs text-brand-ink/60">
@@ -291,7 +291,7 @@ export default async function LandingPage() {
                 <li><Link href="/informasi/darurat" className="hover:text-brand-ink transition-colors">Kontak Darurat</Link></li>
               </ul>
             </div>
-            
+
             <div className="md:col-span-3 space-y-3">
               <h4 className="text-[10px] font-bold text-brand-ink uppercase tracking-wider">Bantuan & Regulasi</h4>
               <ul className="space-y-2 text-xs text-brand-ink/60">
@@ -301,7 +301,7 @@ export default async function LandingPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="pt-6 border-t border-brand-hairline flex flex-col sm:flex-row justify-between items-center text-[10px] text-brand-ink/40 font-mono">
             <p>© {new Date().getFullYear()} Pesona Serpong. All rights reserved.</p>
             <p className="mt-2 sm:mt-0">v1.0.0 · Sistem Pengaduan Warga</p>
@@ -313,34 +313,34 @@ export default async function LandingPage() {
 }
 
 const LANDING_FEATURES = [
-  { 
-    title: 'Lapor Dari Rumah', 
-    desc: 'Kirim laporan kendala lingkungan kapan saja secara online tanpa harus mencari pengurus RT secara fisik.', 
+  {
+    title: 'Lapor Dari Rumah',
+    desc: 'Kirim laporan kendala lingkungan kapan saja secara online tanpa harus mencari pengurus RT secara fisik.',
     icon: Zap,
   },
-  { 
-    title: 'Titik Lokasi Akurat', 
-    desc: 'Deteksi otomatis koordinat lokasi dan data RT/RW untuk mempermudah pengerjaan tim di lapangan.', 
+  {
+    title: 'Titik Lokasi Akurat',
+    desc: 'Deteksi otomatis koordinat lokasi dan data RT/RW untuk mempermudah pengerjaan tim di lapangan.',
     icon: MapPin,
   },
-  { 
-    title: 'Progress Transparan', 
-    desc: 'Pantau tahapan status perbaikan laporan dari mulai diterima, dikerjakan, hingga dinyatakan selesai.', 
+  {
+    title: 'Progress Transparan',
+    desc: 'Pantau tahapan status perbaikan laporan dari mulai diterima, dikerjakan, hingga dinyatakan selesai.',
     icon: Clock,
   },
-  { 
-    title: 'Sektor Kebersihan', 
-    desc: 'Penanganan aduan pembuangan sampah liar, tumpukan limbah jalanan, serta area hijau terbengkalai.', 
+  {
+    title: 'Sektor Kebersihan',
+    desc: 'Penanganan aduan pembuangan sampah liar, tumpukan limbah jalanan, serta area hijau terbengkalai.',
     icon: BarChart3,
   },
-  { 
-    title: 'Sektor Keamanan', 
-    desc: 'Saluran pelaporan cepat untuk gangguan ketertiban umum dan kendala keamanan lingkungan pemukiman.', 
+  {
+    title: 'Sektor Keamanan',
+    desc: 'Saluran pelaporan cepat untuk gangguan ketertiban umum dan kendala keamanan lingkungan pemukiman.',
     icon: ShieldCheck,
   },
-  { 
-    title: 'Data Evaluasi Warga', 
-    desc: 'Akumulasi seluruh data laporan tersimpan rapi sebagai bahan pertimbangan rapat berkala warga.', 
+  {
+    title: 'Data Evaluasi Warga',
+    desc: 'Akumulasi seluruh data laporan tersimpan rapi sebagai bahan pertimbangan rapat berkala warga.',
     icon: Users,
   },
 ];
