@@ -286,5 +286,15 @@ Jika diminta commit:
 1. **Jawab langsung** — hindari preambel "Tentu, saya akan...". Langsung ke inti.
 2. **Tanya jika ambigu** — jika instruksi tidak jelas, tidak lengkap, atau berpotensi melanggar aturan di AGENTS.md ini, WAJIB berhenti dan minta klarifikasi.
 3. **No emojis** — kecuali diminta pengguna.
-4. **Bahasa Indonesia** untuk komunikasi dengan pengguna (dokumentasi teknis boleh Inggris).
 5. **Prioritas keamanan** — jangan expose secrets, API keys, atau DATABASE_URL di output.
+
+<!-- antislop:start -->
+## antislop
+For UI, copy, people, mobile layout, or code comments work, read `antislop.md` (core) and then the skill for the task:
+- UI / visual: `skills/antislop-ui/SKILL.md`
+- Copy & text: `skills/antislop-copywriting/SKILL.md`
+- People: `skills/antislop-human/SKILL.md`
+- Mobile / responsive: `skills/antislop-layoutmobile/SKILL.md`
+- Code comments: `skills/antislop-code/SKILL.md`
+Before starting, ask the user when antislop applies: during the work, or after it is done.
+<!-- antislop:end -->

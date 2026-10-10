@@ -273,7 +273,7 @@ export default async function ComplaintDetailPage({
         </div>
       </main>
 
-      {/* 📄 PRINT RECEIPT — muncul saat Cetak Tanda Terima */}
+      {/* 📄 PRINT RECEIPT - muncul saat Cetak Tanda Terima */}
       <div className="hidden print:block">
         <style>{`
           @page { margin: 2cm; }
@@ -287,7 +287,7 @@ export default async function ComplaintDetailPage({
           {/* Header */}
           <div className="text-center mb-10 pb-8 border-b-2 border-slate-900">
             <h1 className="text-2xl font-bold text-slate-900 mb-2">TANDA TERIMA LAPORAN</h1>
-            <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">SmartComplaint — Pengaduan Masyarakat</p>
+            <p className="text-[8pt] font-bold uppercase tracking-normal text-slate-400">SmartComplaint - Pengaduan Masyarakat</p>
           </div>
 
           {/* Info Laporan */}

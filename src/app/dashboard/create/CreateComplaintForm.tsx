@@ -10,7 +10,8 @@ import {
   ShieldAlert,
   Lightbulb,
   AlertTriangle,
-  ChevronLeft
+  ChevronLeft,
+  ChevronDown
 } from 'lucide-react'
 import { createComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
@@ -189,27 +190,30 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
               
               {/* Category Selector */}
               <div className="space-y-3">
-<label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Pilih Kategori Masalah</label>
-                <select
-                  value={selectedParent}
-                  onChange={(e) => {
-                    setSelectedParent(e.target.value)
-                    setSelectedChildId('')
-                    if (e.target.value === 'umum' && categories.length > 0) {
-                      const umum = categories.find((c: CategoryParent) => c.slug === 'umum')
-                      if (umum?.children?.length === 1) {
-                        setSelectedChildId(umum.children[0].id)
+                <label className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Pilih Kategori Masalah</label>
+                <div className="relative">
+                  <select
+                    value={selectedParent}
+                    onChange={(e) => {
+                      setSelectedParent(e.target.value)
+                      setSelectedChildId('')
+                      if (e.target.value === 'umum' && categories.length > 0) {
+                        const umum = categories.find((c: CategoryParent) => c.slug === 'umum')
+                        if (umum?.children?.length === 1) {
+                          setSelectedChildId(umum.children[0].id)
+                        }
                       }
-                    }
-                  }}
-                  aria-label="Pilih kategori masalah"
-                  className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-3 text-sm font-medium text-brand-ink focus:outline-none focus:ring-2 focus-ring-brand-primary transition-colors cursor-pointer"
-                >
-                  <option value="">Pilih Kategori...</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.slug}>{cat.name}</option>
-                  ))}
-                </select>
+                    }}
+                    aria-label="Pilih kategori masalah"
+                    className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-4 py-3 pr-10 text-sm font-medium text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-primary transition-colors cursor-pointer appearance-none"
+                  >
+                    <option value="">Pilih Kategori...</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.slug}>{cat.name}</option>
+                    ))}
+                  </select>
+                  <ChevronDown aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" size={16} />
+                </div>
               </div>
 
               {/* Title Input */}

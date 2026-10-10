@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Search, Inbox, MapPin, Zap, Filter } from 'lucide-react'
+import { Search, Inbox, MapPin, Zap, Filter, ChevronDown } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import { Prisma, Status } from '@prisma/client'
@@ -200,14 +200,17 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
         {searchQuery && <input type="hidden" name="q" value={searchQuery} />}
         {rt && <input type="hidden" name="rt" value={rt} />}
         {rw && <input type="hidden" name="rw" value={rw} />}
-<div className="flex-1 min-w-[140px]">
+        <div className="flex-1 min-w-[140px]">
           <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Kategori</label>
-          <select name="category" defaultValue={categoryFilter || ''} aria-label="Filter kategori" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
-            <option value="">Semua Kategori</option>
-            {categoryOptions.map((cat) => (
-              <option key={cat.id} value={cat.slug}>{cat.name}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select name="category" defaultValue={categoryFilter || ''} aria-label="Filter kategori" className="w-full bg-brand-canvas border border-brand-hairline rounded-xl px-4 py-3 pr-10 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary transition-all appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+              <option value="">Semua Kategori</option>
+              {categoryOptions.map((cat) => (
+                <option key={cat.id} value={cat.slug}>{cat.name}</option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" size={16} />
+          </div>
         </div>
         <div className="flex-1 min-w-[120px]">
           <label className="block text-[9px] font-semibold text-brand-ink/50 uppercase tracking-normal mb-1.5 ml-1">Dari Tanggal</label>

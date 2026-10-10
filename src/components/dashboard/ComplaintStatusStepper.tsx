@@ -93,11 +93,11 @@ export default function ComplaintStatusStepper({ currentStatus, createdAt, respo
                   isCompleted 
                     ? 'border-emerald-500 bg-emerald-500 text-white' 
                     : isCurrent 
-                      ? 'border-emerald-500 text-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)]' 
+                      ? 'border-emerald-500 text-emerald-500' 
                       : 'border-brand-hairline text-brand-ink/30'
                 }`}
               >
-                <Icon size={16} className={isCurrent ? 'animate-pulse' : ''} />
+                <Icon size={16} />
               </div>
               
               <div className="flex-1">

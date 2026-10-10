@@ -1,5 +1,7 @@
 'use client'
 
+import { ChevronDown } from 'lucide-react'
+
 interface PageSizeSelectorProps {
   currentStatus?: string
   searchQuery?: string
@@ -23,17 +25,20 @@ export default function PageSizeSelector(props: PageSizeSelectorProps) {
       {toDate && <input type="hidden" name="toDate" value={toDate} />}
       {rt && <input type="hidden" name="rt" value={rt} />}
       {rw && <input type="hidden" name="rw" value={rw} />}
-      <select
-        name="pageSize"
-        aria-label="Jumlah laporan per halaman"
-        defaultValue={pageSize}
-        onChange={(e) => e.target.form?.requestSubmit()}
-        className="bg-brand-canvas border border-brand-hairline rounded-lg px-2.5 py-1.5 text-xs font-mono tabular-nums font-bold text-brand-ink outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-primary"
-      >
-        <option value="12">12</option>
-        <option value="24">24</option>
-        <option value="48">48</option>
-      </select>
+      <div className="relative">
+        <select
+          name="pageSize"
+          aria-label="Jumlah laporan per halaman"
+          defaultValue={pageSize}
+          onChange={(e) => e.target.form?.requestSubmit()}
+          className="bg-brand-canvas border border-brand-hairline rounded-lg pl-3 pr-8 py-1.5 text-xs font-mono tabular-nums font-bold text-brand-ink outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-primary appearance-none"
+        >
+          <option value="12">12</option>
+          <option value="24">24</option>
+          <option value="48">48</option>
+        </select>
+        <ChevronDown aria-hidden="true" className="absolute right-2.5 top-1/2 -translate-y-1/2 text-brand-ink/40 pointer-events-none" size={14} />
+      </div>
     </form>
   )
 }

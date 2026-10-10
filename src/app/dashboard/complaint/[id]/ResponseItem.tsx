@@ -141,6 +141,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
               value={content}
               onChange={(e) => setContent(e.target.value)}
               aria-label="Edit tanggapan"
+              placeholder="Tulis pembaruan status atau hasil pemeriksaan lapangan..."
               className="w-full p-3 rounded-xl bg-brand-canvas-soft border-2 border-brand-primary/30 text-sm text-brand-ink focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all resize-none"
               rows={3}
             />
