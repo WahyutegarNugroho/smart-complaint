@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Search, Inbox, MapPin, ArrowRight, Zap, Filter } from 'lucide-react'
+import { Search, Inbox, MapPin, Zap, Filter } from 'lucide-react'
 import prisma from '@/lib/prisma'
 import EmptyState from '@/components/EmptyState'
 import { Prisma, Status } from '@prisma/client'
@@ -279,14 +279,14 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                       <h4 className="text-sm font-bold tracking-tight text-brand-ink group-hover:text-brand-primary transition-colors truncate">
                         {item.title}
                       </h4>
-                      <p className="text-xs text-brand-ink/55 line-clamp-1 leading-relaxed truncate mt-0.5">
+                      <p className="text-xs text-brand-ink/70 line-clamp-1 leading-relaxed truncate mt-0.5">
                         &quot;{item.content}&quot;
                       </p>
                     </div>
                   </div>
 
                   <div className="hidden md:flex items-center">
-                    <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal border border-brand-hairline text-brand-ink/50 bg-brand-canvas-soft/50">
+                    <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal border border-brand-hairline text-brand-ink/70 bg-brand-canvas-soft/50">
                       {item.categoryRel?.name || item.category}
                     </span>
                   </div>
@@ -301,23 +301,23 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
                             <MapPin aria-hidden="true" size={12} /> RT {item.rt}/{item.rw}
                   </div>
 
-                  <div className="hidden md:flex items-center justify-end gap-2">
-                    <span className="text-[11px] font-semibold text-brand-ink/40 uppercase tracking-normal">
+                  <div className="hidden md:flex items-center justify-end gap-3">
+                    <span className="text-[11px] font-semibold text-brand-ink/60 uppercase tracking-normal">
                       {dateStr}
                     </span>
-                    <div className="h-8 w-8 bg-brand-canvas-soft rounded-lg flex items-center justify-center text-brand-ink/20 group-hover:bg-brand-ink dark:group-hover:bg-brand-primary group-hover:text-brand-canvas dark:group-hover:text-[#0e0f0c] transition-all duration-300">
-                      <ArrowRight aria-hidden="true" size={14} />
-                    </div>
+                    <button className="px-4 py-1.5 border border-brand-hairline rounded-lg text-[10px] font-bold uppercase tracking-normal text-brand-ink/70 group-hover:bg-brand-ink group-hover:text-brand-canvas dark:group-hover:bg-brand-primary dark:group-hover:text-[#0e0f0c] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary">
+                      Lihat Rincian
+                    </button>
                   </div>
 
                   {/* Mobile footer row */}
                   <div className="flex md:hidden items-center justify-between pt-2 border-t border-brand-hairline">
-                    <div className="flex items-center gap-2 text-brand-ink/60">
+                    <div className="flex items-center gap-2 text-brand-ink/70">
                       <span className={`text-[10px] font-semibold px-2 py-1 rounded-md uppercase tracking-normal border ${STATUS_BADGE_CLASSES[item.status as keyof typeof STATUS_BADGE_CLASSES] || STATUS_BADGE_CLASSES.PENDING}`}>
                         {STATUS_LABELS[item.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                       </span>
-                      <span className="text-xs text-brand-ink/50">RT {item.rt}/{item.rw}</span>
-                      <span className="text-[10px] text-brand-ink/35 uppercase">{dateStr}</span>
+                      <span className="text-xs text-brand-ink/70">RT {item.rt}/{item.rw}</span>
+                      <span className="text-[10px] text-brand-ink/50 uppercase">{dateStr}</span>
                     </div>
                     {item.isUrgent && item.status !== 'COMPLETED' && (
                       <div className="flex items-center gap-1.5 text-red-500">

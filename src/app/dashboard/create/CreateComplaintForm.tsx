@@ -50,6 +50,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
   const [isUrgent, setIsUrgent] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [title, setTitle] = useState('')
+  const [dismissedWarning, setDismissedWarning] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -149,17 +150,27 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
         </section>
 
         {/* ⚠️ INCOMPLETE PROFILE BANNER */}
-        {isProfileIncomplete && (
-          <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 sm:p-5 flex items-start gap-3">
-            <div className="h-9 w-9 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg flex items-center justify-center shrink-0 border border-amber-500/20">
-              <ShieldAlert size={18} />
+        {isProfileIncomplete && !dismissedWarning && (
+          <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 sm:p-5 flex items-start justify-between gap-3 transition-all relative">
+            <div className="flex items-start gap-3">
+              <div className="h-9 w-9 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg flex items-center justify-center shrink-0 border border-amber-500/20">
+                <ShieldAlert size={18} />
+              </div>
+              <div className="space-y-0.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Profil Anda Belum Lengkap</h4>
+                <p className="text-[10px] text-amber-700/80 dark:text-amber-400/80 leading-relaxed font-medium pr-6">
+                  Beberapa data penting (NIK, No. HP, Alamat) belum terisi. Anda tetap bisa melapor untuk keadaan darurat, namun mohon lengkapi profil di <Link href="/dashboard/settings" className="font-bold underline hover:text-amber-900 dark:hover:text-amber-200">Pengaturan</Link> nantinya.
+                </p>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Profil Anda Belum Lengkap</h4>
-              <p className="text-[10px] text-amber-700/80 dark:text-amber-400/80 leading-relaxed font-medium">
-                Beberapa data penting Anda (NIK, nomor WhatsApp, alamat domisili) belum terisi. Mohon lengkapi di <Link href="/dashboard/settings" className="font-bold underline hover:text-amber-900 dark:hover:text-amber-200">Pengaturan Profil</Link> untuk mempermudah verifikasi petugas.
-              </p>
-            </div>
+            <button 
+              type="button" 
+              onClick={() => setDismissedWarning(true)}
+              className="text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 p-1.5 rounded-lg transition-colors absolute right-4 top-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              aria-label="Tutup Peringatan"
+            >
+              <X size={16} />
+            </button>
           </div>
         )}
 

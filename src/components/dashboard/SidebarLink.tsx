@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 interface SidebarLinkProps {
   href: string
@@ -17,44 +17,6 @@ interface SidebarLinkProps {
   activeClassName?: string
 }
 
-// Fully SSR-safe client-only hook to read searchParams from window.location
-export function useUrlSearchParams() {
-  const [params, setParams] = useState<URLSearchParams | null>(null)
-
-  useEffect(() => {
-    const updateParams = () => {
-      setParams(new URLSearchParams(window.location.search))
-    }
-
-    // Initial setting
-    updateParams()
-
-    // Listen to history transitions
-    window.addEventListener('popstate', updateParams)
-
-    const originalPushState = window.history.pushState
-    const originalReplaceState = window.history.replaceState
-
-    window.history.pushState = function (...args) {
-      originalPushState.apply(this, args)
-      updateParams()
-    }
-
-    window.history.replaceState = function (...args) {
-      originalReplaceState.apply(this, args)
-      updateParams()
-    }
-
-    return () => {
-      window.removeEventListener('popstate', updateParams)
-      window.history.pushState = originalPushState
-      window.history.replaceState = originalReplaceState
-    }
-  }, [])
-
-  return params
-}
-
 export default function SidebarLink({
   href,
   label,
@@ -65,7 +27,7 @@ export default function SidebarLink({
   activeClassName = 'text-brand-primary',
 }: SidebarLinkProps) {
   const pathname = usePathname()
-  const searchParams = useUrlSearchParams()
+  const searchParams = useSearchParams()
 
   const qIndex = href.indexOf('?')
   const basePath = qIndex === -1 ? href : href.slice(0, qIndex)

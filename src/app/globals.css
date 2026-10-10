@@ -168,3 +168,8 @@
   .print-full-width { grid-column: span 12 / span 12 !important; width: 100% !important; max-width: 100% !important; }
 }
 
+/* OpenStreetMap Dark Mode Filter */
+.map-tiles {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+

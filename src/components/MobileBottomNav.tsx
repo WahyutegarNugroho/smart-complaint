@@ -2,8 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useUrlSearchParams } from './dashboard/SidebarLink'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   Home, Plus, Settings2, Inbox, Map,
   LayoutDashboard, ClipboardList, Activity, UserCircle,
@@ -53,7 +52,7 @@ interface MobileBottomNavProps {
 
 export default function MobileBottomNav({ role }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const searchParams = useUrlSearchParams()
+  const searchParams = useSearchParams()
   const navItems = NAV_MAP[role] || ADMIN_NAV
 
   const isActive = (item: NavItem) => {

@@ -172,8 +172,9 @@ export default function LocationPicker({
           zoomControl={false}
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution='&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            className="map-tiles"
           />
           <MapClickHandler onPositionChange={handlePositionChange} />
           <FlyToMarker lat={lat} lng={lng} />

@@ -4,12 +4,8 @@ import { respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
 import { 
   Calendar, 
-  Clock, 
-  CheckCircle2, 
-  Activity, 
   ShieldAlert,
   Zap,
-  CheckCircle,
   MessageSquare,
   Send,
   ChevronLeft,
@@ -26,6 +22,7 @@ import PrintReceiptButton from './PrintReceiptButton'
 import EscalationStatus from './EscalationStatus'
 import StaffActionsPanel from './StaffActionsPanel'
 import { LocationView } from '@/components/map'
+import ComplaintStatusStepper from '@/components/dashboard/ComplaintStatusStepper'
 import { getEscalationInfo } from '@/lib/escalation'
 import { isStaff, isAdmin as checkIsAdmin } from '@/lib/authorization'
 
@@ -98,7 +95,7 @@ export default async function ComplaintDetailPage({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Main Content */}
-          <div className="lg:col-span-7 space-y-6 print-full-width">
+          <div className="lg:col-span-8 space-y-6 print-full-width">
             <div className="bg-brand-canvas rounded-xl shadow-sm border border-brand-hairline overflow-hidden transition-colors">
               {complaint.imageUrl && (
                 <div className="aspect-video w-full overflow-hidden border-b border-brand-hairline relative">
@@ -127,14 +124,8 @@ export default async function ComplaintDetailPage({
                 <h1 className="text-2xl md:text-3xl font-bold text-brand-ink mb-4 leading-tight">{complaint.title}</h1>
                 <p className="text-brand-ink/80 leading-relaxed text-sm whitespace-pre-wrap mb-8 pl-4 border-l-2 border-brand-hairline">{complaint.content}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3">
-                  <LocationView
-                    latitude={complaint.latitude}
-                    longitude={complaint.longitude}
-                    address={complaint.location}
-                    complaintId={complaint.id}
-                  />
-                  <div className="flex items-center gap-3 p-3 bg-brand-canvas-soft rounded-lg border border-brand-hairline">
+                <div className="flex items-center justify-end">
+                  <div className="flex items-center gap-3 p-3 bg-brand-canvas-soft rounded-lg border border-brand-hairline w-full sm:w-auto">
                     <div className="h-7 w-7 bg-brand-canvas rounded-md flex items-center justify-center text-brand-ink border border-brand-hairline">
                        <Calendar size={13} />
                     </div>
@@ -232,21 +223,27 @@ export default async function ComplaintDetailPage({
           </div>
 
           {/* Sidebar Actions */}
-          <div className="lg:col-span-5 space-y-8 no-print">
-            {isAuthor && complaint.status === 'PENDING' && (
-              <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm">
-                <div className="flex items-center gap-3 mb-5">
-                   <div className="h-9 w-9 bg-red-500/10 rounded-lg flex items-center justify-center text-red-600 dark:text-red-400 border border-red-500/20">
-                      <Trash2 size={18} />
-                   </div>
-                   <div>
-                      <h3 className="text-sm font-bold text-brand-ink leading-tight">Batalkan Laporan</h3>
-                      <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Tarik kembali laporan Anda</p>
-                   </div>
-                </div>
-                <CitizenDeleteButton id={complaint.id} />
+          <div className="lg:col-span-4 space-y-6 no-print">
+            <ComplaintStatusStepper 
+              currentStatus={complaint.status} 
+              createdAt={complaint.createdAt} 
+              responses={complaint.responses} 
+            />
+
+            <div className="bg-brand-canvas p-5 sm:p-6 rounded-xl border border-brand-hairline shadow-sm">
+              <h2 className="text-sm font-bold text-brand-ink mb-4">Lokasi Kejadian</h2>
+              <div className="rounded-lg overflow-hidden border border-brand-hairline h-[200px]">
+                <LocationView
+                  latitude={complaint.latitude}
+                  longitude={complaint.longitude}
+                  address={complaint.location}
+                  complaintId={complaint.id}
+                />
               </div>
-            )}
+              <p className="text-xs text-brand-ink/70 mt-3 leading-relaxed">
+                {complaint.location}
+              </p>
+            </div>
 
             {canManage && (
               <StaffActionsPanel
@@ -261,39 +258,17 @@ export default async function ComplaintDetailPage({
               escalationLogs={escalationLogs}
             />
 
-            {/* Timeline / Progress */}
-            <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm">
-               <h2 className="text-xs font-bold uppercase tracking-wider text-brand-ink mb-6 flex items-center gap-2">
-                 <Clock size={14} className="text-brand-primary" /> Progress Operasional
-               </h2>
-               <div className="space-y-6">
-                  {[
-                    { label: 'Laporan Diterima', desc: 'Sistem telah merekam laporan dari warga.', status: 'PENDING', icon: CheckCircle },
-                    { label: 'Sedang Ditangani', desc: 'Petugas sedang melakukan investigasi/perbaikan.', status: 'PROCESSING', icon: Activity },
-                    { label: 'Laporan Selesai', desc: 'Masalah telah teratasi dan laporan ditutup.', status: 'COMPLETED', icon: CheckCircle2 }
-                  ].map((step, i, arr) => {
-                    const isCompleted = complaint.status === 'COMPLETED' || (complaint.status === 'PROCESSING' && i <= 1) || (complaint.status === 'PENDING' && i === 0)
-                    const isActive = complaint.status === step.status
-                    
-                    return (
-                      <div key={i} className="flex gap-4">
-                         <div className="flex flex-col items-center">
-                            <div className={`h-6 w-6 rounded-full flex items-center justify-center transition-colors ${isCompleted ? 'bg-brand-primary text-[#0e0f0c]' : 'bg-brand-canvas-soft text-brand-ink/20'} ${isActive ? 'ring-2 ring-brand-primary/40' : ''}`}>
-                               <step.icon size={12} />
-                            </div>
-                            {i < arr.length - 1 && (
-                               <div className={`w-0.5 h-7 transition-colors ${isCompleted && complaint.status !== step.status ? 'bg-brand-primary' : 'bg-brand-hairline'}`} />
-                            )}
-                         </div>
-                         <div className="pt-0.5">
-                            <h5 className={`text-xs font-bold uppercase tracking-normal ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/30'}`}>{step.label}</h5>
-                            <p className="text-[11px] text-brand-ink/60 mt-1 font-medium">{step.desc}</p>
-                         </div>
-                      </div>
-                    )
-                  })}
-               </div>
-            </div>
+            {isAuthor && complaint.status === 'PENDING' && (
+              <div className="pt-4 border-t border-brand-hairline mt-8 flex justify-center">
+                <div className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-brand-canvas-soft transition-colors group">
+                  <div className="flex items-center gap-2 text-brand-ink/40 group-hover:text-red-500 transition-colors">
+                    <Trash2 size={16} />
+                    <span className="text-xs font-semibold uppercase tracking-wider">Batalkan Laporan</span>
+                  </div>
+                  <CitizenDeleteButton id={complaint.id} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>

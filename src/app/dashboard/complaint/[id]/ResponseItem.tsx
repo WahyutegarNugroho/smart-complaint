@@ -39,6 +39,8 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
   const date = new Date(res.createdAt)
   const timeStr = isNaN(date.getTime()) ? '--:--' : date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 
+  const roleLabel = res.officer?.role === 'ADMIN' ? 'Admin Pusat' : res.officer?.role === 'PETUGAS' ? 'Petugas Teknis' : 'Warga / Pelapor'
+
   const handleDelete = async () => {
     setShowDeleteModal(false)
     setIsDeleting(true)
@@ -69,10 +71,17 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
         </div>
       </div>
 
-      <div className={`max-w-[85%] sm:max-w-[75%] space-y-2 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
-        <div className="flex items-center gap-3 px-1">
-          <span className="text-[11px] font-semibold text-brand-ink/80">{res.officer?.name || 'Petugas'}</span>
-          <span className="text-[10px] font-mono tabular-nums text-brand-ink/40">
+      <div className={`w-full max-w-[85%] sm:max-w-[75%] space-y-1.5 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
+        <div className={`flex items-center gap-2 px-1 ${!isOfficer ? 'flex-row-reverse' : ''}`}>
+          <span className="text-xs font-bold text-brand-ink">{res.officer?.name || 'Pelapor'}</span>
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md ${
+            res.officer?.role === 'ADMIN' ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' :
+            res.officer?.role === 'PETUGAS' ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20' : 
+            'bg-brand-canvas-soft text-brand-ink/60 border border-brand-hairline'
+          }`}>
+            {roleLabel}
+          </span>
+          <span className="text-[9px] font-mono tabular-nums text-brand-ink/40">
             {timeStr}
           </span>
           
@@ -95,7 +104,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                        onClick={() => setShowMenu(false)}
                        aria-label="Tutup menu tanggapan"
                      />
-                     <div className="absolute top-full right-0 mt-1 w-32 bg-brand-canvas border border-brand-hairline rounded-lg shadow-lg z-20 overflow-hidden">
+                     <div className={`absolute top-full mt-1 w-32 bg-brand-canvas border border-brand-hairline rounded-lg shadow-lg z-20 overflow-hidden ${isOfficer ? 'left-0' : 'right-0'}`}>
                        {canEdit && (
                          <button 
                            onClick={() => { setIsEditing(true); setShowMenu(false); }}
