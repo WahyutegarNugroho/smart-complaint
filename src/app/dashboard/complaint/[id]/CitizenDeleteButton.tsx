@@ -15,7 +15,7 @@ export default function CitizenDeleteButton({ id }: { id: string }) {
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-500 py-4 rounded-xl font-bold text-[10px] uppercase tracking-normal hover:bg-red-600 hover:text-white transition-all shadow-sm active:scale-95"
+          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-rose-600 hover:text-white transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
         >
           <Trash2 size={16} />
           Batalkan & Hapus Laporan

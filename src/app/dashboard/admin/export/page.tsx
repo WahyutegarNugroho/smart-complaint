@@ -69,36 +69,46 @@ export default async function ExportPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-brand-canvas text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-20">
-      <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 md:space-y-12 no-print">
-        {/* 👋 HEADER SECTION */}
-        <section className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3 mb-2">
-               <Link href="/dashboard" className="h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all shadow-sm">
-                  <ChevronLeft size={20} />
-               </Link>
-               <span className="text-[10px] font-semibold text-brand-primary uppercase tracking-normal">Manajemen Laporan</span>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 no-print">
+        {/* HEADER SECTION */}
+        <section className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                aria-label="Kembali ke Dashboard"
+                className="h-11 w-11 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-colors shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+              >
+                <ChevronLeft size={18} aria-hidden="true" />
+              </Link>
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                Manajemen Rekapitulasi Data
+              </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-brand-ink transition-colors">Ekspor Data & Arsip</h1>
-            <p className="text-brand-ink/50 font-medium text-sm md:text-base transition-colors">Unduh data laporan masyarakat untuk keperluan evaluasi berkala.</p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+              Ekspor Data & Arsip Laporan
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 font-medium text-sm sm:text-base">
+              Unduh rekapitulasi data pengaduan masyarakat untuk evaluasi berkala dan pelaporan resmi RW.
+            </p>
           </div>
         </section>
 
-        <section className="space-y-8">
-           <ExportButtons />
+        <section className="space-y-6">
+          <ExportButtons />
 
-            <div className="bg-brand-canvas-soft p-4 md:p-5 rounded-xl border border-brand-hairline flex items-start gap-4">
-               <div className="h-9 w-9 bg-brand-canvas rounded-lg flex items-center justify-center text-brand-primary shrink-0 shadow-sm border border-brand-hairline">
-                  <CheckCircle2 size={18} />
-               </div>
-               <div>
-                  <p className="text-[10px] font-semibold text-brand-ink uppercase tracking-wider">Panduan Ekspor</p>
-                  <p className="text-xs text-brand-ink/50 mt-1 leading-relaxed">
-                    Format CSV sangat cocok untuk diolah kembali di Excel, sementara Cetak PDF akan menghasilkan dokumen ringkasan yang siap dipresentasikan pada rapat warga atau pengurus RT/RW.
-                 </p>
-              </div>
-           </div>
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-start gap-4">
+            <div className="h-10 w-10 bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800 rounded-xl flex items-center justify-center shrink-0">
+              <CheckCircle2 size={18} aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wider">Panduan Format Ekspor</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                Format CSV dan Excel sangat cocok untuk pengolahan statistik lanjutan di spreadsheet, sedangkan Dokumen PDF menyajikan format dokumen resmi yang siap dipresentasikan pada musyawarah warga atau rapat evaluasi pengurus RT/RW.
+              </p>
+            </div>
+          </div>
         </section>
       </main>
 
@@ -279,7 +289,7 @@ export default async function ExportPage() {
           <div className="border-t-2 border-slate-900 pt-6 text-right max-w-xs">
             <p className="text-[9pt] text-slate-500 mb-2">Mengetahui,</p>
             <p className="text-[10pt] font-bold text-slate-900 mb-6">{profile.name}</p>
-            <p className="text-[8pt] text-slate-400">SmartComplaint — Platform Pengaduan Warga</p>
+            <p className="text-[8pt] text-slate-400">SmartComplaint - Platform Pengaduan Warga</p>
           </div>
         </div>
         )}

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import Image from 'next/image'
 import { Camera, X } from 'lucide-react'
 
 export default function ResponseFileHandler() {
@@ -26,41 +27,49 @@ export default function ResponseFileHandler() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex items-center gap-3">
       {preview && (
-        <div className="px-6 mb-2">
-           <div className="relative inline-block group">
-              <div className="h-20 w-20 rounded-xl overflow-hidden border-2 border-blue-500/30 shadow-lg relative">
-                <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
-              </div>
-              <button 
-                type="button"
-                onClick={clearFile}
-                aria-label="Hapus lampiran"
-                className="absolute -top-2 -right-2 h-6 w-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
-              >
-                <X size={12} />
-              </button>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-blue-600 text-[8px] font-bold text-white px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
-                TERPILIH
-              </div>
-           </div>
+        <div className="relative inline-block group">
+          <div className="h-10 w-10 rounded-lg overflow-hidden border border-blue-500/40 shadow-sm relative">
+            <Image
+              src={preview}
+              alt="Pratinjau foto tanggapan"
+              fill
+              unoptimized
+              sizes="40px"
+              className="object-cover"
+            />
+          </div>
+          <button 
+            type="button"
+            onClick={clearFile}
+            aria-label="Hapus lampiran foto"
+            className="absolute -top-1.5 -right-1.5 h-5 w-5 bg-rose-600 text-white rounded-full flex items-center justify-center shadow-md hover:bg-rose-700 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-rose-500"
+          >
+            <X size={10} />
+          </button>
         </div>
       )}
       
-      <div className="absolute right-4 bottom-4 flex items-center gap-3">
-        <label className={`h-12 w-12 rounded-xl flex items-center justify-center transition-all border cursor-pointer shadow-inner ${preview ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 border-blue-100 dark:border-blue-900/30' : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 border-transparent hover:border-blue-100 dark:hover:border-blue-900/30'}`}>
-           <Camera size={20} />
-           <input 
-             type="file" 
-             name="responseImage" 
-             ref={fileInputRef}
-             className="hidden" 
-             accept="image/*"
-             onChange={handleFileChange}
-           />
-        </label>
-      </div>
+      <label 
+        aria-label="Lampirkan foto tanggapan"
+        className={`min-h-[40px] px-3.5 rounded-xl flex items-center gap-2 transition-all border cursor-pointer text-xs font-bold select-none focus-within:ring-2 focus-within:ring-blue-600 ${
+          preview 
+            ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800' 
+            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-blue-800 dark:hover:text-blue-400 border-slate-200 dark:border-slate-700 hover:border-blue-300'
+        }`}
+      >
+        <Camera size={16} />
+        <span className="hidden sm:inline">{preview ? 'Ganti Foto' : 'Lampirkan Foto'}</span>
+        <input 
+          type="file" 
+          name="responseImage" 
+          ref={fileInputRef}
+          className="hidden" 
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+      </label>
     </div>
   )
 }

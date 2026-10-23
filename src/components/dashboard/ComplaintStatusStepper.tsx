@@ -73,12 +73,12 @@ export default function ComplaintStatusStepper({ currentStatus, createdAt, respo
   }
 
   return (
-    <div className="bg-brand-canvas p-5 sm:p-6 rounded-xl border border-brand-hairline shadow-sm">
-      <h2 className="text-sm font-bold text-brand-ink mb-6">Status Penanganan</h2>
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-6">Status Penanganan</h2>
       
       <div className="relative pl-3 space-y-8">
         {/* Vertical Line */}
-        <div className="absolute left-[23px] top-[24px] bottom-[24px] w-0.5 bg-brand-hairline -z-10" />
+        <div className="absolute left-[23px] top-[24px] bottom-[24px] w-0.5 bg-slate-200 dark:bg-slate-800 -z-10" />
         
         {steps.map((step) => {
           const status = getStepStatus(step.id)
@@ -89,12 +89,12 @@ export default function ComplaintStatusStepper({ currentStatus, createdAt, respo
           return (
             <div key={step.id} className="flex gap-4 relative">
               <div 
-                className={`shrink-0 h-9 w-9 mt-0.5 rounded-full flex items-center justify-center border-2 transition-all duration-500 bg-brand-canvas ${
+                className={`shrink-0 h-9 w-9 mt-0.5 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                   isCompleted 
-                    ? 'border-emerald-500 bg-emerald-500 text-white' 
+                    ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm' 
                     : isCurrent 
-                      ? 'border-emerald-500 text-emerald-500' 
-                      : 'border-brand-hairline text-brand-ink/30'
+                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 ring-4 ring-blue-100 dark:ring-blue-950/60' 
+                      : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500'
                 }`}
               >
                 <Icon size={16} />
@@ -103,34 +103,34 @@ export default function ComplaintStatusStepper({ currentStatus, createdAt, respo
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h4 className={`text-sm font-bold tracking-tight transition-colors ${
-                    isCompleted || isCurrent ? 'text-brand-ink' : 'text-brand-ink/40'
+                    isCompleted || isCurrent ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500'
                   }`}>
                     {step.label}
                   </h4>
                   {step.date && (
-                    <span className="text-[10px] font-mono tabular-nums text-brand-ink/50 text-right">
+                    <span className="text-[10px] font-mono tabular-nums text-slate-500 dark:text-slate-400 text-right">
                       {formatTime(step.date)}
                     </span>
                   )}
                 </div>
                 
                 <p className={`text-xs mt-0.5 transition-colors ${
-                  isCurrent ? 'text-brand-ink/80 font-medium' : 'text-brand-ink/50'
+                  isCurrent ? 'text-blue-800 dark:text-blue-300 font-semibold' : 'text-slate-500 dark:text-slate-400'
                 }`}>
                   {step.desc}
                 </p>
 
                 {(step.date || step.person) && (
-                  <div className={`mt-2 flex flex-col gap-1 text-[10px] font-mono p-2.5 rounded-lg border ${
-                    isCurrent ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-brand-canvas-soft border-brand-hairline'
+                  <div className={`mt-2 flex flex-col gap-1 text-[10px] font-mono p-2.5 rounded-xl border ${
+                    isCurrent ? 'bg-blue-50/60 dark:bg-blue-950/30 border-blue-200/60 dark:border-blue-900/40' : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60'
                   }`}>
                     {step.person && (
-                      <div className="flex items-center gap-1.5 text-brand-ink/70">
-                        <span className="font-semibold text-brand-ink/90">Oleh:</span> {step.person}
+                      <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                        <span className="font-bold text-slate-900 dark:text-white">Petugas:</span> {step.person}
                       </div>
                     )}
                     {step.date && (
-                      <div className="flex items-center gap-1.5 text-brand-ink/50">
+                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                         {safeFormatDate(step.date, { day: '2-digit', month: 'short', year: 'numeric' })}
                       </div>
                     )}

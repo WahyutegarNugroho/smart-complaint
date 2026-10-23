@@ -74,20 +74,20 @@ export default async function MapPage({
   }))
 
   return (
-    <div className="h-[calc(100vh-1px)] flex flex-col bg-brand-canvas-soft">
-      <header className="bg-brand-canvas border-b border-brand-hairline px-4 md:px-6 py-3 flex items-center justify-between shrink-0">
+    <div className="h-[calc(100vh-1px)] flex flex-col bg-slate-50 dark:bg-slate-950">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 py-3.5 flex items-center justify-between shrink-0 shadow-xs">
         <div className="flex items-center gap-3">
           <Link
             href={complaintId ? `/dashboard/complaint/${complaintId}` : '/dashboard'}
-            className="h-9 w-9 bg-brand-canvas-soft border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all"
-            aria-label={complaintId ? 'Kembali ke detail pengaduan' : 'Kembali ke dashboard'}
+            className="h-10 w-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-blue-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            aria-label={complaintId ? 'Kembali ke detail pengaduan' : 'Kembali ke beranda pengaduan'}
           >
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-sm font-bold text-brand-ink">Peta Sebaran Laporan</h1>
-            <p className="text-[10px] font-semibold text-brand-ink/40 uppercase tracking-normal">
-              {parsed.length} titik lokasi
+            <h1 className="text-sm font-bold text-slate-900 dark:text-white">Peta Sebaran Laporan Wilayah</h1>
+            <p className="text-xs font-mono tabular-nums text-slate-500 dark:text-slate-400">
+              {parsed.length} titik koordinat pengaduan terdata
             </p>
           </div>
         </div>

@@ -63,23 +63,28 @@ export async function uploadImage(
     return { success: false, error: 'invalid_magic' }
   }
 
-  const supabase = await createClient()
-  const fileExt = file.name?.split('.').pop() || 'jpg'
-  const fileName = `${prefix}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-  const filePath = `${userId}/${fileName}`
+  try {
+    const supabase = await createClient()
+    const fileExt = file.name?.split('.').pop() || 'jpg'
+    const fileName = `${prefix}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+    const filePath = `${userId}/${fileName}`
 
-  const { error: uploadError } = await supabase.storage
-    .from(BUCKET)
-    .upload(filePath, file, { contentType: file.type })
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET)
+      .upload(filePath, file, { contentType: file.type })
 
-  if (uploadError) {
-    console.error('Supabase Upload Error:', uploadError)
+    if (uploadError) {
+      console.error('Supabase Upload Error:', uploadError)
+      return { success: false, error: 'upload_failed' }
+    }
+
+    const { data: urlData } = supabase.storage
+      .from(BUCKET)
+      .getPublicUrl(filePath)
+
+    return { success: true, url: urlData.publicUrl }
+  } catch (err) {
+    console.error('UploadImage Unexpected Network/Storage Error:', err)
     return { success: false, error: 'upload_failed' }
   }
-
-  const { data: urlData } = supabase.storage
-    .from(BUCKET)
-    .getPublicUrl(filePath)
-
-  return { success: true, url: urlData.publicUrl }
 }

@@ -7,19 +7,22 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  UserPlus,
+  ChevronDown,
+  Users,
 } from 'lucide-react'
 import Link from 'next/link'
 import { Profile, Prisma, Role } from '@prisma/client'
+import ErrorToast from '@/components/ErrorToast'
+import SuccessToast from '@/components/SuccessToast'
 
 const PAGE_SIZE = 20
 
 export default async function AdminUsersPage({
   searchParams
 }: {
-  searchParams: Promise<{ q?: string, role?: string, rt?: string, rw?: string, page?: string }>
+  searchParams: Promise<{ q?: string, role?: string, rt?: string, rw?: string, page?: string, error?: string, message?: string }>
 }) {
-  const { q, role, rt, rw, page: pageStr } = await searchParams
+  const { q, role, rt, rw, page: pageStr, error: queryError, message: queryMessage } = await searchParams
   const page = Math.max(1, parseInt(pageStr || '1'))
   const supabase = await createClient()
 
@@ -69,67 +72,82 @@ export default async function AdminUsersPage({
   }
 
   return (
-    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans selection:bg-brand-primary/20 transition-colors duration-300 pb-20">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">
+      {queryError && <ErrorToast key={queryError} message={queryError} />}
+      {queryMessage && <SuccessToast key={queryMessage} message={queryMessage} />}
 
-      <main className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
 
-        {/* Header - compact, no oversized hero */}
+        {/* Header */}
         <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard"
-              className="h-9 w-9 bg-brand-canvas border border-brand-hairline rounded-lg flex items-center justify-center text-brand-ink/40 hover:text-brand-ink transition-colors shadow-sm"
-              aria-label="Kembali ke dashboard"
-            >
-              <ArrowLeft size={18} />
-            </Link>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-brand-ink">Data Penduduk</h1>
-              <p className="text-xs text-brand-ink/50 font-medium">Kelola basis data warga, petugas, dan verifikasi akun.</p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2.5 mb-1">
+              <Link
+                href="/dashboard"
+                className="h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-blue-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                aria-label="Kembali ke dashboard"
+              >
+                <ArrowLeft size={18} />
+              </Link>
+              <span className="text-xs font-bold text-blue-800 dark:text-blue-400 uppercase tracking-wider">
+                Basis Data Wilayah
+              </span>
             </div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                Data Penduduk
+              </h1>
+              <span className="text-xs font-mono font-bold tabular-nums text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                {totalUsers} Penduduk Terdata
+              </span>
+            </div>
+            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+              Kelola basis data warga, penugasan hak akses petugas, dan verifikasi akun kependudukan.
+            </p>
           </div>
-          <Link
-            href="/dashboard/admin/users/create"
-            className="flex items-center gap-2 h-9 px-3 bg-brand-primary text-brand-canvas text-xs font-semibold uppercase tracking-wider rounded-lg hover:opacity-90 transition-opacity shadow-sm"
-          >
-            <UserPlus size={14} />
-            Tambah Penduduk
-          </Link>
         </header>
 
-        {/* Filters - flat, no card wrapper */}
-        <form className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3" role="search" aria-label="Filter data penduduk">
+        {/* Filters Bar */}
+        <form 
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 sm:p-4 rounded-2xl shadow-sm flex flex-col lg:flex-row items-stretch lg:items-center gap-3" 
+          role="search" 
+          aria-label="Filter data penduduk"
+        >
           <div className="flex-1 flex items-center gap-2 min-w-0">
             <label htmlFor="search-q" className="sr-only">Cari nama atau username</label>
             <div className="flex-1 relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-ink/30" aria-hidden="true" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
               <input
                 id="search-q"
                 name="q"
                 type="search"
                 defaultValue={q}
-                placeholder="Cari nama atau username warga..."
+                placeholder="Cari berdasarkan nama lengkap atau username..."
                 aria-label="Cari warga"
-                className="w-full pl-10 pr-4 py-2 bg-brand-canvas border border-brand-hairline rounded-lg text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all h-10"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all min-h-[44px]"
               />
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-            <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+            <div className="relative">
               <label htmlFor="filter-role" className="sr-only">Filter role</label>
               <select
                 id="filter-role"
                 name="role"
                 defaultValue={role}
                 aria-label="Filter role"
-                className="w-32 bg-brand-canvas border border-brand-hairline rounded-lg px-3 h-10 text-[10px] font-bold uppercase text-brand-ink/70 focus:ring-2 focus:ring-brand-primary outline-none cursor-pointer appearance-none text-center"
+                className="w-36 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 pr-8 min-h-[44px] text-xs font-bold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-600 outline-none cursor-pointer appearance-none"
               >
-                <option value="">Role</option>
+                <option value="">Semua Peran</option>
                 <option value="MASYARAKAT">Warga</option>
                 <option value="PETUGAS">Petugas</option>
                 <option value="ADMIN">Admin</option>
               </select>
+              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            </div>
+
+            <div className="flex items-center gap-2">
               <label htmlFor="filter-rt" className="sr-only">Filter RT</label>
               <input
                 id="filter-rt"
@@ -138,7 +156,7 @@ export default async function AdminUsersPage({
                 defaultValue={rt}
                 placeholder="RT"
                 aria-label="Filter RT"
-                className="w-16 bg-brand-canvas border border-brand-hairline rounded-lg px-2 h-10 text-[10px] font-mono font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
+                className="w-18 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-2 min-h-[44px] text-xs font-mono font-bold text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-600 outline-none transition-colors"
               />
               <label htmlFor="filter-rw" className="sr-only">Filter RW</label>
               <input
@@ -148,16 +166,20 @@ export default async function AdminUsersPage({
                 defaultValue={rw}
                 placeholder="RW"
                 aria-label="Filter RW"
-                className="w-16 bg-brand-canvas border border-brand-hairline rounded-lg px-2 h-10 text-[10px] font-mono font-bold text-center text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none transition-colors"
+                className="w-18 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-2 min-h-[44px] text-xs font-mono font-bold text-center text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-600 outline-none transition-colors"
               />
             </div>
-            <button type="submit" className="flex-1 lg:flex-none h-10 bg-brand-ink text-brand-canvas px-5 rounded-lg text-[10px] font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm">
+
+            <button 
+              type="submit" 
+              className="flex-1 lg:flex-none min-h-[44px] bg-blue-800 hover:bg-blue-900 active:bg-blue-950 text-white px-5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            >
               Terapkan
             </button>
             {(q || role || rt || rw) && (
               <Link
                 href="/dashboard/admin/users"
-                className="h-10 flex items-center px-3 text-[10px] font-semibold uppercase text-brand-ink/40 tracking-wider hover:text-brand-ink rounded-lg transition-colors"
+                className="min-h-[44px] flex items-center px-3.5 text-xs font-bold uppercase text-slate-500 hover:text-slate-900 dark:hover:text-white tracking-wider rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
               >
                 Reset
               </Link>
@@ -167,44 +189,37 @@ export default async function AdminUsersPage({
 
         {/* Error State */}
         {error && (
-          <div className="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-300" role="alert">
-            <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
-            {error}
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="ml-auto px-3 py-1 text-xs font-semibold uppercase text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-800 rounded hover:bg-red-200 dark:hover:bg-red-700 transition-colors"
+          <div className="flex items-center gap-3 p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl text-sm text-rose-700 dark:text-rose-300" role="alert">
+            <p className="flex-1 font-medium">{error}</p>
+            <Link
+              href="/dashboard/admin/users"
+              className="px-3.5 py-1.5 text-xs font-bold uppercase text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-900/50 rounded-lg hover:bg-rose-200 transition-colors"
             >
               Coba Lagi
-            </button>
+            </Link>
           </div>
         )}
 
-        {/* Users Table - single surface, no nested cards */}
-        <div className="bg-brand-canvas rounded-xl border border-brand-hairline shadow-sm overflow-hidden">
+        {/* Users Table */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-separate border-spacing-0" role="grid">
               <thead>
-                <tr className="bg-brand-canvas-soft/50 border-b border-brand-hairline">
-                  <th scope="col" className="px-4 sm:px-6 py-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Profil Penduduk</th>
-                  <th scope="col" className="hidden md:table-cell px-4 sm:px-6 py-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Domisili</th>
-                  <th scope="col" className="hidden sm:table-cell px-4 sm:px-6 py-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider">Status Akses</th>
-                  <th scope="col" className="sticky right-0 pl-2 pr-4 sm:pl-4 sm:pr-6 py-3 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider text-right z-10">Kelola</th>
+                <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                  <th scope="col" className="px-5 sm:px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Profil Penduduk</th>
+                  <th scope="col" className="hidden md:table-cell px-5 sm:px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Domisili</th>
+                  <th scope="col" className="hidden sm:table-cell px-5 sm:px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status Akses</th>
+                  <th scope="col" className="sticky right-0 pl-2 pr-5 sm:pl-4 sm:pr-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right z-10 bg-slate-50 dark:bg-slate-800/50">Tindakan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-brand-hairline">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
                 {allUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-12 text-center">
-                      <div className="flex flex-col items-center justify-center text-brand-ink/40">
-                        <p className="text-sm font-semibold uppercase tracking-wider mb-2">Tidak ada data penduduk</p>
-                        <p className="text-xs text-brand-ink/30 mb-4">Coba ubah filter pencarian atau</p>
-                        <Link
-                          href="/dashboard/admin/users/create"
-                          className="text-xs font-semibold text-brand-primary hover:underline"
-                        >
-                          Tambah penduduk baru
-                        </Link>
+                    <td colSpan={4} className="px-6 py-14 text-center">
+                      <div className="flex flex-col items-center justify-center text-slate-400">
+                        <Users size={32} className="mb-2 opacity-30" />
+                        <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Tidak ada data penduduk yang cocok</p>
+                        <p className="text-xs text-slate-500">Coba ubah kriteria pencarian atau filter RT/RW Anda.</p>
                       </div>
                     </td>
                   </tr>
@@ -217,32 +232,32 @@ export default async function AdminUsersPage({
             </table>
           </div>
 
-          {/* Pagination - inline, no card wrapper */}
+          {/* Pagination */}
           {totalUsers > PAGE_SIZE && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-brand-hairline bg-brand-canvas-soft/30">
-              <p className="text-xs font-mono tabular-nums text-brand-ink/40">
-                {totalUsers > 0
-                  ? `Menampilkan ${(page - 1) * PAGE_SIZE + 1}-${Math.min(page * PAGE_SIZE, totalUsers)} dari ${totalUsers}`
-                  : 'Tidak ada data'}
+            <div className="flex items-center justify-between px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-850">
+              <p className="text-xs font-mono tabular-nums text-slate-500 dark:text-slate-400">
+                Menampilkan {(page - 1) * PAGE_SIZE + 1}-{Math.min(page * PAGE_SIZE, totalUsers)} dari {totalUsers}
               </p>
-              <nav className="flex items-center gap-1" aria-label="Navigasi halaman">
+              <nav className="flex items-center gap-1.5" aria-label="Navigasi halaman">
                 {page > 1 && (
                   <Link
                     href={`/dashboard/admin/users?page=${page - 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
-                    className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                     aria-label="Halaman sebelumnya"
                   >
-                    <ChevronLeft size={14} />
+                    <ChevronLeft size={16} />
                   </Link>
                 )}
-                <span className="text-xs font-mono tabular-nums font-bold text-brand-ink/60 px-3" aria-current="page">{page}</span>
+                <span className="text-xs font-mono tabular-nums font-bold text-slate-800 dark:text-slate-200 px-3" aria-current="page">
+                  {page}
+                </span>
                 {page * PAGE_SIZE < totalUsers && (
                   <Link
                     href={`/dashboard/admin/users?page=${page + 1}${q ? `&q=${encodeURIComponent(q)}` : ''}${role ? `&role=${role}` : ''}${rt ? `&rt=${rt}` : ''}${rw ? `&rw=${rw}` : ''}`}
-                    className="h-8 w-8 flex items-center justify-center rounded-lg border border-brand-hairline hover:bg-brand-canvas-soft transition-colors"
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-600 dark:text-slate-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                     aria-label="Halaman selanjutnya"
                   >
-                    <ChevronRight size={14} />
+                    <ChevronRight size={16} />
                   </Link>
                 )}
               </nav>

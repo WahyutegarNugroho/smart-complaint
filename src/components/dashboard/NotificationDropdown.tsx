@@ -124,8 +124,8 @@ export default function NotificationDropdown({ notifications: initialNotificatio
 
   const dropdownContent = (
     <>
-      <div className="p-5 border-b border-brand-hairline flex items-center justify-between gap-3">
-        <h4 className="text-xs font-black uppercase tracking-normal text-brand-ink">Notifikasi Anda</h4>
+      <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">Notifikasi Anda</h4>
         <div className="flex items-center gap-2 shrink-0">
           {unreadCount > 0 && (
             <>
@@ -139,50 +139,50 @@ export default function NotificationDropdown({ notifications: initialNotificatio
                     setNotifications(initialNotifications)
                   }
                 }}
-                className="text-[9px] font-semibold text-brand-primary hover:text-brand-ink uppercase tracking-normal flex items-center gap-1 transition-colors cursor-pointer"
+                className="text-xs font-bold text-blue-800 dark:text-blue-400 hover:underline uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer"
                 title="Tandai semua telah dibaca"
               >
-                <CheckCheck size={13} /> Sudah Dibaca
+                <CheckCheck size={14} /> Sudah Dibaca
               </button>
-              <span className="w-px h-4 bg-brand-hairline" />
-          <span className="bg-red-50 dark:bg-red-950/20 text-red-500 text-[10px] font-semibold px-2 py-0.5 rounded uppercase tracking-normal tabular-nums">
-            {unreadCount} Baru
-          </span>
+              <span className="w-px h-4 bg-slate-200 dark:bg-slate-700" />
+              <span className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider tabular-nums">
+                {unreadCount} Baru
+              </span>
             </>
           )}
         </div>
       </div>
 
-      <div className="max-h-80 overflow-y-auto divide-y divide-brand-hairline">
+      <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
         {notifications.length === 0 ? (
-          <div className="p-8 text-center flex flex-col items-center justify-center text-brand-ink/40">
-            <BellOff aria-hidden="true" size={28} className="mb-2 text-brand-ink/20" />
-            <p className="text-[10px] font-semibold uppercase tracking-wider">Belum Ada Notifikasi</p>
-            <p className="text-[9px] font-medium text-brand-ink/50 mt-1">Laporan baru atau tanggapan akan muncul di sini</p>
+          <div className="p-8 text-center flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+            <BellOff aria-hidden="true" size={28} className="mb-2 text-slate-400 dark:text-slate-600" />
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Belum Ada Notifikasi</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Laporan baru atau tanggapan petugas akan muncul di sini</p>
           </div>
         ) : (
           notifications.map((notif) => (
             <div 
               key={notif.id} 
-              className={`p-5 transition-colors flex items-start gap-4 ${notif.isRead ? 'bg-transparent' : 'bg-brand-canvas-soft'}`}
+              className={`p-4 transition-colors flex items-start gap-3.5 ${notif.isRead ? 'bg-transparent hover:bg-slate-50/50 dark:hover:bg-slate-850/50' : 'bg-blue-50/40 dark:bg-blue-950/20 hover:bg-blue-50/60'}`}
             >
               <div className="shrink-0 pt-0.5">
                 {notif.type === 'DELETE' ? (
-                  <div className="h-8 w-8 bg-red-500/10 text-red-500 rounded-lg flex items-center justify-center border border-red-500/20">
+                  <div className="h-8 w-8 bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 rounded-xl flex items-center justify-center border border-rose-200 dark:border-rose-900/50">
                     <ShieldAlert aria-hidden="true" size={16} />
                   </div>
                 ) : (
-                  <div className={`h-8 w-8 rounded-lg flex items-center justify-center border ${notif.isRead ? 'bg-brand-canvas-soft text-brand-ink/40 border-brand-hairline' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'}`}>
+                  <div className={`h-8 w-8 rounded-xl flex items-center justify-center border ${notif.isRead ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700' : 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'}`}>
                     <Bell aria-hidden="true" size={16} />
                   </div>
                 )}
               </div>
 
               <div className="flex-1 min-w-0 space-y-1">
-                <p className={`text-xs leading-relaxed ${notif.isRead ? 'text-brand-ink/60' : 'text-brand-ink font-medium'}`}>
+                <p className={`text-xs leading-relaxed ${notif.isRead ? 'text-slate-600 dark:text-slate-400' : 'text-slate-900 dark:text-white font-semibold'}`}>
                   {notif.message}
                 </p>
-                <span className="text-[8px] font-bold text-brand-ink/40 uppercase tracking-wider block">
+                <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 block">
                   {formatTime(notif.createdAt)}
                 </span>
               </div>
@@ -190,8 +190,9 @@ export default function NotificationDropdown({ notifications: initialNotificatio
               {!notif.isRead && (
                 <button
                   onClick={() => handleMarkAsRead(notif.id)}
-                  className="shrink-0 h-6 w-6 rounded-md hover:bg-brand-canvas-soft flex items-center justify-center text-brand-ink/40 hover:text-brand-primary transition-all cursor-pointer"
+                  className="shrink-0 h-7 w-7 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950 flex items-center justify-center text-slate-400 hover:text-blue-800 dark:hover:text-blue-400 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                   title="Tandai dibaca"
+                  aria-label="Tandai notifikasi telah dibaca"
                 >
                   <Check size={14} />
                 </button>
@@ -210,14 +211,14 @@ export default function NotificationDropdown({ notifications: initialNotificatio
         ref={bellRef}
         onClick={handleToggle}
         onKeyDown={(e) => { if (e.key === 'Escape') setIsOpen(false) }}
-        className="relative h-10 w-10 bg-brand-canvas border border-brand-hairline rounded-xl flex items-center justify-center text-brand-ink/70 hover:text-brand-primary hover:border-brand-primary hover:shadow-sm transition-all cursor-pointer"
+        className="relative h-10 w-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-blue-800 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         aria-label="Notifikasi"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         <Bell aria-hidden="true" size={20} />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold tabular-nums border border-brand-canvas">
+          <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 bg-rose-600 text-white rounded-full flex items-center justify-center text-[9px] font-bold tabular-nums border border-white dark:border-slate-900">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -228,19 +229,19 @@ export default function NotificationDropdown({ notifications: initialNotificatio
         <>
           {/* Mobile Overlay Backdrop */}
           <div 
-            className="fixed inset-0 bg-brand-canvas-soft/90 z-40 md:hidden animate-in fade-in duration-200"
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-40 md:hidden animate-in fade-in duration-200"
             onClick={() => setIsOpen(false)}
           />
 
           {/* Mobile Dropdown */}
-          <div className="fixed inset-x-4 top-20 z-50 bg-brand-canvas border border-brand-hairline rounded-xl shadow-lg overflow-hidden md:hidden text-brand-ink">
+          <div className="fixed inset-x-4 top-20 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden md:hidden text-slate-900 dark:text-white">
             {dropdownContent}
           </div>
 
           {/* Desktop Dropdown (Portal to body) */}
           {desktopPos && createPortal(
             <div
-              className="fixed z-[9999] bg-brand-canvas border border-brand-hairline rounded-xl shadow-lg overflow-hidden text-brand-ink"
+              className="fixed z-[9999] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden text-slate-900 dark:text-white"
               style={{ top: desktopPos.top, left: desktopPos.left, width: '384px' }}
             >
               {dropdownContent}

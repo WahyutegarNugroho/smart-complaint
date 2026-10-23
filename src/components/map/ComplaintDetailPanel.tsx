@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { X, Calendar, MapPin, User, AlertTriangle, ArrowUpRight, LockKeyhole } from 'lucide-react'
 import type { ComplaintMarker } from './MapPageClient'
 import { STATUS_LABELS } from '@/lib/constants'
@@ -76,16 +77,16 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-canvas shadow-xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+        className="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl z-[1001] overflow-y-auto transition-transform duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
       >
-        <div className="sticky top-0 bg-brand-canvas border-b border-brand-hairline px-5 py-4 flex items-center justify-between z-10">
-          <h2 className="text-sm font-bold text-brand-ink truncate pr-2">Detail Laporan</h2>
-<button
-              onClick={onClose}
-              className="h-8 w-8 rounded-xl bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center text-brand-ink/50 hover:text-brand-ink transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 shrink-0"
-              aria-label="Tutup panel"
-            >
-            <X size={16} />
+        <div className="sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-5 py-4 flex items-center justify-between z-10">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white truncate pr-2">Detail Laporan</h2>
+          <button
+            onClick={onClose}
+            className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 shrink-0 cursor-pointer"
+            aria-label="Tutup panel detail laporan"
+          >
+            <X size={18} />
           </button>
         </div>
 
@@ -93,90 +94,92 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
           {canViewFull ? (
             <>
               {complaint.imageUrl && (
-                <div className="rounded-xl overflow-hidden border border-brand-hairline">
-                  <img
+                <div className="relative h-48 w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800">
+                  <Image
                     src={complaint.imageUrl}
                     alt={complaint.title}
-                    className="w-full h-48 object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    className="object-cover"
                   />
                 </div>
               )}
 
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
-                    <AlertTriangle size={10} />
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 flex items-center gap-1 shrink-0">
+                    <AlertTriangle size={11} />
                     Prioritas
                   </span>
                 )}
                 {escalationLabel && (
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 shrink-0">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 shrink-0">
                     {escalationLabel}
                   </span>
                 )}
               </div>
 
-              <h3 className="text-lg font-bold text-brand-ink leading-snug">{complaint.title}</h3>
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white leading-snug">{complaint.title}</h3>
 
-              <p className="text-sm text-brand-ink/70 leading-relaxed line-clamp-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4">
                 {complaint.content}
               </p>
 
               <div className="space-y-3 text-sm">
                 {complaint.categoryName && (
-                  <div className="flex items-center gap-3 text-brand-ink/60">
-                    <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
-                      <span className="text-[10px] font-semibold">{complaint.categoryName.charAt(0)}</span>
+                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                    <span className="h-8 w-8 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-900/40 flex items-center justify-center shrink-0 text-blue-800 dark:text-blue-300 font-bold text-xs">
+                      {complaint.categoryName.charAt(0)}
                     </span>
-                    <span className="font-medium">{complaint.categoryName}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{complaint.categoryName}</span>
                   </div>
                 )}
 
                 {userRole !== 'MASYARAKAT' ? (
-                  <div className="flex items-center gap-3 text-brand-ink/60">
-                    <User size={14} className="shrink-0 opacity-50" />
+                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                    <User size={15} className="shrink-0 text-slate-400" />
                     <span className="font-medium">{complaint.author?.name || 'Anonim'}</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 text-brand-ink/60">
-                    <User size={14} className="shrink-0 opacity-50" />
-                    <span className="font-medium">Warga</span>
+                  <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                    <User size={15} className="shrink-0 text-slate-400" />
+                    <span className="font-medium">Warga Pelapor</span>
                   </div>
                 )}
 
-                <div className="flex items-center gap-3 text-brand-ink/60">
-                  <MapPin size={14} className="shrink-0 opacity-50" />
+                <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                  <MapPin size={15} className="shrink-0 text-slate-400" />
                   {userRole !== 'MASYARAKAT' ? (
                     <span className="font-medium">
                       {complaint.location}
                       {complaint.rt && complaint.rw && (
-                        <span className="text-brand-ink/40"> (RT {complaint.rt}/{complaint.rw})</span>
+                        <span className="text-slate-500 font-mono tabular-nums"> (RT {complaint.rt}/RW {complaint.rw})</span>
                       )}
                     </span>
                   ) : (
                     <span className="font-medium">
-                      {complaint.rt && complaint.rw ? `RT ${complaint.rt}/${complaint.rw}` : 'Lokasi tidak tersedia'}
+                      {complaint.rt && complaint.rw ? `RT ${complaint.rt}/RW ${complaint.rw}` : 'Lokasi tidak tersedia'}
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 text-brand-ink/60">
-                  <Calendar size={14} className="shrink-0 opacity-50" />
+                <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                  <Calendar size={15} className="shrink-0 text-slate-400" />
                   <span className="font-medium">Kejadian: {incidentDate}</span>
                 </div>
 
-                <div className="flex items-center gap-3 text-brand-ink/60">
-                  <Calendar size={14} className="shrink-0 opacity-50" />
+                <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                  <Calendar size={15} className="shrink-0 text-slate-400" />
                   <span className="font-medium">Dilaporkan: {date}</span>
                 </div>
               </div>
 
               <Link
                 href={`/dashboard/complaint/${complaint.id}`}
-                className="w-full flex items-center justify-center gap-2 bg-brand-ink text-brand-canvas dark:bg-brand-primary dark:text-[#0e0f0c] font-bold py-3 px-6 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-blue-800 hover:bg-blue-900 active:bg-blue-950 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               >
                 Lihat Detail Lengkap
                 <ArrowUpRight size={16} />
@@ -185,36 +188,36 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
           ) : (
             <>
               <div className="flex items-start gap-2">
-                <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal shrink-0 ${status.bg}`}>
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider shrink-0 ${status.bg}`}>
                   {STATUS_LABELS[complaint.status as keyof typeof STATUS_LABELS] || 'Menunggu'}
                 </span>
                 {complaint.isUrgent && (
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg uppercase tracking-normal bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-1 shrink-0">
-                    <AlertTriangle size={10} />
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 flex items-center gap-1 shrink-0">
+                    <AlertTriangle size={11} />
                     Prioritas
                   </span>
                 )}
               </div>
 
               {complaint.categoryName && (
-                <div className="flex items-center gap-3 text-sm text-brand-ink/60">
-                  <span className="h-7 w-7 rounded-lg bg-brand-canvas-soft border border-brand-hairline flex items-center justify-center shrink-0">
-                    <span className="text-[10px] font-semibold">{complaint.categoryName.charAt(0)}</span>
+                <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                  <span className="h-8 w-8 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-900/40 flex items-center justify-center shrink-0 text-blue-800 dark:text-blue-300 font-bold text-xs">
+                    {complaint.categoryName.charAt(0)}
                   </span>
-                  <span className="font-medium">{complaint.categoryName}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">{complaint.categoryName}</span>
                 </div>
               )}
 
-              <div className="flex items-center gap-3 text-sm text-brand-ink/60">
-                <MapPin size={14} className="shrink-0 opacity-50" />
+              <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                <MapPin size={15} className="shrink-0 text-slate-400" />
                 <span className="font-medium">
-                  {complaint.rt && complaint.rw ? `RT ${complaint.rt}/${complaint.rw}` : 'Lokasi tidak tersedia'}
+                  {complaint.rt && complaint.rw ? `RT ${complaint.rt}/RW ${complaint.rw}` : 'Lokasi tidak tersedia'}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 dark:border-amber-800/30 rounded-xl text-amber-700 dark:text-amber-400">
-                <LockKeyhole size={14} className="shrink-0" />
-                <p className="text-[11px] font-semibold leading-snug">
+              <div className="flex items-center gap-2.5 p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl text-amber-800 dark:text-amber-300">
+                <LockKeyhole size={16} className="shrink-0 text-amber-600 dark:text-amber-400" />
+                <p className="text-xs font-semibold leading-snug">
                   Detail lengkap laporan hanya dapat dilihat oleh pelapor
                 </p>
               </div>

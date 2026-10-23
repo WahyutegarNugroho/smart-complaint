@@ -16,38 +16,45 @@ export default function DashboardError({
   }, [error])
 
   return (
-    <div className="min-h-screen bg-brand-canvas flex items-center justify-center p-6">
-      <div className="max-w-md w-full text-center space-y-6">
+    <div className="min-h-[70vh] flex items-center justify-center p-4 sm:p-6 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-6 text-center">
         <div className="flex justify-center">
-          <div className="h-14 w-14 bg-negative/[0.08] rounded-xl flex items-center justify-center text-negative border border-negative/20">
-            <AlertCircle size={28} />
+          <div className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800 flex items-center justify-center">
+            <AlertCircle size={28} aria-hidden="true" />
           </div>
         </div>
         
         <div className="space-y-2">
-          <h1 className="text-xl font-bold text-brand-ink tracking-tight">Terjadi Kesalahan</h1>
-          <p className="text-sm text-brand-ink/50 font-medium leading-relaxed">
-            Kami mengalami kendala saat memuat data dashboard Anda.
+          <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
+            Kendala Sistem Dashboard
+          </span>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Terjadi Kesalahan Pemuatan
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+            Sistem mengalami kendala saat memuat data dashboard Anda. Silakan coba kembali beberapa saat lagi.
           </p>
           {error.digest && (
-            <p className="text-[10px] font-mono text-brand-ink/40 bg-brand-canvas-soft py-1.5 rounded-lg border border-brand-hairline">
-              Error ID: {error.digest}
+            <p className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 py-1.5 px-3 rounded-lg border border-slate-200 dark:border-slate-700 mt-2 inline-block">
+              ID Masalah: {error.digest}
             </p>
           )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
-            onClick={reset}
-            className="flex-1 bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-3 rounded-lg font-semibold text-xs uppercase tracking-wider shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer"
+            onClick={() => reset()}
+            className="min-h-[44px] flex-1 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-white rounded-xl font-semibold text-xs uppercase tracking-wider shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
           >
-            <RotateCcw size={16} /> Coba Lagi
+            <RotateCcw size={15} aria-hidden="true" />
+            Coba Lagi
           </button>
           <Link
-            href="/"
-            className="flex-1 bg-brand-canvas border border-brand-hairline text-brand-ink/50 py-3 rounded-lg font-semibold text-xs uppercase tracking-wider hover:text-brand-ink transition-colors flex items-center justify-center gap-2"
+            href="/dashboard"
+            className="min-h-[44px] flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-xs uppercase tracking-wider border border-slate-200 dark:border-slate-700 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
           >
-            <Home size={16} /> Beranda
+            <Home size={15} aria-hidden="true" />
+            Beranda
           </Link>
         </div>
       </div>

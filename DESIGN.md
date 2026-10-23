@@ -1,253 +1,168 @@
-## Overview
+# Design System & UI/UX Specification: Portal Pengaduan Masyarakat
 
-Wise — the global money-transfer brand — wears its identity in a single signature pairing: a vivid lime-green `{colors.primary}` (`#9fe870`) used as the CTA pill and brand accent, set against a pale sage-tinted canvas `{colors.canvas-soft}` (`#e8ebe6`) that runs across the hero band, and a near-black ink `{colors.ink}` (`#0e0f0c`) with a hint of warmth from the brand's underlying olive cast. The brand reads more like a calm Scandinavian magazine than a bank — generous whitespace, large rounded cards, and an unusually heavy display sans set at weight 900 carrying every hero headline.
+Dokumen ini merupakan panduan desain (*Design System*) untuk pengembangan antarmuka pengguna (UI) dan pengalaman pengguna (UX) pada *landing page* **Portal Pengaduan Masyarakat**. 
 
-Display typography is the second decisive voice. The proprietary `Wise Sans` family carries hero displays at weight 900 in scales from 64 px up to 126 px on the largest hero. The brand pairs Wise Sans 900 with Inter at weight 600 for sub-displays — the contrast between the chunky proprietary face and Inter's neutrality creates a particular hierarchy: Wise Sans for the brand moment, Inter for everything else.
+---
 
-Cards are universally pill-rounded — `{rounded.xl}` 24 px is the brand's signature card radius. Buttons take the same 24 px pill-rectangle shape. The brand never uses sharp corners on UI elements; the visual softness is part of the friendly fintech voice.
+## 1. Filosofi & Tema Desain
+* **Tema Utama:** *Modern Civic Tech (Clean, Trustworthy & Accessible)*
+* **Prinsip Utama:**
+  1. **Clarity over Complexity:** Warga yang datang ke situs ini umumnya sedang mengalami kendala/masalah. Antarmuka harus tenang, jelas, dan langsung mengarahkan mereka ke solusi tanpa kebingungan.
+  2. **Transparansi Visual:** Menampilkan data, status, dan alur kerja secara terbuka melalui komponen visual yang rapi.
+  3. **Inklusivitas & Aksesibilitas (WCAG AA):** Kontras warna tinggi, ukuran teks yang nyaman dibaca oleh lintas generasi (termasuk lansia), dan struktur navigasi yang ramah perangkat *mobile* (*Mobile-First*).
+  4. **Default Light Mode:** Memberikan kesan bersih, resmi, terbuka, dan mudah dibaca di bawah sinar matahari saat warga melapor langsung dari lokasi kejadian menggunakan ponsel.
 
-**Key Characteristics:**
-- A single lime-green CTA accent `{colors.primary}` (`#9fe870`) — the brand's universal primary action color. No second accent.
-- Two-face display typography — Wise Sans (proprietary, weight 900, hero scale) + Inter (weight 600, sub-display scale). The contrast is the brand's typographic story.
-- `{rounded.xl}` 24 px is the canonical card and button radius. Generous, friendly.
-- Sage-tinted canvas `{colors.canvas-soft}` (`#e8ebe6`) is the brand's hero surface; white `{colors.canvas}` is reserved for cards within the sage band.
-- A full semantic palette: positive green family, warning yellow family, negative red family — each documented with content / hover / active variants for in-product use.
-- Currency-converter card on the hero — the brand's signature interactive component, hosting from/to amount inputs.
+---
 
-## Colors
+## 2. Palet Warna (Color Tokens)
 
-### Brand & Accent
-- **Wise Green** (`{colors.primary}` — `#9fe870`): The brand's universal CTA color. Every primary button, every "Send money" pill, the brand's logo accent.
-- **Wise Green Hover** (`{colors.primary-active}` — `#cdffad`): The lighter green for active state.
-- **Wise Green Neutral** (`{colors.primary-neutral}` — `#c5edab`): A mid-saturation green used as a neutral active fill.
-- **Wise Green Pale** (`{colors.primary-pale}` — `#e2f6d5`): The lightest green for soft surface tints / badge backgrounds.
+Hindari penggunaan warna merah secara dominan agar tidak menimbulkan efek panik atau kesan agresif. Gunakan biru/hijau *teal* untuk membangun rasa percaya.
 
-### Surface
-- **Canvas** (`{colors.canvas}` — `#ffffff`): Pure white for card interiors.
-- **Canvas Soft** (`{colors.canvas-soft}` — `#e8ebe6`): The sage-tinted page background. Defining mood of the brand.
+### A. Brand & Primary Colors
+| Token | Hex Code | Tailwind Equivalent | Penggunaan |
+| :--- | :--- | :--- | :--- |
+| `--color-primary` | `#1E40AF` | `blue-800` | Warna identitas utama, *header*, elemen aktif, tombol sekunder. |
+| `--color-primary-hover` | `#1E3A8A` | `blue-900` | *State hover* pada elemen primer. |
+| `--color-primary-light` | `#EFF6FF` | `blue-50` | Latar belakang *badge*, *highlight card*, atau *icon container*. |
+| `--color-accent` | `#10B981` | `emerald-500` | Tombol Call-to-Action (CTA) utama ("Buat Laporan"), aksen positif. |
+| `--color-accent-hover` | `#059669` | `emerald-600` | *State hover* untuk CTA utama. |
 
-### Text
-- **Ink** (`{colors.ink}` — `#0e0f0c`): Near-black with a hint of olive warmth — the brand's default text and headings color.
-- **Ink Deep** (`{colors.ink-deep}` — `#163300`): A deep forest-green ink used on positive-state surfaces.
-- **Body** (`{colors.body}` — `#454745`): Secondary body text.
-- **Mute** (`{colors.mute}` — `#868685`): Lowest-priority text — captions, placeholder, fine print.
+### B. Neutral & Surface Colors
+| Token | Hex Code | Tailwind Equivalent | Penggunaan |
+| :--- | :--- | :--- | :--- |
+| `--bg-canvas` | `#F8FAFC` | `slate-50` | Warna latar belakang utama halaman (tidak membuat mata cepat lelah). |
+| `--bg-surface` | `#FFFFFF` | `white` | Latar belakang *card*, *modal*, *navbar*, dan *input field*. |
+| `--bg-subtle` | `#F1F5F9` | `slate-100` | Latar belakang seksi alternatif (*alternating section*). |
+| `--text-primary` | `#0F172A` | `slate-900` | Warna teks judul (*heading*) dan teks utama. |
+| `--text-secondary` | `#475569` | `slate-600` | Subjudul, deskripsi, dan label form. |
+| `--text-muted` | `#94A3B8` | `slate-400` | *Placeholder* input, teks *caption*, atau *timestamp*. |
+| `--border-default` | `#E2E8F0` | `slate-200` | Garis pembatas (*divider*), *border card*, dan *input default*. |
 
-### Semantic
-- **Positive** (`{colors.positive}` — `#2ead4b`): Success indicator.
-- **Positive Deep** (`{colors.positive-deep}` — `#054d28`): Pressed positive state.
-- **Warning** (`{colors.warning}` — `#ffd11a`): Caution indicator.
-- **Warning Deep** (`{colors.warning-deep}` — `#b86700`): Pressed warning.
-- **Warning Content** (`{colors.warning-content}` — `#4a3b1c`): Text on warning surfaces.
-- **Negative** (`{colors.negative}` — `#d03238`): Destructive / error red.
-- **Negative Deep** (`{colors.negative-deep}` — `#a72027`): Pressed destructive.
-- **Negative Darkest** (`{colors.negative-darkest}` — `#a7000d`): Highest-emphasis destructive text.
-- **Negative Bg** (`{colors.negative-bg}` — `#320707`): Dark maroon for destructive callout backgrounds.
+### C. Semantic / Status Colors (Pelacakan Laporan)
+| Status Laporan | Text & Icon Hex | Background Hex | Border Hex | Makna |
+| :--- | :--- | :--- | :--- | :--- |
+| **Menunggu Verifikasi** | `#475569` (`slate-600`) | `#F1F5F9` (`slate-100`) | `#CBD5E1` | Laporan baru masuk antrean. |
+| **Sedang Diproses** | `#B45309` (`amber-700`) | `#FEF3C7` (`amber-100`) | `#FDE68A` | Sedang ditindaklanjuti petugas di lapangan. |
+| **Selesai Ditangani** | `#047857` (`emerald-700`) | `#D1FAE5` (`emerald-100`) | `#A7F3D0` | Masalah telah diselesaikan beserta bukti. |
+| **Ditolak / Tidak Valid**| `#B91C1C` (`red-700`) | `#FEE2E2` (`red-100`) | `#FECACA` | Laporan duplikat, *spam*, atau di luar wewenang. |
 
-### Brand Accent — Tertiary
-- **Accent Orange** (`{colors.accent-orange}` — `#ffc091`): Bright peach used inside illustrative content / pricing cards.
-- **Accent Cyan** (`{colors.accent-cyan}` — `#38c8ff`): Bright sky-blue used as a tertiary illustration accent.
+---
 
-## Typography
+## 3. Tipografi (Typography)
 
 ### Font Family
-Two faces ladder the system:
-1. **Wise Sans** — proprietary geometric sans with an unusually heavy weight 900 used for all hero displays. The face is the brand's typographic signature. Always at weight 900, never lighter on the marketing surface.
-2. **Inter** — used for sub-displays (weight 600), all body, and form labels. Loaded with `font-feature-settings: "calt"` for contextual alternates.
+* **Heading & Body (`--font-sans`):** `'Plus Jakarta Sans'`, `'Inter'`, atau `system-ui, sans-serif`. Karakter huruf modern, terbuka, dan sangat jelas di layar resolusi rendah maupun tinggi.
+* **Nomor Tiket / Kode Laporan (`--font-mono`):** `'JetBrains Mono'` atau `monospace`. Wajib digunakan untuk menampilkan ID Laporan (misal: `#LP-2026-0891`) agar angka `0` dan huruf `O` tidak tertukar.
 
-### Hierarchy
+### Skala Tipografi (Type Scale)
+| Elemen | Ukuran (Desktop) | Ukuran (Mobile) | Ketebalan (Weight) | Line Height |
+| :--- | :--- | :--- | :--- | :--- |
+| **Hero Title (H1)** | `44px` (`2.75rem`) | `32px` (`2.0rem`) | Bold (`700`) | `1.2` |
+| **Section Title (H2)**| `32px` (`2.0rem`) | `24px` (`1.5rem`) | Bold (`700`) | `1.3` |
+| **Card Title (H3)** | `20px` (`1.25rem`) | `18px` (`1.125rem`)| SemiBold (`600`) | `1.4` |
+| **Body Large** | `18px` (`1.125rem`)| `16px` (`1.0rem`) | Regular (`400`) | `1.6` |
+| **Body Default** | `16px` (`1.0rem`) | `16px` (`1.0rem`) | Regular (`400`) | `1.5` |
+| **Caption / Badge** | `14px` (`0.875rem`)| `12px` (`0.75rem`) | Medium (`500`) | `1.4` |
 
-| Token | Size | Weight | Line Height | Letter Spacing | Use |
-|---|---|---|---|---|---|
-| `{typography.display-mega}` | 126px | 900 | 107.1px | 0 | Hero stencil at maximum scale. |
-| `{typography.display-xxl}` | 96px | 900 | 81.6px | 0 | Sub-hero scale. |
-| `{typography.display-xl}` | 64px | 900 | 54.4px | 0 | Standard hero headline. |
-| `{typography.display-lg}` | 47px | 400 | 70.5px | -0.108px | Lighter sub-display. |
-| `{typography.display-md}` | 40px | 900 | 34px | 0 | Section / card headlines. |
-| `{typography.display-sm}` | 32px | 600 | 38.4px | -0.96px | Inter-rendered section headings. |
-| `{typography.display-xs}` | 24px | 600 | 31.2px | -0.48px | Sub-section displays. |
-| `{typography.body-lg}` | 20px | 400 | 30px | 0 | Lead paragraphs. |
-| `{typography.body-md}` | 16px | 400 | 24px | 0 | Default body. |
-| `{typography.body-md-strong}` | 16px | 600 | 24px | 0 | Bold inline body. |
-| `{typography.body-sm}` | 14px | 400 | 20px | 0 | Secondary body. |
-| `{typography.body-sm-strong}` | 14px | 600 | 20px | 0 | Bold caption / nav-link. |
-| `{typography.caption}` | 12px | 400 | 16px | 0 | Fine print. |
-| `{typography.button-md}` | 16px | 600 | 24px | 0 | Button label. |
+---
 
-### Principles
-- **Weight 900 for hero, weight 600 for everything else.** The brand's display ceiling is full-black weight; everything below is semibold.
-- **Wise Sans for the brand voice, Inter for utility.** Strict role separation.
+## 4. Layout, Grid & Spacing
 
-### Note on Font Substitutes
-Wise Sans is proprietary. Open-source substitutes:
-- **Display** — *Inter* at weight 900 or *Manrope* at weight 800 / 900 captures the geometric heaviness. *Geist* weight 800 is a passable second choice.
-- **Sub-display + body** — *Inter* is the brand's actual second face.
+* **Container Max-Width:** `1280px` dengan *padding* horizontal `24px` (Mobile) dan `48px` (Desktop).
+* **Grid System:** 
+  * Desktop: 12 kolom (`gap: 24px`).
+  * Tablet: 8 kolom (`gap: 20px`).
+  * Mobile: 4 kolom (`gap: 16px`).
+* **Section Spacing:** `80px` (`5rem`) vertikal untuk Desktop, `48px` (`3rem`) vertikal untuk Mobile.
+* **Border Radius:**
+  * Tombol & Input: `8px` (`rounded-lg`)
+  * Card & Modal: `16px` (`rounded-2xl`)
+  * Badge Status: `9999px` (`rounded-full`)
+* **Box Shadow (Elevasi Halus):**
+  * Default Card: `0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.06)`
+  * Hover / Floating Widget: `0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04)`
 
-## Layout
+---
 
-### Spacing System
-- **Base unit**: 4 px.
-- **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px.
-- **Section padding**: bands use `{spacing.3xl}` 48 px top/bottom on desktop.
-- **Card interior**: cards at `{spacing.xl}` 24 px.
+## 5. Struktur Anatomi Landing Page (Wireframe Spec)
 
-### Grid & Container
-- Marketing container centres at ~1200 px.
-- Hero: split layout (headline left, currency-converter card right) at desktop; stacked at mobile.
-- Feature grids: 2-up / 3-up at desktop.
+### 5.1. Sticky Navbar
+* **Kiri:** Logo Instansi/Portal + Nama Sistem.
+* **Tengah:** Navigasi Jangkar (*Anchor Links*): *Cara Melapor*, *Statistik*, *Jelajah Laporan*, *FAQ*.
+* **Kanan:** Tombol Sekunder *"Masuk"* & Tombol Primer *"Buat Laporan"*.
 
-### Responsive Strategy
+### 5.2. Hero Section (Dual-Action Focus)
+* **Layout:** *Split 2 Kolom* pada desktop (Kiri: Teks & Aksi, Kanan: Ilustrasi Interaktif/Status Card).
+* **Konten Kiri:**
+  * *Trust Pill Badge:* `"🔒 Identitas Pelapor Dijamin Aman & Rahasia"`
+  * *Headline (H1):* `"Suara Anda, Langkah Awal Perubahan Lingkungan Kita."`
+  * *Subheadline:* `"Sampaikan keluhan infrastruktur, layanan publik, atau ketertiban lingkungan dengan cepat dan pantau penanganannya secara transparan."`
+  * *Primary Action:* Tombol besar **"+ Buat Pengaduan Baru"** (Warna Emerald `#10B981`) berdampingan dengan tombol **"Lapor Darurat / Hotline"**.
+* **Widget Lacak Cepat (Floating Search Bar di bawah Hero):**
+  * Kolom input langsung tanpa harus *login*: *"Sudah melapor? Masukkan Nomor Tiket (Contoh: LP-2026-XXXX)"* + Tombol **"Lacak Status"**.
 
-#### Breakpoints
+### 5.3. Statistik Transparansi (Trust Indicators)
+* **Layout:** 4 Kartu metrik sejajar (*Bento/Counter Cards*).
+* **Metrik yang Ditampilkan:**
+  1. **Total Laporan Masuk** (Angka besar + indikator bulan ini).
+  2. **Sedang Ditindaklanjuti** (Menunjukkan sistem sedang bekerja aktif).
+  3. **Laporan Selesai** (Persentase penyelesaian, misal: `94.2%`).
+  4. **Rata-rata Waktu Respons** (Misal: `< 24 Jam`).
 
-| Name | Width | Key Changes |
-|---|---|---|
-| Mobile | < 768px | Hero stacks; converter card full-width below headline; grids 1-up. |
-| Tablet | 768–1023px | Grids 2-up. |
-| Desktop | ≥ 1024px | Hero split; full grids. |
+### 5.4. Alur Pengaduan (How It Works)
+* **Layout:** 4 Langkah Horizontal (Desktop) / Stepper Vertikal (Mobile).
+* **Tahapan:**
+  1. **Tulis & Unggah Bukti:** Isi kronologi singkat, titik lokasi peta, dan foto bukti.
+  2. **Verifikasi (< 24 Jam):** Tim admin memvalidasi kelengkapan laporan dan meneruskan ke dinas/unit terkait.
+  3. **Tindak Lanjut Lapangan:** Petugas menangani masalah dan memperbarui progres secara berkala.
+  4. **Selesai & Evaluasi:** Laporan ditutup dengan bukti foto hasil pengerjaan (*Before-After*), pelapor dapat memberi *rating*.
 
-#### Touch Targets
-Buttons render ~48 px tall (12 vertical padding + 24 line). WCAG AAA at all widths.
+### 5.5. Kategori Pengaduan Populer (Quick Access Grid)
+* **Layout:** Grid 3x2 atau 4x2 menggunakan kartu berikon jelas. Saat diklik, langsung membuka form pengaduan dengan kategori yang sudah terpilih otomatis (*pre-filled*).
+* **Contoh Kategori:** *Jalan & Jembatan Rusak*, *Lampu Penerangan Jalan*, *Sampah & Kebersihan*, *Saluran Air & Banjir*, *Fasilitas Umum*, *Pelayanan Administrasi*.
 
-#### Image Behavior
-Photography is sparse; the brand prefers illustrative SVGs and product mockups inside cards. Country flag thumbnails appear inside currency rows.
+### 5.6. Feed Laporan Terkini (Transparansi Publik)
+* **Layout:** 3 Kolom *Card Grid* + Filter tab sederhana (*Semua*, *Diproses*, *Selesai*).
+* **Isi Kartu Laporan:**
+  * *Header Card:* Kategori + Badge Status + Waktu Lapor (*"2 jam yang lalu"*).
+  * *Visual:* Foto bukti laporan (dilengkapi label *Before / After* jika sudah selesai).
+  * *Konten:* Judul laporan, lokasi kelurahan/kecamatan.
+  * *Footer Card:* Nama pelapor disamarkan otomatis (Contoh: `"B*** S******"`) untuk menjaga privasi + jumlah dukungan (*Upvote* `"Saya juga mengalami ini"`).
 
-## Elevation & Depth
+### 5.7. Jaminan Keamanan & FAQ (Accordion)
+* Menjawab pertanyaan krusial warga dalam bentuk *expandable accordion*:
+  * *Apakah identitas saya aman jika melaporkan oknum/masalah sensitif?* (Penjelasan fitur **Lapor Anonim / Rahasia**).
+  * *Berapa lama laporan saya akan direspons?*
+  * *Apakah layanan ini dipungut biaya?*
 
-| Level | Treatment | Use |
-|---|---|---|
-| Level 0 — Flat | No shadow, no border. | Default. |
-| Level 1 — Hairline on Dark | 1 px solid `{colors.ink}` border. | Tertiary outline buttons, form inputs. |
-| Level 2 — Soft Card | Implicit Level 0 white card sitting on sage canvas — the surface contrast IS the elevation. | Cards on the sage hero band. |
+### 5.8. Footer
+* Informasi kontak darurat (Call Center 112 / WhatsApp Pengaduan), alamat kantor pengelola, tautan Kebijakan Privasi, dan Syarat Ketentuan.
 
-The brand uses surface contrast (`{colors.canvas-soft}` background vs `{colors.canvas}` cards) as the primary elevation cue.
+---
 
-## Shapes
+## 6. Spesifikasi Komponen Kunci (UI Components)
 
-### Border Radius Scale
+### A. Tombol (Buttons)
+* **Tinggi Minimum (Touch Target):** `48px` untuk tombol utama agar mudah ditekan oleh ibu jari di layar HP.
+* **Primary CTA:** Background `#10B981`, Teks Putih `font-semibold`, dengan ikon tambah/kirim di sebelah kiri teks.
+* **Focus State:** Wajib memiliki `outline: 3px solid #93C5FD` (`blue-300`) untuk aksesibilitas navigasi keyboard.
 
-| Token | Value | Use |
-|---|---|---|
-| `{rounded.none}` | 0px | Full-bleed bands. |
-| `{rounded.sm}` | 8px | Inline pills, small badges. |
-| `{rounded.md}` | 12px | Form inputs, smaller chrome. |
-| `{rounded.lg}` | 16px | Mid-size cards. |
-| `{rounded.xl}` | 24px | The brand's canonical button + card radius. |
-| `{rounded.pill}` | 9999px | Status pills and full-radius accents. |
-| `{rounded.full}` | 9999px | Circular icon containers. |
+### B. Kartu Laporan Publik (Report Card)
+* Memiliki rasio gambar tetap `16:9` dengan `object-fit: cover`.
+* Jika laporan mengandung gambar sensitif, tambahkan efek *blur* otomatis dengan tombol *"Tampilkan Gambar"*.
+* Dilengkapi fitur **Tombol Dukungan (Upvote)**: Memungkinkan warga lain menekan tombol *"Ikut Pantau / Masalah Serupa (24)"* agar warga tidak perlu membuat laporan duplikat untuk jalan berlubang yang sama.
 
-## Components
+### C. Bilah Pelacak Tiket (Ticket Tracker Input)
+* Menggunakan *font monospace* saat pengguna mengetik kode tiket.
+* Otomatis mengubah huruf kecil menjadi huruf kapital (*auto-uppercase*).
+* Menampilkan hasil pratinjau instan (*inline modal/drawer*) berupa *timeline* progres tanpa harus berpindah halaman penuh.
 
-### Buttons
+---
 
-**`button-primary`** — the lime-green CTA pill.
-- Background `{colors.primary}`, text `{colors.on-primary}`, label `{typography.button-md}`, padding `{spacing.md} {spacing.xl}`, shape `{rounded.xl}` 24 px.
-
-**`button-secondary`** — the sage-tinted secondary.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, same typography / padding / shape.
-
-**`button-tertiary`** — the white outline tertiary.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, same typography / padding / shape.
-
-**`button-icon-circular`** — the circular icon button.
-- Background `{colors.canvas}`, ink icon, shape `{rounded.full}`.
-
-### Cards & Containers
-
-**`card-content`** — the default white card.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.xl}`, shape `{rounded.xl}`. No border, sits on sage canvas.
-
-**`card-feature-sage`** — the sage-tinted feature card.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, padding `{spacing.xl}`, shape `{rounded.xl}`.
-
-**`card-feature-green`** — the soft-green feature card.
-- Background `{colors.primary-pale}`, text `{colors.ink}`, padding `{spacing.xl}`, shape `{rounded.xl}`.
-
-**`card-feature-dark`** — the polarity-flipped dark card with green text.
-- Background `{colors.ink}`, text `{colors.primary}` (Wise green!), padding `{spacing.xl}`, shape `{rounded.xl}`. Used for promotional moments.
-
-**`currency-converter-card`** — the brand's signature interactive widget.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, padding `{spacing.xl}`, shape `{rounded.xl}`. Hosts from/to amount inputs + currency selectors.
-
-### Inputs & Forms
-
-**`text-input`** — the canonical text input.
-- Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, body in `{typography.body-md}`, padding `{spacing.md} {spacing.lg}`, shape `{rounded.md}`.
-
-### Navigation
-
-**`nav-bar`** — the sticky top nav.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.xl}`.
-
-**`nav-link`** — link items inside nav.
-- Text `{colors.ink}`, set in `{typography.body-sm-strong}`.
-
-**`footer`** — the dark footer band.
-- Background `{colors.ink}`, text `{colors.canvas-soft}`, padding `{spacing.3xl} {spacing.xl}`. Body in `{typography.body-sm}`.
-
-### Signature Components
-
-**`hero-band`** — the sage-canvas hero band.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, padding `{spacing.3xl} {spacing.xl}`. Headline in `{typography.display-mega}` (Wise Sans weight 900).
-
-**`hero-band-dark`** — the polarity-flipped dark hero.
-- Background `{colors.ink}`, text `{colors.primary}` (Wise green headline on near-black!), same padding / scale.
-
-**`content-band`** — the white content band that follows hero.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.3xl} {spacing.xl}`. Section headline in `{typography.display-md}`.
-
-**`badge-positive`** — the positive status pill.
-- Background `{colors.primary-pale}`, text `{colors.positive-deep}`, body in `{typography.body-sm-strong}`, padding `{spacing.xs} {spacing.md}`, shape `{rounded.pill}`.
-
-**`badge-negative`** — the negative status pill.
-- Background `{colors.negative-bg}`, text white, body in `{typography.body-sm-strong}`, padding `{spacing.xs} {spacing.md}`, shape `{rounded.pill}`.
-
-### Examples (illustrative)
-
-> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
-
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
-
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
-
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
-
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
-
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
-
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-empty-state-card`** — Empty-state illustration frame.
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
-
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
-
-
-## Do's and Don'ts
-
-### Do
-- Reserve `{colors.primary}` Wise green for every primary CTA. The lime-green pill IS the brand's conversion signature.
-- Set hero headlines in `{typography.display-mega}` / `{typography.display-xl}` Wise Sans weight 900. Never lighter.
-- Use `{rounded.xl}` 24 px for buttons and cards. The generous radius is the brand's friendliness signature.
-- Cycle page surfaces in `{colors.canvas-soft}` sage canvas → `{colors.canvas}` white cards. Surface contrast carries elevation.
-- Use the full semantic palette (positive / warning / negative) for in-product status — never repurpose Wise green as success indicator since it IS the brand CTA.
-
-### Don't
-- Don't introduce a second brand accent. Wise green is the sole identity colour.
-- Don't render the hero in weight 700 or lighter. The brand's display weight is 900.
-- Don't render CTAs as sharp rectangles. The 24 px pill geometry is non-negotiable.
-- Don't pair the green CTA with a green background. The brand always sits Wise green on neutral surfaces (sage / white / ink).
-- Don't replace Wise Sans with a generic geometric sans for hero typography — the proprietary face IS the brand's voice.
+## 7. Panduan Aksesibilitas & Micro-Interactions
+1. **Kecepatan Muat (Performance):** Hindari animasi berat (seperti *video background* atau 3D *canvas*). Gunakan ilustrasi berformat `.SVG` atau `.WebP` berukuran di bawah `100KB`.
+2. **Bahasa yang Empatik (UX Writing):** 
+   * Gunakan kalimat aktif dan ramah. 
+   * *Hindari:* `"Error 404: Tiket tidak ditemukan di database."`
+   * *Gunakan:* `"Nomor tiket belum ditemukan. Pastikan kode sudah sesuai (contoh: LP-2026-0123) atau periksa kembali email/WhatsApp Anda."`
+3. **Fitur Lapor Tanpa Login (Guest Reporting) vs Terdaftar:** Berikan opsi melapor cepat hanya dengan verifikasi nomor WhatsApp/Email (OTP) agar warga tidak batal melapor karena malas membuat akun baru.

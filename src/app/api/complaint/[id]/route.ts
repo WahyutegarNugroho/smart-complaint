@@ -7,27 +7,44 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  try {
+    const { id } = await params
+    if (!id) {
+      return NextResponse.json({ error: 'ID laporan tidak valid' }, { status: 400 })
+    }
 
-  const complaint = await prisma.complaint.findUnique({
-    where: { id: id },
-    include: { author: true }
-  })
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Sesi tidak terotentikasi' }, { status: 401 })
+    }
 
-  if (!complaint) return NextResponse.json({ error: 'Not Found' }, { status: 404 })
+    const complaint = await prisma.complaint.findUnique({
+      where: { id },
+      include: { author: true }
+    })
 
-  // 🛡️ SECURITY: Only author or staff can view details
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
-  if (!profile) return NextResponse.json({ error: 'Profile required' }, { status: 403 })
+    if (!complaint) {
+      return NextResponse.json({ error: 'Laporan tidak ditemukan' }, { status: 404 })
+    }
 
-  const isAuthor = complaint.authorId === profile.id
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id },
+      select: { id: true, role: true }
+    })
+    if (!profile) {
+      return NextResponse.json({ error: 'Profil pengguna tidak ditemukan' }, { status: 403 })
+    }
 
-  if (!isStaff(profile) && !isAuthor) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    const isAuthor = complaint.authorId === profile.id
+
+    if (!isStaff(profile) && !isAuthor) {
+      return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 })
+    }
+
+    return NextResponse.json(complaint)
+  } catch (err) {
+    console.error('API /api/complaint/[id] Error:', err)
+    return NextResponse.json({ error: 'Terjadi kesalahan sistem internal' }, { status: 500 })
   }
-
-  return NextResponse.json(complaint)
 }

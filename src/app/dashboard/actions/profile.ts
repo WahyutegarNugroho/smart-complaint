@@ -18,14 +18,18 @@ export async function updateProfile(formData: FormData) {
     if (!profile) throw new Error('profile_not_found')
 
     const name = formData.get('name') as string
-    const nik = formData.get('nik') as string
-    const phone = formData.get('phone') as string
+    const nik = (formData.get('nik') as string || '').trim() || null
+    const rawPhone = (formData.get('phone') as string || '').trim()
+    const normalizedPhone = rawPhone
+      ? rawPhone.replace(/^\+62/, '0').replace(/^62/, '0')
+      : ''
+    const phone = normalizedPhone || null
     const rt = formData.get('rt') as string
     const rw = formData.get('rw') as string
 
     const errName = validateString(name, 'Nama', 100)
-    const errNIK = validateNIK(nik)
-    const errPhone = validatePhone(phone)
+    const errNIK = validateNIK(nik || '')
+    const errPhone = validatePhone(normalizedPhone)
     const errRT = validateRTRW(rt, 'RT')
     const errRW = validateRTRW(rw, 'RW')
 

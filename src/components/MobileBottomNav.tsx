@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import {
   Home, Plus, Settings2, Inbox, Map,
   LayoutDashboard, ClipboardList, Activity, UserCircle,
-  BarChart, Users, LayoutGrid,
+  BarChart, Users, Megaphone,
 } from 'lucide-react'
 
 interface NavItem {
@@ -35,8 +35,8 @@ const PETUGAS_NAV: NavItem[] = [
 const ADMIN_NAV: NavItem[] = [
   { href: '/dashboard', label: 'Stats', icon: BarChart },
   { href: '/dashboard/map', label: 'Peta', icon: Map },
-  { href: '/dashboard/admin/users', label: 'Admin', icon: LayoutGrid, isCenter: true },
-  { href: '/dashboard/admin/users', label: 'Warga', icon: Users },
+  { href: '/dashboard/admin/users', label: 'Warga', icon: Users, isCenter: true },
+  { href: '/dashboard/admin/announcements', label: 'Siaran', icon: Megaphone },
   { href: '/dashboard/settings', label: 'Profil', icon: Settings2 },
 ]
 
@@ -66,9 +66,11 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
     return pathname === item.href
   }
 
+  const isStaffOrAdmin = role === 'PETUGAS' || role === 'ADMIN'
+
   return (
     <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 w-[94%] max-w-[420px] z-[60]">
-      <nav aria-label="Navigasi Bawah" className="bg-brand-canvas border border-brand-hairline rounded-xl px-2 py-2 flex items-center justify-around shadow-lg">
+      <nav aria-label="Navigasi Bawah" className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl px-2 py-1.5 flex items-center justify-around shadow-xl">
 
         {navItems.map((item, index) => {
           const Icon = item.icon
@@ -76,8 +78,19 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
 
           if (item.isCenter) {
             return (
-              <Link key={index} href={item.href} aria-label={item.label} className="flex items-center justify-center -translate-y-5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-xl">
-                <div className="h-14 w-14 bg-brand-ink dark:bg-brand-primary rounded-xl flex items-center justify-center text-brand-canvas dark:text-[#0e0f0c] shadow-md border-2 border-brand-canvas group-active:scale-95 transition-transform">
+              <Link 
+                key={index} 
+                href={item.href} 
+                aria-label={item.label} 
+                className={`flex items-center justify-center -translate-y-5 group focus-visible:outline-none focus-visible:ring-2 rounded-2xl ${
+                  isStaffOrAdmin ? 'focus-visible:ring-blue-600' : 'focus-visible:ring-emerald-600'
+                }`}
+              >
+                <div className={`h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-lg border-4 border-slate-50 dark:border-slate-950 group-active:scale-95 transition-transform ${
+                  isStaffOrAdmin 
+                    ? 'bg-blue-800 hover:bg-blue-900 shadow-blue-800/30' 
+                    : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/30'
+                }`}>
                   <Icon aria-hidden="true" size={24} />
                 </div>
               </Link>
@@ -89,10 +102,14 @@ export default function MobileBottomNav({ role }: MobileBottomNavProps) {
               key={index}
               href={item.href}
               aria-current={active ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[48px] px-2 py-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary ${active ? 'text-brand-primary font-semibold' : 'text-brand-ink/60 hover:text-brand-ink'}`}
+              className={`flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[48px] px-2 py-1.5 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                active 
+                  ? 'text-blue-800 dark:text-blue-400 font-bold' 
+                  : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 font-medium'
+              }`}
             >
               <Icon aria-hidden="true" size={20} />
-              <span className="text-[10px] uppercase tracking-normal">{item.label}</span>
+              <span className="text-[10px] tracking-normal">{item.label}</span>
             </Link>
           )
         })}

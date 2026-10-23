@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { MoreVertical, Edit2, Trash2, Check, X, Loader2 } from 'lucide-react'
 import { deleteResponse, editResponse } from '@/app/dashboard/actions'
 import ConfirmModal from '@/components/ConfirmModal'
@@ -64,24 +65,28 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
   }
 
   return (
-    <div className={`flex gap-4 group/item ${isOfficer ? 'flex-row' : 'flex-row-reverse'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
+    <div className={`flex gap-3 sm:gap-4 group/item ${isOfficer ? 'flex-row' : 'flex-row-reverse'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
       <div className="shrink-0 pt-1">
-        <div className={`h-11 w-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all ${isOfficer ? 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]' : 'bg-brand-canvas border border-brand-hairline text-brand-ink/40'}`}>
+        <div className={`h-10 w-10 sm:h-11 sm:w-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all ${
+          isOfficer 
+            ? 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800' 
+            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+        }`}>
           {(res.officer?.name || '?').charAt(0).toUpperCase()}
         </div>
       </div>
 
       <div className={`w-full max-w-[85%] sm:max-w-[75%] space-y-1.5 ${isOfficer ? 'items-start' : 'items-end flex flex-col'}`}>
         <div className={`flex items-center gap-2 px-1 ${!isOfficer ? 'flex-row-reverse' : ''}`}>
-          <span className="text-xs font-bold text-brand-ink">{res.officer?.name || 'Pelapor'}</span>
-          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md ${
-            res.officer?.role === 'ADMIN' ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' :
-            res.officer?.role === 'PETUGAS' ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20' : 
-            'bg-brand-canvas-soft text-brand-ink/60 border border-brand-hairline'
+          <span className="text-xs font-bold text-slate-900 dark:text-white">{res.officer?.name || 'Pelapor'}</span>
+          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+            res.officer?.role === 'ADMIN' ? 'bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800' :
+            res.officer?.role === 'PETUGAS' ? 'bg-blue-50 text-blue-800 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800' : 
+            'bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
           }`}>
             {roleLabel}
           </span>
-          <span className="text-[9px] font-mono tabular-nums text-brand-ink/40">
+          <span className="text-[10px] font-mono tabular-nums text-slate-400 dark:text-slate-500">
             {timeStr}
           </span>
           
@@ -91,7 +96,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                 <button 
                   onClick={() => setShowMenu(!showMenu)}
                   aria-label="Opsi tanggapan"
-                  className="p-1 rounded-lg hover:bg-brand-canvas-soft text-brand-ink/40 transition-all opacity-0 group-hover/item:opacity-100 cursor-pointer"
+                  className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all opacity-0 group-hover/item:opacity-100 cursor-pointer"
                 >
                   <MoreVertical size={14} />
                 </button>
@@ -104,11 +109,11 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                        onClick={() => setShowMenu(false)}
                        aria-label="Tutup menu tanggapan"
                      />
-                     <div className={`absolute top-full mt-1 w-32 bg-brand-canvas border border-brand-hairline rounded-lg shadow-lg z-20 overflow-hidden ${isOfficer ? 'left-0' : 'right-0'}`}>
+                     <div className={`absolute top-full mt-1 w-32 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg z-20 overflow-hidden ${isOfficer ? 'left-0' : 'right-0'}`}>
                        {canEdit && (
                          <button 
                            onClick={() => { setIsEditing(true); setShowMenu(false); }}
-                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-brand-ink hover:bg-brand-canvas-soft transition-colors cursor-pointer"
+                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                          >
                            <Edit2 size={12} /> Edit
                          </button>
@@ -116,7 +121,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                         {canDelete && (
                           <button 
                             onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
-                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+                           className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
                          >
                            {isDeleting ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />} Hapus
                          </button>
@@ -129,9 +134,9 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
         </div>
 
           {errorMsg && (
-            <div className="w-full p-3 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 font-medium">
+            <div className="w-full p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-400 font-medium">
               {errorMsg}
-              <button onClick={() => setErrorMsg(null)} className="ml-2 text-red-400 hover:text-red-600">&times;</button>
+              <button onClick={() => setErrorMsg(null)} className="ml-2 text-rose-500 hover:text-rose-700">&times;</button>
             </div>
           )}
 
@@ -142,14 +147,14 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
               onChange={(e) => setContent(e.target.value)}
               aria-label="Edit tanggapan"
               placeholder="Tulis pembaruan status atau hasil pemeriksaan lapangan..."
-              className="w-full p-3 rounded-xl bg-brand-canvas-soft border-2 border-brand-primary/30 text-sm text-brand-ink focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all resize-none"
+              className="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border-2 border-blue-600 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all resize-none"
               rows={3}
             />
             <div className="flex justify-end gap-2">
                 <button 
                   onClick={() => setIsEditing(false)}
                   aria-label="Batal edit"
-                  className="p-2 rounded-lg bg-brand-canvas border border-brand-hairline text-brand-ink/60 hover:bg-brand-canvas-soft transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -157,18 +162,28 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                   onClick={handleEdit}
                   disabled={isSaving}
                   aria-label="Simpan edit"
-                  className="p-2 rounded-lg bg-brand-primary text-[#0e0f0c] hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="p-2 rounded-xl bg-blue-800 text-white hover:bg-blue-900 transition-opacity flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                 {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-               </button>
+                  {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                </button>
             </div>
           </div>
         ) : (
-          <div className={`p-4 rounded-xl text-sm leading-relaxed font-medium shadow-sm ${isOfficer ? 'bg-brand-canvas border border-brand-hairline text-brand-ink' : 'bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c]'}`}>
+          <div className={`p-4 rounded-2xl text-sm leading-relaxed font-medium shadow-sm ${
+            isOfficer 
+              ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-sm' 
+              : 'bg-blue-800 text-white dark:bg-blue-700 rounded-tr-sm'
+          }`}>
             {res.content}
             {res.imageUrl && (
-              <div className="mt-3 rounded-lg overflow-hidden border border-brand-hairline relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
-                <img src={res.imageUrl} alt="Lampiran" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="mt-3 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700/60 relative aspect-video w-full min-w-[200px] sm:min-w-[300px]">
+                <Image
+                  src={res.imageUrl}
+                  alt="Lampiran foto tanggapan"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 400px"
+                  className="object-cover"
+                />
               </div>
             )}
           </div>

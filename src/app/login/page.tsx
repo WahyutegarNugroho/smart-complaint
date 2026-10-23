@@ -1,202 +1,268 @@
-'use client'
+'use client';
 
-import { login } from '@/app/auth/actions'
-import { Zap, ArrowRight, Lock, Mail, Eye, EyeOff, Clock } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import SubmitButton from '@/components/SubmitButton'
-import ThemeToggle from '@/components/ThemeToggle'
-import { useState, use, useEffect, useRef } from 'react'
+import React, { useState, use, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import {
+  Megaphone,
+  ArrowRight,
+  Lock,
+  Mail,
+  Eye,
+  EyeOff,
+  Clock,
+  ArrowLeft,
+  AlertTriangle,
+} from 'lucide-react';
+import { login } from '@/app/auth/actions';
+import SubmitButton from '@/components/SubmitButton';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string, message?: string, remaining?: string, remainingAttempts?: string }>
+  searchParams: Promise<{
+    error?: string;
+    message?: string;
+    remaining?: string;
+    remainingAttempts?: string;
+  }>;
 }) {
-  const { error, message, remaining, remainingAttempts } = use(searchParams)
-  const router = useRouter()
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const initRef = useRef(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [locked, setLocked] = useState(false)
-  const [countdown, setCountdown] = useState(0)
-  const showRemaining = !locked && remainingAttempts
-  const remainingNum = showRemaining ? (parseInt(remainingAttempts) || 0) : 0
+  const { error, message, remaining, remainingAttempts } = use(searchParams);
+  const router = useRouter();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const initRef = useRef(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const showRemaining = !locked && remainingAttempts;
+  const remainingNum = showRemaining ? parseInt(remainingAttempts) || 0 : 0;
 
   // Inisialisasi status lock: prioritaskan API, fallback ke URL params
   useEffect(() => {
-    if (initRef.current) return
-    initRef.current = true
+    if (initRef.current) return;
+    initRef.current = true;
     fetch('/api/login-status')
       .then((res) => res.json())
       .then((data) => {
         if (data.locked) {
-          setLocked(true)
-          setCountdown(data.remainingSeconds)
+          setLocked(true);
+          setCountdown(data.remainingSeconds);
         }
       })
       .catch(() => {
         if (error === 'locked' && remaining) {
-          setLocked(true)
-          setCountdown(parseInt(remaining) || 60)
+          setLocked(true);
+          setCountdown(parseInt(remaining) || 60);
         }
-      })
-  }, [error, remaining])
+      });
+  }, [error, remaining]);
 
-  // Countdown timer — selalu 1 interval, selalu pakai latest countdown
+  // Countdown timer: selalu 1 interval, selalu pakai latest countdown
   useEffect(() => {
     if (!locked) {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
-      return
+      return;
     }
-    if (intervalRef.current) return
+    if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          if (intervalRef.current) clearInterval(intervalRef.current)
-          intervalRef.current = null
-          setLocked(false)
-          router.replace('/login')
-          return 0
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          setLocked(false);
+          router.replace('/login');
+          return 0;
         }
-        return prev - 1
-      })
-    }, 1000)
+        return prev - 1;
+      });
+    }, 1000);
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
-    }
-  }, [locked, router])
+    };
+  }, [locked, router]);
 
   const formatCountdown = (s: number) => {
-    const m = Math.floor(s / 60)
-    const sec = s % 60
-    return `${m}:${sec.toString().padStart(2, '0')}`
-  }
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-canvas-soft px-6 animate-page">
-      <div className="absolute top-6 right-6 z-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col justify-center items-center px-4 sm:px-6 py-12 selection:bg-blue-600 selection:text-white relative">
+      {/* Top Controls: Return to Home & Theme Toggle */}
+      <div className="absolute top-6 left-6 z-20">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 min-h-[44px] text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-800 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded px-2.5 py-2"
+        >
+          <ArrowLeft size={14} />
+          <span>Kembali ke Beranda</span>
+        </Link>
+      </div>
+
+      <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md py-10">
-        <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 group">
-            <div className="h-8 w-8 rounded-lg bg-brand-primary text-[#0e0f0c] flex items-center justify-center">
-              <Zap size={16} fill="currentColor" />
+      {/* Main Authentication Card */}
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xl shadow-slate-950/5 p-7 sm:p-9 space-y-6 mt-12 sm:mt-0">
+        {/* Brand Header */}
+        <div className="space-y-4 text-center sm:text-left">
+          <Link href="/" className="inline-flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg p-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-800 text-white shadow-sm shadow-blue-800/20 group-hover:scale-105 transition-transform">
+              <Megaphone size={19} />
             </div>
-            <span className="text-base font-bold text-brand-ink tracking-tight uppercase">
-              Smart<span className="text-brand-primary">Complaint</span>
-            </span>
+            <div className="flex flex-col text-left">
+              <span className="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
+                Portal <span className="text-blue-800 dark:text-blue-400">Pengaduan</span>
+              </span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-normal -mt-0.5">
+                Warga Pesona Serpong
+              </span>
+            </div>
           </Link>
+
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Masuk ke Akun
+            </h1>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              Gunakan email dan password terdaftar untuk mengelola pengaduan Anda.
+            </p>
+          </div>
         </div>
 
-        <div className="space-y-1 mb-6">
-          <h1 className="text-2xl font-bold text-brand-ink tracking-tight">Masuk ke Dashboard</h1>
-          <p className="text-xs text-brand-ink/50">Gunakan akun yang sudah terdaftar untuk mengelola pengaduan.</p>
-        </div>
-
+        {/* Lockout Screen */}
         {locked ? (
           <div className="space-y-4">
-            <div className="rounded-xl bg-red-500/5 p-5 text-center space-y-3 border border-red-500/20">
+            <div className="rounded-2xl bg-red-50 dark:bg-red-950/40 p-6 text-center space-y-3 border border-red-200 dark:border-red-900/50">
               <div className="flex justify-center">
-                <div className="h-10 w-10 bg-red-500/10 rounded-lg flex items-center justify-center">
-                  <Clock size={20} className="text-red-500" />
+                <div className="h-12 w-12 bg-red-100 dark:bg-red-900/50 rounded-xl flex items-center justify-center text-red-700 dark:text-red-300">
+                  <Clock size={24} />
                 </div>
               </div>
               <div className="space-y-1">
-                <h2 className="text-sm font-bold text-red-600">Terlalu Banyak Percobaan</h2>
-                <p className="text-[10px] text-red-500/70">Akun diblokir sementara setelah 5 kali gagal login</p>
+                <h2 className="text-sm font-bold text-red-800 dark:text-red-300">
+                  Terlalu Banyak Percobaan
+                </h2>
+                <p className="text-xs text-red-700 dark:text-red-400/90">
+                  Akun diblokir sementara demi keamanan sistem.
+                </p>
               </div>
-              <span className="text-3xl font-black text-red-600 tabular-nums tracking-tight font-mono block">
+              <span className="text-3xl font-black text-red-700 dark:text-red-400 tabular-nums tracking-tight font-mono block">
                 {formatCountdown(countdown)}
               </span>
-              <p className="text-[10px] font-semibold text-red-500/50">
-                Tunggu hingga waktu habis untuk mencoba lagi
+              <p className="text-[11px] text-red-600 dark:text-red-400/80">
+                Silakan tunggu hingga waktu habis untuk mencoba kembali.
               </p>
             </div>
 
             <SubmitButton
               disabled={true}
-              className="w-full h-11 rounded-lg bg-red-300 text-white text-xs font-bold uppercase tracking-wider cursor-not-allowed"
+              className="w-full min-h-[44px] rounded-xl bg-slate-300 dark:bg-slate-800 text-slate-500 text-xs font-bold uppercase tracking-wider cursor-not-allowed"
             >
               Masuk
             </SubmitButton>
           </div>
         ) : (
-          <form action={login} className="space-y-5">
+          <form action={login} className="space-y-4.5">
             {message && (
-              <div className="rounded-lg bg-brand-primary/10 p-3 text-xs font-semibold text-brand-primary border border-brand-primary/20 flex items-start gap-3">
-                <div className="h-2 w-2 bg-brand-primary rounded-full mt-1 shrink-0"></div>
-                {message}
+              <div className="rounded-xl bg-blue-50 dark:bg-blue-950/50 p-3.5 text-xs font-semibold text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-900/40 flex items-start gap-2.5">
+                <div className="h-2 w-2 bg-blue-700 dark:bg-blue-400 rounded-full mt-1.5 shrink-0" />
+                <span>{message}</span>
               </div>
             )}
 
             {showRemaining && (
-              <div className={`rounded-lg p-3 text-xs font-semibold flex items-start gap-3 border ${
-                remainingNum > 3 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' :
-                remainingNum > 1 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' :
-                'bg-red-500/10 text-red-600 border-red-500/20'
-              }`}>
-                <div className={`h-2 w-2 rounded-full mt-1 shrink-0 ${
-                  remainingNum > 3 ? 'bg-emerald-500' :
-                  remainingNum > 1 ? 'bg-amber-500' : 'bg-red-500'
-                }`}></div>
+              <div
+                className={`rounded-xl p-3.5 text-xs font-semibold flex items-start gap-2.5 border ${
+                  remainingNum > 3
+                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/40'
+                    : remainingNum > 1
+                    ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/40'
+                    : 'bg-red-50 dark:bg-red-950/50 text-red-800 dark:text-red-300 border-red-200 dark:border-red-900/40'
+                }`}
+              >
+                <AlertTriangle size={15} className="shrink-0 mt-0.5" />
                 <div>
-                  <span>Sisa percobaan: {remainingNum}</span>
-                  <span className="block text-[10px] mt-0.5 opacity-60">Akan diblokir 1 menit setelah habis</span>
+                  <span>Sisa percobaan login: {remainingNum}</span>
+                  <span className="block text-[11px] mt-0.5 opacity-80">
+                    Akan diblokir sementara setelah batas percobaan habis.
+                  </span>
                 </div>
               </div>
             )}
 
             {error && error !== 'locked' && (
-              <div className="rounded-lg bg-red-500/5 p-3 text-xs font-semibold text-red-500 border border-red-500/20 flex items-start gap-3">
-                <div className="h-2 w-2 bg-red-500 rounded-full mt-1 shrink-0"></div>
-                {error}
+              <div className="rounded-xl bg-red-50 dark:bg-red-950/40 p-3.5 text-xs font-semibold text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/50 flex items-start gap-2.5">
+                <div className="h-2 w-2 bg-red-600 rounded-full mt-1.5 shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <label htmlFor="login-email" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider block">Email</label>
+            <div className="space-y-1.5 text-left">
+              <label
+                htmlFor="login-email"
+                className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block"
+              >
+                Alamat Email
+              </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={16} />
+                <Mail
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+                  size={16}
+                />
                 <input
                   id="login-email"
                   name="email"
                   type="email"
                   required
-                  className="block w-full rounded-lg border border-brand-hairline bg-brand-canvas-soft pl-12 pr-4 py-3 text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:border-brand-primary focus:bg-brand-canvas focus:ring-2 focus:ring-brand-primary/10 transition-all outline-none"
-                  placeholder="email@pesonaserpong.com"
+                  className="block w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 pl-10 pr-4 py-3 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none"
+                  placeholder="nama@email.com"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 text-left">
               <div className="flex justify-between items-center">
-                <label htmlFor="login-password" className="text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider">Password</label>
-                <Link href="/forgot-password" className="text-[10px] font-semibold text-brand-ink/40 hover:text-brand-primary transition-colors">Lupa?</Link>
+                <label
+                  htmlFor="login-password"
+                  className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                >
+                  Kata Sandi
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-semibold text-blue-800 dark:text-blue-400 hover:underline"
+                >
+                  Lupa Sandi?
+                </Link>
               </div>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-ink/20 group-focus-within:text-brand-primary transition-colors" size={16} />
+              <div className="relative">
+                <Lock
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+                  size={16}
+                />
                 <input
                   id="login-password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  className="block w-full rounded-lg border border-brand-hairline bg-brand-canvas-soft pl-12 pr-12 py-3 text-sm font-medium text-brand-ink placeholder:text-brand-ink/30 focus:border-brand-primary focus:bg-brand-canvas focus:ring-2 focus:ring-brand-primary/10 transition-all outline-none"
+                  className="block w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 pl-10 pr-11 py-3 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none"
                   placeholder="Masukkan password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/30 hover:text-brand-ink transition-colors"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -204,27 +270,28 @@ export default function LoginPage({
             </div>
 
             <SubmitButton
-              className="w-full h-11 rounded-lg bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-opacity mt-4"
-              icon={<ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
-              loadingText="Masuk..."
+              className="w-full min-h-[44px] rounded-xl bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold uppercase tracking-wider shadow-md shadow-blue-800/20 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-2"
+              icon={<ArrowRight size={15} />}
+              loadingText="Memverifikasi..."
             >
-              Masuk
+              Masuk ke Dashboard
             </SubmitButton>
           </form>
         )}
 
-        <div className="mt-8 pt-6 border-t border-brand-hairline text-center">
-          <p className="text-[11px] text-brand-ink/40">
-            Belum punya akun?{' '}
-            <Link href="/register" className="font-bold text-brand-primary hover:underline">
-              Registrasi sekarang
+        {/* Footer Link */}
+        <div className="pt-5 border-t border-slate-200 dark:border-slate-800 text-center">
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Belum memiliki akun warga?{' '}
+            <Link
+              href="/register"
+              className="font-bold text-blue-800 dark:text-blue-400 hover:underline"
+            >
+              Daftar Sekarang
             </Link>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-
-

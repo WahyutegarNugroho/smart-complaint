@@ -6,9 +6,9 @@ export default function ExportActions() {
   return (
     <button 
       onClick={() => window.print()}
-      className="flex items-center gap-2 bg-slate-900 text-white px-6 py-4 rounded-xl font-black text-sm uppercase tracking-normal hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10"
+      className="min-h-[44px] flex items-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-white px-5 py-2.5 rounded-xl font-semibold text-xs uppercase tracking-wider transition-colors shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
     >
-      <Printer size={18} />
+      <Printer size={16} aria-hidden="true" />
       Cetak PDF
     </button>
   )

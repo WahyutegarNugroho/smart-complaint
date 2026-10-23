@@ -1,4 +1,4 @@
-import { ShieldAlert } from 'lucide-react'
+import { ShieldAlert, ChevronDown } from 'lucide-react'
 import { updateComplaintStatus } from '@/app/dashboard/actions'
 import DeleteComplaintButton from './DeleteComplaintButton'
 import SubmitButton from '@/components/SubmitButton'
@@ -13,34 +13,39 @@ export default function StaffActionsPanel({
   isAdmin: boolean
 }) {
   return (
-    <div className="bg-brand-canvas p-5 rounded-xl border border-brand-hairline shadow-sm">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-8 w-8 bg-amber-500/10 rounded-lg flex items-center justify-center text-amber-600 dark:text-amber-400 border border-amber-500/20">
+    <div className="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex items-center gap-3 mb-5">
+        <div className="h-9 w-9 bg-amber-50 dark:bg-amber-950/60 rounded-xl flex items-center justify-center text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/60 shrink-0">
           <ShieldAlert size={18} />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-brand-ink">Moderasi</h3>
-          <p className="text-[10px] font-medium text-brand-ink/50 uppercase tracking-wider">Kontrol Status Laporan</p>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Moderasi Laporan</h3>
+          <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pembaruan Tahap Progres</p>
         </div>
       </div>
 
       <form action={updateComplaintStatus} className="space-y-4">
         <input type="hidden" name="id" value={complaintId} />
-        <div>
-          <label className="block text-[10px] font-semibold text-brand-ink/50 uppercase tracking-wider mb-2">Ubah Progress</label>
-          <select
-            name="status"
-            defaultValue={currentStatus}
-            aria-label="Ubah status laporan"
-            className="w-full bg-brand-canvas-soft border border-brand-hairline rounded-lg px-3 py-2.5 text-xs font-semibold text-brand-ink focus:ring-2 focus:ring-brand-primary outline-none appearance-none cursor-pointer"
-          >
-            <option value="PENDING" className="dark:bg-brand-canvas">MENUNGGU KONFIRMASI</option>
-            <option value="PROCESSING" className="dark:bg-brand-canvas">SEDANG DIPROSES</option>
-            <option value="COMPLETED" className="dark:bg-brand-canvas">DINYATAKAN SELESAI</option>
-          </select>
+        <div className="space-y-1.5">
+          <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+            Tahap Penanganan
+          </label>
+          <div className="relative">
+            <select
+              name="status"
+              defaultValue={currentStatus}
+              aria-label="Ubah status laporan"
+              className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none appearance-none cursor-pointer transition-colors"
+            >
+              <option value="PENDING">MENUNGGU VERIFIKASI</option>
+              <option value="PROCESSING">SEDANG DITINDAKLANJUTI</option>
+              <option value="COMPLETED">DINYATAKAN SELESAI</option>
+            </select>
+            <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+          </div>
         </div>
         <SubmitButton
-          className="w-full bg-brand-ink dark:bg-brand-primary text-brand-canvas dark:text-[#0e0f0c] py-3 rounded-lg font-semibold text-[10px] uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm"
+          className="w-full bg-blue-800 hover:bg-blue-900 active:bg-blue-950 text-white min-h-[44px] py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
           loadingText="Menyimpan..."
         >
           Simpan Perubahan
@@ -48,8 +53,8 @@ export default function StaffActionsPanel({
       </form>
 
       {isAdmin && (
-        <div className="mt-6 pt-4 border-t border-brand-hairline">
-          <p className="text-[10px] font-semibold text-red-500 uppercase tracking-wider mb-3">Tindakan Destruktif</p>
+        <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+          <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Tindakan Khusus Admin</p>
           <DeleteComplaintButton id={complaintId} />
         </div>
       )}

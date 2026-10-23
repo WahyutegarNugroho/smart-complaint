@@ -1,59 +1,198 @@
-import Link from 'next/link'
+import React from 'react';
+import {
+  ShieldCheck,
+  PhoneCall,
+  Clock,
+  MapPin,
+  Car,
+  BellRing,
+  AlertCircle,
+  KeyRound,
+} from 'lucide-react';
+import LandingNavbar from '@/components/LandingNavbar';
+import CivicFooter from '@/components/CivicFooter';
+import CivicPageHeader from '@/components/CivicPageHeader';
 
 export const metadata = {
-  title: 'Keamanan | Smart Complaint',
-}
+  title: 'Pos & Jadwal Keamanan | Portal Pengaduan Pesona Serpong',
+  description: 'Jadwal shift satpam, lokasi pos ronda, dan standar operasional keamanan lingkungan Perumahan Pesona Serpong.',
+};
+
+const POSTS = [
+  {
+    title: 'Pos Keamanan Gerbang Utama',
+    location: 'Akses Masuk Depan (Jalan Boulevard)',
+    schedule: '24 Jam Non-Stop',
+    officers: '2 Personel per Shift',
+    icon: ShieldCheck,
+    isPrimary: true,
+  },
+  {
+    title: 'Pos Jaga 2 (Sektor Barat)',
+    location: 'Persimpangan Jalan Flamboyan & Blok D',
+    schedule: '24 Jam Non-Stop',
+    officers: '1 Personel per Shift',
+    icon: MapPin,
+    isPrimary: false,
+  },
+  {
+    title: 'Pos Ronda 3 (Taman Belakang)',
+    location: 'Area Fasum Balai Warga & Lapangan',
+    schedule: '18.00 - 06.00 WIB',
+    officers: 'Patroli Terjadwal + Warga',
+    icon: Clock,
+    isPrimary: false,
+  },
+  {
+    title: 'Patroli Bergerak (Mobile Patrol)',
+    location: 'Keliling Blok A hingga Blok K',
+    schedule: '22.00 - 05.00 WIB (Interval 1 Jam)',
+    officers: 'Regu Patroli Bermotor',
+    icon: Car,
+    isPrimary: false,
+  },
+];
+
+const RULES = [
+  {
+    title: 'Tamu Wajib Lapor',
+    desc: 'Tamu atau kurir luar yang masuk setelah pukul 22.00 WIB wajib melapor di Pos Gerbang Utama dan menukar identitas.',
+    icon: KeyRound,
+  },
+  {
+    title: 'Penutupan Portal Sektor',
+    desc: 'Portal sisi timur dan barat dikunci mulai pukul 23.00 WIB. Seluruh keluar-masuk kendaraan wajib melalui Gerbang Utama.',
+    icon: Clock,
+  },
+  {
+    title: 'Sterilisasi Jalur Darurat',
+    desc: 'Dilarang keras memarkir kendaraan di tikungan sempit atau di depan titik hidran agar mobil pemadam dan ambulans tidak terhalang.',
+    icon: AlertCircle,
+  },
+  {
+    title: 'Laporan Kehilangan / Kerusakan',
+    desc: 'Bila melihat orang mencurigakan atau terjadi insiden, hubungi satpam seketika via telepon atau buat laporan dengan tag keamanan.',
+    icon: BellRing,
+  },
+];
 
 export default function KeamananPage() {
   return (
-    <div className="min-h-screen bg-brand-canvas-soft text-brand-ink font-sans animate-page">
-      <main className="max-w-4xl mx-auto p-6 sm:p-10 lg:p-16 space-y-8">
-        <div className="space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-semibold text-brand-ink/40 uppercase tracking-wider hover:text-brand-primary transition-colors">
-            ← Kembali
-          </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-ink">Keamanan Lingkungan</h1>
-          <p className="text-brand-ink/60 font-medium text-sm leading-relaxed">Informasi pos dan jadwal jaga keamanan Pesona Serpong.</p>
-        </div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-600 selection:text-white">
+      {/* Universal Top Navigation */}
+      <LandingNavbar />
 
-        <div className="bg-brand-canvas border border-brand-hairline rounded-xl divide-y divide-brand-hairline">
-          <div className="p-4 sm:p-5 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Kontak Pos Utama</p>
-              <h2 className="text-sm font-semibold text-brand-ink mt-0.5">Pos Keamanan Gerbang Depan</h2>
-            </div>
-            <a 
-              href="tel:02112345678"
-              aria-label="Hubungi Pos Keamanan di (021) 1234-5678" 
-              className="px-3 py-2 bg-brand-canvas-soft hover:bg-brand-hairline border border-brand-hairline rounded-lg text-sm font-mono font-bold tabular-nums text-brand-ink transition-colors"
-            >
-              (021) 1234-5678
-            </a>
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 space-y-10">
+        {/* Civic Header with Breadcrumb */}
+        <CivicPageHeader
+          breadcrumbs={[
+            { label: 'Informasi', href: '/#kategori' },
+            { label: 'Pos & Jadwal Keamanan' },
+          ]}
+          kicker="Kamtibmas Lingkungan"
+          title="Pos & Jadwal Jaga Keamanan"
+          description="Informasi titik pos jaga, pembagian jadwal siskamling, dan standar operasional keamanan bagi warga Perumahan Pesona Serpong."
+        />
+
+        {/* Primary Contact Banner */}
+        <div className="p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-800 dark:text-blue-400">
+              Hotline Cepat Pos Induk
+            </span>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              Pos Keamanan Gerbang Depan (24 Jam)
+            </h2>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              Langsung terhubung dengan regu satpam yang sedang bertugas saat ini.
+            </p>
           </div>
 
-          <div className="p-4 sm:p-5">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-brand-ink/50 mb-3">Jadwal & Titik Jaga</h3>
-            <div className="divide-y divide-brand-hairline border border-brand-hairline rounded-lg">
-              {[
-                { title: 'Pos Utama', desc: 'Gerbang Utama', schedule: '24 Jam' },
-                { title: 'Pos Jaga 2', desc: 'Jalan Flamboyan', schedule: '24 Jam' },
-                { title: 'Pos Jaga 3', desc: 'Jalan Anggrek', schedule: '18.00 - 06.00 WIB' },
-                { title: 'Patroli Lingkungan', desc: 'Keliling Blok A - F', schedule: '22.00 - 05.00 WIB' },
-              ].map((item, i) => (
-                <div key={i} className="p-3 flex items-center justify-between text-xs">
-                  <div>
-                    <span className="font-semibold text-brand-ink block">{item.title}</span>
-                    <span className="text-brand-ink/60">{item.desc}</span>
+          <a
+            href="tel:0215382345"
+            aria-label="Hubungi Pos Keamanan di (021) 538-2345"
+            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 rounded-xl bg-blue-800 hover:bg-blue-900 text-white font-mono text-sm font-bold shadow-md shadow-blue-800/20 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 shrink-0 whitespace-nowrap"
+          >
+            <PhoneCall size={16} />
+            <span>(021) 538-2345</span>
+          </a>
+        </div>
+
+        {/* Guard Posts & Schedules */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            Titik Penjagaan &amp; Shift Petugas
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {POSTS.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={i}
+                  className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="h-10 w-10 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-300 flex items-center justify-center">
+                      <Icon size={20} />
+                    </div>
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      {item.schedule}
+                    </span>
                   </div>
-                  <span className="font-mono text-brand-primary tabular-nums font-medium">{item.schedule}</span>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                      {item.location}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 font-mono">
+                    Kekuatan: {item.officers}
+                  </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Security Rules */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            Peraturan &amp; Tata Tertib Keamanan
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {RULES.map((rule, i) => {
+              const Icon = rule.icon;
+              return (
+                <div
+                  key={i}
+                  className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-3.5"
+                >
+                  <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-800 dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Icon size={17} />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {rule.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {rule.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </main>
+
+      {/* Shared Civic Footer */}
+      <CivicFooter />
     </div>
-  )
+  );
 }
-
-

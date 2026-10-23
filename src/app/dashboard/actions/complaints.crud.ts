@@ -187,6 +187,7 @@ export async function deleteComplaint(formData: FormData) {
     redirect('/dashboard?message=Laporan berhasil dihapus')
   } catch (err) {
     console.error('DeleteComplaint Error:', err)
+    if (isRedirectError(err)) throw err
     redirect('/dashboard?error=system_error')
   }
 }
