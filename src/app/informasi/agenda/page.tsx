@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Megaphone, Inbox } from 'lucide-react';
-import prisma from '@/lib/prisma';
+import { getAnnouncements } from '@/lib/dal';
 import LandingNavbar from '@/components/LandingNavbar';
 import CivicFooter from '@/components/CivicFooter';
 import CivicPageHeader from '@/components/CivicPageHeader';
@@ -40,22 +40,7 @@ const CATEGORY_MAP: Record<string, { label: string; cls: string }> = {
 };
 
 export default async function AgendaPage() {
-  let announcements: Array<{
-    id: string;
-    title: string;
-    content: string;
-    category: string;
-    createdAt: Date;
-  }> = [];
-
-  try {
-    announcements = await prisma.announcement.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 50,
-    });
-  } catch (err) {
-    console.error('AgendaPage Error:', err);
-  }
+  const announcements = await getAnnouncements({ take: 50 });
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-600 selection:text-white">

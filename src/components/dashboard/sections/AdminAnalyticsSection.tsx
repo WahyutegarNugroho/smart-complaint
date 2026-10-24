@@ -1,43 +1,13 @@
 import React from 'react'
 import { ChevronRight, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
-import prisma from '@/lib/prisma'
+import { getAdminAnalyticsData } from '@/lib/dal'
 
 export default async function AdminAnalyticsSection() {
-  let completionRate = 0
-  let unverifiedUsers = 0
-  let chartData: { day: string; count: number }[] = []
-  let maxChart = 1
-  let total7Days = 0
+  const data = await getAdminAnalyticsData()
+  if (!data) return null
 
-  try {
-    const [total, completed, unverifiedUsersCount, rawChartData] = await Promise.all([
-      prisma.complaint.count(),
-      prisma.complaint.count({ where: { status: 'COMPLETED' } }),
-      prisma.profile.count({ where: { isVerified: false, role: 'MASYARAKAT' } }),
-      prisma.complaint.findMany({
-        where: { createdAt: { gte: new Date(new Date().setDate(new Date().getDate() - 7)) } },
-        select: { createdAt: true }
-      })
-    ])
-
-    unverifiedUsers = unverifiedUsersCount
-    completionRate = total > 0 ? Math.round((completed / total) * 100) : 0
-    total7Days = rawChartData.length
-
-    const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
-    chartData = Array.from({ length: 7 }).map((_, i) => {
-      const d = new Date()
-      d.setDate(d.getDate() - (6 - i))
-      const dateStr = d.toLocaleDateString()
-      const count = rawChartData.filter(c => new Date(c.createdAt).toLocaleDateString() === dateStr).length
-      return { day: days[d.getDay()], count }
-    })
-    maxChart = Math.max(...chartData.map(d => d.count), 1)
-  } catch (err) {
-    console.error('AdminAnalyticsSection Error:', err)
-    return null
-  }
+  const { completionRate, unverifiedUsers, chartData, maxChart, total7Days } = data
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-4">

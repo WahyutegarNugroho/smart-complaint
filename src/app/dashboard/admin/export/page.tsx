@@ -1,8 +1,7 @@
 import { redirect } from 'next/navigation'
-import prisma from '@/lib/prisma'
-import { createClient } from '@/utils/supabase/server'
+import { getAdminExportData, ComplaintWithAuthorForExport } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import Link from 'next/link'
-import { Prisma } from '@prisma/client'
 import { 
   ChevronLeft, 
   CheckCircle2,
@@ -26,27 +25,17 @@ const STATUS_COLOR: Record<string, string> = {
 }
 
 export default async function ExportPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED' || !authData.profile) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id },
-    select: { role: true, name: true }
-  })
-
-  if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
+  const { profile } = authData
+  if (profile.role !== 'ADMIN') redirect('/dashboard')
 
   // 📊 Fetch complaints for print preview (with safety limit)
-  type ComplaintWithAuthor = Prisma.ComplaintGetPayload<{ include: { author: true } }>
-  let complaints: ComplaintWithAuthor[] = []
+  let complaints: ComplaintWithAuthorForExport[] = []
   let exportError = false
   try {
-    complaints = await prisma.complaint.findMany({
-      include: { author: true },
-      orderBy: { createdAt: 'desc' },
-      take: 500
-    })
+    complaints = await getAdminExportData(500)
   } catch (err) {
     console.error('Export Fetch Error:', err)
     exportError = true

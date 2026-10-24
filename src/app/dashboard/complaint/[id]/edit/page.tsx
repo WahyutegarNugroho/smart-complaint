@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import prisma from '@/lib/prisma'
+import { getComplaintForEdit } from '@/lib/dal'
 import { getCachedProfile } from '@/lib/profile'
 import EditComplaintForm from './EditComplaintForm'
 
@@ -18,27 +18,19 @@ export default async function EditComplaintPage({
     return redirect('/login')
   }
 
-  const { profile } = data
+  const result = await getComplaintForEdit(id, data.profile.id)
 
-  const complaint = await prisma.complaint.findUnique({
-    where: { id },
-    include: { author: true }
-  })
-
-  if (!complaint) {
+  if (result.status === 'NOT_FOUND') {
     return redirect('/dashboard')
   }
 
-  // 🛡️ SECURITY: Only author can edit their own complaint
-  // Staff should use the detail page for moderation
-  if (complaint.authorId !== profile.id) {
+  if (result.status === 'FORBIDDEN') {
     return redirect(`/dashboard/complaint/${id}?error=forbidden`)
   }
 
-  // Only allow editing if status is PENDING
-  if (complaint.status !== 'PENDING') {
+  if (result.status === 'ALREADY_PROCESSED' || !result.complaint) {
     return redirect(`/dashboard/complaint/${id}?error=already_processed`)
   }
 
-  return <EditComplaintForm complaint={complaint} id={id} />
+  return <EditComplaintForm complaint={result.complaint} id={id} />
 }

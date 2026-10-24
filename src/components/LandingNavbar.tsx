@@ -12,7 +12,7 @@ export default function LandingNavbar() {
     { href: '/#alur', label: 'Cara Melapor' },
     { href: '/#statistik', label: 'Statistik' },
     { href: '/#kategori', label: 'Kategori' },
-    { href: '/#jelajah', label: 'Jelajah Laporan' },
+    // { href: '/#jelajah', label: 'Jelajah Laporan' }, // [SEMENTARA DISEMBUNYIKAN]
     { href: '/#faq', label: 'FAQ' },
   ];
 

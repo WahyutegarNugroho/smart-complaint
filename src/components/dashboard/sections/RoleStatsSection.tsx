@@ -1,6 +1,6 @@
 import React from 'react'
 import { Inbox, Zap, Activity, Clock, CheckCircle2 } from 'lucide-react'
-import prisma from '@/lib/prisma'
+import { getRoleStatsData } from '@/lib/dal'
 
 type Role = 'admin' | 'petugas'
 
@@ -25,31 +25,16 @@ interface StatItem {
 }
 
 export default async function RoleStatsSection({ role }: { role: Role }) {
-  let stats: StatItem[] = []
+  const config = roleStats[role]
+  const data = await getRoleStatsData(role)
+  if (!data) return null
 
-  try {
-    const config = roleStats[role]
-    const secondQuery = role === 'admin'
-      ? prisma.complaint.count({ where: { isUrgent: true, status: { not: 'COMPLETED' } } })
-      : prisma.complaint.count({ where: { status: 'PROCESSING' } })
-
-    const [total, second, pending, completed] = await Promise.all([
-      prisma.complaint.count(),
-      secondQuery,
-      prisma.complaint.count({ where: { status: 'PENDING' } }),
-      prisma.complaint.count({ where: { status: 'COMPLETED' } })
-    ])
-
-    stats = [
-      { label: 'Total Laporan', val: total, icon: Inbox, color: 'slate' },
-      { label: config.label, val: second, icon: config.icon, color: config.color },
-      { label: 'Menunggu', val: pending, icon: Clock, color: 'amber' },
-      { label: 'Selesai', val: completed, icon: CheckCircle2, color: 'emerald' }
-    ]
-  } catch (err) {
-    console.error(`StatsSection (${role}) Error:`, err)
-    return null
-  }
+  const stats: StatItem[] = [
+    { label: 'Total Laporan', val: data.total, icon: Inbox, color: 'slate' },
+    { label: config.label, val: data.second, icon: config.icon, color: config.color },
+    { label: 'Menunggu', val: data.pending, icon: Clock, color: 'amber' },
+    { label: 'Selesai', val: data.completed, icon: CheckCircle2, color: 'emerald' }
+  ]
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-4">

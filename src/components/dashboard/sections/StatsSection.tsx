@@ -1,6 +1,6 @@
 import React from 'react'
 import { Inbox, Clock, Activity, CheckCircle2 } from 'lucide-react'
-import prisma from '@/lib/prisma'
+import { getDashboardStats } from '@/lib/dal'
 
 interface StatsSectionProps {
   profileId: string
@@ -9,27 +9,8 @@ interface StatsSectionProps {
 
 export default async function StatsSection({ profileId, isWarga }: StatsSectionProps) {
   if (!profileId && isWarga) return null;
-  const whereBase = isWarga ? { authorId: profileId } : {};
 
-  let stats: { total: number; pending: number; processing: number; completed: number } = {
-    total: 0,
-    pending: 0,
-    processing: 0,
-    completed: 0
-  };
-
-  try {
-    const [total, pending, processing, completed] = await Promise.all([
-      prisma.complaint.count({ where: whereBase }),
-      prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
-      prisma.complaint.count({ where: { ...whereBase, status: 'PROCESSING' } }),
-      prisma.complaint.count({ where: { ...whereBase, status: 'COMPLETED' } }),
-    ]);
-    stats = { total, pending, processing, completed };
-  } catch (err) {
-    console.error('StatsSection Error:', err);
-    return null;
-  }
+  const stats = await getDashboardStats(profileId, isWarga);
 
   const items = [
     { 

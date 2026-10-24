@@ -1,18 +1,8 @@
 import { Bell } from 'lucide-react'
-import prisma from '@/lib/prisma'
-import { Announcement } from '@prisma/client'
+import { getAnnouncements } from '@/lib/dal'
 
 export default async function AnnouncementsSection() {
-  let announcements: Announcement[] = []
-  try {
-    announcements = await prisma.announcement.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 3
-    })
-  } catch (err) {
-    console.error('AnnouncementsSection Error:', err)
-    return null; // Don't crash the whole dashboard if announcements fail
-  }
+  const announcements = await getAnnouncements({ take: 3 })
 
   if (announcements.length === 0) return null
 

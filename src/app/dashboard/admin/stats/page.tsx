@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
+import { getAdminDeepStatsData } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import { 
   ArrowLeft,
   PieChart as PieIcon,
@@ -13,53 +13,15 @@ import { ComplaintMapView } from '@/components/map'
 import { STATUS_LABELS } from '@/lib/constants'
 
 export default async function AdminStatsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED') redirect('/login')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') redirect('/dashboard')
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { role: true } })
-  if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
+  const deepStats = await getAdminDeepStatsData()
+  if (!deepStats) return null
 
-  // Parallel queries
-  const [statusCounts, rtCounts, total, mappedComplaints] = await Promise.all([
-    prisma.complaint.groupBy({
-      by: ['status'],
-      _count: { _all: true }
-    }),
-    prisma.complaint.groupBy({
-      by: ['rt'],
-      _count: { _all: true },
-      orderBy: { rt: 'asc' }
-    }),
-    prisma.complaint.count(),
-    prisma.complaint.findMany({
-      where: {
-        latitude: { not: null },
-        longitude: { not: null }
-      },
-      select: {
-        id: true,
-        title: true,
-        latitude: true,
-        longitude: true,
-        status: true,
-        rt: true,
-        rw: true,
-        isUrgent: true,
-        createdAt: true
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 500
-    }),
-  ])
-
-  const maxRTCount = Math.max(...rtCounts.map(r => r._count._all), 1)
-
-  const mapComplaints = mappedComplaints.map(c => ({
-    ...c,
-    latitude: c.latitude!,
-    longitude: c.longitude!
-  }))
+  const { statusCounts, rtCounts, total, mappedComplaints, maxRTCount } = deepStats
+  const mapComplaints = mappedComplaints
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">

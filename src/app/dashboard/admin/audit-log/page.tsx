@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
+import { getAdminAuditLogs } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import { ArrowLeft, History, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import AuditLogActionFilter from '@/components/AuditLogActionFilter'
@@ -34,43 +34,16 @@ export default async function AuditLogPage({
   const sp = await searchParams
   const filterAction = sp.action
   const page = Math.max(1, parseInt(sp.page || '1'))
-  const supabase = await createClient()
 
-  let logs: Array<{
-    id: string
-    action: string
-    details: string
-    createdAt: Date
-    admin: { name: string | null }
-  }> = []
-  let totalLogs = 0
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED') redirect('/login')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') redirect('/dashboard')
 
-  try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
-
-    const profile = await prisma.profile.findUnique({
-      where: { userId: user.id },
-      select: { role: true }
-    })
-    if (!profile || profile.role !== 'ADMIN') redirect('/dashboard')
-
-    const whereClause: { action?: string } = {}
-    if (filterAction) whereClause.action = filterAction
-
-    ;[totalLogs, logs] = await Promise.all([
-      prisma.auditLog.count({ where: whereClause }),
-      prisma.auditLog.findMany({
-        where: whereClause,
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE,
-        include: { admin: true }
-      }),
-    ])
-  } catch (err) {
-    console.error('AuditLogPage Error:', err)
-  }
+  const { logs, totalLogs } = await getAdminAuditLogs({
+    action: filterAction,
+    page,
+    pageSize: PAGE_SIZE,
+  })
 
   const buildHref = (p: number) => {
     const params = new URLSearchParams()

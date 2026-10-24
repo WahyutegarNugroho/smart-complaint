@@ -26,9 +26,9 @@ interface Announcement {
   content: string
   category: string
   createdAt: Date | string
-  author: {
+  author?: {
     name: string | null
-  }
+  } | null
 }
 
 interface AnnouncementItemProps {
@@ -114,7 +114,7 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             <dt className="sr-only">Penulis</dt>
             <dd className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
               <User size={12} aria-hidden="true" />
-              <span>{item.author.name || 'Admin'}</span>
+              <span>{item.author?.name || 'Admin'}</span>
             </dd>
             <dt className="sr-only">Tanggal</dt>
             <dd className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">

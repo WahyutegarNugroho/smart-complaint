@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
-import prisma from '@/lib/prisma'
-import { Notification } from '@prisma/client'
+import { getUserNotifications, getDashboardStats } from '@/lib/dal'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import {
@@ -52,37 +51,16 @@ export default async function DashboardLayout({
   const isAdmin = profile.role === 'ADMIN'
   const isWarga = profile.role === 'MASYARAKAT'
 
-  // Fetch user notifications
-  let notifications: Notification[] = []
-  try {
-    notifications = await prisma.notification.findMany({
-      where: { userId: profile.id },
-      orderBy: [
-        { isRead: 'asc' },
-        { createdAt: 'desc' }
-      ],
-      take: 10
-    })
-  } catch (notifErr) {
-    console.error('Notifications Fetch Error:', notifErr)
-  }
+  // Fetch user notifications & sidebar stats via DAL
+  const [notifications, dashStats] = await Promise.all([
+    getUserNotifications(profile.id, 10),
+    getDashboardStats(profile.id, isWarga),
+  ])
 
-  // 📊 Fetch Stats for Sidebar (Optimized - single GROUP BY query)
-  const stats = { pending: 0, processing: 0, completed: 0 }
-  
-  try {
-    const whereBase = isWarga ? { authorId: profile.id } : {}
-    const groupCounts = await prisma.complaint.groupBy({
-      by: ['status'],
-      where: whereBase,
-      _count: { status: true },
-    })
-    for (const g of groupCounts) {
-      const key = g.status.toLowerCase() as 'pending' | 'processing' | 'completed'
-      stats[key] = g._count.status
-    }
-  } catch (err) {
-    console.error('Dashboard Stats Fetch Error:', err)
+  const stats = {
+    pending: dashStats.pending,
+    processing: dashStats.processing,
+    completed: dashStats.completed,
   }
 
   return (

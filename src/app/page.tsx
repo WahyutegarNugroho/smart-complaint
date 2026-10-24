@@ -16,12 +16,14 @@ import {
 import LandingNavbar from '@/components/LandingNavbar';
 import CivicFooter from '@/components/CivicFooter';
 import TicketTrackerWidget from '@/components/landing/TicketTrackerWidget';
-import PublicReportsFeed, { FeedComplaintItem } from '@/components/landing/PublicReportsFeed';
+// [SEMENTARA DISEMBUNYIKAN - Buka comment ini jika section Jelajah Laporan diaktifkan kembali]
+// import PublicReportsFeed, { FeedComplaintItem } from '@/components/landing/PublicReportsFeed';
 import FaqAccordion from '@/components/landing/FaqAccordion';
-import prisma from '@/lib/prisma';
+import { getPublicLandingStats } from '@/lib/dal';
 
 export const revalidate = 60;
 
+/* [SEMENTARA DISEMBUNYIKAN - Buka comment ini jika section Jelajah Laporan diaktifkan kembali]
 function maskName(name: string): string {
   if (!name) return 'Warga';
   const parts = name.trim().split(/\s+/);
@@ -32,78 +34,21 @@ function maskName(name: string): string {
     })
     .join(' ');
 }
+*/
 
 export default async function LandingPage() {
-  let totalReports = 0;
-  let processingReports = 0;
-  let completedReports = 0;
-  let averageResponseHours = 12;
-  let rawRecentComplaints: {
-    id: string;
-    title: string;
-    category: string;
-    status: string;
-    imageUrl: string | null;
-    rt: string | null;
-    rw: string | null;
-    createdAt: Date;
-    author: { name: string } | null;
-  }[] = [];
+  const {
+    totalReports,
+    processingReports,
+    completedReports,
+    averageResponseHours,
+    successRate,
+    formattedResponseTime,
+    // recentComplaints, // [SEMENTARA DISEMBUNYIKAN]
+  } = await getPublicLandingStats();
 
-  try {
-    const [
-      total,
-      processing,
-      completed,
-      avgHoursResult,
-      recent
-    ] = await Promise.all([
-      prisma.complaint.count(),
-      prisma.complaint.count({ where: { status: 'PROCESSING' } }),
-      prisma.complaint.count({ where: { status: 'COMPLETED' } }),
-      prisma.$queryRaw<{ avg_hours: number | null }[]>`
-        SELECT AVG(EXTRACT(EPOCH FROM ("updatedAt" - "createdAt")) / 3600) AS avg_hours
-        FROM "Complaint"
-        WHERE "status" = 'COMPLETED'
-      `,
-      prisma.complaint.findMany({
-        take: 6,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          title: true,
-          category: true,
-          status: true,
-          imageUrl: true,
-          rt: true,
-          rw: true,
-          createdAt: true,
-          author: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      }),
-    ]);
-
-    totalReports = total;
-    processingReports = processing;
-    completedReports = completed;
-    const avgHours = avgHoursResult?.[0]?.avg_hours;
-    if (avgHours && avgHours > 0) averageResponseHours = Math.max(1, Math.round(avgHours));
-    rawRecentComplaints = recent;
-  } catch (error) {
-    console.error('Database connection notice on landing page:', error);
-  }
-
-  const successRate = totalReports > 0 ? ((completedReports / totalReports) * 100).toFixed(1) : '100';
-  const formattedResponseTime = averageResponseHours >= 48
-    ? `${Math.round(averageResponseHours / 24)} Hari`
-    : `${averageResponseHours} Jam`;
-
-  // Format complaint list for client feed
-  const initialComplaints: FeedComplaintItem[] = rawRecentComplaints.map((item) => ({
+  /* [SEMENTARA DISEMBUNYIKAN - Buka comment ini jika section Jelajah Laporan diaktifkan kembali]
+  const initialComplaints: FeedComplaintItem[] = recentComplaints.map((item) => ({
     id: item.id,
     title: item.title,
     category: item.category,
@@ -114,6 +59,7 @@ export default async function LandingPage() {
     createdAt: item.createdAt.toISOString(),
     maskedAuthor: maskName(item.author?.name || 'Warga'),
   }));
+  */
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
@@ -545,7 +491,9 @@ export default async function LandingPage() {
 
       {/* =========================================================================
           SECTION 5.6: FEED LAPORAN TERKINI (Transparansi Publik - Jelajah Laporan)
+          [SEMENTARA DISEMBUNYIKAN - Hapus tanda komentar di bawah jika ingin mengaktifkan kembali]
           ========================================================================= */}
+      {/*
       <section id="jelajah" className="py-16 lg:py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl text-left mb-10">
@@ -557,10 +505,10 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          {/* Interactive Public Reports Feed with Tabs & Upvotes */}
           <PublicReportsFeed initialComplaints={initialComplaints} />
         </div>
       </section>
+      */}
 
       {/* =========================================================================
           SECTION 5.7: JAMINAN KEAMANAN & FAQ (Clean Civic Accordion)

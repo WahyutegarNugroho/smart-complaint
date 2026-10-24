@@ -2,9 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search, Inbox, MapPin, Zap, Filter, ChevronDown } from 'lucide-react'
-import prisma from '@/lib/prisma'
+import { getComplaintList } from '@/lib/dal'
 import EmptyState from '@/components/EmptyState'
-import { Prisma, Status } from '@prisma/client'
 import PageSizeSelector from './PageSizeSelector'
 import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
 
@@ -42,76 +41,17 @@ interface ComplaintListSectionProps {
   }
 }
 
-interface ComplaintWithAuthor {
-  id: string
-  title: string
-  content: string
-  imageUrl?: string | null
-  status: string
-  category: string
-  categoryRel?: { name: string } | null
-  rt: string | null
-  rw: string | null
-  isUrgent: boolean
-  createdAt: Date
-  author?: {
-    name: string | null
-  } | null
-}
-
 export default async function ComplaintListSection({ profileId, isWarga, searchParams }: ComplaintListSectionProps) {
-  const { status: currentStatus, q: searchQuery, rt, rw, page, category: categoryFilter, fromDate, toDate, pageSize: rawPageSize } = searchParams
-  const currentPage = Math.max(1, Number(page) || 1)
-  const pageSize = [12, 24, 48].includes(Number(rawPageSize)) ? Number(rawPageSize) : 12
+  const { status: currentStatus, q: searchQuery, rt, rw, category: categoryFilter, fromDate, toDate, pageSize: rawPageSize } = searchParams
 
-  const whereClause: Prisma.ComplaintWhereInput = {}
-  
-  if (currentStatus) {
-    const validStatuses = Object.values(Status)
-    if (validStatuses.includes(currentStatus as Status)) {
-      whereClause.status = currentStatus as Status
-    }
-  }
-
-  if (searchQuery) whereClause.title = { contains: searchQuery, mode: 'insensitive' }
-  if (rt) whereClause.rt = rt
-  if (rw) whereClause.rw = rw
-  if (isWarga && profileId) whereClause.authorId = profileId
-  if (categoryFilter) whereClause.category = categoryFilter
-  if (fromDate || toDate) {
-    const createdAt: Record<string, Date> = {}
-    if (fromDate) createdAt.gte = new Date(fromDate)
-    if (toDate) createdAt.lte = new Date(toDate + 'T23:59:59.999Z')
-    whereClause.createdAt = createdAt
-  }
-
-  let complaints: ComplaintWithAuthor[] = []
-  let totalComplaints = 0
-  let categoryOptions: { id: string; name: string; slug: string }[] = []
-
-  try {
-    categoryOptions = await prisma.category.findMany({
-      where: { parentId: null },
-      orderBy: { name: 'asc' },
-    })
-
-    const [resComplaints, resTotal] = await Promise.all([
-      prisma.complaint.findMany({
-        where: whereClause,
-        orderBy: [{ isUrgent: 'desc' }, { createdAt: 'desc' }],
-        include: { author: { select: { name: true } }, categoryRel: { select: { name: true } } }, 
-        take: pageSize,
-        skip: (currentPage - 1) * pageSize
-      }),
-      prisma.complaint.count({ where: whereClause })
-    ])
-    complaints = resComplaints as ComplaintWithAuthor[]
-    totalComplaints = resTotal
-  } catch (err) {
-    console.error('ComplaintListSection Error:', err)
-  }
-
-  const totalPages = Math.ceil(totalComplaints / pageSize)
+  const {
+    complaints,
+    totalComplaints,
+    totalPages,
+    currentPage,
+    pageSize,
+    categoryOptions,
+  } = await getComplaintList({ profileId, isWarga, searchParams })
 
   return (
     <section className="space-y-6 pt-2">

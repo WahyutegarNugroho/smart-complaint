@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
+import { getAdminPaginatedAnnouncements } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import { createAnnouncement } from '@/app/dashboard/actions'
 import AnnouncementItem from './AnnouncementItem'
 import {
@@ -13,18 +13,6 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import Link from 'next/link'
-import { Prisma } from '@prisma/client'
-
-interface Announcement {
-  id: string
-  title: string
-  content: string
-  category: string
-  createdAt: Date | string
-  author: {
-    name: string | null
-  }
-}
 
 const PAGE_SIZE = 10
 
@@ -35,44 +23,15 @@ export default async function AdminAnnouncementsPage({
 }) {
   const { message: successMessage, page: pageStr } = await searchParams
   const page = Math.max(1, parseInt(pageStr || '1'))
-  const supabase = await createClient()
 
-  let announcements: Announcement[] = []
-  let totalAnnouncements = 0
-  let error: string | null = null
-
-  try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
-
-    const profile = await prisma.profile.findUnique({
-      where: { userId: user.id },
-      select: { role: true }
-    })
-
-    if (!profile || profile.role !== 'ADMIN') {
-      redirect('/dashboard')
-    }
-
-    const whereClause: Prisma.AnnouncementWhereInput = {}
-
-    const [fetchedAnnouncements, fetchedTotal] = await Promise.all([
-      prisma.announcement.findMany({
-        where: whereClause,
-        orderBy: { createdAt: 'desc' },
-        include: { author: true },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE
-      }),
-      prisma.announcement.count({ where: whereClause })
-    ])
-
-    announcements = fetchedAnnouncements
-    totalAnnouncements = fetchedTotal
-  } catch (err) {
-    console.error('AdminAnnouncementsPage Data Error:', err)
-    error = 'Gagal memuat daftar pengumuman. Silakan coba lagi.'
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED') redirect('/login')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') {
+    redirect('/dashboard')
   }
+
+  const { announcements, totalAnnouncements } = await getAdminPaginatedAnnouncements(page, PAGE_SIZE)
+  const error: string | null = null
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
+import { getAdminUsersList } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import UserRow from './UserRow'
 import {
   ArrowLeft,
@@ -11,7 +11,6 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
-import { Profile, Prisma, Role } from '@prisma/client'
 import ErrorToast from '@/components/ErrorToast'
 import SuccessToast from '@/components/SuccessToast'
 
@@ -24,52 +23,22 @@ export default async function AdminUsersPage({
 }) {
   const { q, role, rt, rw, page: pageStr, error: queryError, message: queryMessage } = await searchParams
   const page = Math.max(1, parseInt(pageStr || '1'))
-  const supabase = await createClient()
 
-  let allUsers: Profile[] = []
-  let totalUsers = 0
-  let error: string | null = null
-
-  try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
-
-    const profile = await prisma.profile.findUnique({
-      where: { userId: user.id },
-      select: { role: true }
-    })
-
-    if (!profile || profile.role !== 'ADMIN') {
-      redirect('/dashboard')
-    }
-
-    const whereClause: Prisma.ProfileWhereInput = {}
-    if (q) {
-      whereClause.OR = [
-        { name: { contains: q, mode: 'insensitive' } },
-        { username: { contains: q, mode: 'insensitive' } }
-      ]
-    }
-    if (role) whereClause.role = role as Role
-    if (rt) whereClause.rt = rt
-    if (rw) whereClause.rw = rw
-
-    const [fetchedUsers, fetchedTotal] = await Promise.all([
-      prisma.profile.findMany({
-        where: whereClause,
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE
-      }),
-      prisma.profile.count({ where: whereClause })
-    ])
-
-    allUsers = fetchedUsers
-    totalUsers = fetchedTotal
-  } catch (err) {
-    console.error('AdminUsersPage Data Error:', err)
-    error = 'Gagal memuat data pengguna. Silakan coba lagi.'
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED') redirect('/login')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') {
+    redirect('/dashboard')
   }
+
+  const { users: allUsers, totalUsers } = await getAdminUsersList({
+    q,
+    role,
+    rt,
+    rw,
+    page,
+    pageSize: PAGE_SIZE,
+  })
+  const error: string | null = null
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">

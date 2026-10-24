@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import prisma from '@/lib/prisma'
+import { getMappedComplaints, getMapCategories } from '@/lib/dal'
+import { getCachedProfile } from '@/lib/profile'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { MapPageClient } from '@/components/map'
@@ -11,58 +11,15 @@ export default async function MapPage({
   searchParams: Promise<{ complaintId?: string }>
 }) {
   const { complaintId } = await searchParams
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const authData = await getCachedProfile()
+  if (authData.status === 'UNAUTHENTICATED' || !authData.profile) redirect('/login')
 
-  const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
-  if (!profile) redirect('/dashboard')
+  const { profile } = authData
 
-  const complaints = await prisma.complaint.findMany({
-    where: {
-      latitude: { not: null },
-      longitude: { not: null }
-    },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      latitude: true,
-      longitude: true,
-      status: true,
-      rt: true,
-      rw: true,
-      isUrgent: true,
-      createdAt: true,
-      category: true,
-      categoryId: true,
-      imageUrl: true,
-      location: true,
-      incidentDate: true,
-      escalationLevel: true,
-      authorId: true,
-      author: {
-        select: {
-          name: true,
-          username: true
-        }
-      },
-      categoryRel: {
-        select: {
-          id: true,
-          name: true
-        }
-      }
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 500
-  })
-
-  const categories = await prisma.category.findMany({
-    where: { parentId: { not: null } },
-    select: { id: true, name: true, parentId: true },
-    orderBy: { name: 'asc' }
-  })
+  const [complaints, categories] = await Promise.all([
+    getMappedComplaints(500),
+    getMapCategories(),
+  ])
 
   const parsed = complaints.map(c => ({
     ...c,

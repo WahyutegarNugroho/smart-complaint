@@ -1,5 +1,5 @@
 import { redirect, notFound } from 'next/navigation'
-import prisma from '@/lib/prisma'
+import { getComplaintDetail } from '@/lib/dal'
 import { respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
 import { 
@@ -23,7 +23,6 @@ import EscalationStatus from './EscalationStatus'
 import StaffActionsPanel from './StaffActionsPanel'
 import { LocationView } from '@/components/map'
 import ComplaintStatusStepper from '@/components/dashboard/ComplaintStatusStepper'
-import { getEscalationInfo } from '@/lib/escalation'
 import { isStaff, isAdmin as checkIsAdmin } from '@/lib/authorization'
 import ErrorToast from '@/components/ErrorToast'
 import SuccessToast from '@/components/SuccessToast'
@@ -56,20 +55,7 @@ export default async function ComplaintDetailPage({
   
   const { profile } = data
 
-  const [complaint, escalationLogs] = await Promise.all([
-    prisma.complaint.findUnique({
-      where: { id },
-      include: { 
-        author: true,
-        categoryRel: true,
-        responses: {
-          include: { officer: true },
-          orderBy: { createdAt: 'asc' }
-        }
-      }
-    }),
-    getEscalationInfo(id),
-  ])
+  const { complaint, escalationLogs } = await getComplaintDetail(id)
 
   if (!complaint) notFound()
 
