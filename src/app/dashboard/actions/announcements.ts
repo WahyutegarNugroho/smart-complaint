@@ -4,12 +4,19 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
-import { isRedirectError } from '@/lib/redirect-guard'
+import { isNextControlFlowError, logServerError, mapPrismaError } from '@/lib/errors'
 import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
 import { requireAdmin } from '@/lib/authorization'
 import { createAuditLog } from '@/lib/audit'
 
-export async function createAnnouncement(formData: FormData) {
+export type AnnouncementFormState = {
+  error?: string
+} | null
+
+export async function createAnnouncement(
+  _prevState: AnnouncementFormState,
+  formData: FormData
+): Promise<AnnouncementFormState> {
   try {
     const { user } = await getAuthenticatedUser()
     const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
@@ -21,7 +28,7 @@ export async function createAnnouncement(formData: FormData) {
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Isi pengumuman', 2000)
     if (errTitle || errContent) {
-      redirect(`/dashboard/admin/announcements?error=${encodeURIComponent(errTitle || errContent || '')}`)
+      return { error: errTitle || errContent || 'Input tidak valid.' }
     }
 
     await prisma.announcement.create({
@@ -34,13 +41,16 @@ export async function createAnnouncement(formData: FormData) {
     revalidatePath('/dashboard/admin/announcements')
     redirect('/dashboard/admin/announcements?message=Pengumuman berhasil diterbitkan')
   } catch (err) {
-    console.error('CreateAnnouncement Error:', err)
-    if (isRedirectError(err)) throw err
-    redirect('/dashboard/admin/announcements?error=Gagal menerbitkan pengumuman')
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.createAnnouncement', err)
+    return { error: mapPrismaError(err).userMessage }
   }
 }
 
-export async function updateAnnouncement(formData: FormData) {
+export async function updateAnnouncement(
+  _prevState: AnnouncementFormState,
+  formData: FormData
+): Promise<AnnouncementFormState> {
   try {
     const { user } = await getAuthenticatedUser()
     const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
@@ -53,7 +63,7 @@ export async function updateAnnouncement(formData: FormData) {
     const errTitle = validateString(title, 'Judul', 200)
     const errContent = validateString(content, 'Isi pengumuman', 2000)
     if (errTitle || errContent) {
-      redirect(`/dashboard/admin/announcements?error=${encodeURIComponent(errTitle || errContent || '')}`)
+      return { error: errTitle || errContent || 'Input tidak valid.' }
     }
 
     await prisma.announcement.update({
@@ -67,28 +77,33 @@ export async function updateAnnouncement(formData: FormData) {
     revalidatePath('/dashboard/admin/announcements')
     redirect('/dashboard/admin/announcements?message=Pengumuman berhasil diubah')
   } catch (err) {
-    console.error('UpdateAnnouncement Error:', err)
-    if (isRedirectError(err)) throw err
-    redirect('/dashboard/admin/announcements?error=Gagal mengubah pengumuman')
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.updateAnnouncement', err)
+    return { error: mapPrismaError(err).userMessage }
   }
 }
 
-export async function deleteAnnouncement(formData: FormData) {
+export async function deleteAnnouncement(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
     const auth = await getAuthenticatedUserOptional()
-    if (!auth) return
+    if (!auth) return { success: false, error: 'Sesi Anda telah berakhir. Silakan masuk ulang.' }
     const { user } = auth
     const profile = await prisma.profile.findUnique({ where: { userId: user.id }, select: { id: true, role: true } })
     if (!profile || profile.role !== 'ADMIN') return redirect('/dashboard?error=forbidden')
 
     const id = formData.get('id') as string
+    if (!id) return { success: false, error: 'ID pengumuman tidak valid.' }
+
     await prisma.announcement.delete({ where: { id } })
 
     await createAuditLog('DELETE_ANNOUNCEMENT', `Menghapus pengumuman (${id})`, profile.id)
 
     revalidatePath('/dashboard')
     revalidatePath('/dashboard/admin/announcements')
+    return { success: true }
   } catch (err) {
-    console.error('DeleteAnnouncement Error:', err)
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.deleteAnnouncement', err)
+    return { success: false, error: mapPrismaError(err).userMessage }
   }
 }

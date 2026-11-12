@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect, forbidden } from 'next/navigation'
 import { getAdminUsersList } from '@/lib/dal'
 import { getCachedProfile } from '@/lib/profile'
 import UserRow from './UserRow'
@@ -27,10 +27,10 @@ export default async function AdminUsersPage({
   const authData = await getCachedProfile()
   if (authData.status === 'UNAUTHENTICATED') redirect('/login')
   if (!authData.profile || authData.profile.role !== 'ADMIN') {
-    redirect('/dashboard')
+    forbidden()
   }
 
-  const { users: allUsers, totalUsers } = await getAdminUsersList({
+  const { users: allUsers, totalUsers, error } = await getAdminUsersList({
     q,
     role,
     rt,
@@ -38,7 +38,6 @@ export default async function AdminUsersPage({
     page,
     pageSize: PAGE_SIZE,
   })
-  const error: string | null = null
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 pb-20">

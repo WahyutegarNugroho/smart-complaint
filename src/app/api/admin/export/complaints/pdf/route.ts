@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { guardAdminExport } from '@/lib/admin-export'
+import { apiErrorResponse, logServerError, mapPrismaError, parsePositiveLimit } from '@/lib/errors'
 import PDFDocument from 'pdfkit'
 
 export const runtime = 'nodejs'
@@ -14,11 +15,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const limitParam = searchParams.get('limit')
-    const limit = Math.min(Math.max(1, parseInt(limitParam || '500')), 5000)
+    const limit = parsePositiveLimit(limitParam)
 
     const complaints = await prisma.complaint.findMany({
       take: limit,
-      include: { author: true, categoryRel: true },
+      include: { author: { select: { name: true } }, categoryRel: true },
       orderBy: { createdAt: 'desc' }
     })
 
@@ -178,9 +179,8 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (err) {
-    console.error('=== PDF Export Error ===')
-    console.error(err instanceof Error ? err.message : err)
-    if (err instanceof Error && err.stack) console.error(err.stack)
-    return new NextResponse(`Internal Server Error: ${err instanceof Error ? err.message : 'Unknown error'}`, { status: 500 })
+    logServerError('api.export.pdf', err)
+    const mapped = mapPrismaError(err)
+    return apiErrorResponse(mapped.code, mapped.userMessage, mapped.status)
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '@/lib/rate-limit'
+import { apiErrorResponse, logServerError } from '@/lib/errors'
 
 const NOMINATIM_BASE = 'https://nominatim.openstreetmap.org'
 
@@ -14,9 +15,11 @@ async function proxyRequest(url: string): Promise<NextResponse> {
     })
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Geocoding service unavailable' },
-        { status: 502 }
+      logServerError('api.geocode.upstream', new Error(`HTTP ${response.status}`))
+      return apiErrorResponse(
+        'INTERNAL_ERROR',
+        'Layanan pencarian alamat sedang tidak tersedia. Silakan coba lagi.',
+        502
       )
     }
 
@@ -26,10 +29,12 @@ async function proxyRequest(url: string): Promise<NextResponse> {
         'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
       },
     })
-  } catch {
-    return NextResponse.json(
-      { error: 'Geocoding service unavailable' },
-      { status: 502 }
+  } catch (err) {
+    logServerError('api.geocode.fetch', err)
+    return apiErrorResponse(
+      'INTERNAL_ERROR',
+      'Layanan pencarian alamat sedang tidak dapat dijangkau.',
+      502
     )
   }
 }
@@ -46,10 +51,7 @@ export async function GET(request: NextRequest) {
     const lon = searchParams.get('lon')
 
     if (!lat || !lon) {
-      return NextResponse.json(
-        { error: 'Missing lat or lon parameter' },
-        { status: 400 }
-      )
+      return apiErrorResponse('VALIDATION_ERROR', 'Parameter koordinat lat dan lon wajib diisi.', 400)
     }
 
     const latNum = parseFloat(lat)
@@ -58,10 +60,7 @@ export async function GET(request: NextRequest) {
     if (isNaN(latNum) || isNaN(lonNum) ||
         latNum < -90 || latNum > 90 ||
         lonNum < -180 || lonNum > 180) {
-      return NextResponse.json(
-        { error: 'Invalid coordinates' },
-        { status: 400 }
-      )
+      return apiErrorResponse('VALIDATION_ERROR', 'Koordinat lokasi tidak valid.', 400)
     }
 
     const url = `${NOMINATIM_BASE}/reverse?format=json&lat=${latNum}&lon=${lonNum}&accept-language=id&addressdetails=1`
@@ -72,18 +71,16 @@ export async function GET(request: NextRequest) {
     const q = searchParams.get('q')
 
     if (!q || q.trim().length < 3) {
-      return NextResponse.json(
-        { error: 'Query must be at least 3 characters' },
-        { status: 400 }
-      )
+      return apiErrorResponse('VALIDATION_ERROR', 'Kata kunci pencarian minimal 3 karakter.', 400)
     }
 
     const url = `${NOMINATIM_BASE}/search?format=json&q=${encodeURIComponent(q.trim())}&limit=5&accept-language=id&addressdetails=1`
     return proxyRequest(url)
   }
 
-  return NextResponse.json(
-    { error: 'Invalid action. Use action=reverse or action=search' },
-    { status: 400 }
+  return apiErrorResponse(
+    'VALIDATION_ERROR',
+    'Parameter action tidak valid. Gunakan reverse atau search.',
+    400
   )
 }

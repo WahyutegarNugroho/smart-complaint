@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { Bell, Check, ShieldAlert, BellOff, CheckCheck } from 'lucide-react'
+import { Bell, Check, ShieldAlert, BellOff, CheckCheck, AlertCircle, X } from 'lucide-react'
 import { markNotificationAsRead, markAllNotificationsAsRead } from '@/app/dashboard/actions'
 
 interface NotificationItem {
@@ -22,6 +22,8 @@ export default function NotificationDropdown({ notifications: initialNotificatio
   const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications)
   const [now, setNow] = useState<number>(0)
   const [desktopPos, setDesktopPos] = useState<{ top: number; left: number } | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isMarkingAll, setIsMarkingAll] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLButtonElement>(null)
 
@@ -43,18 +45,39 @@ export default function NotificationDropdown({ notifications: initialNotificatio
 
   // Polling: fetch notifications every 30s
   useEffect(() => {
+    let active = true
     const interval = setInterval(async () => {
       try {
         const res = await fetch('/api/notifications')
-        if (res.ok) {
-          const data: NotificationItem[] = await res.json()
-          setNotifications(data)
+        if (!active) return
+
+        if (res.status === 401 || res.status === 403) {
+          clearInterval(interval)
+          setErrorMessage('Sesi Anda telah berakhir. Silakan muat ulang halaman.')
+          return
         }
-      } catch (err) {
-        console.error('Notification polling error:', err)
+
+        if (!res.ok) {
+          setErrorMessage('Gagal menyegarkan notifikasi terbaru.')
+          return
+        }
+
+        const data: unknown = await res.json()
+        if (Array.isArray(data)) {
+          setNotifications(data as NotificationItem[])
+          setErrorMessage(null)
+        }
+      } catch {
+        if (active) {
+          setErrorMessage('Koneksi terganggu saat memuat notifikasi.')
+        }
       }
     }, 30000)
-    return () => clearInterval(interval)
+
+    return () => {
+      active = false
+      clearInterval(interval)
+    }
   }, [])
 
   // Close dropdown on click outside or Escape
@@ -78,17 +101,42 @@ export default function NotificationDropdown({ notifications: initialNotificatio
   const unreadCount = notifications.filter(n => !n.isRead).length
 
   const handleMarkAsRead = async (id: string) => {
-    // Optimistic UI update
-    setNotifications(prev => 
+    const snapshot = notifications
+    setErrorMessage(null)
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, isRead: true } : n)
     )
-    
+
     try {
-      await markNotificationAsRead(id)
-    } catch (err) {
-      console.error('Failed to mark notification as read:', err)
-      // Rollback on error
-      setNotifications(initialNotifications)
+      const result = await markNotificationAsRead(id)
+      if (!result.success) {
+        setNotifications(snapshot)
+        setErrorMessage(result.error || 'Gagal menandai notifikasi sebagai dibaca.')
+      }
+    } catch {
+      setNotifications(snapshot)
+      setErrorMessage('Terjadi kendala saat memperbarui notifikasi.')
+    }
+  }
+
+  const handleMarkAllAsRead = async () => {
+    if (isMarkingAll) return
+    const snapshot = notifications
+    setIsMarkingAll(true)
+    setErrorMessage(null)
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+
+    try {
+      const result = await markAllNotificationsAsRead()
+      if (!result.success) {
+        setNotifications(snapshot)
+        setErrorMessage(result.error || 'Gagal menandai semua notifikasi sebagai dibaca.')
+      }
+    } catch {
+      setNotifications(snapshot)
+      setErrorMessage('Terjadi kendala saat memperbarui semua notifikasi.')
+    } finally {
+      setIsMarkingAll(false)
     }
   }
 
@@ -130,19 +178,13 @@ export default function NotificationDropdown({ notifications: initialNotificatio
           {unreadCount > 0 && (
             <>
               <button
-                onClick={async () => {
-                  setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
-                  try {
-                    await markAllNotificationsAsRead()
-                  } catch (err) {
-                    console.error('Mark all as read error:', err)
-                    setNotifications(initialNotifications)
-                  }
-                }}
-                className="text-xs font-bold text-blue-800 dark:text-blue-400 hover:underline uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer"
+                type="button"
+                disabled={isMarkingAll}
+                onClick={handleMarkAllAsRead}
+                className="text-xs font-bold text-blue-800 dark:text-blue-400 hover:underline uppercase tracking-wider flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50"
                 title="Tandai semua telah dibaca"
               >
-                <CheckCheck size={14} /> Sudah Dibaca
+                <CheckCheck size={14} aria-hidden="true" /> Sudah Dibaca
               </button>
               <span className="w-px h-4 bg-slate-200 dark:bg-slate-700" />
               <span className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider tabular-nums">
@@ -152,6 +194,26 @@ export default function NotificationDropdown({ notifications: initialNotificatio
           )}
         </div>
       </div>
+
+      {errorMessage && (
+        <div
+          role="alert"
+          className="px-4 py-2.5 bg-rose-50 dark:bg-rose-950/40 border-b border-rose-200 dark:border-rose-900/60 flex items-center justify-between gap-2 text-xs text-rose-800 dark:text-rose-200"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <AlertCircle size={14} aria-hidden="true" className="shrink-0 text-rose-600 dark:text-rose-400" />
+            <span className="font-medium truncate">{errorMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setErrorMessage(null)}
+            aria-label="Tutup pesan kesalahan notifikasi"
+            className="text-rose-600 dark:text-rose-300 hover:text-rose-800 p-1 rounded cursor-pointer"
+          >
+            <X size={14} aria-hidden="true" />
+          </button>
+        </div>
+      )}
 
       <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
         {notifications.length === 0 ? (

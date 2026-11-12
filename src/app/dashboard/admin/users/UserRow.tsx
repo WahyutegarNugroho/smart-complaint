@@ -14,9 +14,9 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import ConfirmModal from '@/components/ConfirmModal'
-import { Profile } from '@prisma/client'
+import type { AdminUserListItem } from '@/lib/dal/admin'
 
-export default function UserRow({ user }: { user: Profile }) {
+export default function UserRow({ user }: { user: AdminUserListItem }) {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -216,11 +216,11 @@ export default function UserRow({ user }: { user: Profile }) {
               <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div className="space-y-1">
                   <dt className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nomor Induk Kependudukan (NIK)</dt>
-                  <dd className="text-sm font-mono tabular-nums font-bold text-slate-900 dark:text-white">{user.nik ? `****${user.nik.slice(-4)}` : 'Belum diisi'}</dd>
+                  <dd className="text-sm font-mono tabular-nums font-bold text-slate-900 dark:text-white">{user.maskedNik ?? 'Belum diisi'}</dd>
                 </div>
                 <div className="space-y-1">
                   <dt className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kontak WhatsApp</dt>
-                  <dd className="text-sm font-mono tabular-nums font-bold text-slate-900 dark:text-white">{user.phone ? `****${user.phone.slice(-4)}` : 'Belum diisi'}</dd>
+                  <dd className="text-sm font-mono tabular-nums font-bold text-slate-900 dark:text-white">{user.maskedPhone ?? 'Belum diisi'}</dd>
                 </div>
                 <div className="space-y-1">
                   <dt className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Wilayah RT / RW</dt>

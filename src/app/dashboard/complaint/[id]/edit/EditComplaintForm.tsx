@@ -3,8 +3,12 @@
 import { updateComplaint } from '@/app/dashboard/actions'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useRef, useEffect } from 'react'
-import { X, UploadCloud, Save, ChevronLeft } from 'lucide-react'
+import { useState, useRef, useEffect, useActionState } from 'react'
+import { X, UploadCloud, Save, ChevronLeft, AlertCircle } from 'lucide-react'
+import SubmitButton from '@/components/SubmitButton'
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024
 
 interface ComplaintData {
   title: string
@@ -21,18 +25,38 @@ export default function EditComplaintForm({
   id: string,
   complaint: ComplaintData
 }) {
-  const [complaint] = useState<ComplaintData>(initialComplaint)
+  const [state, formAction] = useActionState(updateComplaint, null)
+  const [title, setTitle] = useState(initialComplaint.title)
+  const [incidentDate, setIncidentDate] = useState(() =>
+    new Date(initialComplaint.incidentDate).toISOString().split('T')[0]
+  )
+  const [location, setLocation] = useState(initialComplaint.location)
+  const [content, setContent] = useState(initialComplaint.content)
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialComplaint.imageUrl || null)
+  const [fileError, setFileError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      if (previewUrl && previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl)
-      }
-      setPreviewUrl(URL.createObjectURL(file))
+    if (!file) return
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setFileError('Format berkas tidak didukung. Gunakan JPG, PNG, WebP, atau GIF.')
+      e.target.value = ''
+      return
     }
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      setFileError('Ukuran berkas melebihi batas maksimal 5MB.')
+      e.target.value = ''
+      return
+    }
+
+    setFileError(null)
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl)
+    }
+    setPreviewUrl(URL.createObjectURL(file))
   }
 
   const removeFile = () => {
@@ -40,6 +64,7 @@ export default function EditComplaintForm({
       URL.revokeObjectURL(previewUrl)
     }
     setPreviewUrl(null)
+    setFileError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -82,7 +107,7 @@ export default function EditComplaintForm({
           </div>
         </section>
 
-        <form action={updateComplaint} className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        <form action={formAction} className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           <input type="hidden" name="id" value={id} />
           
           {/* LEFT: Main Form */}
@@ -98,7 +123,8 @@ export default function EditComplaintForm({
                   name="title"
                   type="text"
                   required
-                  defaultValue={complaint.title}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors"
                 />
               </div>
@@ -113,7 +139,8 @@ export default function EditComplaintForm({
                     name="incidentDate"
                     type="date"
                     required
-                    defaultValue={new Date(complaint.incidentDate).toISOString().split('T')[0]}
+                    value={incidentDate}
+                    onChange={(e) => setIncidentDate(e.target.value)}
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-mono tabular-nums text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors"
                   />
                 </div>
@@ -126,7 +153,8 @@ export default function EditComplaintForm({
                     name="location"
                     type="text"
                     required
-                    defaultValue={complaint.location}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors"
                   />
                 </div>
@@ -141,7 +169,8 @@ export default function EditComplaintForm({
                   name="content"
                   rows={6}
                   required
-                  defaultValue={complaint.content}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                   className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none resize-none leading-relaxed"
                 />
               </div>
@@ -211,15 +240,36 @@ export default function EditComplaintForm({
                   </div>
                 )}
               </div>
+
+              {fileError && (
+                <p role="alert" className="text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl px-3.5 py-2.5 flex items-center gap-2">
+                  <AlertCircle aria-hidden="true" size={16} className="shrink-0 text-rose-600 dark:text-rose-400" />
+                  <span>{fileError}</span>
+                </p>
+              )}
             </div>
 
-            <div className="flex flex-col gap-3">
-              <button
-                type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white min-h-[48px] py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            {state?.error && (
+              <div
+                role="alert"
+                className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl p-4 flex items-start gap-3 text-rose-800 dark:text-rose-200 shadow-sm"
               >
-                <Save size={18} /> Simpan Pembaruan
-              </button>
+                <AlertCircle aria-hidden="true" size={18} className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+                <div className="space-y-0.5 text-xs">
+                  <p className="font-bold">Pembaruan belum dapat disimpan</p>
+                  <p className="font-medium leading-relaxed">{state.error}</p>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-3">
+              <SubmitButton
+                className="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white min-h-[48px] py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                loadingText="Menyimpan Pembaruan..."
+                icon={<Save size={18} />}
+              >
+                Simpan Pembaruan
+              </SubmitButton>
               <Link 
                 href={`/dashboard/complaint/${id}`}
                 className="w-full min-h-[44px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-slate-900 dark:hover:text-white text-center transition-colors flex items-center justify-center shadow-sm"

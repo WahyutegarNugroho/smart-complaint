@@ -11,6 +11,12 @@ const KNOWN_ERROR_MESSAGES: Record<string, string> = {
   upload_failed: 'Gagal mengunggah berkas gambar. Silakan coba kembali.',
   invalid_type: 'Format berkas tidak didukung (gunakan JPG, PNG, WebP, atau GIF).',
   file_too_large: 'Ukuran berkas melebihi batas maksimal 5MB.',
+  already_processed: 'Laporan ini sudah diproses sebelumnya atau statusnya telah diperbarui.',
+  rate_limited: 'Terlalu banyak permintaan dalam waktu singkat. Silakan tunggu sebentar lalu coba lagi.',
+  database_unavailable: 'Layanan basis data sedang terganggu. Silakan coba kembali beberapa saat lagi.',
+  invalid_input: 'Data masukan tidak valid atau belum lengkap. Silakan periksa kembali.',
+  conflict: 'Data yang dimasukkan sudah terdaftar atau bertentangan dengan data lain.',
+  self_action_forbidden: 'Anda tidak dapat mengubah peran atau menghapus akun Anda sendiri.',
 }
 
 interface ErrorToastProps {

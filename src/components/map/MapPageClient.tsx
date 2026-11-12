@@ -31,7 +31,7 @@ export interface ComplaintMarker {
   incidentDate: string
   escalationLevel: string
   author: { name: string; username: string } | null
-  authorId: string
+  isOwn: boolean
 }
 
 interface CategoryItem {
@@ -45,7 +45,6 @@ interface MapPageClientProps {
   categories: CategoryItem[]
   highlightedComplaintId?: string
   userRole: string
-  currentUserId: string
 }
 
 interface Filters {
@@ -211,7 +210,7 @@ function AutoSelectMapLayer({
   return null
 }
 
-export default function MapPageClient({ complaints, categories, highlightedComplaintId, userRole, currentUserId }: MapPageClientProps) {
+export default function MapPageClient({ complaints, categories, highlightedComplaintId, userRole }: MapPageClientProps) {
   const [filters, setFilters] = useState<Filters>({
     status: '',
     categoryId: '',
@@ -385,7 +384,6 @@ export default function MapPageClient({ complaints, categories, highlightedCompl
         complaint={selectedComplaint}
         onClose={() => setSelectedComplaint(null)}
         userRole={userRole}
-        currentUserId={currentUserId}
       />
     </>
   )

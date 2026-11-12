@@ -2,10 +2,13 @@ import React from 'react'
 import { ChevronRight, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { getAdminAnalyticsData } from '@/lib/dal'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 
 export default async function AdminAnalyticsSection() {
   const data = await getAdminAnalyticsData()
-  if (!data) return null
+  if (!data) {
+    return <SectionErrorFallback title="Gagal Memuat Analitik Mingguan" />
+  }
 
   const { completionRate, unverifiedUsers, chartData, maxChart, total7Days } = data
 

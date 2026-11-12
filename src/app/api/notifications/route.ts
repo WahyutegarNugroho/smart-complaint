@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
+import { apiErrorResponse, logServerError, mapPrismaError } from '@/lib/errors'
 
 export async function GET() {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: 'Sesi tidak terotentikasi' }, { status: 401 })
+      return apiErrorResponse('UNAUTHORIZED', 'Sesi Anda telah berakhir.', 401)
     }
 
     const profile = await prisma.profile.findUnique({
@@ -15,7 +16,7 @@ export async function GET() {
       select: { id: true }
     })
     if (!profile) {
-      return NextResponse.json({ error: 'Profil pengguna tidak ditemukan' }, { status: 403 })
+      return apiErrorResponse('FORBIDDEN', 'Profil pengguna tidak ditemukan.', 403)
     }
 
     const notifications = await prisma.notification.findMany({
@@ -29,7 +30,8 @@ export async function GET() {
 
     return NextResponse.json(notifications)
   } catch (err) {
-    console.error('API /api/notifications Error:', err)
-    return NextResponse.json([], { status: 500 })
+    logServerError('api.notifications', err)
+    const mapped = mapPrismaError(err)
+    return apiErrorResponse(mapped.code, mapped.userMessage, mapped.status)
   }
 }

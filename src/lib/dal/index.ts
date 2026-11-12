@@ -1,3 +1,4 @@
+import 'server-only'
 export * from './stats'
 export * from './announcements'
 export * from './notifications'

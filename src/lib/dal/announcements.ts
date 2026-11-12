@@ -1,6 +1,9 @@
+import 'server-only'
 import { cache } from 'react'
 import prisma from '@/lib/prisma'
 import { Announcement } from '@prisma/client'
+import { logServerError, mapPrismaError } from '@/lib/errors'
+import { getAuthorizedAdminProfile } from './guard'
 
 export interface AnnouncementWithAuthor extends Announcement {
   author?: {
@@ -11,6 +14,7 @@ export interface AnnouncementWithAuthor extends Announcement {
 export interface PaginatedAnnouncementsResult {
   announcements: AnnouncementWithAuthor[]
   totalAnnouncements: number
+  error?: string | null
 }
 
 /**
@@ -27,7 +31,7 @@ export const getAnnouncements = cache(
         skip,
       })
     } catch (err) {
-      console.error('getAnnouncements DAL Error:', err)
+      logServerError('dal.getAnnouncements', err)
       return []
     }
   }
@@ -39,6 +43,11 @@ export const getAnnouncements = cache(
 export const getAdminPaginatedAnnouncements = cache(
   async (page: number = 1, pageSize: number = 10): Promise<PaginatedAnnouncementsResult> => {
     try {
+      const admin = await getAuthorizedAdminProfile()
+      if (!admin) {
+        return { announcements: [], totalAnnouncements: 0 }
+      }
+
       const safePage = Math.max(1, page)
       const skip = (safePage - 1) * pageSize
 
@@ -63,10 +72,11 @@ export const getAdminPaginatedAnnouncements = cache(
         totalAnnouncements,
       }
     } catch (err) {
-      console.error('getAdminPaginatedAnnouncements DAL Error:', err)
+      logServerError('dal.getAdminPaginatedAnnouncements', err)
       return {
         announcements: [],
         totalAnnouncements: 0,
+        error: mapPrismaError(err).userMessage,
       }
     }
   }

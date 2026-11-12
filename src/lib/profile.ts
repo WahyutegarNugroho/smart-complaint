@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { createClient } from '@/utils/supabase/server'
 import { Profile } from '@prisma/client'
 import { User } from '@supabase/supabase-js'
+import { logServerError } from '@/lib/errors'
 
 export type ProfileResponse = 
   | { profile: null; user: null; status: 'UNAUTHENTICATED' }
@@ -71,13 +72,13 @@ export const getCachedProfile = cache(async (): Promise<ProfileResponse> => {
 
     return { profile, user, status: 'AUTHENTICATED' }
   } catch (err: unknown) {
-    console.error('getCachedProfile Critical Failure:', err)
+    logServerError('getCachedProfile', err)
     const error = err as Error
     return { 
       profile: null, 
       user: null, 
       status: 'ERROR',
-      error: error?.message || String(err)
+      error: process.env.NODE_ENV === 'development' ? (error?.message || String(err)) : 'DATABASE_UNAVAILABLE'
     }
   }
 })

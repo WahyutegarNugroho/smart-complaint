@@ -1,6 +1,8 @@
 'use server';
 
+import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export interface PublicTicketStatus {
   found: boolean;
@@ -35,25 +37,39 @@ function maskName(name: string): string {
 }
 
 export async function trackTicketStatus(rawTicketId: string): Promise<PublicTicketStatus> {
-  const ticketId = rawTicketId.trim().replace(/^#/, '');
+  const headerList = await headers();
+  const ip =
+    headerList.get('x-real-ip') ||
+    headerList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    'unknown';
 
-  if (!ticketId || ticketId.length < 3) {
+  const rl = await checkRateLimit(ip, { keyPrefix: 'track', max: 15, windowMs: 60_000 });
+  if (!rl.allowed) {
     return {
       found: false,
-      message: 'Masukkan nomor tiket yang valid (contoh: ID pengaduan atau format LP-XXXX).',
+      message: `Terlalu banyak permintaan pelacakan. Silakan coba kembali dalam ${rl.retryAfter} detik.`,
+    };
+  }
+
+  const ticketId = rawTicketId.trim().replace(/^#/, '').replace(/^LP-/i, '');
+
+  if (!ticketId || !/^[a-zA-Z0-9_-]{6,}$/.test(ticketId)) {
+    return {
+      found: false,
+      message: 'Masukkan minimal 6 karakter kode tiket yang valid (contoh: 6 karakter terakhir ID atau format LP-XXXXXX).',
     };
   }
 
   try {
-    // Cari complaint berdasarkan id persis atau prefix/suffix
-    const complaint = await prisma.complaint.findFirst({
+    // Cari complaint berdasarkan id persis atau suffix minimal 6 karakter (tanpa startsWith agar tidak bisa di-enumerate)
+    const matches = await prisma.complaint.findMany({
       where: {
         OR: [
-          { id: ticketId },
-          { id: { endsWith: ticketId } },
-          { id: { startsWith: ticketId } },
+          { id: { equals: ticketId, mode: 'insensitive' } },
+          { id: { endsWith: ticketId, mode: 'insensitive' } },
         ],
       },
+      take: 2,
       select: {
         id: true,
         title: true,
@@ -84,12 +100,21 @@ export async function trackTicketStatus(rawTicketId: string): Promise<PublicTick
       },
     });
 
-    if (!complaint) {
+    if (matches.length === 0) {
       return {
         found: false,
         message: 'Nomor tiket belum ditemukan. Pastikan kode sudah sesuai atau periksa kembali riwayat pengaduan Anda.',
       };
     }
+
+    if (matches.length > 1) {
+      return {
+        found: false,
+        message: 'Kode tiket cocok dengan lebih dari satu laporan. Masukkan ID tiket yang lebih lengkap.',
+      };
+    }
+
+    const complaint = matches[0];
 
     return {
       found: true,

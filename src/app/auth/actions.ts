@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server'
 import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
 import { checkLoginAttempt, recordFailedAttempt, resetLoginAttempts } from '@/lib/login-rate-limit'
-import { isRedirectError } from '@/lib/redirect-guard'
+import { isNextControlFlowError, logServerError, mapAuthError, mapPrismaError } from '@/lib/errors'
 
 export async function login(formData: FormData) {
   console.log('[LOGIN] action started')
@@ -32,12 +32,12 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    console.error('[LOGIN] supabase auth error:', error.message, error.status)
+    logServerError('auth.login', error)
     const result = await recordFailedAttempt(ip)
     if (result.locked) {
       redirect('/login?error=locked&remaining=' + result.remainingSeconds)
     }
-    redirect('/login?error=' + encodeURIComponent(error.message) + '&remainingAttempts=' + result.remainingAttempts)
+    redirect('/login?error=' + encodeURIComponent(mapAuthError(error.message)) + '&remainingAttempts=' + result.remainingAttempts)
   }
 
   console.log('[LOGIN] auth success, resetting rate limit')
@@ -84,8 +84,8 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    console.error('Signup Auth Error:', error.message)
-    redirect('/register?error=' + encodeURIComponent(error.message))
+    logServerError('auth.signup', error)
+    redirect('/register?error=' + encodeURIComponent(mapAuthError(error.message)))
   }
 
   console.log('Signup Auth Success')
@@ -105,16 +105,13 @@ export async function signup(formData: FormData) {
       })
       console.log(`Prisma upsert Success`)
     } catch (dbError: unknown) {
-      // ⚠️ Don't catch Next.js redirect errors
-      if (isRedirectError(dbError)) throw dbError;
-      
-      const error = dbError as Error;
-      console.error('Signup Prisma Error:', error.message)
-      
-      const errorMessage = error.message?.includes('max clients reached') 
-        ? 'Database sedang sibuk. Silahkan coba beberapa saat lagi.'
-        : 'Gagal membuat profil. Akun terdaftar di Auth tapi gagal di Database.'
-      
+      if (isNextControlFlowError(dbError)) throw dbError;
+      logServerError('auth.signup.profileUpsert', dbError)
+      const mapped = mapPrismaError(dbError)
+      const errorMessage =
+        mapped.code === 'DATABASE_UNAVAILABLE'
+          ? mapped.userMessage
+          : 'Gagal membuat profil. Akun terdaftar di Auth tetapi gagal disimpan di basis data.'
       redirect('/register?error=' + encodeURIComponent(errorMessage))
     }
   }
@@ -146,14 +143,16 @@ export async function resetPassword(formData: FormData) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
   if (!siteUrl) {
-    throw new Error('NEXT_PUBLIC_SITE_URL environment variable is not set')
+    logServerError('auth.resetPassword', new Error('NEXT_PUBLIC_SITE_URL is not configured'))
+    redirect('/forgot-password?error=' + encodeURIComponent('Layanan pemulihan sandi belum dikonfigurasi. Silakan hubungi pengurus.'))
   }
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${siteUrl}/reset-password`,
   })
 
   if (error) {
-    redirect('/forgot-password?error=' + encodeURIComponent(error.message))
+    logServerError('auth.resetPassword', error)
+    redirect('/forgot-password?error=' + encodeURIComponent(mapAuthError(error.message)))
   }
 
   redirect('/login?message=' + encodeURIComponent('Link reset password telah dikirim ke email Anda'))
@@ -171,7 +170,8 @@ export async function updatePassword(formData: FormData) {
 
   const { error } = await supabase.auth.updateUser({ password })
   if (error) {
-    redirect('/reset-password?error=' + encodeURIComponent(error.message))
+    logServerError('auth.updatePassword', error)
+    redirect('/reset-password?error=' + encodeURIComponent(mapAuthError(error.message)))
   }
 
   redirect('/login?message=' + encodeURIComponent('Password berhasil diubah. Silakan login.'))

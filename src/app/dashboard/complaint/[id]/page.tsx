@@ -1,5 +1,6 @@
-import { redirect, notFound } from 'next/navigation'
+import { redirect, notFound, forbidden } from 'next/navigation'
 import { getComplaintDetail } from '@/lib/dal'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 import { respondToComplaint } from '@/app/dashboard/actions'
 import { getCachedProfile } from '@/lib/profile'
 import { 
@@ -55,8 +56,16 @@ export default async function ComplaintDetailPage({
   
   const { profile } = data
 
-  const { complaint, escalationLogs } = await getComplaintDetail(id)
+  const { complaint, escalationLogs, forbidden: isForbidden, error: dbError } = await getComplaintDetail(id)
 
+  if (isForbidden) forbidden()
+  if (dbError) {
+    return (
+      <main className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        <SectionErrorFallback title="Gagal Memuat Rincian Laporan" message={dbError} />
+      </main>
+    )
+  }
   if (!complaint) notFound()
 
   const canManage = isStaff(profile)

@@ -44,24 +44,39 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
 
   const handleDelete = async () => {
     setShowDeleteModal(false)
+    setErrorMsg(null)
     setIsDeleting(true)
-    const result = await deleteResponse(res.id)
-    if (result.error) {
-      setErrorMsg(result.error || null)
+    try {
+      const result = await deleteResponse(res.id)
+      if (!result.success) {
+        setErrorMsg(result.error || 'Gagal menghapus tanggapan.')
+        setIsDeleting(false)
+      }
+    } catch {
+      setErrorMsg('Terjadi kendala saat menghapus tanggapan. Silakan coba kembali.')
       setIsDeleting(false)
     }
   }
 
   const handleEdit = async () => {
-    if (!content.trim()) return
-    setIsSaving(true)
-    const result = await editResponse(res.id, content)
-    if (result.success) {
-      setIsEditing(false)
-    } else {
-      setErrorMsg(result.error || null)
+    if (!content.trim()) {
+      setErrorMsg('Isi tanggapan tidak boleh kosong.')
+      return
     }
-    setIsSaving(false)
+    setErrorMsg(null)
+    setIsSaving(true)
+    try {
+      const result = await editResponse(res.id, content)
+      if (result.success) {
+        setIsEditing(false)
+      } else {
+        setErrorMsg(result.error || 'Gagal memperbarui tanggapan.')
+      }
+    } catch {
+      setErrorMsg('Terjadi kendala saat memperbarui tanggapan. Silakan coba kembali.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -112,7 +127,8 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                      <div className={`absolute top-full mt-1 w-32 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg z-20 overflow-hidden ${isOfficer ? 'left-0' : 'right-0'}`}>
                        {canEdit && (
                          <button 
-                           onClick={() => { setIsEditing(true); setShowMenu(false); }}
+                           type="button"
+                           onClick={() => { setContent(res.content); setErrorMsg(null); setIsEditing(true); setShowMenu(false); }}
                            className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                          >
                            <Edit2 size={12} /> Edit
@@ -120,6 +136,7 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
                        )}
                         {canDelete && (
                           <button 
+                            type="button"
                             onClick={() => { setShowDeleteModal(true); setShowMenu(false); }}
                            className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
                          >
@@ -134,9 +151,9 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
         </div>
 
           {errorMsg && (
-            <div className="w-full p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-400 font-medium">
-              {errorMsg}
-              <button onClick={() => setErrorMsg(null)} className="ml-2 text-rose-500 hover:text-rose-700">&times;</button>
+            <div role="alert" className="w-full p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 font-medium flex items-center justify-between gap-2">
+              <span>{errorMsg}</span>
+              <button type="button" onClick={() => setErrorMsg(null)} aria-label="Tutup pesan kesalahan" className="text-rose-600 dark:text-rose-300 hover:text-rose-800 p-1 cursor-pointer">&times;</button>
             </div>
           )}
 
@@ -152,17 +169,19 @@ export default function ResponseItem({ res, currentProfileId, isAdmin }: Respons
             />
             <div className="flex justify-end gap-2">
                 <button 
-                  onClick={() => setIsEditing(false)}
+                  type="button"
+                  onClick={() => { setContent(res.content); setErrorMsg(null); setIsEditing(false); }}
                   aria-label="Batal edit"
-                  className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="min-h-[40px] min-w-[40px] p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors cursor-pointer flex items-center justify-center"
                 >
                   <X size={16} />
                 </button>
                 <button 
+                  type="button"
                   onClick={handleEdit}
                   disabled={isSaving}
                   aria-label="Simpan edit"
-                  className="p-2 rounded-xl bg-blue-800 text-white hover:bg-blue-900 transition-opacity flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="min-h-[40px] min-w-[40px] p-2 rounded-xl bg-blue-800 text-white hover:bg-blue-900 transition-opacity flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                 </button>

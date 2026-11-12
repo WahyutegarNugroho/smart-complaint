@@ -1,6 +1,7 @@
-import { redirect } from 'next/navigation'
-import { getAdminExportData, ComplaintWithAuthorForExport } from '@/lib/dal'
+import { redirect, forbidden } from 'next/navigation'
+import { getAdminExportResult, ComplaintWithAuthorForExport } from '@/lib/dal'
 import { getCachedProfile } from '@/lib/profile'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 import Link from 'next/link'
 import { 
   ChevronLeft, 
@@ -29,17 +30,13 @@ export default async function ExportPage() {
   if (authData.status === 'UNAUTHENTICATED' || !authData.profile) redirect('/login')
 
   const { profile } = authData
-  if (profile.role !== 'ADMIN') redirect('/dashboard')
+  if (profile.role !== 'ADMIN') forbidden()
 
-  // 📊 Fetch complaints for print preview (with safety limit)
-  let complaints: ComplaintWithAuthorForExport[] = []
-  let exportError = false
-  try {
-    complaints = await getAdminExportData(500)
-  } catch (err) {
-    console.error('Export Fetch Error:', err)
-    exportError = true
-  }
+  // Fetch complaints for print preview (with safety limit)
+  const exportRes = await getAdminExportResult(500)
+  const complaints: ComplaintWithAuthorForExport[] = exportRes.complaints
+  const exportErrorMsg = exportRes.error || null
+  const exportError = Boolean(exportErrorMsg)
 
   // Compute summary metrics
   const total = complaints.length
@@ -85,6 +82,9 @@ export default async function ExportPage() {
         </section>
 
         <section className="space-y-6">
+          {exportErrorMsg && (
+            <SectionErrorFallback title="Gagal Memuat Pratinjau Ekspor" message={exportErrorMsg} />
+          )}
           <ExportButtons />
 
           <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-start gap-4">

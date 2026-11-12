@@ -1,6 +1,7 @@
 import React from 'react'
 import { Inbox, Zap, Activity, Clock, CheckCircle2 } from 'lucide-react'
 import { getRoleStatsData } from '@/lib/dal'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 
 type Role = 'admin' | 'petugas'
 
@@ -28,6 +29,9 @@ export default async function RoleStatsSection({ role }: { role: Role }) {
   const config = roleStats[role]
   const data = await getRoleStatsData(role)
   if (!data) return null
+  if (data.error) {
+    return <SectionErrorFallback title="Gagal Memuat Ringkasan Statistik" message={data.error} />
+  }
 
   const stats: StatItem[] = [
     { label: 'Total Laporan', val: data.total, icon: Inbox, color: 'slate' },

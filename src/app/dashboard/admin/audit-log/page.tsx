@@ -1,6 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect, forbidden } from 'next/navigation'
 import { getAdminAuditLogs } from '@/lib/dal'
 import { getCachedProfile } from '@/lib/profile'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 import { ArrowLeft, History, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import AuditLogActionFilter from '@/components/AuditLogActionFilter'
@@ -37,9 +38,9 @@ export default async function AuditLogPage({
 
   const authData = await getCachedProfile()
   if (authData.status === 'UNAUTHENTICATED') redirect('/login')
-  if (!authData.profile || authData.profile.role !== 'ADMIN') redirect('/dashboard')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') forbidden()
 
-  const { logs, totalLogs } = await getAdminAuditLogs({
+  const { logs, totalLogs, error: dalError } = await getAdminAuditLogs({
     action: filterAction,
     page,
     pageSize: PAGE_SIZE,
@@ -93,7 +94,11 @@ export default async function AuditLogPage({
           </div>
 
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-            {logs.length === 0 ? (
+            {dalError ? (
+              <div className="p-4">
+                <SectionErrorFallback title="Gagal Memuat Log Audit" message={dalError} />
+              </div>
+            ) : logs.length === 0 ? (
               <div className="p-14 text-center">
                 <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 mx-auto mb-3 border border-slate-200 dark:border-slate-700">
                   <History size={24} aria-hidden="true" />

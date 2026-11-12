@@ -11,7 +11,6 @@ interface ComplaintDetailPanelProps {
   complaint: ComplaintMarker | null
   onClose: () => void
   userRole: string
-  currentUserId: string
 }
 
 const statusConfig = {
@@ -27,7 +26,7 @@ const escalationLabels: Record<string, string> = {
   LEVEL_3: 'Diproses >72 jam',
 }
 
-export default function ComplaintDetailPanel({ complaint, onClose, userRole, currentUserId }: ComplaintDetailPanelProps) {
+export default function ComplaintDetailPanel({ complaint, onClose, userRole }: ComplaintDetailPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -64,8 +63,7 @@ export default function ComplaintDetailPanel({ complaint, onClose, userRole, cur
       })
     : '-'
   const escalationLabel = escalationLabels[complaint.escalationLevel] || ''
-  const isOwnComplaint = complaint.authorId === currentUserId
-  const canViewFull = userRole !== 'MASYARAKAT' || isOwnComplaint
+  const canViewFull = userRole !== 'MASYARAKAT' || complaint.isOwn
 
   return (
     <>

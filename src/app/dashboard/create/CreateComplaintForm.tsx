@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useActionState } from 'react'
 import { 
   Camera, 
   Calendar as CalendarIcon, 
@@ -10,6 +10,7 @@ import {
   ShieldAlert,
   Lightbulb,
   AlertTriangle,
+  AlertCircle,
   ChevronLeft,
   ChevronDown
 } from 'lucide-react'
@@ -44,31 +45,29 @@ interface ProfileData {
   address?: string | null
 }
 
-export default function CreateComplaintForm({ profile }: { profile: ProfileData }) {
+export default function CreateComplaintForm({
+  profile,
+  categories,
+}: {
+  profile: ProfileData
+  categories: CategoryParent[]
+}) {
+  const [state, formAction] = useActionState(createComplaint, null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [categories, setCategories] = useState<CategoryParent[]>([])
   const [selectedParent, setSelectedParent] = useState('umum')
-  const [selectedChildId, setSelectedChildId] = useState('')
+  const [selectedChildId, setSelectedChildId] = useState(() => {
+    const umum = categories.find((c) => c.slug === 'umum')
+    return umum?.children?.length === 1 ? umum.children[0].id : ''
+  })
   const [isUrgent, setIsUrgent] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [rt, setRt] = useState(profile?.rt || '001')
+  const [rw, setRw] = useState(profile?.rw || '001')
+  const [incidentDate, setIncidentDate] = useState(() => new Date().toISOString().split('T')[0])
   const [dismissedWarning, setDismissedWarning] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    fetch('/api/categories')
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data)
-        if (data.length > 0) {
-          const umum = data.find((c: CategoryParent) => c.slug === 'umum')
-          if (umum?.children?.length === 1) {
-            setSelectedChildId(umum.children[0].id)
-          }
-        }
-      })
-      .catch(() => {})
-  }, [])
 
   const isProfileIncomplete = !profile.rt || !profile.rw || !profile.nik || !profile.phone || !profile.address
 
@@ -177,7 +176,7 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
         )}
 
         <form 
-          action={createComplaint}
+          action={formAction}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12"
         >
           {/* Hidden inputs */}
@@ -259,6 +258,8 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                   name="content"
                   rows={5}
                   required
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                   placeholder="Ceritakan detail masalah, waktu kejadian, patokan rumah terdekat, serta dampaknya bagi warga..."
                   className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none resize-none leading-relaxed transition-all"
                 />
@@ -363,7 +364,8 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     name="rt" 
                     type="text" 
                     required 
-                    defaultValue={profile?.rt || '001'} 
+                    value={rt}
+                    onChange={(e) => setRt(e.target.value)}
                     placeholder="001" 
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors" 
                   />
@@ -377,7 +379,8 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     name="rw" 
                     type="text" 
                     required 
-                    defaultValue={profile?.rw || '001'} 
+                    value={rw}
+                    onChange={(e) => setRw(e.target.value)}
                     placeholder="001" 
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono tabular-nums font-bold text-center text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors" 
                   />
@@ -395,12 +398,26 @@ export default function CreateComplaintForm({ profile }: { profile: ProfileData 
                     name="incidentDate"
                     type="date" 
                     required
-                    defaultValue={new Date().toISOString().split('T')[0]}
+                    value={incidentDate}
+                    onChange={(e) => setIncidentDate(e.target.value)}
                     className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl pl-11 pr-4 py-2.5 text-sm font-mono tabular-nums text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-colors appearance-none"
                   />
                 </div>
               </div>
             </div>
+
+            {state?.error && (
+              <div
+                role="alert"
+                className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl p-4 flex items-start gap-3 text-rose-800 dark:text-rose-200 shadow-sm"
+              >
+                <AlertCircle aria-hidden="true" size={18} className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+                <div className="space-y-0.5 text-xs">
+                  <p className="font-bold">Laporan belum dapat diterbitkan</p>
+                  <p className="font-medium leading-relaxed">{state.error}</p>
+                </div>
+              </div>
+            )}
 
             {/* Submit Button */}
             <SubmitButton 

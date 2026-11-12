@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { processEscalations } from '@/lib/escalation'
+import { apiErrorResponse, logServerError, mapPrismaError } from '@/lib/errors'
 
 // Vercel Cron: */30 * * * *
 // Bisa juga dipanggil manual oleh admin via tombol di dashboard
@@ -9,11 +10,11 @@ export async function GET(request: Request) {
   const cronSecret = process.env.CRON_SECRET
 
   if (!cronSecret) {
-    return NextResponse.json({ error: 'Cron not configured' }, { status: 500 })
+    return apiErrorResponse('INTERNAL_ERROR', 'Konfigurasi cron belum tersedia.', 500)
   }
 
   if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return apiErrorResponse('UNAUTHORIZED', 'Akses cron tidak sah.', 401)
   }
 
   try {
@@ -25,7 +26,8 @@ export async function GET(request: Request) {
       timestamp: new Date().toISOString(),
     })
   } catch (err) {
-    console.error('Cron Escalate Error:', err)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    logServerError('api.cron.escalate', err)
+    const mapped = mapPrismaError(err)
+    return apiErrorResponse(mapped.code, mapped.userMessage, mapped.status)
   }
 }

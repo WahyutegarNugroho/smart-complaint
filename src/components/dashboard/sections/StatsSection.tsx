@@ -1,6 +1,7 @@
 import React from 'react'
 import { Inbox, Clock, Activity, CheckCircle2 } from 'lucide-react'
 import { getDashboardStats } from '@/lib/dal'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 
 interface StatsSectionProps {
   profileId: string
@@ -11,6 +12,9 @@ export default async function StatsSection({ profileId, isWarga }: StatsSectionP
   if (!profileId && isWarga) return null;
 
   const stats = await getDashboardStats(profileId, isWarga);
+  if (stats.error) {
+    return <SectionErrorFallback title="Gagal Memuat Statistik Laporan" message={stats.error} />
+  }
 
   const items = [
     { 

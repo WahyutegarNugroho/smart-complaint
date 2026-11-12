@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { validateEnum } from '@/lib/validate'
 import { resetEscalation } from '@/lib/escalation'
-import { isRedirectError } from '@/lib/redirect-guard'
+import { isNextControlFlowError, logServerError, mapPrismaError } from '@/lib/errors'
 import { STATUS_LABELS } from '@/lib/constants'
 import { requireStaff } from '@/lib/role-guard'
 import { createAuditLog } from '@/lib/audit'
@@ -29,10 +29,11 @@ export async function toggleUrgentStatus(formData: FormData) {
     revalidatePath(`/dashboard/complaint/${complaintId}`)
     revalidatePath('/dashboard')
   } catch (err) {
-    console.error('ToggleUrgentStatus Error:', err)
-    if (isRedirectError(err)) throw err
-    if (complaintId) redirect(`/dashboard/complaint/${complaintId}?error=Gagal mengubah status urgensi`)
-    redirect('/dashboard?error=Gagal mengubah status urgensi')
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.toggleUrgentStatus', err, { complaintId })
+    const msg = mapPrismaError(err).code === 'NOT_FOUND' ? 'not_found' : 'Gagal mengubah status urgensi'
+    if (complaintId) redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(msg)}`)
+    redirect(`/dashboard?error=${encodeURIComponent(msg)}`)
   }
 }
 
@@ -44,7 +45,10 @@ export async function updateComplaintStatus(formData: FormData) {
     id = formData.get('id') as string
     const rawStatus = formData.get('status') as string
     const status = validateEnum(rawStatus, ['PENDING', 'PROCESSING', 'COMPLETED'] as const)
-    if (!status) throw new Error('Status tidak valid')
+    if (!status) {
+      if (id) redirect(`/dashboard/complaint/${id}?error=invalid_input`)
+      redirect('/dashboard?error=invalid_input')
+    }
 
     const updatedComplaint = await prisma.complaint.update({
       where: { id },
@@ -58,7 +62,7 @@ export async function updateComplaintStatus(formData: FormData) {
 
     const statusText = (STATUS_LABELS[status] || 'Menunggu').toUpperCase()
 
-    await createAuditLog('UPDATE_STATUS', `Mengubah status laporan "${updatedComplaint.title}" (${id}) dari lama menjadi ${statusText}`, profile.id)
+    await createAuditLog('UPDATE_STATUS', `Mengubah status laporan "${updatedComplaint.title}" (${id}) menjadi ${statusText}`, profile.id)
 
     await prisma.notification.create({
       data: {
@@ -71,8 +75,13 @@ export async function updateComplaintStatus(formData: FormData) {
     revalidatePath(`/dashboard/complaint/${id}`)
     revalidatePath('/dashboard')
   } catch (err) {
-    console.error('UpdateComplaintStatus Error:', err)
-    if (id) redirect(`/dashboard/complaint/${id}?error=Gagal mengubah status`)
-    redirect('/dashboard?error=Gagal mengubah status')
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.updateComplaintStatus', err, { complaintId: id })
+    const mapped = mapPrismaError(err)
+    if (mapped.code === 'NOT_FOUND') {
+      redirect('/dashboard?error=not_found')
+    }
+    if (id) redirect(`/dashboard/complaint/${id}?error=${encodeURIComponent(mapped.userMessage)}`)
+    redirect(`/dashboard?error=${encodeURIComponent(mapped.userMessage)}`)
   }
 }

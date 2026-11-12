@@ -5,7 +5,9 @@ const scriptSrc = process.env.NODE_ENV === 'production'
   : "'self' 'unsafe-inline' 'unsafe-eval'"
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    authInterrupts: true,
+  },
   images: {
     remotePatterns: [
       {

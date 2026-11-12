@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { guardAdminExport } from '@/lib/admin-export'
+import { apiErrorResponse, logServerError, mapPrismaError, parsePositiveLimit } from '@/lib/errors'
 import { Readable } from 'stream'
 
 function escapeCsvField(value: string): string {
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const limitParam = searchParams.get('limit')
-    const limit = Math.min(Math.max(1, parseInt(limitParam || '500')), 5000)
+    const limit = parsePositiveLimit(limitParam)
 
     const complaints = await prisma.complaint.findMany({
       take: limit,
@@ -70,7 +71,8 @@ export async function GET(request: NextRequest) {
       }
     )
   } catch (err) {
-    console.error('Export Error:', err)
-    return new NextResponse('Internal Server Error', { status: 500 })
+    logServerError('api.export.csv', err)
+    const mapped = mapPrismaError(err)
+    return apiErrorResponse(mapped.code, mapped.userMessage, mapped.status)
   }
 }

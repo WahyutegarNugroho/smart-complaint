@@ -6,7 +6,8 @@ import prisma from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
 import { getAuthenticatedUser, getAuthenticatedUserOptional } from '@/lib/auth'
 import { requireAdmin } from '@/lib/authorization'
-import { isRedirectError } from '@/lib/redirect-guard'
+import { isNextControlFlowError, logServerError, mapPrismaError } from '@/lib/errors'
+import { validateEnum } from '@/lib/validate'
 
 export async function updateUserRole(formData: FormData) {
   try {
@@ -18,7 +19,15 @@ export async function updateUserRole(formData: FormData) {
     requireAdmin(adminProfile)
 
     const targetProfileId = formData.get('profileId') as string
-    const newRole = formData.get('role') as 'MASYARAKAT' | 'PETUGAS' | 'ADMIN'
+    const rawRole = formData.get('role') as string
+    const newRole = validateEnum(rawRole, ['MASYARAKAT', 'PETUGAS', 'ADMIN'] as const)
+    if (!newRole) {
+      redirect('/dashboard/admin/users?error=' + encodeURIComponent('Peran pengguna tidak valid.'))
+    }
+
+    if (targetProfileId === adminProfile.id && newRole !== 'ADMIN') {
+      redirect('/dashboard/admin/users?error=' + encodeURIComponent('Tidak dapat menurunkan peran akun Anda sendiri.'))
+    }
 
     const targetUser = await prisma.profile.findUnique({
       where: { id: targetProfileId },
@@ -37,9 +46,9 @@ export async function updateUserRole(formData: FormData) {
     await createAuditLog('UPDATE_ROLE', `Mengubah role ${targetUser.username} dari ${targetUser.role} menjadi ${newRole}`, adminProfile.id)
     redirect('/dashboard/admin/users?message=' + encodeURIComponent(`Peran ${targetUser.username} berhasil diubah menjadi ${newRole}.`))
   } catch (err) {
-    console.error('UpdateUserRole Error:', err)
-    if (isRedirectError(err)) throw err
-    redirect('/dashboard/admin/users?error=' + encodeURIComponent('Gagal memperbarui peran akun pengguna.'))
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.updateUserRole', err)
+    redirect('/dashboard/admin/users?error=' + encodeURIComponent(mapPrismaError(err).userMessage))
   }
 }
 
@@ -67,9 +76,9 @@ export async function toggleUserVerification(formData: FormData) {
     }
     redirect('/dashboard/admin/users?message=' + encodeURIComponent(`Status verifikasi akun berhasil diperbarui.`))
   } catch (err) {
-    console.error('ToggleUserVerification Error:', err)
-    if (isRedirectError(err)) throw err
-    redirect('/dashboard/admin/users?error=' + encodeURIComponent('Gagal memperbarui status verifikasi akun.'))
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.toggleUserVerification', err)
+    redirect('/dashboard/admin/users?error=' + encodeURIComponent(mapPrismaError(err).userMessage))
   }
 }
 
@@ -89,6 +98,10 @@ export async function deleteUserAccount(formData: FormData) {
     }
 
     const targetProfileId = formData.get('profileId') as string
+    if (targetProfileId === adminProfile.id) {
+      redirect('/dashboard/admin/users?error=' + encodeURIComponent('Tidak dapat menghapus akun Anda sendiri.'))
+    }
+
     const targetUser = await prisma.profile.findUnique({ where: { id: targetProfileId }, select: { username: true, name: true } })
     if (!targetUser) {
       redirect('/dashboard/admin/users?error=' + encodeURIComponent('Akun pengguna tidak ditemukan.'))
@@ -99,12 +112,13 @@ export async function deleteUserAccount(formData: FormData) {
     await createAuditLog('DELETE_USER', `Menghapus akun ${targetUser.username} (${targetUser.name})`, adminProfile.id)
     redirect('/dashboard/admin/users?message=' + encodeURIComponent(`Akun ${targetUser.username} berhasil dihapus.`))
   } catch (err) {
-    console.error('DeleteUserAccount Error:', err)
-    if (isRedirectError(err)) throw err
-    const isForeignKey = typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2003'
-    const errorMsg = isForeignKey
-      ? 'Akun tidak dapat dihapus karena masih memiliki riwayat laporan atau tanggapan aktif.'
-      : 'Gagal menghapus akun pengguna dari sistem.'
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.deleteUserAccount', err)
+    const mapped = mapPrismaError(err)
+    const errorMsg =
+      mapped.code === 'DEPENDENCY_EXISTS'
+        ? 'Akun tidak dapat dihapus karena masih memiliki riwayat laporan atau tanggapan aktif.'
+        : mapped.userMessage
     redirect('/dashboard/admin/users?error=' + encodeURIComponent(errorMsg))
   }
 }

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Search, Inbox, MapPin, Zap, Filter, ChevronDown } from 'lucide-react'
 import { getComplaintList } from '@/lib/dal'
 import EmptyState from '@/components/EmptyState'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 import PageSizeSelector from './PageSizeSelector'
 import { STATUS_LABELS, STATUS_BADGE_CLASSES } from '@/lib/constants'
 
@@ -51,6 +52,7 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
     currentPage,
     pageSize,
     categoryOptions,
+    error: dalError,
   } = await getComplaintList({ profileId, isWarga, searchParams })
 
   return (
@@ -214,7 +216,9 @@ export default async function ComplaintListSection({ profileId, isWarga, searchP
       </form>
 
       {/* REPORT TABLE - Dense list layout with column headers (not card grid) */}
-      {complaints.length === 0 ? (
+      {dalError ? (
+        <SectionErrorFallback title="Gagal Memuat Daftar Laporan" message={dalError} />
+      ) : complaints.length === 0 ? (
         isWarga && !currentStatus && !searchQuery ? (
           <EmptyState 
             icon={Inbox}

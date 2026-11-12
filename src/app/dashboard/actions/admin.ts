@@ -5,9 +5,11 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { createAuditLog } from '@/lib/audit'
 import { getAuthenticatedUserOptional } from '@/lib/auth'
+import { isNextControlFlowError, logServerError, mapPrismaError } from '@/lib/errors'
 
 export async function adminDeleteComplaint(formData: FormData) {
-  let success = false
+  let errorCode = 'system_error'
+
   try {
     const auth = await getAuthenticatedUserOptional()
     if (!auth) return redirect('/login')
@@ -16,6 +18,8 @@ export async function adminDeleteComplaint(formData: FormData) {
     if (!profile || profile.role !== 'ADMIN') return redirect('/dashboard?error=forbidden')
 
     const id = formData.get('id') as string
+    if (!id) return redirect('/dashboard?error=not_found')
+
     const complaint = await prisma.complaint.findUnique({
       where: { id },
       select: { title: true, authorId: true, author: { select: { name: true } } }
@@ -34,13 +38,15 @@ export async function adminDeleteComplaint(formData: FormData) {
     await prisma.complaint.delete({ where: { id } })
 
     revalidatePath('/dashboard')
-    success = true
-
     await createAuditLog('DELETE_REPORT', `Menghapus laporan "${complaint.title}" milik ${complaint.author?.name || 'Anonim'}`, profile.id)
+
+    redirect('/dashboard?message=Laporan telah dihapus dan warga diberi tahu')
   } catch (err) {
-    console.error('AdminDeleteComplaint Error:', err)
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.adminDeleteComplaint', err)
+    const mapped = mapPrismaError(err)
+    errorCode = mapped.code === 'NOT_FOUND' ? 'not_found' : mapped.userMessage
   }
-  redirect(success
-    ? '/dashboard?message=Laporan telah dihapus dan warga diberi tahu'
-    : '/dashboard?error=Gagal menghapus laporan')
+
+  redirect(`/dashboard?error=${encodeURIComponent(errorCode)}`)
 }

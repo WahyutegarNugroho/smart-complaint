@@ -1,6 +1,10 @@
+import 'server-only'
 import { cache } from 'react'
 import prisma from '@/lib/prisma'
 import { Status } from '@prisma/client'
+import { isAdmin, isStaff } from '@/lib/authorization'
+import { logServerError, mapPrismaError } from '@/lib/errors'
+import { getAuthorizedAdminProfile, getAuthorizedProfile, getAuthorizedStaffProfile } from './guard'
 
 export interface PublicLandingStats {
   totalReports: number
@@ -87,7 +91,7 @@ export const getPublicLandingStats = cache(async (): Promise<PublicLandingStats>
       recentComplaints: recent,
     }
   } catch (error) {
-    console.error('[DAL getPublicLandingStats] Error:', error)
+    logServerError('dal.getPublicLandingStats', error)
     return {
       totalReports: 0,
       processingReports: 0,
@@ -105,6 +109,7 @@ export interface DashboardStats {
   pending: number
   processing: number
   completed: number
+  error?: string | null
 }
 
 /**
@@ -115,9 +120,20 @@ export const getDashboardStats = cache(async (profileId: string, isWarga: boolea
     return { total: 0, pending: 0, processing: 0, completed: 0 }
   }
 
-  const whereBase = isWarga ? { authorId: profileId } : {}
-
   try {
+    const authProfile = await getAuthorizedProfile()
+    if (!authProfile) {
+      return { total: 0, pending: 0, processing: 0, completed: 0 }
+    }
+    if (isWarga && authProfile.id !== profileId) {
+      return { total: 0, pending: 0, processing: 0, completed: 0 }
+    }
+    if (!isWarga && !isStaff(authProfile)) {
+      return { total: 0, pending: 0, processing: 0, completed: 0 }
+    }
+
+    const whereBase = isWarga ? { authorId: profileId } : {}
+
     const [total, pending, processing, completed] = await Promise.all([
       prisma.complaint.count({ where: whereBase }),
       prisma.complaint.count({ where: { ...whereBase, status: 'PENDING' } }),
@@ -127,8 +143,14 @@ export const getDashboardStats = cache(async (profileId: string, isWarga: boolea
 
     return { total, pending, processing, completed }
   } catch (err) {
-    console.error('[DAL getDashboardStats] Error:', err)
-    return { total: 0, pending: 0, processing: 0, completed: 0 }
+    logServerError('dal.getDashboardStats', err)
+    return {
+      total: 0,
+      pending: 0,
+      processing: 0,
+      completed: 0,
+      error: mapPrismaError(err).userMessage,
+    }
   }
 })
 
@@ -138,6 +160,7 @@ export interface RoleStatsData {
   secondMetric: number
   pending: number
   completed: number
+  error?: string | null
 }
 
 /**
@@ -145,6 +168,11 @@ export interface RoleStatsData {
  */
 export const getRoleStatsData = cache(async (role: 'admin' | 'petugas'): Promise<RoleStatsData> => {
   try {
+    const staff = await getAuthorizedStaffProfile()
+    if (!staff || (role === 'admin' && !isAdmin(staff))) {
+      return { total: 0, second: 0, secondMetric: 0, pending: 0, completed: 0 }
+    }
+
     const secondQuery = role === 'admin'
       ? prisma.complaint.count({ where: { isUrgent: true, status: { not: 'COMPLETED' } } })
       : prisma.complaint.count({ where: { status: 'PROCESSING' } })
@@ -158,8 +186,15 @@ export const getRoleStatsData = cache(async (role: 'admin' | 'petugas'): Promise
 
     return { total, second, secondMetric: second, pending, completed }
   } catch (err) {
-    console.error(`[DAL getRoleStatsData] Error (${role}):`, err)
-    return { total: 0, second: 0, secondMetric: 0, pending: 0, completed: 0 }
+    logServerError('dal.getRoleStatsData', err, { role })
+    return {
+      total: 0,
+      second: 0,
+      secondMetric: 0,
+      pending: 0,
+      completed: 0,
+      error: mapPrismaError(err).userMessage,
+    }
   }
 })
 
@@ -178,6 +213,9 @@ export interface AdminAnalyticsData {
  */
 export const getAdminAnalyticsData = cache(async (): Promise<AdminAnalyticsData | null> => {
   try {
+    const admin = await getAuthorizedAdminProfile()
+    if (!admin) return null
+
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
@@ -214,7 +252,7 @@ export const getAdminAnalyticsData = cache(async (): Promise<AdminAnalyticsData 
       maxChart,
     }
   } catch (err) {
-    console.error('[DAL getAdminAnalyticsData] Error:', err)
+    logServerError('dal.getAdminAnalyticsData', err)
     return null
   }
 })
@@ -242,6 +280,9 @@ export interface AdminDeepStatsData {
  */
 export const getAdminDeepStatsData = cache(async (): Promise<AdminDeepStatsData | null> => {
   try {
+    const admin = await getAuthorizedAdminProfile()
+    if (!admin) return null
+
     const [statusCounts, rtCounts, total, mappedComplaintsRaw] = await Promise.all([
       prisma.complaint.groupBy({
         by: ['status'],
@@ -289,7 +330,7 @@ export const getAdminDeepStatsData = cache(async (): Promise<AdminDeepStatsData 
       maxRTCount,
     }
   } catch (err) {
-    console.error('[DAL getAdminDeepStatsData] Error:', err)
+    logServerError('dal.getAdminDeepStatsData', err)
     return null
   }
 })

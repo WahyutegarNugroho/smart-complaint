@@ -1,6 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect, forbidden } from 'next/navigation'
 import { getAdminDeepStatsData } from '@/lib/dal'
 import { getCachedProfile } from '@/lib/profile'
+import SectionErrorFallback from '@/components/SectionErrorFallback'
 import { 
   ArrowLeft,
   PieChart as PieIcon,
@@ -15,10 +16,16 @@ import { STATUS_LABELS } from '@/lib/constants'
 export default async function AdminStatsPage() {
   const authData = await getCachedProfile()
   if (authData.status === 'UNAUTHENTICATED') redirect('/login')
-  if (!authData.profile || authData.profile.role !== 'ADMIN') redirect('/dashboard')
+  if (!authData.profile || authData.profile.role !== 'ADMIN') forbidden()
 
   const deepStats = await getAdminDeepStatsData()
-  if (!deepStats) return null
+  if (!deepStats) {
+    return (
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <SectionErrorFallback title="Gagal Memuat Statistik Wilayah" />
+      </main>
+    )
+  }
 
   const { statusCounts, rtCounts, total, mappedComplaints, maxRTCount } = deepStats
   const mapComplaints = mappedComplaints

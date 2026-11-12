@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { validateString } from '@/lib/validate'
 import { uploadImage, UPLOAD_ERROR_MAP } from '@/lib/upload'
-import { isRedirectError } from '@/lib/redirect-guard'
+import { isNextControlFlowError, logServerError, mapPrismaError } from '@/lib/errors'
 import { getAuthenticatedProfile, getAuthenticatedUserOptional } from '@/lib/auth'
 import { createAuditLog } from '@/lib/audit'
 
@@ -73,32 +73,32 @@ export async function respondToComplaint(formData: FormData) {
     revalidatePath('/dashboard')
     redirect(`/dashboard/complaint/${complaintId}?message=Tanggapan berhasil dikirim`)
   } catch (err) {
-    console.error('RespondToComplaint Error:', err)
-    if (isRedirectError(err)) throw err
-    redirect(`/dashboard/complaint/${complaintId}?error=system_error`)
+    if (isNextControlFlowError(err)) throw err
+    logServerError('actions.respondToComplaint', err, { complaintId })
+    redirect(`/dashboard/complaint/${complaintId}?error=${encodeURIComponent(mapPrismaError(err).userMessage)}`)
   }
 }
 
 export async function deleteResponse(responseId: string) {
   try {
     const auth = await getAuthenticatedUserOptional()
-    if (!auth) return { error: 'Unauthorized' }
+    if (!auth) return { error: 'Sesi Anda telah berakhir. Silakan login kembali.' }
     const { user } = auth
     const profile = await prisma.profile.findUnique({
       where: { userId: user.id },
       select: { id: true, role: true }
     })
-    if (!profile) return { error: 'Profile not found' }
+    if (!profile) return { error: 'Profil pengguna tidak ditemukan.' }
 
     const response = await prisma.response.findUnique({
       where: { id: responseId },
       select: { id: true, complaintId: true, officerId: true }
     })
-    if (!response) return { error: 'Response not found' }
+    if (!response) return { error: 'Tanggapan tidak ditemukan atau telah dihapus.' }
 
     if (response.officerId !== profile.id && profile.role !== 'ADMIN') {
       await createAuditLog('DELETE_RESPONSE_FORBIDDEN', `Akses ditolak hapus tanggapan ${responseId} untuk laporan ${response.complaintId}`, profile.id)
-      return { error: 'Forbidden' }
+      return { error: 'Anda tidak memiliki izin untuk menghapus tanggapan ini.' }
     }
 
     await prisma.response.delete({
@@ -110,38 +110,38 @@ export async function deleteResponse(responseId: string) {
     revalidatePath(`/dashboard/complaint/${response.complaintId}`)
     return { success: true }
   } catch (err) {
-    console.error('DeleteResponse Error:', err)
-    return { error: 'system_error' }
+    logServerError('actions.deleteResponse', err, { responseId })
+    return { error: mapPrismaError(err).userMessage }
   }
 }
 
 export async function editResponse(responseId: string, content: string) {
   try {
     if (!content || content.trim().length === 0) {
-      return { error: 'Konten tidak boleh kosong' }
+      return { error: 'Konten tanggapan tidak boleh kosong.' }
     }
     if (content.trim().length > 2000) {
-      return { error: 'Konten melebihi 2000 karakter' }
+      return { error: 'Konten tanggapan melebihi batas 2000 karakter.' }
     }
 
     const auth = await getAuthenticatedUserOptional()
-    if (!auth) return { error: 'Unauthorized' }
+    if (!auth) return { error: 'Sesi Anda telah berakhir. Silakan login kembali.' }
     const { user } = auth
     const profile = await prisma.profile.findUnique({
       where: { userId: user.id },
       select: { id: true }
     })
-    if (!profile) return { error: 'Profile not found' }
+    if (!profile) return { error: 'Profil pengguna tidak ditemukan.' }
 
     const response = await prisma.response.findUnique({
       where: { id: responseId },
       select: { id: true, complaintId: true, officerId: true }
     })
-    if (!response) return { error: 'Response not found' }
+    if (!response) return { error: 'Tanggapan tidak ditemukan atau telah dihapus.' }
 
     if (response.officerId !== profile.id) {
       await createAuditLog('EDIT_RESPONSE_FORBIDDEN', `Akses ditolak edit tanggapan ${responseId} untuk laporan ${response.complaintId}`, profile.id)
-      return { error: 'Forbidden' }
+      return { error: 'Anda hanya dapat mengubah tanggapan milik Anda sendiri.' }
     }
 
     await prisma.response.update({
@@ -154,7 +154,7 @@ export async function editResponse(responseId: string, content: string) {
     revalidatePath(`/dashboard/complaint/${response.complaintId}`)
     return { success: true }
   } catch (err) {
-    console.error('EditResponse Error:', err)
-    return { error: 'system_error' }
+    logServerError('actions.editResponse', err, { responseId })
+    return { error: mapPrismaError(err).userMessage }
   }
 }

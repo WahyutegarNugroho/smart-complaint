@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { guardAdminExport } from '@/lib/admin-export'
+import { apiErrorResponse, logServerError, mapPrismaError, parsePositiveLimit } from '@/lib/errors'
 import ExcelJS from 'exceljs'
 
 export async function GET(request: NextRequest) {
@@ -10,11 +11,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const limitParam = searchParams.get('limit')
-    const limit = Math.min(Math.max(1, parseInt(limitParam || '500')), 5000)
+    const limit = parsePositiveLimit(limitParam)
 
     const complaints = await prisma.complaint.findMany({
       take: limit,
-      include: { author: true, categoryRel: true },
+      include: { author: { select: { name: true } }, categoryRel: true },
       orderBy: { createdAt: 'desc' }
     })
 
@@ -100,7 +101,8 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (err) {
-    console.error('XLSX Export Error:', err)
-    return new NextResponse('Internal Server Error', { status: 500 })
+    logServerError('api.export.xlsx', err)
+    const mapped = mapPrismaError(err)
+    return apiErrorResponse(mapped.code, mapped.userMessage, mapped.status)
   }
 }

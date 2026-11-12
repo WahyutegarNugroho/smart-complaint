@@ -2,8 +2,21 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
-import { MapPin, Search, Crosshair, Loader2 } from 'lucide-react'
+import { MapPin, Search, Crosshair, Loader2, AlertCircle } from 'lucide-react'
 import L from 'leaflet'
+
+function extractApiError(payload: unknown, fallback: string): string {
+  if (typeof payload === 'object' && payload !== null) {
+    const obj = payload as { error?: unknown; message?: unknown }
+    if (typeof obj.error === 'object' && obj.error !== null && 'message' in obj.error) {
+      const msg = (obj.error as { message?: unknown }).message
+      if (typeof msg === 'string' && msg) return msg
+    }
+    if (typeof obj.message === 'string' && obj.message) return obj.message
+    if (typeof obj.error === 'string' && obj.error) return obj.error
+  }
+  return fallback
+}
 
 const DEFAULT_CENTER: [number, number] = [-6.330579, 106.660773]
 const DEFAULT_ZOOM = 17
@@ -73,19 +86,31 @@ export default function LocationPicker({
   const [searching, setSearching] = useState(false)
   const [geoLoading, setGeoLoading] = useState(false)
   const [dragging, setDragging] = useState(false)
+  const [locationError, setLocationError] = useState<string | null>(null)
 
   const reverseGeocode = async (lat: number, lng: number) => {
+    setLocationError(null)
     try {
       const res = await fetch(
         `/api/geocode?action=reverse&lat=${lat}&lon=${lng}`
       )
-      const data = await res.json()
-      if (data.display_name) {
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        if (res.status === 429) {
+          setLocationError('Terlalu banyak permintaan lokasi. Anda tetap dapat mengetik alamat secara manual.')
+        } else {
+          setLocationError(
+            extractApiError(data, 'Gagal mengenali alamat dari titik peta. Silakan ketik alamat manual.')
+          )
+        }
+        return
+      }
+      if (data && typeof data.display_name === 'string' && data.display_name) {
         setAddress(data.display_name)
         setSearchQuery(data.display_name)
       }
     } catch {
-      // silent fail — user can type address manually
+      setLocationError('Gagal mengambil nama alamat otomatis. Anda tetap dapat mengisi alamat secara manual.')
     }
   }
 
@@ -96,37 +121,65 @@ export default function LocationPicker({
   }
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return
+    const trimmed = searchQuery.trim()
+    if (trimmed.length < 3) {
+      setLocationError('Masukkan minimal 3 karakter untuk mencari alamat.')
+      return
+    }
+    setLocationError(null)
     setSearching(true)
     try {
       const res = await fetch(
-        `/api/geocode?action=search&q=${encodeURIComponent(searchQuery)}`
+        `/api/geocode?action=search&q=${encodeURIComponent(trimmed)}`
       )
-      const data = await res.json()
-      if (data.length > 0) {
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        if (res.status === 429) {
+          setLocationError('Terlalu banyak pencarian lokasi dalam waktu singkat. Coba lagi sebentar lagi.')
+        } else {
+          setLocationError(extractApiError(data, 'Gagal mencari alamat. Silakan ketik alamat secara manual.'))
+        }
+        return
+      }
+      if (Array.isArray(data) && data.length > 0) {
         const newLat = parseFloat(data[0].lat)
         const newLng = parseFloat(data[0].lon)
         setLat(newLat)
         setLng(newLng)
         setAddress(data[0].display_name)
+      } else {
+        setLocationError('Alamat tidak ditemukan. Coba kata kunci lain atau geser pin di peta.')
       }
     } catch {
-      // silent fail
+      setLocationError('Layanan pencarian lokasi tidak dapat dijangkau. Silakan isi alamat secara manual.')
     } finally {
       setSearching(false)
     }
   }
 
   const handleGeolocate = () => {
-    if (!navigator.geolocation) return
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setLocationError('Peramban Anda tidak mendukung deteksi lokasi GPS otomatis.')
+      return
+    }
+    setLocationError(null)
     setGeoLoading(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         handlePositionChange(pos.coords.latitude, pos.coords.longitude)
         setGeoLoading(false)
       },
-      () => setGeoLoading(false),
-      { enableHighAccuracy: true }
+      (err) => {
+        setGeoLoading(false)
+        if (err.code === 1) {
+          setLocationError('Izin akses lokasi GPS ditolak. Izinkan lokasi di peramban atau geser pin di peta.')
+        } else if (err.code === 2) {
+          setLocationError('Sinyal lokasi GPS sedang tidak tersedia. Geser pin peta atau ketik alamat manual.')
+        } else {
+          setLocationError('Waktu pencarian lokasi GPS habis. Silakan coba lagi atau geser pin di peta.')
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
     )
   }
 
@@ -162,6 +215,16 @@ export default function LocationPicker({
           {geoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Crosshair aria-hidden="true" size={18} />}
         </button>
       </div>
+
+      {locationError && (
+        <p
+          role="alert"
+          className="text-xs font-medium text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl px-3.5 py-2.5 flex items-start gap-2"
+        >
+          <AlertCircle aria-hidden="true" size={15} className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+          <span>{locationError}</span>
+        </p>
+      )}
 
       {/* Map */}
       <div className="h-64 md:h-80 rounded-xl overflow-hidden border border-brand-hairline shadow-sm">

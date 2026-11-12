@@ -50,7 +50,7 @@ export default async function MapPage({
         </div>
       </header>
       <div className="flex-1 relative">
-        <MapPageClient complaints={parsed} categories={categories} highlightedComplaintId={complaintId} userRole={profile.role} currentUserId={profile.id} />
+        <MapPageClient complaints={parsed} categories={categories} highlightedComplaintId={complaintId} userRole={profile.role} />
       </div>
     </div>
   )

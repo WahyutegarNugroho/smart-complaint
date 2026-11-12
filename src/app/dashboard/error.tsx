@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { AlertCircle, RotateCcw, Home } from 'lucide-react'
-import Link from 'next/link'
+import ErrorPageShell from '@/components/ErrorPageShell'
 
 export default function DashboardError({
   error,
@@ -16,48 +15,22 @@ export default function DashboardError({
   }, [error])
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center p-4 sm:p-6 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <div className="max-w-md w-full bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-6 text-center">
-        <div className="flex justify-center">
-          <div className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800 flex items-center justify-center">
-            <AlertCircle size={28} aria-hidden="true" />
-          </div>
-        </div>
-        
-        <div className="space-y-2">
-          <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
-            Kendala Sistem Dashboard
-          </span>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Terjadi Kesalahan Pemuatan
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-            Sistem mengalami kendala saat memuat data dashboard Anda. Silakan coba kembali beberapa saat lagi.
-          </p>
-          {error.digest && (
-            <p className="text-xs font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 py-1.5 px-3 rounded-lg border border-slate-200 dark:border-slate-700 mt-2 inline-block">
-              ID Masalah: {error.digest}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <button
-            onClick={() => reset()}
-            className="min-h-[44px] flex-1 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-white rounded-xl font-semibold text-xs uppercase tracking-wider shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-          >
-            <RotateCcw size={15} aria-hidden="true" />
-            Coba Lagi
-          </button>
-          <Link
-            href="/dashboard"
-            className="min-h-[44px] flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-xs uppercase tracking-wider border border-slate-200 dark:border-slate-700 transition-colors flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
-          >
-            <Home size={15} aria-hidden="true" />
-            Beranda
-          </Link>
-        </div>
-      </div>
-    </div>
+    <ErrorPageShell
+      variant="dashboard"
+      statusCode="HTTP 500"
+      statusLabel="Kendala Dashboard"
+      kicker="Sistem Pengelolaan Aduan"
+      title="Terjadi Kesalahan Pemuatan"
+      description="Sistem mengalami kendala saat memuat halaman dashboard Anda. Sesi dan data laporan Anda tetap tersimpan aman."
+      guidance="Tekan tombol Coba Lagi untuk memuat ulang segmen ini atau kembali ke beranda dashboard."
+      referenceId={error.digest}
+      tone="rose"
+      icon="server-error"
+      onRetry={() => reset()}
+      actions={[
+        { label: 'Coba Lagi', kind: 'retry', icon: 'reload', tone: 'primary' },
+        { label: 'Beranda Dashboard', kind: 'link', href: '/dashboard', icon: 'dashboard', tone: 'secondary' },
+      ]}
+    />
   )
 }

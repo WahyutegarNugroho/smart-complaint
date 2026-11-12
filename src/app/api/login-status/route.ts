@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { checkLoginAttempt } from '@/lib/login-rate-limit'
+import { logServerError } from '@/lib/errors'
 
 export async function GET(request: Request) {
   try {
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
     const result = await checkLoginAttempt(ip)
     return NextResponse.json(result)
   } catch (err) {
-    console.error('API /api/login-status Error:', err)
+    logServerError('api.login-status', err)
     return NextResponse.json(
       { locked: false, remainingAttempts: 5, remainingSeconds: 0 },
       { status: 200 }

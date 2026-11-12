@@ -1,15 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { deleteAnnouncement, updateAnnouncement } from '@/app/dashboard/actions'
+import { useActionState, useState } from 'react'
+import {
+  deleteAnnouncement,
+  updateAnnouncement,
+  type AnnouncementFormState,
+} from '@/app/dashboard/actions'
 import {
   Trash2,
   Edit3,
   Check,
   Calendar,
   User,
+  AlertCircle,
 } from 'lucide-react'
 import ConfirmModal from '@/components/ConfirmModal'
+import SubmitButton from '@/components/SubmitButton'
 
 const CATEGORY_STYLES: Record<string, { label: string; cls: string }> = {
   umum: { label: 'Umum', cls: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' },
@@ -38,6 +44,50 @@ interface AnnouncementItemProps {
 export default function AnnouncementItem({ item }: AnnouncementItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState(item.title)
+  const [editContent, setEditContent] = useState(item.content)
+  const [editCategory, setEditCategory] = useState(item.category || 'umum')
+
+  const [editState, editFormAction] = useActionState(
+    async (prevState: AnnouncementFormState, formData: FormData) => {
+      const result = await updateAnnouncement(prevState, formData)
+      if (!result?.error) {
+        setIsEditing(false)
+      }
+      return result
+    },
+    null
+  )
+
+  const handleStartEdit = () => {
+    setEditTitle(item.title)
+    setEditContent(item.content)
+    setEditCategory(item.category || 'umum')
+    setDeleteError(null)
+    setIsEditing(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (isDeleting) return
+    setIsDeleting(true)
+    setDeleteError(null)
+    try {
+      const formData = new FormData()
+      formData.append('id', item.id)
+      const result = await deleteAnnouncement(formData)
+      setShowDeleteModal(false)
+      if (!result.success) {
+        setDeleteError(result.error || 'Gagal menghapus pengumuman.')
+      }
+    } catch {
+      setShowDeleteModal(false)
+      setDeleteError('Terjadi kendala saat menghapus pengumuman. Silakan coba lagi.')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   const categoryStyle = CATEGORY_STYLES[item.category] || CATEGORY_STYLES.umum
   const formattedDate = new Date(item.createdAt).toLocaleDateString('id-ID', {
@@ -48,14 +98,30 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
 
   if (isEditing) {
     return (
-      <form action={updateAnnouncement} onSubmit={() => setIsEditing(false)} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-blue-500/40 dark:border-blue-500/50 shadow-sm space-y-4">
+      <form
+        action={editFormAction}
+        className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-blue-500/40 dark:border-blue-500/50 shadow-sm space-y-4"
+      >
         <input type="hidden" name="id" value={item.id} />
+
+        {editState?.error && (
+          <div
+            role="alert"
+            className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl p-3 flex items-start gap-2 text-rose-800 dark:text-rose-200 text-xs"
+          >
+            <AlertCircle aria-hidden="true" size={16} className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+            <p className="font-medium leading-relaxed">{editState.error}</p>
+          </div>
+        )}
+
         <div className="space-y-1.5">
           <label htmlFor={`edit-title-${item.id}`} className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Judul</label>
           <input
             id={`edit-title-${item.id}`}
             name="title"
-            defaultValue={item.title}
+            required
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
             autoFocus
             className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all min-h-[44px]"
           />
@@ -65,7 +131,9 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
           <textarea
             id={`edit-content-${item.id}`}
             name="content"
-            defaultValue={item.content}
+            required
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
             rows={4}
             className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none transition-all"
           />
@@ -76,7 +144,8 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
             <select
               id={`edit-category-${item.id}`}
               name="category"
-              defaultValue={item.category || 'umum'}
+              value={editCategory}
+              onChange={(e) => setEditCategory(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all appearance-none min-h-[44px] cursor-pointer"
             >
               <option value="umum">Umum</option>
@@ -89,11 +158,18 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
           </div>
         </div>
         <div className="flex items-center gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
-          <button type="submit" className="min-h-[44px] flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-            <Check size={14} aria-hidden="true" />
+          <SubmitButton
+            loadingText="Menyimpan..."
+            icon={<Check size={14} aria-hidden="true" />}
+            className="min-h-[44px] flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          >
             Simpan Perubahan
-          </button>
-          <button type="button" onClick={() => setIsEditing(false)} className="min-h-[44px] px-5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
+          </SubmitButton>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            className="min-h-[44px] px-5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+          >
             Batal
           </button>
         </div>
@@ -126,38 +202,43 @@ export default function AnnouncementItem({ item }: AnnouncementItemProps) {
 
         <div className="flex items-center gap-1.5 shrink-0">
           <button
-            onClick={() => setIsEditing(true)}
+            type="button"
+            onClick={handleStartEdit}
             aria-label={`Edit pengumuman "${item.title}"`}
             className="min-h-[44px] min-w-[44px] bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >
             <Edit3 size={15} aria-hidden="true" />
           </button>
-          <form id={`delete-form-${item.id}`} action={deleteAnnouncement}>
-            <input type="hidden" name="id" value={item.id} />
-            <button
-              type="button"
-              onClick={() => setShowDeleteModal(true)}
-              aria-label={`Hapus pengumuman "${item.title}"`}
-              className="min-h-[44px] min-w-[44px] bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:outline-none"
-            >
-              <Trash2 size={15} aria-hidden="true" />
-            </button>
-          </form>
+          <button
+            type="button"
+            disabled={isDeleting}
+            onClick={() => setShowDeleteModal(true)}
+            aria-label={`Hapus pengumuman "${item.title}"`}
+            className="min-h-[44px] min-w-[44px] bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Trash2 size={15} aria-hidden="true" />
+          </button>
           <ConfirmModal
             open={showDeleteModal}
             title="Hapus Pengumuman"
             message={`Apakah Anda yakin ingin menghapus pengumuman "${item.title}"? Tindakan ini tidak dapat dibatalkan.`}
-            confirmLabel="Ya, Hapus"
+            confirmLabel={isDeleting ? 'Menghapus...' : 'Ya, Hapus'}
             variant="danger"
-            onConfirm={() => {
-              const form = document.getElementById(`delete-form-${item.id}`) as HTMLFormElement | null
-              form?.requestSubmit()
-              setShowDeleteModal(false)
-            }}
-            onCancel={() => setShowDeleteModal(false)}
+            onConfirm={handleConfirmDelete}
+            onCancel={() => !isDeleting && setShowDeleteModal(false)}
           />
         </div>
       </header>
+
+      {deleteError && (
+        <div
+          role="alert"
+          className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl p-3 flex items-start gap-2 text-rose-800 dark:text-rose-200 text-xs"
+        >
+          <AlertCircle aria-hidden="true" size={16} className="shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+          <p className="font-medium leading-relaxed">{deleteError}</p>
+        </div>
+      )}
 
       <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap pl-3.5 border-l-2 border-slate-200 dark:border-slate-700">
         {item.content}

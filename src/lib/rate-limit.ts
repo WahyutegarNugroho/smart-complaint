@@ -30,15 +30,16 @@ const DEFAULT_CONFIG: RateLimitConfig = {
   keyPrefix: 'api',
 }
 
-export async function rateLimit(
-  request: NextRequest,
+export type RateLimitCheckResult =
+  | { allowed: true }
+  | { allowed: false; retryAfter: number; limit: number; resetAt: number }
+
+export async function checkRateLimit(
+  identifier: string,
   config: Partial<RateLimitConfig> = {}
-): Promise<NextResponse | null> {
+): Promise<RateLimitCheckResult> {
   const { windowMs, max, keyPrefix } = { ...DEFAULT_CONFIG, ...config }
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    'unknown'
-  const key = `${keyPrefix}:${ip}`
+  const key = `${keyPrefix}:${identifier}`
 
   const done = await waitForTurn(key)
   try {
@@ -47,27 +48,48 @@ export async function rateLimit(
 
     if (!record || now > record.resetAt) {
       rateLimitStore.set(key, { count: 1, resetAt: now + windowMs })
-      return null
+      return { allowed: true }
     }
 
     if (record.count >= max) {
-      return NextResponse.json(
-        { error: 'Too Many Requests', message: 'Rate limit exceeded' },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(Math.ceil((record.resetAt - now) / 1000)),
-            'X-RateLimit-Limit': String(max),
-            'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': String(Math.ceil(record.resetAt / 1000)),
-          },
-        }
-      )
+      return {
+        allowed: false,
+        retryAfter: Math.ceil((record.resetAt - now) / 1000),
+        limit: max,
+        resetAt: Math.ceil(record.resetAt / 1000),
+      }
     }
 
     record.count++
-    return null
+    return { allowed: true }
   } finally {
     done()
   }
+}
+
+export async function rateLimit(
+  request: NextRequest,
+  config: Partial<RateLimitConfig> = {}
+): Promise<NextResponse | null> {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  const result = await checkRateLimit(ip, config)
+
+  if (!result.allowed) {
+    return NextResponse.json(
+      { error: 'Too Many Requests', message: 'Rate limit exceeded' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(result.retryAfter),
+          'X-RateLimit-Limit': String(result.limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(result.resetAt),
+        },
+      }
+    )
+  }
+
+  return null
 }
